@@ -21,6 +21,7 @@ SKILL_NAMES = (
 )
 
 
+@unittest.skipIf(os.name == "nt", "install.sh transaction tests require a POSIX shell with python3 and mv")
 class InstallerTransactionTests(unittest.TestCase):
     def run_installer(self, arguments: list[str], environment: dict[str, str]) -> subprocess.CompletedProcess[str]:
         return subprocess.run(
@@ -147,7 +148,7 @@ class InstallerTransactionTests(unittest.TestCase):
                 os.environ.copy(),
             )
             self.assertNotEqual(0, result.returncode)
-            self.assertIn("暂不支持 --scope project", result.stdout + result.stderr)
+            self.assertIn("does not support --scope project", result.stdout + result.stderr)
 
     def test_help_lists_every_supported_host(self) -> None:
         result = self.run_installer(["--help"], os.environ.copy())
@@ -169,7 +170,7 @@ class InstallerTransactionTests(unittest.TestCase):
             environment["PATH"] = f"{fake_bin}{os.pathsep}/usr/bin:/bin"
             result = self.run_installer([], environment)
         self.assertNotEqual(0, result.returncode)
-        self.assertIn("多个宿主", result.stdout + result.stderr)
+        self.assertIn("Multiple hosts detected", result.stdout + result.stderr)
 
 
 if __name__ == "__main__":

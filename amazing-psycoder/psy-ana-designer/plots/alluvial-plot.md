@@ -1,17 +1,17 @@
-# 冲积图 (Alluvial/Sankey Plot)
+# Alluvial/Sankey Plot
 
-## 概述
+## Overview
 
-冲积图展示分类数据在多个时间点或阶段之间的流动变化。适合纵向追踪中的类别转换。
+Alluvial plots show changes in the flow of categorical data between multiple time points or phases. Suitable for category transitions in longitudinal tracking.
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| 场景 | 纵向分类数据(诊断变化、阶段转换) |
-| 变量 | 2-4个分类时间点 |
+| Scenario | Vertical classification data (diagnostic changes, stage transitions) |
+| Variables | 2-4 classification time points |
 
-## R 代码
+## R code
 
 ```r
 library(ggalluvial)
@@ -25,17 +25,17 @@ ggplot(data, aes(axis1=time1, axis2=time2, axis3=time3,
   theme_minimal()
 ```
 
-## 解读
+## Interpretation
 
-- 流带宽度=类别转换人数
-- 流带颜色一致=大多数人在同一类别
-- 流带分散=类别转换多
-- 窄带→少数人发生该转换
+- Streaming belt width = number of category conversion people
+- Consistent flow band color = most people are in the same category
+- Scattered flow = many category transitions
+- Narrowband → This conversion occurs in a small number of people
 
-## 关键参数
+## Key parameters
 
-| 参数 | 作用 |
+| Parameters | Function |
 |------|------|
-| `aes(axis1,axis2,...)` | 各时间点的分类变量 |
-| `fill` | 流带颜色映射 |
-| `width` | 流带和柱体的宽度(0.1-0.4) |
+| `aes(axis1,axis2,...)` | Categorical variables at each time point |
+| `fill` | Flowband color mapping |
+| `width` | Width of flow belt and cylinder (0.1-0.4) |

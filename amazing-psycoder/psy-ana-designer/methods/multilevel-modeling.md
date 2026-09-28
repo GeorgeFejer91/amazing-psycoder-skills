@@ -1,47 +1,47 @@
-# 多水平/跨层模型 (Multilevel Modeling)
+# Multilevel/Cross-layer Modeling (Multilevel Modeling)
 
-## 概述
+## Overview
 
-多水平模型处理嵌套数据结构。心理学中最常见的嵌套:试次嵌套于被试,被试嵌套于班级,班级嵌套于学校。
+Multi-level models handle nested data structures. The most common nesting in psychology: trials are nested in subjects, subjects are nested in classes, and classes are nested in schools.
 
-**典型场景**: 学生(Level-1)嵌套于班级(Level-2),检验班级氛围(Level-2)对学生成绩(Level-1)的影响。
+**Typical scenario**: Students (Level-1) are nested in classes (Level-2), and the impact of class atmosphere (Level-2) on student performance (Level-1) is tested.
 
-## 何时使用
+## When to use
 
-| 条件 | 要求 |
+| Conditions | Requirements |
 |---|---|
-| 研究设计类型 | 嵌套设计（试次嵌套于被试、被试嵌套于班级/学校）、重复测量设计 |
-| 因变量类型 | 连续变量（反应时、成绩、量表得分等） |
-| 样本信息 | 分别规划高层单元数、单元内观测和不平衡；由随机效应/固定效应目标、ICC 和区间精度决定，优先模拟 |
-| 关键前提 | 数据存在显著嵌套结构（ICC > 0.05）；Level-1 变量组均值中心化，Level-2 变量总均值中心化 |
+| Research design type | Nested design (trials are nested in subjects, subjects are nested in classes/schools), repeated measures design |
+| Dependent variable type | Continuous variable (reaction time, grade, scale score, etc.) |
+| Sample information | Plan the number of high-level units, intra-unit observations and imbalance respectively; determined by random effect/fixed effect target, ICC and interval accuracy, give priority to simulation |
+| Key premise | There is a significant nested structure in the data (ICC > 0.05); Level-1 variable group mean centering, Level-2 variable total mean centering |
 
-## 何时用（vs lmer）
+## When to use (vs lmer)
 
-其实 lmer 就是多水平模型的特例。当你的数据有明确层级(重复测量/嵌套)且需要区分组内和组间效应时,多水平术语更有用:
+In fact, lmer is a special case of multi-level model. Multilevel terms are more useful when your data have clear levels (repeated measures/nested) and you need to distinguish between within-group and between-group effects:
 
-- 被试内效应(Level-1): 条件效应
-- 被试间效应(Level-2): 组别、人口学变量
-- 跨层交互: Level-2变量调节Level-1效应
+- Within-subject effect (Level-1): Conditioning effect
+- Between-subjects effect (Level-2): Group, demographic variables
+- Cross-level interaction: Level-2 variables regulate Level-1 effects
 
-## 模型
+## Model
 
 ```r
 lmer(rt ~ condition * group + (1+condition|subject), data=data)
 ```
 
-## 关键：中心化
+## Key: Centralization
 
-- Level-1变量: 组均值中心化 (centered within cluster)
-- Level-2变量: 总均值中心化 (grand mean centered)
-- 不做中心化会导致组间和组内效应混淆
+- Level-1 variable: group mean centered (centered within cluster)
+- Level-2 variable: grand mean centered
+- Failure to centralize will lead to confusion between between-group and within-group effects
 
 ## ICC (Intraclass Correlation Coefficient)
 
-ICC = 组间方差/(组间方差+组内方差),衡量嵌套结构的必要性。ICC > 0.05 → 需要用多水平模型。
+ICC = between-group variance/(between-group variance + within-group variance), measures the necessity of nested structure. ICC > 0.05 → A multilevel model is required.
 
-## 报告（APA 7th 格式）
+## Report (APA 7th format)
 
-多水平模型报告应包含模型设定、固定效应、随机效应及模型比较信息。以下为 APA 7th 格式示例：
+Multilevel model reports should include model specification, fixed effects, random effects, and model comparison information. The following is an example of APA 7th format:
 
 **Model specification.** A multilevel model was fitted to examine the effect of condition (Level-1 within-subject factor: congruent vs. incongruent) and group (Level-2 between-subject factor: control vs. treatment) on reaction time (RT). The model included random intercepts and random slopes for condition by subject. Level-1 predictor (condition) was group-mean centered; Level-2 predictor (group) was grand-mean centered. Estimation was performed using restricted maximum likelihood (REML) via the `lme4` package in R.
 

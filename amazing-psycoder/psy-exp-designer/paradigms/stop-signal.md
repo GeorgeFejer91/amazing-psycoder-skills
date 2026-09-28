@@ -5,7 +5,7 @@
 
 ## When to Use
 
-User mentions: Stop-signal, 停止信号, SST, stop-signal task, SSRT, stop-signal reaction time.
+User mentions: Stop-signal, stop signal, SST, stop-signal task, SSRT, stop-signal reaction time.
 
 ## Core Logic
 
@@ -26,10 +26,10 @@ Before generating stop-signal code, confirm ALL of these:
 7. **Stop probability**: what fraction of trials have a stop signal? (typically 25–30%)
 8. **Go trial deadline**: response deadline for go trials? (typically 1000–1500 ms)
 9. **Feedback**: is inhibition performance feedback shown?
-10. **ITI duration**: 试次间隔时间和变化范围？
-11. **OS & font**: 在什么操作系统运行？如使用中文，确认字体
-12. **Display**: 全屏还是窗口？刺激大小和屏幕位置？
-13. **Instruction text**: 指导语内容？如何向被试说明停止信号？
+10. **ITI duration**: Trial interval time and variation range?
+11. **OS & font**: What operating system is it running on? If using Chinese, confirm the font
+12. **Display**: Full screen or window? Stimulus size and screen location?
+13. **Instruction text**: Instruction content? How to explain the stop signal to subjects?
 
 ## Do Not Assume
 
@@ -94,7 +94,7 @@ Verbruggen, F., Aron, A. R., Band, G. P., Beste, C., Bissett, P. G., Brockett, A
 
 ### User Request
 
-> "我要做一个停止信号任务。被试对箭头方向做按键反应：左箭头按F，右箭头按J。在25%的试次中，箭头出现后会有一个声音信号（750Hz纯音），表示需要停止反应。停止信号延迟（SSD）用自适应阶梯法，初始250 ms，步长50 ms，范围50-800 ms。正式实验4个block各80个trial，开始前有30个练习trial。箭头呈现直到按键或到1000 ms截止，ITI随机800-1200 ms。用PsychoPy。"
+> "I want to do a stop signal task. The subjects responded to the arrow direction: press F for the left arrow and press J for the right arrow. In 25% of the trials, there will be a sound signal (750Hz pure tone) after the arrow appears, indicating the need to stop the response. The stop signal delay (SSD) uses the adaptive ladder method, initial 250 ms, step size 50 ms, range 50-800 ms. There are 4 blocks of 80 trials each in the formal experiment. There are 30 practice trials before the arrow is pressed or until 1000 ms. The ITI is randomly 800-1200 ms.
 
 ### Trial Window Timeline
 
@@ -102,7 +102,7 @@ Verbruggen, F., Aron, A. R., Band, G. P., Beste, C., Bissett, P. G., Brockett, A
 ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐
 │ Window 1                 │ →  │ Window 2                 │ →  │ Window 3                 │ →  │ Window 4                 │
 │ Fixation                 │    │ Go Stimulus              │    │ Feedback                 │    │ ITI                      │
-│ Content: +               │    │ Content: ← or →          │    │ Content: 正确/错误        │    │ Content: empty           │
+│ Content: + │ │ Content: ← or → │ │ Content: True/Wrong │ │ Content: empty │
 │ Duration: 500 ms         │    │ Duration: until key      │    │ Duration: 500 ms         │    │ Duration: 800-1200 ms     │
 │ Response: none           │    │ Response: f/j            │    │ Response: none           │    │ Response: none           │
 │ File: none               │    │ File: none (text)        │    │ File: none               │    │ File: none               │
@@ -114,8 +114,8 @@ Verbruggen, F., Aron, A. R., Band, G. P., Beste, C., Bissett, P. G., Brockett, A
 | Window | Content | Duration | Response | File/Folder | Condition | Data |
 |--------|---------|----------|----------|-------------|-----------|------|
 | Fixation | + | 500 ms | none | none | none | none |
-| Go Stimulus | ← or → (+ 750Hz tone if stop) | until key (deadline 1000 ms) | f=左, j=右 (withhold on stop) | none (text) | {arrow_dir} | rt, key, acc, ssd, stop_trial |
-| Feedback | 正确/错误/太慢 | 500 ms | none | none | {correct_response} | none |
+| Go Stimulus | ← or → (+ 750Hz tone if stop) | until key (deadline 1000 ms) | f=left, j=right (withhold on stop) | none (text) | {arrow_dir} | rt, key, acc, ssd, stop_trial |
+| Feedback | Correct/Wrong/Too Slow | 500 ms | none | none | {correct_response} | none |
 | ITI | empty | 800-1200 ms random | none | none | none | none |
 
 ### Parsed Experiment Specification
@@ -127,7 +127,7 @@ Verbruggen, F., Aron, A. R., Band, G. P., Beste, C., Bissett, P. G., Brockett, A
 | Task type | Stop-signal |
 | Go stimulus | Left arrow (←) or Right arrow (→) |
 | Stop signal | 750Hz pure tone, auditory |
-| Response mapping | F=左箭头, J=右箭头 |
+| Response mapping | F=left arrow, J=right arrow |
 | Stop probability | 25% of trials |
 | SSD algorithm | Adaptive staircase, independent per subject |
 | Initial SSD | 250 ms |

@@ -1,50 +1,50 @@
-# ROC 分析 (Receiver Operating Characteristic)
+# ROC Analysis (Receiver Operating Characteristic)
 
-## 概述
+## Overview
 
-ROC分析评估二分类模型的判别能力,通过AUC(曲线下面积)量化分类性能。在临床心理学中广泛用于评估诊断工具。
+ROC analysis evaluates the discriminative ability of the two-classification model and quantifies the classification performance through AUC (area under the curve). It is widely used in clinical psychology to evaluate diagnostic tools.
 
-**典型场景**: 评估焦虑分数对临床诊断的分类准确性; 评估行为指标区分ADHD和对照组的能力。
+**Typical Scenario**: Evaluate the classification accuracy of anxiety scores for clinical diagnoses; evaluate the ability of behavioral indicators to distinguish ADHD from controls.
 
-## 何时使用
+## When to use
 
-| 条件 | 要求 |
+| Conditions | Requirements |
 |------|------|
-| 研究设计 | 诊断/预测验证设计；需明确目标总体、取样方案、预测时点和可辩护的参考标准 |
-| 因变量类型 | 二分类(如患病/未患病、阳性/阴性) |
-| 自变量类型 | 连续变量或有序分类变量(如量表得分、生物指标) |
-| 样本信息 | 由阳性/阴性例数、目标 AUC/敏感度特异度精度、阈值选择和验证方案决定；分别规划两类样本信息 |
-| 关键检查 | 参考标准误分类/验证偏倚、病例对照取样、重复/聚类观测、预测器评估时点与目标应用一致；阈值选择必须与验证分开 |
-| 扩展/限制 | 多分类、时间结局或聚类数据需要相应 ROC/判别扩展；无可靠参考标准时，普通二分类 ROC 的解释受限；名义预测器需先定义可验证的评分规则 |
+| Study design | Diagnostic/predictive validation design; target population, sampling plan, prediction time points and defensible reference standards need to be clearly defined |
+| Dependent variable type | Binary classification (such as diseased/not diseased, positive/negative) |
+| Independent variable type | Continuous variables or ordered categorical variables (such as scale scores, biological indicators) |
+| Sample information | Determined by the number of positive/negative cases, target AUC/sensitivity specificity accuracy, threshold selection and verification scheme; plan two types of sample information separately |
+| Key checks | Reference standard misclassification/validation bias, case-control sampling, repeated/clustered observations, predictor evaluation time points consistent with target application; threshold selection must be separate from validation |
+| Extensions/Limitations | Corresponding ROC/discriminant extensions are required for multi-category, time-outcome or clustered data; when there is no reliable reference standard, the interpretation of ordinary two-category ROC is limited; nominal predictors need to first define verifiable scoring rules |
 
-## 关键指标
+## Key indicators
 
-| 指标 | 含义 | 标准 |
+| Indicator | Meaning | Standard |
 |------|------|------|
-| AUC | 整体判别力 | 0.5=随机, 0.7=可接受, 0.8=好, 0.9=优秀 |
-| Sensitivity | 真阳性率(检出率) | — |
-| Specificity | 真阴性率(排错率) | — |
-| Youden指数 | Sens+Spec-1 | 确定最优截断点 |
+| AUC | Overall discriminative power | 0.5=Random, 0.7=Acceptable, 0.8=Good, 0.9=Excellent |
+| Sensitivity | True positive rate (detection rate) | — |
+| Specificity | True negative rate (error rate) | — |
+| Youden index | Sens+Spec-1 | Determine the optimal cutoff point |
 
-## R代码
+## R code
 
 ```r
 library(pROC)
 roc_obj <- roc(data$diagnosis, data$score)
 auc(roc_obj)
 plot(roc_obj)
-coords(roc_obj, "best")  # 最优截断点
+coords(roc_obj, "best")  # Optimal cutoff point
 ```
 
-## 报告
+## Report
 
-APA 7th 格式报告示例:
+APA 7th format report example:
 
 > A receiver operating characteristic (ROC) analysis was conducted to evaluate the diagnostic accuracy of the anxiety score for identifying clinical anxiety disorder (as determined by structured clinical interview). The area under the ROC curve (AUC) was 0.82, 95% CI [0.75, 0.89], indicating good discriminatory ability between individuals with and without the disorder (Hosmer & Lemeshow, 2000). The optimal cutoff score of 45 was identified using the Youden index (Youden, 1950), yielding a sensitivity of 78% and specificity of 74%. Figure 1 presents the ROC curve.
 
-APA 7th 格式中需报告的关键要素:
-- AUC值及其95%置信区间
-- 判别能力的定性描述(参考标准: 0.5 = 随机, 0.7–0.8 = 可接受, 0.8–0.9 = 好, ≥ 0.9 = 优秀)
-- 最优截断点的确定方法(如Youden指数)及对应的敏感性和特异性
-- 参考标准的来源、盲法、误分类风险和缺失验证说明
-- 图表编号引用(Figure 1)
+Key elements to report in APA 7th format:
+- AUC value and its 95% confidence interval
+- Qualitative description of discriminative ability (reference standard: 0.5 = random, 0.7–0.8 = acceptable, 0.8–0.9 = good, ≥ 0.9 = excellent)
+- Method for determining the optimal cutoff point (such as Youden index) and the corresponding sensitivity and specificity
+- Description of source, blinding, risk of misclassification and missing validation of reference standards
+- Figure number reference (Figure 1)

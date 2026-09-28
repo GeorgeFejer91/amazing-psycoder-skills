@@ -1,10 +1,10 @@
-# psy-exp-reviewer — 实验审计与证据门
+# psy-exp-reviewer — Experimental audit and evidence gate
 
-> **版本**: v1.4.0 | **角色**: 审计实验设计、配置、实现和运行证据；不直接修改代码。
+> **Version**: v1.4.0 | **Role**: Audit experimental design, configuration, implementation and operation evidence; do not directly modify the code.
 
-## 核心原则
+## Core Principles
 
-Reviewer 不把“看起来正确”当成“可以采集”。证据按以下顺序升级：
+Reviewer does not treat "looks correct" as "can be collected". Evidence is escalated in the following order:
 
 ```text
 design_confirmed
@@ -13,48 +13,48 @@ design_confirmed
   → ready_for_collection
 ```
 
-静态代码审计只能发现可见风险；`ready_for_collection` 还必须有目标机器上的实测 smoke-test 证据，包括启动、刺激呈现、响应、数据保存、中断恢复和正常退出。所有审计都应报告输入范围、未验证事项和证据文件路径。
+Static code audits can only uncover visible risks; `ready_for_collection` must also have evidence of live smoke-testing on the target machine, including startup, stimulus presentation, response, data saving, interrupt recovery, and graceful exit. All audits should report input ranges, unvalidated items, and evidence file paths.
 
-## 审查模式
+## Review mode
 
-| 模式 | 最低输入 | 最大结论 |
+| Mode | Minimum Input | Maximum Conclusion |
 |------|----------|----------|
-| `code-audit` | 代码 + config；如需最终就绪标签还要 smoke-test 证据 | 无运行证据时为 `not_ready_for_collection`；证据充分时可为 `ready_for_collection` |
+| `code-audit` | code + config; if final readiness label is required, smoke-test evidence is required | `not_ready_for_collection` when there is no running evidence; `ready_for_collection` when there is sufficient evidence |
 | `config-audit` | Config YAML / trial timeline | `pre_code_ready` |
-| `implementation-plan-review` | 伪代码 / 架构计划 | 仅架构风险与待确认项 |
-| `triage-only` | 自然语言实验描述 | 缺失信息与设计风险 |
-| `blocked` | 无可审查输入 | 明确所需输入 |
+| `implementation-plan-review` | Pseudocode / Architecture plan | Only architectural risks and pending items |
+| `triage-only` | Natural language experiment description | Missing information and design risks |
+| `blocked` | No input for review | Specify required input |
 
-## 审计范围
+## Audit scope
 
-- 设计忠实度：窗口、条件、计分、反应映射与 config 一致。
-- 计时与响应：RT 原点、响应事件、超时、多键和退出逻辑明确。
-- 随机化：seed scope、解析后的 seed、比例、约束和 counterbalancing 可复现。
-- 刺激与运行环境：资源、字体、版本、依赖和目标设备策略明确。
-- 数据语义：语义化 trial-summary；重复的试次内事件写入关联 event table；缺失 RT 不用数值哨兵。
-- 持久化与恢复：增量保存、唯一标识、重复运行防护、中断测试和资源清理。
-- 运行证据：在声明的目标环境中实际观察，而不是由静态检查推断。
+- Design fidelity: windows, conditions, scoring, reaction mappings are consistent with config.
+- Timing and response: RT origin, response events, timeout, multi-key and exit logic are clear.
+- Randomization: seed scope, parsed seed, scale, constraints and counterbalancing are reproducible.
+- Stimulation and runtime environment: Resources, fonts, versions, dependencies and target device policies are clear.
+- Data semantics: semantic trial-summary; repeated intra-trial events are written to the associated event table; missing RTs do not use numerical sentinels.
+- Persistence and recovery: incremental saving, unique identification, duplicate run protection, interruption testing and resource cleanup.
+- Running evidence: actual observation in the declared target environment, rather than inferred by static inspection.
 
-## 平台感知
+## Platform awareness
 
-`code-audit` 根据实现加载相应规范：
+`code-audit` loads the corresponding specification according to the implementation:
 
-| 平台签名 | 规范 |
+| Platform signature | Specification |
 |----------|------|
 | PsychoPy (`from psychopy import`, `visual.Window`) | `../psy-exp-coder/psychopy/spec/README.md` |
 | jsPsych (`initJsPsych`, `jsPsych.run`) | `../psy-exp-coder/jspsych/spec/README.md` |
 | Psychtoolbox (`PsychImaging`, `Screen('Flip'`) | `../psy-exp-coder/psychtoolbox/spec/README.md` |
 
-## 严重度与标签
+## Severity and tags
 
-严重度按对数据有效性、参与者安全、数据丢失和结论正确性的实际影响分级，而不是按固定问题数量分级。
+Severity is graded by actual impact on data validity, participant safety, data loss, and correctness of conclusions, rather than by a fixed number of issues.
 
-| 标签 | 证据要求 |
+| Tags | Evidence Requirements |
 |------|----------|
-| `ready_for_collection` | 零 Critical/Major，且目标机器 smoke test 已通过并被审查 |
-| `not_ready_for_collection` | 存在 Critical/Major，或所需运行证据缺失/失败 |
-| `pre_code_ready` | 配置完整，只代表可以进入代码生成 |
-| `needs_experiment_info` | 关键设计信息缺失 |
-| `blocked` | 输入不足，无法形成相应结论 |
+| `ready_for_collection` | Zero Critical/Major, and the target machine smoke test has passed and been reviewed |
+| `not_ready_for_collection` | Critical/Major exists, or required running evidence is missing/failed |
+| `pre_code_ready` | Complete configuration, only means that you can enter code generation |
+| `needs_experiment_info` | Key design information is missing |
+| `blocked` | Insufficient input to form corresponding conclusion |
 
-完整协议、检查表和输出格式见 [SKILL.md](SKILL.md)。
+The complete protocol, checklist, and output format can be found in [SKILL.md](SKILL.md).

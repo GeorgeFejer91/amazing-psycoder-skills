@@ -89,11 +89,11 @@ The conversation has one goal: **fill every `[MISSING]` field in this config**. 
 Every new experiment follows the same 5 phases. The order reflects how experimenters naturally design: **trial first (with rules), then sequence structure**. The config YAML is filled progressively.
 
 ```
-Phase 1: Assess    → 收集已有信息
-Phase 2: Windows & Rules → 定义 Trial + 反应规则（最关键）
-Phase 3: Conditions→ 定义 trial 序列（xlsx + 刺激文件）
-Phase 4: Sequences → 定义序列结构和执行模式
-Phase 5: Validate  → 验证并移交代码生成
+Phase 1: Assess → Collect existing information
+Phase 2: Windows & Rules → Define Trial + reaction rules (the most critical)
+Phase 3: Conditions→ Define trial sequence (xlsx + stimulus file)
+Phase 4: Sequences → Define sequence structure and execution mode
+Phase 5: Validate → Validate and hand over code generation
 ```
 
 ### Blocking Gates
@@ -114,11 +114,11 @@ Determine what the user already has, what paradigm, and what platform.
 
 | User provides | Action |
 |--------------|--------|
-| Natural-language description ("我想做一个Stroop实验...") | Parse into skeleton config; flag all unknowns as `[MISSING]` |
+| Natural-language description ("I want to do a Stroop experiment...") | Parse into skeleton config; flag all unknowns as `[MISSING]` |
 | Partial config YAML | Load it; identify which sections are filled vs missing |
 | config.yaml + conditions/*.xlsx | Load everything; validate; skip to Phase 5 if complete |
 | Existing experiment code to modify/debug | Route to `psy-exp-coder`; do not modify implementation inside the Designer |
-| "帮我检查这段代码" | Route to `psy-exp-reviewer` directly |
+| "Check this code for me" | Route to `psy-exp-reviewer` directly |
 
 Also resolve in Phase 1 if the user hasn't stated it:
 - Paradigm/family metadata when useful. Load an exact [paradigm file](paradigms/) only as a reference; an unknown or custom paradigm is valid when its semantics are complete
@@ -162,9 +162,9 @@ is left-to-right. Show every sequence, mark unresolved values as `[MISSING]`,
 and annotate the response window with its RT anchor and recorded data.
 
 **Questions (max 3)**:
-1. "每个窗口的持续时间是多少？反应窗口的截止时间？"
-2. "被试按哪些键反应？哪个键对应哪个条件？"
-3. "刺激呈现什么内容？文字、图片还是图形？"
+1. "What is the duration of each window? What is the deadline for the response window?"
+2. "Which keys did the subject press to respond? Which key corresponds to which condition?"
+3. "What content does the stimulus present? Text, pictures, or graphics?"
 
 Also ask any paradigm Must-Confirm items assigned to Phase 2 (stimulus identity, timing values, key assignment, accuracy rules). Phase 2 typically carries the most Must-Confirm items — if paradigm questions + generic questions exceed the 3-question limit, apply the [Must-Confirm overflow rule](#must-confirm-overflow-rule) (batch compatible questions, default low-risk items with ⚠️ flag, defer to later phases where logical).
 
@@ -178,7 +178,7 @@ Also ask any paradigm Must-Confirm items assigned to Phase 2 (stimulus identity,
 Window structure may suggest an anchor, but a paradigm label or heuristic never defines the dependent variable. Before Gate 1, record `response_event`, `rt_onset`/anchor window, scientific rationale, and `status: confirmed`. For a merged response window, propose its measured display onset; for a stimulus then response sequence, explain that the two possible anchors estimate different quantities and ask which operational definition is intended.
 
 Present the consequence without implementation jargon and request confirmation:
-> "我建议把反应时定义为：从 **[可观察事件/窗口]** 的实际呈现时间，到 **[按下/释放/点击]**。这样测量的是 **[研究含义]**；若改从 **[另一事件]** 起算，解释会不同。请确认这一定义。"
+> "I recommend defining reaction time as: from the actual rendering time of **[observable event/window]** to **[press/release/click]**. This is measured in **[research implications]**; if it were measured from **[another event]**, the interpretation would be different. Please confirm this definition."
 
 Do not confirm the design until the user confirms this definition. Coder
 resolvability checks are implementation guards, not scientific validation.
@@ -194,13 +194,13 @@ Once windows are defined, immediately finalize the response rules — don't defe
 - **Deadline**: Maximum response time per trial. If unknown, propose a task-appropriate candidate with rationale and keep it unconfirmed; there is no universal paradigm-family default
 
 **Questions (ask alongside window questions above — don't create a separate question round)**:
-- "哪个键对应哪个条件？" (if mapping not obvious from key list)
-- "No-go试次不按键=正确，按键=错误，确认吗？" (paradigm-specific, from Must-Confirm)
+- "Which key corresponds to which condition?" (if mapping not obvious from key list)
+- "No-go trial without key press = correct, key press = error, confirm?" (paradigm-specific, from Must-Confirm)
 
 **Output format** — also finalized here, but offer defaults; only ask if customization needed:
 - Data directory: `data/` (default)
 - Filename pattern: `sub-{subject_id}_{task_name}_{run_id}.csv` (default)
-- Question (only if user needs changes): "数据用默认设置保存，需要修改吗？" (counts toward the 3-question limit only if asked)
+- Question (only if user needs changes): "The data is saved with default settings, do you need to modify it?" (counts toward the 3-question limit only if asked)
 
 **Output**: Config `windows[]`, `response_rules`, `paradigm_config`, and `output` sections complete. Phase 2 Decision Checklist presented for user confirmation. Gate 1 check: windows have no `[MISSING]`, response keys and mapping are confirmed, accuracy rules are defined, and the response-event/RT-anchor measurement contract is explicitly confirmed.
 
@@ -219,9 +219,9 @@ Define what varies trial-to-trial — the condition table that drives each trial
 **Condition file generation**: If the user needs condition files created, use [condition-file-generation.md](references/condition-file-generation.md). For simple designs, write the xlsx directly. For complex or reproducible designs, generate a standalone Python script. Always report the generated file's path, row count, columns, and condition distribution.
 
 **Questions (max 3)**:
-1. "trial 顺序有现成的 xlsx 文件吗？还是根据条件自动生成？" — if yes, validate the file; skip question 2
-2. "每个条件各多少 trial？各条件比例是多少？"
-3. "刺激文件放在哪个文件夹？文件命名规则是什么？" — skip if all stimuli are text-based (determined in Phase 2)
+1. "Is there a ready-made xlsx file for the trial sequence? Or is it automatically generated based on conditions?" — if yes, validate the file; skip question 2
+2. "How many trials are there for each condition? What is the proportion of each condition?"
+3. "In which folder are the stimulus files placed? What are the file naming rules?" — skip if all stimuli are text-based (determined in Phase 2)
 
 Also ask any paradigm Must-Confirm items assigned to Phase 3 (condition ratios, stimulus file source).
 
@@ -260,9 +260,9 @@ but it must not be projected back into Studio as a hidden setting.
 - Feedback appears only in sequences that contain a Feedback window. The `show_in` field restricts further — e.g., `show_in: [practice]` means the sequence only appears during practice, even if it shares windows with formal sequences.
 
 **Questions (max 3)**:
-1. "实验有几个序列？每个序列使用哪张条件表并循环几轮？（如 Start 无表 1 轮、Practice 使用练习表 1 轮、Main 使用正式表 2 轮）"
-2. "反馈在哪些序列显示？只在练习还是正式实验也有？"
-3. "序列呈现顺序是固定的还是在被试间平衡？"
+1. "How many sequences are there in the experiment? Which condition table is used for each sequence and how many rounds are cycled? (For example, Start uses no table for 1 round, Practice uses practice tables for 1 round, and Main uses formal tables for 2 rounds)"
+2. "In which sequences does feedback appear? Is it only in exercises or in formal experiments?"
+3. "Is the order of sequence presentation fixed or balanced across subjects?"
 
 For a rest sequence, ask what the screen displays and how it advances. Never
 insert rest text or a continue key that the user did not confirm.
@@ -298,14 +298,14 @@ sequence/window, response and RT semantics, plus the cumulative Decision
 Registry with all assumed values visibly marked.
 
 - Items marked ⚠️ are defaults/assumptions — the user MUST be prompted to review them
-- Ask: "以上所有设计决策确认无误，可以生成代码？如需修改请指定编号和新值。"
+- Ask: "All the above design decisions are confirmed and the code can be generated? If you need to modify it, please specify the number and new value."
 - Do NOT route to the coder until the user explicitly confirms the full registry
 - If the user wants to change any item, return to the relevant phase, update the config, and re-run validation
 - Save the confirmed config and Decision Registry in the project directory before handoff. The Coder documents stable parameter names/sections after code exists; the Designer must never invent future line numbers.
 
 **Step 3: Persist and route** — After Gate 5, save `config.yaml` and the Decision Registry, report both paths, and route `psy-exp-coder` to those artifacts. After generation, route to `psy-exp-reviewer`. Static approval permits packaging for runtime testing; collection still requires observed smoke-test evidence.
 
-> **下一步**: 实验设计完成。将已保存的 config 路径交给 `psy-exp-coder`；生成后由 `psy-exp-reviewer` 审计并核验运行时证据。
+> **Next step**: The experimental design is completed. Pass the saved config path to `psy-exp-coder`; after generation, it will be audited and verified by `psy-exp-reviewer` for runtime evidence.
 
 ## Question Protocol
 
@@ -318,20 +318,20 @@ At every phase, follow this protocol:
 5. **Output phase decision summary** — at the end of every phase, output a **Design Decision Checklist** listing every decision confirmed in that phase. Format:
 
 ```
-## Phase N 设计决策确认清单
+## Phase N Design Decision Checklist
 
-| # | 决策项 | 确认值 | 来源 |
+| # | Decision item | Confirmation value | Source |
 |---|--------|--------|------|
-| 1 | 注视点持续时间 | 500ms | 用户确认 |
-| 2 | 反应按键 | f/j/k | 用户确认 |
-| 3 | 反应截止时间 | 2000ms | 建议值（待用户确认） |
-| 4 | 按键映射 | f=红, j=绿, k=蓝 | 用户确认 |
+| 1 | Fixation duration | 500ms | User confirmation |
+| 2 | Response button | f/j/k | User confirmation |
+| 3 | Response deadline | 2000ms | Recommended value (to be confirmed by the user) |
+| 4 | Key mapping | f=red, j=green, k=blue | User confirmation |
 | ... | ... | ... | ... |
 ```
 
-Each decision's **来源** must be one of: `用户确认` / `模板建议（待确认）` / `通用建议（待确认）` / `自动推断（待确认）`. A proposed value is never confirmed merely because a template or reference supplied it.
+Each decision's **Source** must be one of: `User Confirmed` / `Template Suggestion (pending confirmation)` / `Generic Suggestion (pending confirmation)` / `Automatic Inference (pending confirmation)`. A proposed value is never confirmed merely because a template or reference supplied it.
 
-6. **Get phase-level confirmation** — after showing the checklist, ask: "以上设计决策确认无误，进入下一阶段？" or equivalent. Do NOT advance until the user confirms.
+6. **Get phase-level confirmation** — after showing the checklist, ask: "The above design decisions are confirmed to be correct, proceed to the next stage?" or equivalent. Do NOT advance until the user confirms.
 
 7. **Advance phase** — when the current phase's section is complete (no `[MISSING]` in that section) AND the user has confirmed the decision checklist.
 
@@ -345,8 +345,8 @@ conversation. Use the phase-grouped table format in
 
 Rules:
 - **Every** non-trivial design choice (durations, key assignments, stimulus content, condition ratios, sequence repetitions, feedback presence, output format, etc.) must appear in the registry
-- Source must be explicit: `用户确认` / `默认（范式惯例）` / `默认（通用）` / `自动推断`
-- Defaulted items (`默认...` / `自动推断`) must be visually distinct (e.g., marked with ⚠️ or `[ASSUMED]`)
+- Source must be explicit: `User confirmation` / `Default (paradigm convention)` / `Default (generic)` / `Automatic inference`
+- Defaulted items (`Default...` / `Automatically inferred`) must be visually distinct (e.g., marked with ⚠️ or `[ASSUMED]`)
 - The registry is cumulative — each phase appends to it
 - Before code generation (Gate 5), present the FULL registry and require explicit user confirmation
 
@@ -362,10 +362,10 @@ Never ask more than 3 questions in one response. Never skip a phase with `[MISSI
 
 **<a id="must-confirm-overflow-rule"></a>Must-Confirm overflow rule**: When a phase has more Must-Confirm items + generic questions than the 3-question limit, handle overflow as follows:
 
-1. **Batch compatible questions**: Combine related items into one question (e.g., "注视点 500ms，ITI 500-800ms 随机，反馈显示 500ms，这些时间参数可以吗？").
-2. **Propose low-risk items with flag**: For items with a strong exact-reference convention, propose a default, enter it in the registry with status `proposed` and source `参考建议`, and flag it in the phase decision checklist. It is not confirmed until the user accepts it.
+1. **Batch compatible questions**: Combine related items into one question (e.g., "Fixation point 500ms, ITI 500-800ms random, feedback display 500ms, are these time parameters OK?").
+2. **Propose low-risk items with flag**: For items with a strong exact-reference convention, propose a default, enter it in the registry with status `proposed` and source `reference suggestion`, and flag it in the phase decision checklist. It is not confirmed until the user accepts it.
 3. **Defer to next phase if logical**: Items that could be asked in a later phase without blocking current progress (e.g., feedback presence can be deferred to Phase 4 even if the paradigm file assigns it to Phase 2).
-4. **If overflow is unavoidable**: State which items were defaulted and why, and invite the user to correct any: "以下 2 项按惯例默认设置，如需修改请告知：[列表]。"
+4. **If overflow is unavoidable**: State which items were defaulted and why, and invite the user to correct any: "The following 2 items are set by default by convention. If you need to modify it, please inform: [list]."
 5. **Registry review**: All defaulted/assumed items in the registry are reviewed at Gate 5 (Final Design Review) before code generation.
 
 The goal: every Must-Confirm item is either explicitly confirmed by the user, or explicitly flagged as an assumption the user can correct — and all assumptions are reviewed before code is generated.
@@ -377,8 +377,8 @@ The goal: every Must-Confirm item is either explicitly confirmed by the user, or
 | User request | Action |
 |-------------|--------|
 | New experiment (any starting format) | Unified Workflow Phase 1-5 |
-| "帮我写/改/调试实验代码" | Route to [psy-exp-coder](../psy-exp-coder/SKILL.md) |
-| "帮我检查这段实验代码能不能正式采集" | Route to [psy-exp-reviewer](../psy-exp-reviewer/SKILL.md); full audit |
+| "Help me write/modify/debug the experimental code" | Route to [psy-exp-coder](../psy-exp-coder/SKILL.md) |
+| "Help me check whether this experimental code can be officially collected" | Route to [psy-exp-reviewer](../psy-exp-reviewer/SKILL.md); full audit |
 | Code modification / debugging | Route to [psy-exp-coder](../psy-exp-coder/SKILL.md); apply change; show diff |
 | Condition table generation | Use the confirmed condition semantics + [randomization.md](references/randomization.md); an exact paradigm reference may suggest checks only |
 
@@ -398,21 +398,21 @@ When a user requests any platform, build the config through Phases 1-4, then rou
 
 | User mentions | Read this file |
 |---------------|---------------|
-| Go/No-go, 反应抑制, response inhibition | [paradigms/go-nogo.md](paradigms/go-nogo.md) |
-| Navon, 整体局部, global/local, hierarchical letters | [paradigms/navon.md](paradigms/navon.md) |
-| Priming, 启动, prime-target, masked prime | [paradigms/priming.md](paradigms/priming.md) |
-| Stroop, 斯特鲁普, color-word, 颜色词 | [paradigms/stroop.md](paradigms/stroop.md) |
-| Eriksen Flanker, 侧翼冲突, center-surround | [paradigms/eriksen-flanker.md](paradigms/eriksen-flanker.md) |
-| Simon, 西蒙任务, spatial compatibility | [paradigms/simon.md](paradigms/simon.md) |
-| Rating, 评分, Likert, VAS | [paradigms/rating.md](paradigms/rating.md) |
-| Stop-signal, 停止信号, SST, SSRT | [paradigms/stop-signal.md](paradigms/stop-signal.md) |
-| IAT, 内隐联想测验, implicit association | [paradigms/iat.md](paradigms/iat.md) |
-| N-back, 工作记忆, working memory | [paradigms/n-back.md](paradigms/n-back.md) |
-| Dot-probe, 点探测, attentional bias, 注意偏向 | [paradigms/dot-probe.md](paradigms/dot-probe.md) |
-| Visual search, 视觉搜索, set size, pop-out, conjunction | [paradigms/visual-search.md](paradigms/visual-search.md) |
-| Task switching, 任务转换, switch cost, cognitive flexibility | [paradigms/task-switching.md](paradigms/task-switching.md) |
-| EAST, 外在情感性西蒙, implicit attitude, 内隐态度, De Houwer | [paradigms/east.md](paradigms/east.md) |
-| Questionnaire, 问卷, survey, Likert, 量表 | Read [references/supplementary-patterns.md](references/supplementary-patterns.md) |
+| Go/No-go, response inhibition, response inhibition | [paradigms/go-nogo.md](paradigms/go-nogo.md) |
+| Navon, global/local, hierarchical letters | [paradigms/navon.md](paradigms/navon.md) |
+| Priming, start, prime-target, masked prime | [paradigms/priming.md](paradigms/priming.md) |
+| Stroop, Stroop, color-word, color word | [paradigms/stroop.md](paradigms/stroop.md) |
+| Eriksen Flanker, flank conflict, center-surround | [paradigms/eriksen-flanker.md](paradigms/eriksen-flanker.md) |
+| Simon, Simon task, spatial compatibility | [paradigms/simon.md](paradigms/simon.md) |
+| Rating, rating, Likert, VAS | [paradigms/rating.md](paradigms/rating.md) |
+| Stop-signal, stop signal, SST, SSRT | [paradigms/stop-signal.md](paradigms/stop-signal.md) |
+| IAT, implicit association test, implicit association | [paradigms/iat.md](paradigms/iat.md) |
+| N-back, working memory, working memory | [paradigms/n-back.md](paradigms/n-back.md) |
+| Dot-probe, dot detection, attentional bias, attention bias | [paradigms/dot-probe.md](paradigms/dot-probe.md) |
+| Visual search, visual search, set size, pop-out, conjunction | [paradigms/visual-search.md](paradigms/visual-search.md) |
+| Task switching, task switching, switch cost, cognitive flexibility | [paradigms/task-switching.md](paradigms/task-switching.md) |
+| EAST, external emotional Simon, implicit attitude, implicit attitude, De Houwer | [paradigms/east.md](paradigms/east.md) |
+| Questionnaire, questionnaire, survey, Likert, scale | Read [references/supplementary-patterns.md](references/supplementary-patterns.md) |
 
 **Extended paradigms**: Use their available sections as design evidence, but verify required headings and missing design details at intake rather than assuming uniform completeness. If a needed condition/data/example section is absent, collect it explicitly and record the gap.
 

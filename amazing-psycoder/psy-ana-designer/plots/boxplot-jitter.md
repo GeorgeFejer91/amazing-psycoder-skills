@@ -1,26 +1,26 @@
-# 箱线图+散点 (Boxplot + Jitter)
+# Boxplot + Scatter (Boxplot + Jitter)
 
-## 概述
+## Overview
 
-箱线图展示数据的四分位分布，叠加散点展示个体数据点。适合被试间设计或多组比较。
+The box plot shows the quartile distribution of the data, and the scatter points are overlaid to show the individual data points. Suitable for between-subjects design or multiple group comparisons.
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| 设计 | 被试间设计或多组比较 |
-| DV | 连续变量 |
-| 组数 | 2-6组（更多时分面） |
+| Design | Inter-subject design or multiple group comparison |
+| DV | Continuous variable |
+| Number of groups | 2-6 groups (more times divided) |
 
-## 图表元素
+## Chart elements
 
-| 元素 | 作用 |
+| Element | Function |
 |------|------|
-| 箱体 | IQR（25%-75%），中位线 |
-| 须线 | 1.5×IQR范围 |
-| 散点 (jitter) | 每个被试的数据点 |
+| Box | IQR (25%-75%), median line |
+| whiskers | 1.5×IQR range |
+| jitter | data points for each subject |
 
-## R 代码
+## R code
 
 ```r
 ggplot(data, aes(x=group, y=rt, fill=group)) +
@@ -31,14 +31,14 @@ ggplot(data, aes(x=group, y=rt, fill=group)) +
   theme_minimal(12) + theme(legend.position="none")
 ```
 
-## vs 雨云图
+## vs Rain Cloud Picture
 
-雨云图增加了小提琴密度层，更适合被试内设计。箱线+散点简洁清晰，适合被试间或多组。
+The rain cloud diagram adds a violin density layer, which is more suitable for within-subjects design. Box lines + scattered points are simple and clear, suitable for subjects or multiple groups.
 
-## 关键参数
+## Key parameters
 
-| 参数 | 作用 |
+| Parameters | Function |
 |------|------|
-| `width` | 箱宽(0.3-0.6) |
-| `outlier.shape` | NA=隐藏异常值 |
-| `notch` | TRUE=中位数缺口比较 |
+| `width` | Box width (0.3-0.6) |
+| `outlier.shape` | NA=hide outliers |
+| `notch` | TRUE=median notch comparison |

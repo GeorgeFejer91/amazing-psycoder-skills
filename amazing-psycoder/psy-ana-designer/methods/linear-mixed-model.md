@@ -1,64 +1,61 @@
-# 线性混合模型 (Linear Mixed Model / lmer)
+# Linear Mixed Model / lmer
 
-## 概述
+## Overview
 
-线性混合模型（LMM）是被试内设计的**推荐首选方法**。相比传统t检验/ANOVA，它能利用全部试次数据（非均值化），自然处理不平衡设计和缺失数据，同时建模被试间随机变异。
+Linear mixed models (LMMs) can be useful for trial-level repeated-measures data when the dependence structure and estimand warrant them. They can model subject and, when applicable, stimulus variation without first aggregating trials. A planned subject-level contrast or repeated-measures ANOVA may be simpler and equally appropriate for some questions.
 
-**典型场景**：Stroop/Flanker/GoNoGo等被试内设计的RT分析。
+**Typical scenario**: RT analysis of within-subject designs such as Stroop/Flanker/GoNoGo.
 
-## 何时使用
+## When to use
 
-| 条件 | 要求 |
+| Conditions | Requirements |
 |------|------|
-| 设计 | 被试内或混合设计 |
-| DV | 连续变量 |
-| 数据要求 | 试次级数据（非已聚合），残差近似正态 |
-| 优势 | 利用全部试次、处理不平衡、易扩展协变量 |
+| Design | Within-subjects or mixed design |
+| DV | Continuous variable |
+| Data requirements | Trial-level or repeated data; check the model's residual and dependence assumptions for the chosen outcome scale |
+| Advantages | Utilize all trials, handle imbalance, and easily expand covariates |
 
-## 为什么优于t检验/ANOVA
+## Why is better than t test/ANOVA
 
-| 维度 | t检验/ANOVA | LMM |
+| Dimensions | t-test/ANOVA | LMM |
 |------|-----------|-----|
-| 数据利用 | 均值化→丢失试次间变异 | 全部试次参与建模 |
-| 统计效力 | 低(被试数=数据点数) | 高(被试数×试次数) |
-| 不平衡设计 | 困难 | 自动处理 |
-| 协变量 | 需重新分析 | 公式加+即可 |
-| 缺失数据 | 需排除被试 | FIML自动利用已有数据 |
+| Data utilization | Mean → lose inter-trial variation | All trials participate in modeling |
+| Statistical power | Depends on the design and estimand | Depends on the number of independent subjects/items, trials, variance components, and model; trials do not multiply the number of independent subjects |
+| Unbalanced design | Difficulty | Automatic processing |
+| Covariates | Need to reanalyze | Just add + to the formula |
+| Missing data | Incomplete pairs/cells can complicate a complete-case analysis | Available observations can contribute under an appropriate missingness model; missingness can still bias inference |
 
-## 随机效应结构
+## Random effect structure
 
-**推荐: (1+condition|subject)** — 随机截距+随机斜率。每个被试有自己的基线RT和条件效应。
+**Recommended: (1+condition|subject)** — Random intercept + random slope. Each subject has his or her own baseline RT and condition effects.
 
-收敛问题降级方案：
-1. (1|subject)+(0+condition|subject) — 去掉相关性
-2. (1|subject) — 仅随机截距
-3. 换优化器: `lmerControl(optimizer="bobyqa")`
+If fitting is singular or fails to converge, inspect the data and model specification, then consider a justified simpler random-effects structure or alternative optimizer. Removing a random slope changes the model and must not be an automatic fix.
 
-## 效应量
+## Effect size
 
-| 指标 | 公式 | 含义 |
+| Indicator | Formula | Meaning |
 |------|------|------|
-| Marginal R² | 固定效应解释的方差比例 | 条件效应的独立贡献 |
-| Conditional R² | 固定+随机效应解释的方差比例 | 整体模型拟合 |
+| Marginal R² | Model-specific variance-accounted-for summary for all fixed effects | Descriptive model summary, not the unique contribution of a single condition effect |
+| Conditional R² | Model-specific variance-accounted-for summary for fixed and random effects | Descriptive model summary, not a substitute for diagnostics |
 
-## 报告格式
+## Report format
 
 > A linear mixed model with condition as fixed effect and random intercepts and slopes by subject was fit. Condition significantly predicted RT, b=45.2, SE=8.3, t(29.0)=5.44, p<.001. Marginal R²=.18, Conditional R²=.72.
 
-## 常见错误
-- ❌ 只加随机截距(1|subject)不做随机斜率——当条件效应在被试间有差异时,假阳性膨胀
-- ❌ 不检查收敛——奇异拟合时需降级
-- ❌ 用lme4原生的p值——需lmerTest或car::Anova获取p值
-- ❌ 用summary(model)$r.squared——不存在,用performance::r2()
+## Common errors
+- ❌ Omit a subject slope for a within-subject manipulation without checking whether the omission is justified by the design, model fit, and estimand; the effect on uncertainty depends on the data-generating structure
+- ❌ Convergence is not checked - downgrade is required for singular fitting
+- ❌ Use lme4's native p value - lmerTest or car::Anova is required to obtain the p value
+- ❌ Use summary(model)$r.squared - does not exist, use performance::r2()
 
-## R 代码
+## R code
 
 ```r
-# 随机截距+随机斜率(推荐)
+# Random intercept + random slope (recommended)
 model <- lmer(rt ~ condition + (1 + condition | subject_id),
               data = data_rt, control = lmerControl(optimizer = "bobyqa"))
 summary(model)
 
-# 随机截距仅(收敛失败降级)
+# Random intercept only (convergence failure degraded)
 model <- lmer(rt ~ condition + (1 | subject_id), data = data_rt)
 ```

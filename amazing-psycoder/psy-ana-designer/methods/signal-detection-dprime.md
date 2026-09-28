@@ -1,66 +1,66 @@
-# 信号检测论 (Signal Detection Theory / d')
+# Signal Detection Theory / d'
 
-## 概述
+## Overview
 
-信号检测论将反应分解为**辨别力(d')**和**反应偏向(c)**两个独立指标。解决准确率指标混淆辨别力和偏向的问题。
+Under the equal-variance Gaussian signal-detection model, hit and false-alarm rates yield distinct summaries of **sensitivity (d')** and **response criterion (c)**. They are model-based summaries, not statistically independent quantities.
 
-**典型场景**: Go/No-go、N-back、记忆再认等范式中,将准确率分解为d'和c。
+**Typical scenarios**: In Go/No-go, N-back, memory recognition and other paradigms, the accuracy is decomposed into d' and c.
 
-## 何时使用
+## When to use
 
-| 条件 | 要求 |
+| Conditions | Requirements |
 |------|------|
-| 实验设计 | 包含信号试次(信号出现)和噪音试次(信号未出现)的检测任务 |
-| 因变量 | 二分类反应("是"/"否" 或 "信号"/"噪音") |
-| 理论基础 | 信号检测论框架, 需计算击中率(Hit)和虚报率(FA) |
-| 试次信息 | 由目标命中/虚报率精度、极端率概率、条件数和层级模型决定；用二项信息/模拟规划，不设通用每条件试次数 |
-| 数据前提 | 可计算击中率和虚报率的分类数据; 极端值(0或1)需校正 |
+| Experimental design | Detection task including signal trials (signal present) and noise trials (signal not present) |
+| Dependent variable | Binary response ("yes"/"no" or "signal"/"noise") |
+| Theoretical basis | Signal detection theory framework, need to calculate hit rate (Hit) and false alarm rate (FA) |
+| Trial information | Determined by target hit/false alarm rate accuracy, extreme rate probability, condition number and hierarchical model; use binomial information/simulation planning, no universal number of trials per condition |
+| Data premise | Classified data that can calculate hit rate and false alarm rate; extreme values (0 or 1) need to be corrected |
 
-## 关键指标
+## Key indicators
 
-| 指标 | 公式 | 含义 |
+| Indicator | Formula | Meaning |
 |------|------|------|
-| **d' (d-prime)** | z(Hit) - z(FA) | 辨别力:区分信号和噪音的能力 |
-| **c (criterion)** | -0.5*(z(Hit)+z(FA)) | 反应偏向: c>0保守, c<0宽松 |
+| **d' (d-prime)** | z(Hit) - z(FA) | Discrimination: the ability to distinguish signal from noise |
+| **c (criterion)** | -0.5*(z(Hit)+z(FA)) | Response bias: c>0 conservative, c<0 loose |
 
-- Hit = 信号出现时的"是"反应率
-- FA = 信号未出现时的"是"反应率(虚报)
+- Hit = "Yes" response rate when the signal occurs
+- FA = Yes response rate when signal is not present (false alarms)
 
-## 为什么用d'而非准确率
+## Why use d' instead of accuracy
 
-两个被试准确率都是85%,但:
-- A: Hit=90%, FA=20% → d'=2.08, 偏向宽松
-- B: Hit=85%, FA=5% → d'=2.76, 偏向保守
+With equally frequent signal and noise trials, both observers have 85% accuracy, but:
+- A: Hit=95%, FA=25% → d'≈2.32 and c≈−0.49 (liberal criterion)
+- B: Hit=85%, FA=15% → d'≈2.07 and c≈0 (neutral criterion)
 
-准确率相同但d'差异大。单纯用准确率会混淆辨别力和反应偏向。
+The accuracy is the same but the difference in d' is large. Using accuracy alone confuses discrimination and response bias.
 
-## 校正极端值
+## Correct extreme values
 
-Hit或FA为0或1时,z值无穷大。常用校正:
-- **log-linear**: Hit=(#Hit+0.5)/(#Signal+1)
-- **1/(2N)**: 极值替换为 1/(2×试次数)
+When Hit or FA is 0 or 1, the z value is infinite. Commonly used corrections:
+- **log-linear**: apply (count+0.5)/(number of trials+1) separately to both hits and false alarms
+- **1/(2N)**: The extreme value is replaced by 1/(2×number of trials)
 
-## R 代码
+## R code
 
 ```r
-# 信号检测论: d' 和 c 的计算
+# Signal detection theory: calculation of d' and c
 library(tidyverse)
-library(effsize)  # 用于 Cohen's d
+library(effsize)  # for Cohen's d
 
-# ---- 示例数据 ----
-# 每个被试的 Hit 和 FA 来自实验原始反应数据
+# ---- Sample data ----
+# Each subject's Hit and FA come from the original response data of the experiment
 df <- tibble(
   subject   = 1:30,
   group     = rep(c("ADHD", "Control"), each = 15),
-  n_signal  = 50,   # 信号试次总数
-  n_noise   = 50,   # 噪音试次总数
+  n_signal  = 50,   # Total number of signal trials
+  n_noise   = 50,   # Total number of noise trials
   n_hit     = c(sample(30:45, 15, replace = TRUE), sample(35:48, 15, replace = TRUE)),
   n_fa      = c(sample(10:25, 15, replace = TRUE), sample(3:12,  15, replace = TRUE))
 )
 
-# ---- 核心函数: 计算 d' 和 c ----
+# ---- Core function: Calculate d' and c ----
 calc_dprime <- function(hit, fa, n_signal, n_noise, correction = "loglinear") {
-  # Log-linear 校正避免极端值
+  # Log-linear correction to avoid extreme values
   if (correction == "loglinear") {
     hit_rate <- (hit + 0.5) / (n_signal + 1)
     fa_rate  <- (fa  + 0.5) / (n_noise  + 1)
@@ -80,12 +80,12 @@ calc_dprime <- function(hit, fa, n_signal, n_noise, correction = "loglinear") {
   tibble(hit_rate, fa_rate, d_prime, c_bias)
 }
 
-# ---- 批量计算 ----
+# ---- Batch calculation ----
 results <- df |>
   mutate(calc_dprime(n_hit, n_fa, n_signal, n_noise)) |>
   select(subject, group, hit_rate, fa_rate, d_prime, c_bias)
 
-# ---- 组水平描述统计 ----
+# ---- Group level descriptive statistics ----
 results |>
   group_by(group) |>
   summarise(
@@ -97,48 +97,44 @@ results |>
     .groups      = "drop"
   )
 
-# ---- 独立样本 t 检验 + 效应量 ----
-# d' 组间比较
+# ---- Independent samples t-test + effect size ----
+# d' Comparison between groups
 t_dprime <- t.test(d_prime ~ group, data = results)
 print(t_dprime)
 
 cohens_d_dprime <- cohen.d(d_prime ~ group, data = results)
 print(cohens_d_dprime)
 
-# c 组间比较
+# c Comparison between groups
 t_c <- t.test(c_bias ~ group, data = results)
 print(t_c)
 
-# ---- 可视化 ----
+# ---- Visualization ----
 ggplot(results, aes(x = group, y = d_prime, fill = group)) +
   geom_boxplot(outlier.shape = NA, alpha = 0.5) +
   geom_jitter(width = 0.1, size = 2) +
   labs(
-    title  = "信号检测论: 辨别力 (d') 组间比较",
-    y      = "d' (辨别力)",
+    title  = "Signal detection theory: Discrimination (d') Comparison between groups",
+    y      = "d' (discrimination)",
     x      = NULL
   ) +
   theme_minimal()
 ```
 
-## 报告
+## Report
 
-**APA 7th 报告模板 (中文)**：
+**Report template (replace every bracketed field with computed results):**
 
-> 采用信号检测论分析辨别力与反应偏向。ADHD组辨别力显著低于对照组（d' = 1.45 ± 0.38 vs. 2.32 ± 0.41），独立样本 t 检验结果显著，t(58) = 4.21, p < .001, Cohen's d = 1.10, 95% CI [0.82, 1.38]。两组在反应偏向上无显著差异（c = 0.12 ± 0.15 vs. 0.08 ± 0.17），t(58) = 0.76, p = .450。
+> Sensitivity and criterion were computed from participant-level hit and false-alarm counts using [correction]. The [group/condition] contrast in d' was [estimate, uncertainty interval, test statistic, p-value if applicable]. The corresponding contrast in c was [estimate and uncertainty interval]. Interpret these estimates under the stated signal-detection assumptions.
 
-**APA 7th Report Template (English)**:
+**Report Highlights**:
+- Report the mean and standard deviation of both d' and c
+- Reports inferential statistics (t-values, degrees of freedom, p-values) and effect sizes (Cohen's d, 95% CI)
+- If the correction method (log-linear / 1/(2N)) is used, this should be stated in the methods section
 
-> Signal detection analysis was conducted to separate sensitivity (d') from response bias (c). The ADHD group showed significantly lower sensitivity (d' = 1.45, SD = 0.38) compared to the control group (d' = 2.32, SD = 0.41), t(58) = 4.21, p < .001, Cohen's d = 1.10, 95% CI [0.82, 1.38]. No significant group difference was found in response criterion (c = 0.12, SD = 0.15 vs. c = 0.08, SD = 0.17), t(58) = 0.76, p = .450.
+## Alternative method
 
-**报告要点**：
-- 同时报告 d' 和 c 的均值、标准差
-- 报告推断统计（t值、自由度、p值）及效应量（Cohen's d, 95% CI）
-- 若使用校正方法（log-linear / 1/(2N)），应在方法部分说明
-
-## 备选方法
-
-- [ROC分析 (Receiver Operating Characteristic)](../methods/roc-analysis.md) — 信号检测论的扩展，适用于多水平置信度评定
-- [线性混合模型 (Linear Mixed Model)](../methods/linear-mixed-model.md) — 当需同时建模被试和项目随机效应时
-- [逻辑混合模型 (Logistic GLMM)](../methods/logistic-mixed-model.md) — 当自变量为分类或连续变量时，直接建模"是/否"反应概率
-- A' (A-prime) — 非参数信号检测指标，不假设等方差正态分布（在非参数检验中涉及）
+- [ROC Analysis (Receiver Operating Characteristic)](../methods/roc-analysis.md) — An extension of signal detection theory, suitable for multi-level confidence assessment
+- [Linear Mixed Model](../methods/linear-mixed-model.md) — When it is necessary to model subject and item random effects at the same time
+- [Logistic GLMM](../methods/logistic-mixed-model.md) — Directly models yes/no response probabilities when the independent variables are categorical or continuous
+- A' (A-prime) — non-parametric signal detection indicator that does not assume equal variance normal distribution (involved in non-parametric tests)

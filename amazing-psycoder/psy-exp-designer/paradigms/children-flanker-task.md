@@ -6,7 +6,7 @@
 
 ## When to Use
 
-User mentions: Children flanker, child flanker, fish flanker, kids attention task, 儿童侧翼任务, 儿童注意任务. A child-friendly adaptation of the Eriksen flanker paradigm using fish images instead of abstract arrows, designed for developmental populations and pediatric research.
+User mentions: Children flanker, child flanker, fish flanker, kids attention task, children flanker task, children attention task. A child-friendly adaptation of the Eriksen flanker paradigm using fish images instead of abstract arrows, designed for developmental populations and pediatric research.
 
 ## Core Logic
 
@@ -62,123 +62,123 @@ Eriksen, B. A., & Eriksen, C. W. (1974). Effects of noise letters upon the ident
 
 Rueda, M. R., Fan, J., McCandliss, B. D., Halparin, J. D., Gruber, D. B., Lercari, L. P., & Posner, M. I. (2004). Development of attentional networks in childhood. *Neuropsychologia, 42*(8), 1029–1040. https://doi.org/10.1016/j.neuropsychologia.2003.12.012
 
-## 不要假设
+## Don’t assume
 
-- 不要假设刺激一定是鱼类图片 —— 儿童版Flanker可能使用箭头、动物或其他儿童友好刺激，需明确确认具体图片素材（leftFish.png / rightFish.png 或其他）
-- 不要假设一致与不一致试次比例为50:50 —— 需明确确认比例，部分研究可能包含中性条件（如鱼朝上/朝下），影响条件文件生成逻辑
-- 不要假设反应键一定是键盘左右箭头 —— 对于更小年龄的儿童（3-4岁），可能使用左右两侧的大按钮、触摸屏或游戏手柄
-- 不要假设练习阶段一定有反馈 —— 需确认反馈策略：仅练习反馈（标准做法）、全程反馈、或无反馈（部分研究有意省略以避免反馈干扰）
-- 不要假设儿童版无反应截止时间 —— 儿童版通常设置较长的截止时间（如3000 ms），但需确认具体数值，无截止可能导致试次过长
-- 不要假设两阶段设计（练习+正式）一定适用 —— 部分实验可能包含多个正式block、中间休息提示、或"游戏化"过渡界面
+- Don't assume that the stimulus must be a picture of a fish - Flanker for Kids may use arrows, animals or other child-friendly stimuli, please clearly confirm the specific image material (leftFish.png / rightFish.png or other)
+- Do not assume that the ratio of consistent and inconsistent trials is 50:50 - the ratio needs to be clearly confirmed. Some studies may include neutral conditions (such as fish facing up/down), which affects the logic of condition file generation
+- Don't assume that the reaction keys must be the left and right keyboard arrows - for younger children (3-4 years old), maybe use the large left and right buttons, a touch screen, or a gamepad
+- Don't assume there will be feedback during the practice phase - confirm the feedback strategy: only practice feedback (standard practice), full feedback, or no feedback (some studies intentionally omit it to avoid feedback interference)
+- Do not assume that the children's version has a no-response cutoff time - the children's version usually sets a longer cutoff time (such as 3000 ms), but the specific value needs to be confirmed. No cutoff may lead to too long trials
+- Don’t assume that the two-stage design (practice + formal) is necessarily applicable - some experiments may include multiple formal blocks, break prompts, or "gamification" transition interfaces
 
-## 条件文件列
+## Condition file column
 
-条件文件（csv/xlsx）中驱动每个试次所需的列：
+Columns required to drive each trial in condition file (csv/xlsx):
 
-| 列名 | 类型 | 描述 |
+| column name | type | description |
 |------|------|------|
-| congruency | str | `"congruent"` 或 `"incongruent"`，目标鱼与侧翼鱼方向是否一致 |
-| target_dir | str | `"left"` 或 `"right"`，中间目标鱼的方向 |
-| corrAns | str | `"left"` 或 `"right"`，正确按键答案（与target_dir相同） |
+| congruency | str | `"congruent"` or `"incongruent"`, whether the direction of the target fish and the flanking fish are consistent |
+| target_dir | str | `"left"` or `"right"`, the direction of the middle target fish |
+| corrAns | str | `"left"` or `"right"`, correct key answer (same as target_dir) |
 
-## 变体
+## Variations
 
-- **标准箭头Flanker**：使用箭头（←←←←← 或 ←←→←←）作为刺激的原始Eriksen范式，适用于成人及青少年被试。反应截止时间较短（1000-1500 ms），无儿童友好设计元素。参见 [eriksen-flanker.md](eriksen-flanker.md)
-- **鱼类Flanker（儿童版）**：使用鱼类图片替代箭头，配合彩色背景和进度计数器，适用于3-8岁儿童。即本文档所述版本。反应截止时间较长（~3000 ms），包含试次进度显示以维持儿童动机
-- **情绪Flanker**：使用情绪面孔或情绪词汇作为侧翼干扰刺激，测量情绪信息对注意控制的干扰效应。常见于发展心理学和临床研究中评估情绪调节与认知控制的交互
+- **Standard Arrow Flanker**: The original Eriksen paradigm using arrows (←←←←← or ←←→←←) as stimuli, suitable for adult and adolescent subjects. Short response deadline (1000-1500 ms), no child-friendly design elements. See [eriksen-flanker.md](eriksen-flanker.md)
+- **Fish Flanker (Children's Edition)**: Use fish pictures instead of arrows, with a colorful background and progress counter, suitable for children aged 3-8. That is the version described in this document. Long response deadline (~3000 ms), including trial progress display to maintain children's motivation
+- **Emotional Flanker**: Use emotional faces or emotional words as flanking interference stimuli to measure the interference effect of emotional information on attentional control. Commonly used in developmental psychology and clinical research to assess the interaction of emotion regulation and cognitive control
 
 ---
 
-## 示例
+## Example
 
-### 用户请求
+### User request
 
-> "我要做一个儿童Flanker任务，被试是5-7岁儿童。屏幕中央呈现一排5条鱼，中间那条是目标鱼，孩子需要判断中间鱼朝向并按对应方向键。两侧鱼方向可能与中间一致或不一致。先20个练习trial带反馈，再3个正式block各40个trial。注视点500ms，刺激呈现直到按键（最长3000ms），ITI随机800-1200ms。用PsychoPy。"
+> "I am going to do a children's Flanker task, and the subjects are children aged 5-7. A row of 5 fish is presented in the center of the screen, and the middle one is the target fish. The child needs to judge the direction of the middle fish and press the corresponding direction key. The directions of the fish on both sides may or may not be consistent with the middle. First 2 0 practice trials with feedback, and 3 formal blocks of 40 trials each. The fixation point is 500ms, the stimulus is presented until the button is pressed (up to 3000ms), and the ITI is randomly 800-1200ms. "
 
-### 试次窗口时间线
+### Trial window timeline
 
 ```text
 ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐
-│ 窗口1                     │ →  │ 窗口2                     │ →  │ 窗口3                     │ →  │ 窗口4                     │
-│ 注视点                    │    │ 鱼类刺激                  │    │ 反馈（仅练习阶段）          │    │ ITI                      │
-│ 内容: +                  │    │ 内容: 5条鱼一排           │    │ 内容: 正确/错误 + 进度     │    │ 内容: 空白               │
-│ 时长: 500 ms             │    │ 时长: 直到按键            │    │ 时长: 500 ms              │    │ 时长: 800-1200 ms         │
-│ 反应: 无                 │    │ (截止 3000 ms)            │    │ 反应: 无                  │    │ 反应: 无                 │
-│ 条件: 无                 │    │ 反应: 左/右键             │    │ 条件: 无                  │    │ 条件: 无                 │
-│ 数据: 无                 │    │ 条件: {congruency}        │    │ 数据: 无                  │    │ 数据: 无                 │
-└──────────────────────────┘    │ 数据: rt, key, acc,       │    └──────────────────────────┘    └──────────────────────────┘
+│ Window 1 │ → │ Window 2 │ → │ Window 3 │ → │ Window 4 │
+│ Fixation point │ │ Fish stimulation │ │ Feedback (only practice phase) │ │ ITI │
+│ Content: + │ │ Content: 5 fish in a row │ │ Content: Correct/wrong + Progress │ │ Content: Blank │
+│ Duration: 500 ms │ │ Duration: until key │ │ Duration: 500 ms │ │ Duration: 800-1200 ms │
+│ Response: None │ │ (cut-off 3000 ms) │ │ Response: None │ │ Response: None │
+│ Condition: None │ │ Response: Left/right key │ │ Condition: None │ │ Condition: None │
+│ Data: None │ │ Condition: {congruency} │ │ Data: None │ │ Data: None │
+└───────────────────────────┘ │ Data: rt, key, acc, │ └───────────────────────────┘ └───────────────────────────┘
                                 │       trial_counter        │
                                 └──────────────────────────┘
 ```
 
-| 窗口 | 内容 | 时长 | 反应 | 条件 | 数据 |
+| Window | Content | Duration | Response | Condition | Data |
 |------|------|------|------|------|------|
-| 注视点 | + | 500 ms | 无 | 无 | 无 |
-| 鱼类刺激 | 5条鱼（←←←←← 或 ←←→←←） | 直到按键（截止 3000 ms） | 左/右键 | {congruency} | rt, key, acc, trial_counter |
-| 反馈（仅练习） | 正确/错误文字 + 进度计数 | 500 ms | 无 | 无 | 无 |
-| ITI | 空白 | 800-1200 ms 随机 | 无 | 无 | 无 |
+| fixation point | + | 500 ms | none | none | none |
+| Fish stimulus | 5 fish (←←←←← or ←←→←←) | until key pressed (cut off 3000 ms) | left/right key | {congruency} | rt, key, acc, trial_counter |
+| Feedback (Practice only) | Correct/wrong text + progress count | 500 ms | None | None | None |
+| ITI | Blank | 800-1200 ms Random | None | None | None |
 
-### 解析的实验规范
+### Experimental specifications for analysis
 
-| 字段 | 值 |
+| Field | Value |
 |------|-----|
-| 实验名称 | 儿童鱼类Flanker任务 |
-| 平台 | PsychoPy |
-| 任务类型 | Flanker任务（选择性注意 / 抑制控制） |
-| 刺激类型 | 鱼类图片（leftFish.png, rightFish.png） |
-| 一致条件 | 目标鱼与侧翼鱼方向相同（←←←←←） |
-| 不一致条件 | 目标鱼与侧翼鱼方向相反（←←→←←） |
-| 练习试次 | 20（带试次级反馈） |
-| 正式试次 | 3个block × 40试次 = 120 |
-| 一致/不一致比例 | 50:50（各60个正式试次） |
-| 注视点时长 | 500 ms |
-| 反应截止时间 | 3000 ms |
-| ITI | 800-1200 ms 随机 |
-| 阶段顺序 | 指导语 → 练习(20) → 休息提示 → 正式Block1-3(各40) |
+| Experiment Name | Children's Fish Flanker Task |
+| Platform | PsychoPy |
+| Task type | Flanker task (selective attention/inhibitory control) |
+| Stimulus type | Fish pictures (leftFish.png, rightFish.png) |
+| Consistent condition | The target fish and the flanking fish are in the same direction (←←←←←) |
+| Inconsistent conditions | The target fish and the flanking fish are in opposite directions (←←→←←) |
+| Practice trials | 20 (with trial secondary feedback) |
+| Official trial | 3 blocks × 40 trials = 120 |
+| Agree/disagree ratio | 50:50 (60 formal trials each) |
+| Fixation point duration | 500 ms |
+| Response deadline | 3000 ms |
+| ITI | 800-1200 ms random |
+| Stage sequence | Instructions → Practice (20) → Rest tips → Formal Block1-3 (40 each) |
 
-### 缺失信息
+### Missing information
 
-1. 一致/不一致试次的具体比例未明确 —— 假设50:50，需向用户确认
-2. 鱼类图片素材来源未说明 —— 需确认使用默认素材还是用户自定义图片
-3. 练习与正式阶段之间的过渡界面未提及 —— 需确认是否有休息提示或鼓励语
+1. The specific ratio of consistent/inconsistent trials is not clear - assuming 50:50, need to confirm with the user
+2. The source of the fish picture material is not specified - you need to confirm whether to use the default material or user-defined picture
+3. The transition interface between practice and formal stages is not mentioned - it is necessary to confirm whether there are rest prompts or words of encouragement
 
-### 关键假设
+### Key assumptions
 
-- 一致与不一致试次比例为50:50，不超过2个连续不一致试次
-- 练习阶段使用试次级反馈（正确/错误文字 + 进度计数），正式阶段无反馈
-- 鱼类图片使用默认素材（leftFish.png, rightFish.png），背景使用彩色自然主题背景
+- The ratio of consistent and inconsistent trials is 50:50, no more than 2 consecutive inconsistent trials
+- Trial-level feedback (correct/wrong text + progress count) is used in the practice phase, and there is no feedback in the formal phase
+- The fish pictures use the default material (leftFish.png, rightFish.png), and the background uses a colorful natural theme background
 
-### 代码架构
+### Code structure
 
 ```
 children_flanker.py
-├── 参数设置（反应键、截止时间、比例、时长、试次计数）
-├── 窗口设置（全屏/窗口、背景色/图片）
-├── 刺激预加载（leftFish.png, rightFish.png, 注视点, 反馈文本, 进度文本）
-├── 生成条件表（一致:不一致 = 50:50，随机排列，每个block独立）
-├── 指导语界面（儿童友好措辞 + 图示）
-├── 练习循环（20试次）：
-│   ├── 注视点（500 ms）
-│   ├── 鱼类刺激（5条鱼，直到按键或3000 ms截止）
-│   ├── 反馈（正确/错误 + 进度计数，500 ms）
-│   └── ITI（800-1200 ms 随机）
-├── 休息/过渡界面
-├── 正式block循环（3 × 40试次）：
-│   ├── 注视点（500 ms）
-│   ├── 鱼类刺激（5条鱼，直到按键或3000 ms截止）
-│   └── ITI（800-1200 ms 随机）
-├── 数据保存：try/finally 增量写入CSV
-└── 结束界面（感谢语 + 完成提示）
+├── Parameter settings (reaction key, cut-off time, proportion, duration, trial count)
+├── Window settings (full screen/window, background color/picture)
+├── Stimulus preloading (leftFish.png, rightFish.png, fixation point, feedback text, progress text)
+├── Generate condition table (consistent: inconsistent = 50:50, randomly arranged, each block is independent)
+├── Guidance interface (child-friendly wording + icons)
+├── Practice loop (20 trials):
+│ ├── Fixation point (500 ms)
+│ ├── Fish stimulation (5 fish, until key press or 3000 ms cutoff)
+│ ├── Feedback (correct/wrong + progress count, 500 ms)
+│ └── ITI (800-1200 ms random)
+├── Rest/transition interface
+├── Formal block loop (3 × 40 trials):
+│ ├── Fixation point (500 ms)
+│ ├── Fish stimulation (5 fish, until key press or 3000 ms cutoff)
+│ └── ITI (800-1200 ms random)
+├── Data saving: try/finally incremental write to CSV
+└── End interface (thank you + completion prompt)
 ```
 
-### 预期数据列
+### Expected data column
 
-| 列名 | 类型 | 描述 |
+| column name | type | description |
 |------|------|------|
-| congruency | str | `"congruent"` 或 `"incongruent"` |
-| target_dir | str | `"left"` 或 `"right"`，目标鱼方向 |
-| rt | float | 反应时（毫秒），从刺激呈现到按键 |
-| acc | int | 正确为1，错误为0 |
-| trial_counter | int | 当前试次计数编号 |
-| block_type | str | `"practice"` 或 `"formal"` |
-| block_num | int | Block编号（练习=0，正式=1/2/3） |
+| congruency | str | `"congruent"` or `"incongruent"` |
+| target_dir | str | `"left"` or `"right"`, target fish direction |
+| rt | float | Reaction time (milliseconds) from stimulus presentation to key press |
+| acc | int | 1 for correct, 0 for error |
+| trial_counter | int | Current trial count number |
+| block_type | str | `"practice"` or `"formal"` |
+| block_num | int | Block number (Practice=0, Official=1/2/3) |

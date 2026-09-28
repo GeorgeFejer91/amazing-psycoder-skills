@@ -6,7 +6,7 @@
 
 ## When to Use
 
-User mentions: BART, balloon task, risk-taking, 气球模拟风险任务. A behavioral measure of risk-taking propensity in which participants inflate balloons to earn rewards, trading off the risk of bursting and losing earnings.
+User mentions: BART, balloon task, risk-taking, balloon simulation risk task. A behavioral measure of risk-taking propensity in which participants inflate balloons to earn rewards, trading off the risk of bursting and losing earnings.
 
 ## Core Logic
 
@@ -66,9 +66,9 @@ Columns in the xlsx/csv file that define each balloon's hidden parameters:
 
 ## Variants
 
-- **标准BART (Standard BART)**: 原始Lejuez et al. (2002)版本，每个气球有固定的爆炸概率（如1/128），每次充气后根据该概率决定是否爆炸。爆炸点为隐藏变量，参与者无法直接观察到。
-- **多颜色BART (Multi-color BART)**: 不同颜色的气球对应不同的爆炸概率分布。例如红色气球平均爆炸点较低（高风险），蓝色气球平均爆炸点较高（低风险）。用于考察参与者对风险概率的敏感性和学习效应。可交叉参考 risk-task.md。
-- **自动充气BART (Automatic-pump BART)**: 气球以固定间隔自动充气，参与者只需决定何时停止并兑现。去除了按键频率这一混淆变量，更纯粹地测量风险决策的时间动态。可交叉参考 [stop-signal.md](stop-signal.md)。
+- **Standard BART (Standard BART)**: Original Lejuez et al. (2002) version, each balloon has a fixed explosion probability (such as 1/128), and whether to explode is determined based on this probability after each inflation. The explosion point is a hidden variable that cannot be directly observed by participants.
+- **Multi-color BART (Multi-color BART)**: Balloons of different colors correspond to different explosion probability distributions. For example, red balloons have a lower average explosion point (high risk), while blue balloons have a higher average explosion point (low risk). Used to examine participants' sensitivity to risk probabilities and learning effects. Can be cross-referenced to risk-task.md.
+- **Automatic-pump BART**: Balloons automatically inflate at regular intervals, and participants only need to decide when to stop and cash out. The confounding variable of keystroke frequency is removed, providing a more pure measure of the temporal dynamics of risky decisions. Can be cross-referenced to [stop-signal.md](stop-signal.md).
 
 ## References
 
@@ -80,7 +80,7 @@ Lejuez, C. W., Read, J. P., Kahler, C. W., Richards, J. B., Ramsey, S. E., Stuar
 
 ### User Request
 
-> "我想用PsychoPy做一个BART实验。屏幕中央呈现一个红色气球，按空格键给气球充气，每次充气球变大一点并加0.5分。每个气球有一个隐藏的爆炸上限（在1到128之间随机整数）。如果充气次数超过这个上限，气球爆炸，该轮得分清零。参与者可以随时按Enter键"收钱"，把当前得分转入永久账户。总共30个气球。在正式实验前有3个练习气球。每次充气后显示反馈100 ms。爆炸或收钱后显示结果2000 ms。气球爆炸时播放爆炸音效。"
+> "I want to use PsychoPy to do a BART experiment. A red balloon appears in the center of the screen. Press the space bar to inflate the balloon. Each time the balloon is inflated, it becomes a little larger and adds 0.5 points. Each balloon has a hidden explosion upper limit (a random integer between 1 and 128). If the number of inflation exceeds this limit, the balloon explodes and the score for the round is cleared. The participant can press Enter at any time to transfer the current score to the permanent account. There are 3 practice balloons with a feedback of 100 before the official experiment. ms. The result is displayed for 2000 ms after exploding or collecting money. The explosion sound effect is played when the balloon explodes.
 
 ### Trial Window Timeline
 
@@ -88,11 +88,11 @@ Lejuez, C. W., Read, J. P., Kahler, C. W., Richards, J. B., Ramsey, S. E., Stuar
 ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐
 │ Window 1                 │ →  │ Window 2                 │ →  │ Window 3                 │ →  │ Window 4                 │
 │ Balloon Display          │    │ Pump Feedback            │    │ Outcome                  │    │ ITI                      │
-│ Content: 气球图像        │    │ Content: 气球变大       │    │ Content: 爆炸动画/音效  │    │ Content: 空白           │
-│ + 当前得分 + 充气次数    │    │ + 得分增加动画          │    │ 或 "已收钱" 提示        │    │ Duration: 500 ms         │
-│ Duration: 直到按键       │    │ Duration: 100 ms         │    │ Duration: 2000 ms        │    │ Response: none           │
-│ Response: 空格(充气)     │    │ Response: none           │    │ Response: none           │    │ File: none               │
-│ 或 Enter(收钱)           │    │ File: none               │    │ File: burst_sound.wav    │    │ Condition: none          │
+│ Content: Balloon image │ │ Content: Balloon getting bigger │ │ Content: Explosion animation/sound effect │ │ Content: Blank │
+│ + Current score + Number of inflations │ │ + Score increase animation │ │ or "Money collected" prompt │ │ Duration: 500 ms │
+│ Duration: until key pressed │ │ Duration: 100 ms │ │ Duration: 2000 ms │ │ Response: none │
+│ Response: space (inflated) │ │ Response: none │ │ Response: none │ │ File: none │
+│ or Enter (receive money) │ │ File: none │ │ File: burst_sound.wav │ │ Condition: none │
 │ File: balloon.png        │    │ Condition: none          │    │ Condition: none          │    │ Data: none               │
 │ Condition: {balloon_id}  │    │ Data: none               │    │ Data: burst (bool),      │    │                          │
 │ Data: pump_count, acc    │    │                          │    │ trial_earnings           │    │                          │
@@ -101,10 +101,10 @@ Lejuez, C. W., Read, J. P., Kahler, C. W., Richards, J. B., Ramsey, S. E., Stuar
 
 | Window | Content | Duration | Response | File/Folder | Condition | Data |
 |--------|---------|----------|----------|-------------|-----------|------|
-| Balloon Display | 气球图像 + 当前得分 + 充气次数 | 直到按键 | 空格(充气) / Enter(收钱) | balloon.png | {balloon_id} | pump_count, accumulated_score |
-| Pump Feedback | 气球变大 + 得分增加动画 | 100 ms | none | none | none | none |
-| Outcome | 爆炸动画/音效 或 "已收钱" 提示 | 2000 ms | none | burst_sound.wav | none | burst (bool), trial_earnings |
-| ITI | 空白 | 500 ms | none | none | none | none |
+| Balloon Display | Balloon image + current score + number of inflation | Until button | Space (inflate) / Enter (collect money) | balloon.png | {balloon_id} | pump_count, accumulated_score |
+| Pump Feedback | Balloon gets bigger + score increases animation | 100 ms | none | none | none | none |
+| Outcome | Explosion animation/sound effect or "Money received" prompt | 2000 ms | none | burst_sound.wav | none | burst (bool), trial_earnings |
+| ITI | Blank | 500 ms | none | none | none | none |
 
 ### Parsed Experiment Specification
 
@@ -115,10 +115,10 @@ Lejuez, C. W., Read, J. P., Kahler, C. W., Richards, J. B., Ramsey, S. E., Stuar
 | Task type | BART (risk-taking) |
 | Balloon count | 30 formal + 3 practice |
 | Burst rule | Random integer threshold (1–128) per balloon |
-| Pump key | Space (空格键) |
-| Collect key | Enter (回车键) |
-| Reward per pump | 0.5 分 |
-| Burst consequence | 当前轮得分清零 |
+| Pump key | Space (space bar) |
+| Collect key | Enter (Enter key) |
+| Reward per pump | 0.5 points |
+| Burst consequence | Clear the current round score to zero |
 | Pump feedback duration | 100 ms |
 | Outcome duration | 2000 ms |
 | ITI | 500 ms |
@@ -126,32 +126,32 @@ Lejuez, C. W., Read, J. P., Kahler, C. W., Richards, J. B., Ramsey, S. E., Stuar
 
 ### Missing Information
 
-1. 气球图像文件路径及规格未说明 → 需确认 balloon.png 尺寸、颜色、背景要求
-2. 爆炸音效具体文件及格式未提供 → 需确认 burst_sound.wav 路径或使用默认音效
-3. 是否需要在气球爆炸前显示充气次数反馈 → 需确认试次间是否显示累计充气次数
+1. The path and specifications of the balloon image file are not specified → You need to confirm the size, color, and background requirements of balloon.png
+2. The specific file and format of the explosion sound effect are not provided → You need to confirm the burst_sound.wav path or use the default sound effect
+3. Whether it is necessary to display feedback on the number of inflations before the balloon explodes → It is necessary to confirm whether the cumulative number of inflations is displayed between trials
 
 ### Assumptions
 
-- 爆炸阈值为均匀分布的随机整数（1–128），而非基于概率函数，已在请求中明确
-- 每轮结束后气球图像自动重置为初始大小，无平滑过渡动画
-- 爆炸后得分为0，而非部分扣除；收钱后得分全数转入永久账户
-- 练习气球数据不纳入最终分析，但存储以供检查
+- The explosion threshold is a uniformly distributed random integer (1–128), not based on a probability function, as specified in the request
+- The balloon image is automatically reset to its initial size after each round, without smooth transition animation
+- After the explosion, the score will be 0 instead of partial deduction; after collecting the money, the score will be transferred to the permanent account in full
+- Practice balloon data is not included in the final analysis, but is stored for review
 
 ### Expected Code Architecture
 
 ```
 bart.py
 ├── Parameters (n_balloons=30, n_practice=3, max_pumps_range=128, reward_per_pump=0.5)
-├── Window setup (全屏或窗口)
+├── Window setup (full screen or window)
 ├── Stimulus preloading (balloon.png, burst_sound.wav)
 ├── Generate condition file (balloon_id, max_pumps, reward_per_pump)
 ├── Practice loop (3 balloons)
 ├── Formal trial loop (30 balloons):
-│   ├── Balloon display (直到按键: 空格充气 / Enter收钱)
-│   ├── Pump feedback (100 ms: 气球变大 + 得分增加)
-│   ├── Outcome (2000 ms: 爆炸/收钱结果)
-│   │   └── 若充气次数 > max_pumps → burst=True, trial_earnings=0, 播放音效
-│   │   └── 若按Enter → burst=False, trial_earnings 转入永久账户
+│ ├── Balloon display (until button: Space to inflate / Enter to collect money)
+│ ├── Pump feedback (100 ms: balloon gets bigger + score increases)
+│ ├── Outcome (2000 ms: explosion/money collection result)
+│ │ └── If the number of inflations > max_pumps → burst=True, trial_earnings=0, play the sound effect
+│ │ └── If press Enter → burst=False, trial_earnings transfer to permanent account
 │   └── ITI (500 ms)
 ├── Data: try/finally CSV with incremental writes
 ```
@@ -162,11 +162,11 @@ Base columns + balloon_id, trial_type, pump_count, burst, trial_earnings, total_
 
 | Column | Type | Description |
 |--------|------|-------------|
-| balloon_id | int | 气球编号 (1–30) |
+| balloon_id | int | Balloon number (1–30) |
 | trial_type | str | `"practice"` or `"formal"` |
-| pump_count | int | 该气球的总充气次数 |
-| burst | int | 1=爆炸, 0=主动收钱 |
-| trial_earnings | float | 该轮实际得分（爆炸为0） |
-| total_earnings | float | 累计永久账户得分 |
-| adjusted_pumps | float | 非爆炸试次的平均充气次数（分析时计算） |
-| max_pumps | int | 该气球的隐藏爆炸阈值（实验记录用） |
+| pump_count | int | The total number of times the balloon has been inflated |
+| burst | int | 1=explosion, 0=actively collect money |
+| trial_earnings | float | Actual score of the round (explosion is 0) |
+| total_earnings | float | Cumulative permanent account score |
+| adjusted_pumps | float | Average number of pumps for non-explosive trials (calculated during analysis) |
+| max_pumps | int | The hidden explosion threshold of the balloon (for experimental records) |

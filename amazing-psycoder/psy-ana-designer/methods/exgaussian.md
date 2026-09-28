@@ -1,37 +1,37 @@
-# Ex-Gaussian 分布拟合
+# Ex-Gaussian distribution fitting
 
-## 概述
+## Overview
 
-Ex-Gaussian（指数修正高斯）是描述右偏 RT 分布的一种候选分布，常用参数对应高斯位置/尺度与指数尾部尺度。参数是分布描述，不应在没有过程模型或外部证据时直接命名为“决策速度”“稳定性”或“注意 lapse”，也不是所有 RT 问题的黄金标准。
+Ex-Gaussian (exponentially modified Gaussian) is a candidate distribution that describes the right-skewed RT distribution. Common parameters correspond to Gaussian position/scale and exponential tail scale. Parameters are distributional descriptions and should not be directly named "decision speed" "stability" or "attention lapse" without a process model or external evidence, nor are they the gold standard for all RT problems.
 
-**典型场景**: ADHD研究中,高τ值(更多的极端慢反应)是核心行为标记,而μ和σ可能与对照组无差异。
+**Typical scenario**: In ADHD studies, high τ values ​​(more extreme slow reactions) are core behavioral markers, while μ and σ may be no different from controls.
 
-## 何时使用
+## When to use
 
-| 条件 | 要求 |
+| Conditions | Requirements |
 |------|------|
-| 实验设计 | 被试间或被试内设计;需至少两组或两个条件进行比较 |
-| 因变量类型 | 反应时(RT),连续正数变量,单位通常为毫秒 |
-| 样本信息 | 由层级结构、尾部信息、效应大小和估计器决定；用参数恢复/设计模拟评估，不设通用试次数/被试数门槛 |
-| 关键检查 | 分布支持与任务 RT 相容；与 lognormal/shifted-lognormal/过程模型等候选做预测检查；核验收敛、参数恢复和对预先声明清理规则的敏感性，不自动加入固定 RT/SD 剔除 |
+| Experimental design | Between-subjects or within-subjects design; at least two groups or two conditions are required for comparison |
+| Dependent variable type | Reaction time (RT), a continuous positive variable, usually in milliseconds |
+| Sample information | Determined by hierarchical structure, tail information, effect size and estimator; evaluated with parameter recovery/design simulation, no common trial number/subject number threshold |
+| Key checks | Distribution support is compatible with task RT; prediction checks with candidates such as lognormal/shifted-lognormal/process models; verify convergence, parameter recovery and sensitivity to pre-stated cleanup rules, do not automatically add fixed RT/SD culling |
 
-## 三个参数
+## Three parameters
 
-| 参数 | 心理学解释 | 典型值(ms) |
+| Parameters | Psychological explanation | Typical values (ms) |
 |------|-----------|----------|
-| μ (mu) | 高斯成分的位置参数；心理过程解释需额外证据 | 由任务/单位/模型估计 |
-| σ (sigma) | 高斯成分的尺度参数 | 由任务/单位/模型估计 |
-| τ / beta | 指数成分的尺度/均值参数（名称依实现） | 由任务/单位/模型估计 |
+| μ (mu) | Position parameter of Gaussian component; additional evidence required for psychological process explanation | Estimated by task/unit/model |
+| σ (sigma) | Scale parameter of the Gaussian component | Estimated by task/unit/model |
+| τ/beta | Scale/mean parameter of the exponential component (named by implementation) | Estimated by task/unit/model |
 
-## 为什么用Ex-Gaussian
+## Why use Ex-Gaussian
 
-均值/中位数不能完整描述分布形状；Ex-Gaussian 可把位置、尺度与右尾差异参数化。但不同生成过程可能产生相似参数，分布参数差异不能单独识别“走神”等潜在认知过程。
+Mean/median cannot fully describe the shape of the distribution; Ex-Gaussian can parameterize position, scale and right-tail differences. However, different generation processes may produce similar parameters, and differences in distribution parameters cannot independently identify potential cognitive processes such as “mind wandering”.
 
-## R代码
+## R code
 
 ```r
 library(brms)
-# 仅示意：公式、先验、清理和随机结构必须来自已确认 config。
+# For illustration only: formulas, priors, sanitization, and random structures must come from a confirmed config.
 fit <- brm(
   bf(
     rt ~ condition + (1 + condition | subject_id),
@@ -45,22 +45,22 @@ fit <- brm(
 )
 summary(fit)
 pp_check(fit)
-# 还需检查 R-hat/ESS、发散、后验预测与预先声明的候选分布敏感性。
+# Also check R-hat/ESS, divergence, posterior predictions and pre-stated candidate distribution sensitivities.
 ```
 
-## 报告格式 (APA 7th)
+## Report Format (APA 7th)
 
-**方法部分**:
+**Method part**:
 
 > Trial-level RTs were modeled with a hierarchical Ex-Gaussian distribution in the pinned `brms` environment. The Gaussian location/scale and exponential-component parameterization followed the documented package version. Cleaning rules were prespecified in the analysis config; no generic fixed-RT or within-cell SD rule was added. The model represented subject/item dependence declared by the design. We reported parameter contrasts with posterior intervals, R-hat/ESS and divergence diagnostics, posterior-predictive checks, and a prespecified comparison with viable alternative RT distributions.
 
-**结果部分**:
+**Result part**:
 
 > The fitted groups differed primarily in the model's exponential-tail parameter, while location and Gaussian-scale contrasts were smaller and less precise. Posterior-predictive checks showed where the Ex-Gaussian captured or missed each group's RT distribution. These are distributional differences; labeling the tail contrast as attentional lapses or the location contrast as decision speed would require independent process-level evidence.
 
-**表格建议**:
+**Form suggestions**:
 
-| 参数 | 声明的组间/条件对比 | 区间 | 模型/预测诊断 |
+| Parameters | Declared group/condition comparison | Interval | Model/Predictive diagnosis |
 |------|--------------------|------|---------------|
 | μ / location | estimate | 95% CrI/CI | R-hat/ESS + posterior predictive fit |
 | σ | estimate | 95% CrI/CI | R-hat/ESS + posterior predictive fit |

@@ -1,81 +1,81 @@
-# 聚类分析 (Cluster Analysis)
+# Cluster Analysis (Cluster Analysis)
 
-## 概述
+## Overview
 
-聚类分析基于多个变量将被试分成同质的子群体,常用于发现行为模式。
+Cluster analysis divides subjects into homogeneous subgroups based on multiple variables and is often used to discover behavioral patterns.
 
-**典型场景**: 基于RT、准确率和问卷分数将被试分为"高效"和"谨慎"两类; 发现焦虑的不同表现亚型。
+**Typical scenario**: Divide subjects into two categories: "efficient" and "cautious" based on RT, accuracy and questionnaire scores; discover different performance subtypes of anxiety.
 
-## 何时使用
+## When to use
 
-| 条件 | 要求 |
+| Conditions | Requirements |
 |------|------|
-| 设计 | 被试间 |
-| DV | 多个连续变量（需标准化） |
-| 目标 | 发现同质子群体（探索性） |
-| 样本信息 | 由维度、距离集中、簇分离度、最小簇和稳定性目标决定；通过重采样/模拟评估，不设通用 n/p 比 |
-| 数据要求 | 标准化变量，缺失值已处理 |
+| Design | Subject Room |
+| DV | Multiple continuous variables (need to be standardized) |
+| Goal | Discover homogeneous subpopulations (exploratory) |
+| Sample information | Determined by dimension, distance concentration, cluster separation, minimum cluster, and stability goals; evaluated by resampling/simulation, no universal n/p ratio |
+| Data requirements | Standardized variables, missing values handled |
 
-## 方法
+## Method
 
-| 方法 | 特点 | R包 |
+| Method | Features | R package |
 |------|------|-----|
-| K-means | 预指定k个类 | `stats::kmeans()` |
-| 层次聚类 | 不需预指定,树状图可视化 | `stats::hclust()` |
-| 潜在类别分析(LCA) | 基于模型,提供拟合指标 | `poLCA` |
+| K-means | Pre-specified k classes | `stats::kmeans()` |
+| Hierarchical clustering | No pre-specification required, dendrogram visualization | `stats::hclust()` |
+| Latent class analysis (LCA) | Based on the model, providing fitting indicators | `poLCA` |
 
-## 如何确定k
+## How to determine k
 
-| 方法 | 指标 |
+| Method | Indicator |
 |------|------|
-| 肘部法 (Elbow) | 组内SS的拐点 |
-| 轮廓系数 (Silhouette) | 越接近1越好 |
-| BIC (LCA) | 越低越好 |
+| Elbow method (Elbow) | Inflection point of SS within group |
+| Silhouette coefficient (Silhouette) | The closer to 1, the better |
+| BIC (LCA) | Lower is better |
 
-## R 代码
+## R code
 
 ```r
-# 聚类分析完整示例
+# Complete example of cluster analysis
 library(tidyverse)
-library(cluster)      # 轮廓系数
-library(factoextra)   # 聚类可视化
-library(effectsize)   # 效应量（eta-squared）
+library(cluster)      # Contour coefficient
+library(factoextra)   # Cluster visualization
+library(effectsize)   # Effect size (eta-squared)
 
 # ============================================
-# 1. 数据准备与标准化
+# 1. Data preparation and standardization
 # ============================================
 set.seed(123)
-df <- read.csv("data.csv")  # 替换为实际数据文件
+df <- read.csv("data.csv")  # replaced with actual data file
 vars <- df %>% select(RT, accuracy, anxiety, depression)
-vars_scaled <- scale(vars)  # 标准化（均值为0，标准差为1）
+vars_scaled <- scale(vars)  # Standardized (mean is 0, standard deviation is 1)
 
 # ============================================
-# 2. 确定最佳聚类数 k
+# 2. Determine the optimal number of clusters k
 # ============================================
-# 肘部法：寻找组内平方和（WSS）的拐点
+# Elbow method: finding the inflection point of the within-group sum of squares (WSS)
 fviz_nbclust(vars_scaled, kmeans, method = "wss") +
-  labs(title = "肘部法确定最佳 k")
+  labs(title = "Elbow method to determine optimal k")
 
-# 轮廓系数法：越接近 1 越好
+# Contour coefficient method: the closer to 1, the better
 fviz_nbclust(vars_scaled, kmeans, method = "silhouette") +
-  labs(title = "轮廓系数法确定最佳 k")
+  labs(title = "Contour coefficient method to determine optimal k")
 
 # ============================================
-# 3. 执行 K-means 聚类（假设 k = 3）
+# 3. Perform K-means clustering (assume k = 3)
 # ============================================
 k <- 3
 km <- kmeans(vars_scaled, centers = k, nstart = 25)
 df$cluster <- factor(km$cluster)
 
-# 聚类结果可视化（PCA 降维投影）
+# Visualization of clustering results (PCA dimensionality reduction projection)
 fviz_cluster(km, data = vars_scaled,
              ellipse.type = "norm",
              palette = "jco",
              ggtheme = theme_minimal(),
-             main = paste0("K-means 聚类结果 (k = ", k, ")"))
+             main = paste0("K-means clustering results (k =", k, ")"))
 
 # ============================================
-# 4. 聚类特征描述
+# 4. Clustering feature description
 # ============================================
 cluster_profile <- df %>%
   group_by(cluster) %>%
@@ -87,49 +87,49 @@ cluster_profile <- df %>%
 print(cluster_profile)
 
 # ============================================
-# 5. 聚类质量指标：轮廓系数
+# 5. Clustering quality index: silhouette coefficient
 # ============================================
 sil <- silhouette(km$cluster, dist(vars_scaled))
-cat(sprintf("平均轮廓系数: %.3f\n", mean(sil[, 3])))
+cat(sprintf("Average silhouette coefficient: %.3f\\n", mean(sil[, 3])))
 
 # ============================================
-# 6. 外部效度验证：聚类间差异检验 + 效应量
+# 6. External validity verification: difference test between clusters + effect size
 # ============================================
-# ANOVA 检验焦虑分数在聚类间是否有差异
+# ANOVA tests whether anxiety scores differ between clusters
 anova_res <- aov(anxiety ~ cluster, data = df)
 summary(anova_res)
 
-# 效应量：eta-squared（广义 eta-squared 适用于被试间设计）
+# Effect size: eta-squared (generalized eta-squared is suitable for between-subjects designs)
 eta_sq <- eta_squared(anova_res, partial = FALSE)
 cat(sprintf("eta-squared = %.3f (%.2f%% CI [%.3f, %.3f])\n",
             eta_sq$Eta2, 95,
             eta_sq$CI_low, eta_sq$CI_high))
 
-# 事后多重比较（Tukey HSD）
+# Post hoc multiple comparisons (Tukey HSD)
 TukeyHSD(anova_res)
 
 # ============================================
-# 7.（可选）层次聚类
+# 7. (Optional) Hierarchical clustering
 # ============================================
 dist_mat <- dist(vars_scaled, method = "euclidean")
 hc <- hclust(dist_mat, method = "ward.D2")
 fviz_dend(hc, k = k, rect = TRUE,
-          main = "层次聚类树状图（Ward 法）")
+          main = "Hierarchical clustering dendrogram (Ward method)")
 ```
 
-## 报告
+## Report
 
 > K-means clustering (k=3, silhouette=0.42) identified three response patterns: fast-accurate (45%), slow-accurate (32%), and fast-inaccurate (23%). Groups differed on anxiety scores, F(2,97)=8.34, p<.001.
 
-## 注意事项
+## Notes
 
-- 聚类是探索性方法——结果需在独立样本中验证
-- 变量需标准化(否则单位大的变量主导聚类)
-- 不同的k和算法可能得出不同结果——报告稳定性
+- Clustering is an exploratory method - results need to be verified in independent samples
+- Variables need to be standardized (otherwise variables with large units dominate clustering)
+- Different k and algorithms may give different results - reporting stability
 
-## 备选方法
+## Alternative method
 
-- 判别分析 — 已知分组标签时用于预测组别归属
-- [因子分析](./factor-analysis.md) — 降维发现潜在维度结构，而非将被试分组
-- 潜在剖面分析 — 连续变量的模型化聚类，提供拟合指标
-- 混合效应模型 — 处理层次数据结构中的亚组差异
+- Discriminant analysis - used to predict group affiliation when group labels are known
+- [Factor Analysis](./factor-analysis.md) — Dimensionality reduction discovers underlying dimensional structures rather than dividing subjects into groups
+- Latent profile analysis - modeled clustering of continuous variables, providing fit indicators
+- Mixed Effects Model—Handling subgroup differences in hierarchical data structures

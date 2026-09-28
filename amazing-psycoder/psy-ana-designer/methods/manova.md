@@ -1,46 +1,46 @@
-# 多元方差分析 (MANOVA)
+# Multivariate Analysis of Variance (MANOVA)
 
-## 概述
+## Overview
 
-MANOVA 在多个因变量上同时检验组间差异。当DV之间相关时,比分别做多个ANOVA更有效力且控制整体假阳性。
+MANOVA tests differences between groups simultaneously on multiple dependent variables. When DVs are correlated, it is more effective than doing multiple ANOVAs separately and controls overall false positives.
 
-**典型场景**: 检验焦虑组和对照组在RT、准确率、RT变异性三个DV上的综合差异。
+**Typical scenario**: Test the comprehensive difference between the anxiety group and the control group in the three DVs of RT, accuracy, and RT variability.
 
-## 何时使用
+## When to use
 
-| 条件 | 要求 |
+| Conditions | Requirements |
 |------|------|
-| 设计类型 | 组间设计（一个分类IV，多个连续DV） |
-| DV | 2+连续变量，中等相关（r ≈ 0.3–0.7）；相关过高（r > 0.8）可考虑降维，相关过低（r < 0.2）则多个ANOVA亦可 |
-| IV | 1个或以上分类变量（单因素或多因素） |
-| 样本信息 | 由组数、结局相关结构、协方差估计、效应和不平衡决定；用设计模拟/稳定性诊断，不使用“每 DV 固定人数”规则 |
-| 假设 | 多元正态性（每组的DV联合分布近似多元正态）、方差-协方差矩阵齐性（Box's M 检验 p > .001）、观测独立性、无多元异常值 |
+| Design type | Between-groups design (one classification IV, multiple continuous DVs) |
+| DV | 2+ continuous variables, medium correlation (r ≈ 0.3–0.7); if the correlation is too high (r > 0.8), dimensionality reduction can be considered, and if the correlation is too low (r < 0.2), multiple ANOVAs can also be considered |
+| IV | 1 or more categorical variables (single factor or multi-factor) |
+| Sample information | Determined by number of groups, outcome correlation structure, covariance estimates, effects, and imbalance; used design simulation/stability diagnostics, not using the "fixed number per DV" rule |
+| Assumptions | Multivariate normality (the DV joint distribution of each group is approximately multivariate normal), homogeneity of variance-covariance matrices (Box's M test p > .001), independence of observations, no multivariate outliers |
 
-## vs 多个ANOVA
+## vs multiple ANOVA
 
-- 多个ANOVA: 每个DV一个 → 假阳性累积(3个DV→~14%至少一个假显著)
-- MANOVA: 一个检验覆盖所有DV → 控制整体假阳性
-- MANOVA可以检测到单个ANOVA检测不到的差异(DV组合的线性模式)
+- Multiple ANOVAs: one per DV → cumulative false positives (3 DVs → ~14% at least one falsely significant)
+- MANOVA: One test covers all DV → controls overall false positives
+- MANOVA can detect differences that cannot be detected by a single ANOVA (linear mode of DV combination)
 
-## 关键输出
+## Key output
 
-| 统计量 | 推荐场景 |
+| Statistics | Recommended scenarios |
 |--------|---------|
-| Pillai's Trace | 最稳健,假设违反时优先 |
-| Wilks' Λ | 最常用 |
+| Pillai's Trace | The most robust, taking priority when assumptions are violated |
+| Wilks' Λ | Most commonly used |
 
-## R 代码
+## R code
 
 ```r
-# 加载必要的包
-library(car)        # 用于MANOVA和Box's M检验
-library(effectsize) # 用于效应量计算
+# Load necessary packages
+library(car)        # for MANOVA and Box's M test
+library(effectsize) # is used for effect size calculations
 
-# ---- 模拟数据 ----
-# 场景: 焦虑组 vs 对照组，在RT、准确率、RT变异性上的综合差异
+# ---- Simulated data ----
+# Scenario: Anxiety group vs control group, comprehensive differences in RT, accuracy, and RT variability
 set.seed(123)
 n_per_group <- 40
-group <- factor(rep(c("焦虑组", "对照组"), each = n_per_group))
+group <- factor(rep(c("Anxiety group", "Control group"), each = n_per_group))
 
 RT <- c(rnorm(n_per_group, mean = 520, sd = 80),
         rnorm(n_per_group, mean = 450, sd = 75))
@@ -53,12 +53,12 @@ RT_variability <- c(rnorm(n_per_group, mean = 120, sd = 30),
 
 df <- data.frame(group, RT, accuracy, RT_variability)
 
-# ---- 描述统计 ----
-cat("=== 描述统计 ===\n")
+# ---- Descriptive Statistics ----
+cat("=== Descriptive Statistics ===\\n")
 print(aggregate(cbind(RT, accuracy, RT_variability) ~ group, data = df, FUN = mean))
 
-# ---- 假设检验: Box's M (方差-协方差矩阵齐性) ----
-cat("\n=== Box's M 检验 ===\n")
+# ---- Hypothesis test: Box's M (homogeneity of variance-covariance matrix) ----
+cat("\\n=== Box's M Test ===\\n")
 box_m <- boxM(cbind(RT, accuracy, RT_variability) ~ group, data = df)
 print(box_m)
 
@@ -72,12 +72,12 @@ print(summary(manova_fit, test = "Pillai"))
 cat("\n=== MANOVA (Wilks' Λ) ===\n")
 print(summary(manova_fit, test = "Wilks"))
 
-# ---- 效应量 (偏η²) ----
-cat("\n=== 效应量 ===\n")
+# ---- Effect size (partial η²) ----
+cat("\\n=== Effect size ===\\n")
 print(eta_squared(manova_fit, partial = TRUE))
 
-# ---- 事后单变量ANOVA (Bonferroni校正) ----
-cat("\n=== 事后单变量ANOVA ===\n")
+# ---- Post hoc univariate ANOVA (Bonferroni correction) ----
+cat("\\n=== Post hoc univariate ANOVA ===\\n")
 dv_names <- c("RT", "accuracy", "RT_variability")
 for (dv in dv_names) {
   cat("\n---", dv, "---\n")
@@ -86,31 +86,31 @@ for (dv in dv_names) {
 }
 ```
 
-## 报告格式 (APA 7th)
+## Report Format (APA 7th)
 
-**方法部分**（简要报告）:
+**Methods Section** (brief report):
 
 > A one-way multivariate analysis of variance (MANOVA) was conducted to examine the effect of group (anxiety group vs. control group) on three dependent variables: reaction time (RT), accuracy, and RT variability. Assumptions were checked prior to analysis. Box's M test for homogeneity of variance-covariance matrices was non-significant, *M* = 18.23, *p* = .214, indicating the assumption was tenable. Multivariate normality was assessed via Shapiro-Wilk tests on each DV per group; no severe violations were detected.
 
-**结果部分**:
+**Result part**:
 
 > Using Pillai's Trace, the multivariate effect of group was significant, *V* = 0.45, *F*(3, 76) = 11.23, *p* < .001, partial η² = .31. Follow-up univariate ANOVAs with Bonferroni-adjusted alpha (.05/3 = .017) revealed that the anxiety group had significantly slower RT, *F*(1, 78) = 18.45, *p* < .001, η²_p = .19; lower accuracy, *F*(1, 78) = 22.10, *p* < .001, η²_p = .22; and higher RT variability, *F*(1, 78) = 15.67, *p* < .001, η²_p = .17. Descriptive statistics and full model results are presented in Table X.
 
-**APA 7th 要点**:
-- 报告检验统计量名称（Pillai's Trace / Wilks' Λ）、值、*F*值、假设自由度和误差自由度、*p*值、效应量（partial η²）。
-- 若 Pillai's 和 Wilks' 均报告，需说明选择依据（如"因样本量不等，报告 Pillai's Trace"）。
-- 事后单变量分析须注明多重比较校正方法及调整后的 alpha 水平。
+**APA 7th Key Points**:
+- Reports test statistic name (Pillai's Trace / Wilks' Λ), value, *F* value, hypothesis and error degrees of freedom, *p* value, effect size (partial η²).
+- If both Pillai's and Wilks' are reported, the basis for selection needs to be stated (e.g. "Due to unequal sample sizes, Pillai's Trace is reported").
+- Post hoc univariate analyzes must indicate the multiple comparison correction method and adjusted alpha level.
 
-## 局限
+## Limitations
 
-- 需要较大样本(每DV每条件≥20)
-- 假设比ANOVA更难满足
-- 显著后仍需单变量ANOVA解读——报告时需多重比较校正
+- Larger sample required (≥20 per condition per DV)
+- Assumptions are more difficult to satisfy than ANOVA
+- Univariate ANOVA interpretation is still required after significance - multiple comparison correction is required when reporting
 
-## 备选方法
+## Alternative method
 
-- 单因素ANOVA — DV只有一个时使用
-- MANCOVA — 需要控制协变量时使用
-- 判别分析 — 关注变量组合如何区分组别时使用
-- 重复测量ANOVA — 同组被试多时间点时使用
-- 线性判别分析(LDA) — 分类目的时优先考虑
+- One-way ANOVA — used when there is only one DV
+- MANCOVA — used when you need to control for covariates
+- Discriminant analysis - used when focusing on how combinations of variables differentiate between groups
+- Repeated measures ANOVA - used when the same group of subjects has multiple time points
+- Linear discriminant analysis (LDA) — preferred for classification purposes

@@ -1,94 +1,94 @@
-# 相关分析 (Correlation)
+# Correlation
 
-## 概述
+## Overview
 
-相关分析测量两个连续变量之间的线性关联强度。
+Correlation analysis measures the strength of the linear association between two continuous variables.
 
-**典型场景**: RT 与年龄的关系, 两种任务表现的相关, 问卷各维度间的关联。
+**Typical scenario**: The relationship between RT and age, the correlation between the performance of the two tasks, and the correlation between the various dimensions of the questionnaire.
 
-## 何时使用
+## When to use
 
-| 条件 | 要求 |
+| Conditions | Requirements |
 |------|------|
-| 变量类型 | 两个连续变量（或有序变量，用 Spearman/Kendall） |
-| 关系形态 | 线性关系（检查散点图；非线性时考虑曲线相关或转换） |
-| 正态性 | Pearson 要求双变量正态；Spearman/Kendall 无此要求 |
-| 独立性 | 每对观测独立（重复测量数据用 rmcorr） |
-| 极端值 | Pearson 对极端值敏感；存在极端值时优先 Spearman |
-| 样本量 | 无严格下限，但 n < 20 时 CI 很宽；小样本优先 Kendall τ |
+| Variable type | Two continuous variables (or ordinal variables, use Spearman/Kendall) |
+| Relationship form | Linear relationship (check scatter plot; consider curve correlation or transformation when nonlinear) |
+| Normality | Pearson requires bivariate normality; Spearman/Kendall does not require this |
+| Independence | Each pair of observations is independent (use rmcorr for repeated measurement data) |
+| Extreme values | Pearson is sensitive to extreme values; takes precedence when extreme values exist Spearman |
+| Sample size | No strict lower limit, but CI is wide when n < 20; small samples are preferred Kendall τ |
 
-## 方法选择
+## Method selection
 
-| 方法 | 何时用 | 假设 |
+| Method | When to use | Assumptions |
 |------|--------|------|
-| Pearson r | 两变量连续正态 | 线性关系,无极端值 |
-| Spearman ρ | 非正态/有序变量 | 单调关系 |
-| Kendall τ | 小样本,多ties | 单调关系 |
+| Pearson r | Two variables continuous normal | Linear relationship, no extreme values |
+| Spearman ρ | Non-normal/ordinal variables | Monotonic relationships |
+| Kendall τ | Small sample, many ties | Monotone relationship |
 
-## 效应量
+## Effect size
 
-| r 值 | 解释 |
+| r value | explanation |
 |------|------|
-| 0.1 | 小 |
-| 0.3 | 中 |
-| 0.5 | 大 |
+| 0.1 | small |
+| 0.3 | Medium |
+| 0.5 | Large |
 
-r² = 一个变量可被另一个变量解释的方差比例。
+r² = The proportion of variance that one variable can explain by another variable.
 
-## R 代码
+## R code
 
 ```r
-# 加载必要包
+# Load necessary packages
 library(ggplot2)
 
-# 示例数据：模拟被试年龄(age)与反应时(RT)的关系
+# Example data: Simulating the relationship between subject age (age) and reaction time (RT)
 set.seed(42)
 n <- 100
 age <- rnorm(n, mean = 35, sd = 12)
 RT  <- 500 - 3 * age + rnorm(n, mean = 0, sd = 80)
 d   <- data.frame(age, RT)
 
-# -------------------- 1. 描述统计 --------------------
-cat("年龄:", round(mean(d$age), 1), "±", round(sd(d$age), 1), "(M ± SD)\n")
+# -------------------- 1. Descriptive statistics --------------------
+cat("Age:", round(mean(d$age), 1), "±", round(sd(d$age), 1), "(M ± SD)\n")
 cat("RT:", round(mean(d$RT), 1), "±", round(sd(d$RT), 1), "(M ± SD)\n")
 
-# -------------------- 2. 散点图 --------------------
+# -------------------- 2. Scatter plot --------------------
 ggplot(d, aes(x = age, y = RT)) +
   geom_point(alpha = 0.5) +
   geom_smooth(method = "lm", se = TRUE, color = "steelblue") +
-  labs(title = "年龄与反应时的关系",
-       x = "年龄 (岁)", y = "反应时 (ms)") +
+  labs(title = "The relationship between age and reaction time",
+       x = "Age (years)", y = "Response time (ms)") +
   theme_minimal()
 
-# -------------------- 3. 正态性检验 --------------------
-# Pearson 的前提：检验双变量正态性
+# -------------------- 3. Normality test --------------------
+# Pearson's premise: Testing bivariate normality
 shapiro.test(d$age)
 shapiro.test(d$RT)
 
-# -------------------- 4. Pearson 相关 --------------------
+# -------------------- 4. Pearson related --------------------
 res <- cor.test(d$age, d$RT, method = "pearson")
 cat("\nPearson r =", round(res$estimate, 3),
     ", t(", res$parameter, ") = ", round(res$statistic, 2),
     ", p = ", format.pval(res$p.value, digits = 3),
     "\n95% CI: [", round(res$conf.int[1], 3), ", ", round(res$conf.int[2], 3), "]\n", sep = "")
 
-# -------------------- 5. 效应量 --------------------
-# r 本身就是效应量；同时报告 r²（决定系数）
+# ------------------ 5. Effect size ------------------
+# r itself is the effect size; r² (coefficient of determination) is also reported
 r <- res$estimate
-cat("r² =", round(r^2, 3), "→", round(r^2 * 100, 1), "% 的 RT 方差可被 age 解释\n")
+cat("r² =", round(r^2, 3), "→", round(r^2 * 100, 1), "% of the RT variance can be explained by age\\n")
 
-# -------------------- 6. Spearman 相关（非参数备选） --------------------
+# -------------------- 6. Spearman correlation (non-parametric alternative) --------------------
 res_sp <- cor.test(d$age, d$RT, method = "spearman")
 cat("\nSpearman ρ =", round(res_sp$estimate, 3),
     ", p =", format.pval(res_sp$p.value, digits = 3), "\n")
 
-# -------------------- 7. Kendall τ（小样本/多ties时推荐） --------------------
+# -------------------- 7. Kendall τ (recommended for small samples/many ties) --------------------
 res_kt <- cor.test(d$age, d$RT, method = "kendall")
 cat("Kendall τ =", round(res_kt$estimate, 3),
     ", p =", format.pval(res_kt$p.value, digits = 3), "\n")
 
-# -------------------- 8. 多变量相关矩阵 --------------------
-# 假设有多个变量的情况
+# -------------------- 8. Multivariable correlation matrix --------------------
+# Assume there are multiple variables
 d_multi <- data.frame(
   age   = age,
   RT    = RT,
@@ -98,28 +98,28 @@ cor_matrix <- cor(d_multi, method = "pearson")
 cor_pvals <- psych::corr.test(d_multi)$p
 print(round(cor_matrix, 3))
 
-# -------------------- 9. 重复测量相关 (rmcorr) --------------------
-# 当每个被试有多行数据时，用 rmcorr 替代普通 Pearson
+# -------------------- 9. Repeated Measures Correlation (rmcorr) --------------------
+# Use rmcorr instead of normal Pearson when there are multiple rows of data for each subject
 # library(rmcorr)
 # rmcorr_result <- rmcorr(participant = subject_id, measure1 = var1, measure2 = var2, dataset = df)
 ```
 
-## APA 报告格式
+## APA report format
 
 > Reaction time was negatively correlated with age, r(98)=-.34, p<.001, 95% CI [-.50, -.16].
 
-## 注意事项
+## Notes
 
-- 相关≠因果
-- 需检查散点图确认线性关系(非线性时r可能接近0)
-- 极端值对r影响巨大
-- 被试内重复测量数据不能用普通 Pearson r——每个被试多行,违反独立性。用 **rmcorr (repeated measures correlation)** 替代
+- Correlation ≠ Causation
+- The scatter plot needs to be checked to confirm the linear relationship (r may be close to 0 when non-linear)
+- Extreme values have a huge impact on r
+- Ordinary Pearson r cannot be used for within-subject repeated measurement data - multiple rows for each subject, violating independence. Use **rmcorr (repeated measures correlation)** instead
 
-## 备选方法
+## Alternative method
 
-- 简单线性回归 — 需要明确区分预测变量和结果变量时
-- [rmcorr（重复测量相关）](rmcorr.md) — 被试内重复测量设计的相关分析
-- 偏相关 — 需要控制第三个变量时
-- 多项式相关/曲线回归 — 关系为非线性时
-- [Bland-Altman 分析](bland-altman.md) — 评估两种测量方法的一致性而非关联强度
-- [信度分析（Cronbach's α / ICC）](reliability.md) — 评估测量工具内部一致性或评分者一致性
+- Simple Linear Regression - When a clear distinction between predictor and outcome variables is required
+- [rmcorr (repeated measures correlation)](rmcorr.md) — Correlation analysis for within-subjects repeated measures designs
+- Partial correlation - when a third variable needs to be controlled
+- Polynomial Correlation/Curve Regression - When the relationship is non-linear
+- [Bland-Altman Analysis](bland-altman.md) — Evaluates the agreement of two measures rather than the strength of the association
+- [Reliability Analysis (Cronbach's α/ICC)](reliability.md) — Assess the internal consistency or inter-rater agreement of a measurement instrument

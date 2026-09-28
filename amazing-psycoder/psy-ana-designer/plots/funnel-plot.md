@@ -1,17 +1,17 @@
-# 漏斗图 (Funnel Plot)
+# Funnel Plot
 
-## 概述
+## Overview
 
-漏斗图是元分析中检查效应量与研究精度关系的诊断图。X轴通常是效应量，Y轴是标准误或精度；其形状可能受发表选择、异质性、设计质量和偶然波动共同影响，不能单独“检测出”发表偏倚。
+A funnel plot is a diagnostic plot used in a meta-analysis to examine the relationship between effect size and study precision. The x-axis is usually the effect size, and the y-axis is the standard error or precision; its shape may be affected by publication selection, heterogeneity, design quality, and chance fluctuations, and publication bias cannot be "detected" alone.
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| 场景 | 元分析中的小研究效应/选择机制敏感性检查 |
-| 数据 | 每个研究的效应量+SE |
+| Scenario | Small study effects/selection mechanism sensitivity checks in meta-analyses |
+| Data | Effect size + SE per study |
 
-## R 代码
+## R code
 
 ```r
 library(metafor)
@@ -21,15 +21,15 @@ funnel(res, main="Funnel Plot")
 regtest(res)
 ```
 
-## 解读
+## Interpretation
 
-- 近似对称不能证明不存在发表选择，尤其在研究数少或异质性高时。
-- 不对称提示效应量与精度有关；发表选择只是候选解释之一，还需结合异质性、结局定义、研究质量和敏感性模型判断。
-- Egger 回归给出小研究效应的模型证据，不是“发表偏倚存在/不存在”的二元裁决；研究数少时统计功效和校准尤其有限。
+- Approximate symmetry does not prove the absence of publication selection, especially when the number of studies is small or heterogeneity is high.
+- Asymmetry suggests that effect size is related to precision; publication selection is only one candidate explanation and needs to be combined with heterogeneity, outcome definition, study quality and sensitivity model judgment.
+- Egger regression gives model evidence of small study effects and is not a binary verdict of "present/absent publication bias"; statistical power and calibration are particularly limited when the number of studies is small.
 
-## 关键参数
+## Key parameters
 
-| 参数 | 作用 |
+| Parameters | Function |
 |------|------|
-| `main` | 标题 |
-| `level` | 漏斗边界置信水平 |
+| `main` | title |
+| `level` | Funnel boundary confidence level |

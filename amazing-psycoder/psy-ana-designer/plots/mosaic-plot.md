@@ -1,17 +1,17 @@
-# 马赛克图 (Mosaic Plot)
+# Mosaic Plot
 
-## 概述
+## Overview
 
-马赛克图用矩形面积表示分类变量交叉表的频数。矩形越大=该组合越多。适合展示两个或多个分类变量的关系。
+The mosaic plot uses a rectangular area to represent the frequency of the crosstab of categorical variables. The bigger the rectangle = the more combinations there are. Suitable for showing the relationship between two or more categorical variables.
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| 场景 | 2-3个分类变量的交叉表 |
-| 优势 | 面积直观展示频数,标准残差着色 |
+| Scenario | Crosstab of 2-3 categorical variables |
+| Advantages | Visual display of area frequency, standard residual coloring |
 
-## R 代码
+## R code
 
 ```r
 library(vcd)
@@ -21,16 +21,16 @@ mosaic(~ condition + error_type, data=data,
                                           error_type="Error Type")))
 ```
 
-## 解读
+## Interpretation
 
-- 矩形面积=该组合的观测数
-- 蓝色=观测>期望(正残差)
-- 红色=观测<期望(负残差)
-- 颜色越深=偏离期望越远
+- Rectangular area = number of observations for this combination
+- blue = observed > expected (positive residuals)
+- red = observed < expected (negative residual)
+- The darker the color = the further you deviate from your expectations
 
-## 关键参数
+## Key parameters
 
-| 参数 | 作用 |
+| Parameters | Function |
 |------|------|
-| `shade=TRUE` | 残差着色(蓝=多于期望,红=少于) |
-| `legend=TRUE` | 显示残差图例 |
+| `shade=TRUE` | Residual coloring (blue = more than expected, red = less than expected) |
+| `legend=TRUE` | Display residual legend |

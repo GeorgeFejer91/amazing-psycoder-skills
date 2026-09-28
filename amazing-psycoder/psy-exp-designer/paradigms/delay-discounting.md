@@ -6,7 +6,7 @@
 
 ## When to Use
 
-User mentions: Delay discounting, temporal discounting, intertemporal choice, impulsivity, 延迟折扣, 时间贴现. Measures the tendency to devalue rewards as a function of the delay until their receipt — the preference for smaller-sooner rewards over larger-later ones.
+User mentions: Delay discounting, temporal discounting, intertemporal choice, impulsivity, delay discounting, temporal discounting. Measures the tendency to devalue rewards as a function of the delay until their receipt — the preference for smaller-sooner rewards over larger-later ones.
 
 ## Core Logic
 
@@ -57,30 +57,31 @@ Kirby, K. N., Petry, N. M., & Bickel, W. K. (1999). Heroin addicts have higher d
 
 ## Do Not Assume
 
-- 不要假设奖励类型一定是金钱。延迟折扣任务中的奖励可以是食物、香烟、酒精、毒品或其他商品。不同奖励类型的折扣率可能存在系统性差异（如物质使用者对毒品的折扣率显著高于金钱）。在生成代码前，必须确认奖励的具体类型。
-- 不要假设选择格式一定是固定选择集。虽然多数实现使用预定义的条件文件罗列所有金额-延迟组合（全因子设计），但也有研究采用自适应滴定程序——即时金额根据前序选择动态调整以逼近无差异点。务必确认用户期望的是哪种格式。
-- 不要假设所有试次都是假设性选择。在一些设计中，实验结束后会随机抽取一个试次按参与者的选择实际兑现（真实支付），这可能产生不同于纯假设选择的折扣率。确认是否包含真实支付试次。
-- 不要假设即时选项总是在左侧。即时选项与延迟选项的左右位置应在试次间进行平衡（counterbalancing），以控制位置偏好偏差。确认条件文件是否已包含位置平衡的试次，或是否需要代码在运行时随机化左右位置。
-- 不要假设没有反应时间限制。虽然偏好测量任务通常不设反应截止时间，但某些实现会设置最大反应窗口（如 4000 ms），并对低于预期阈值的过快反应（如 RT < 200 ms）进行标记或剔除。确认是否需要反应时间限制。
-- 不要假设所有延迟使用相同的时间单位。延迟可能以天、周、月或年为单位。条件文件的列命名及后续数据分析（如 k 值的量纲）必须与实际使用的单位一致。确认延迟的时间单位。
+- Don't assume the reward type must be monetary. Rewards in delayed discounting tasks can be food, cigarettes, alcohol, drugs, or other goods. There may be systematic differences in discount rates across reward types (e.g., substance users discount drugs at significantly higher rates than money). The specific type of reward must be confirmed before generating a code.
+- Do not assume that the selection format must be a fixed selection set. While most implementations use a predefined condition file listing all amount-delay combinations (full factorial design), there are also studies using an adaptive titration procedure - the instant amount is dynamically adjusted based on the previous selection to approach the indifference point. Be sure to confirm which format the user expects.
+- Do not assume that all trials are hypothetical choices. In some designs, a trial is randomly drawn after the experiment to actually cash out (real payout) the participant's choice, which may yield a different discount rate than a purely hypothetical choice. Confirm whether real payment trials are included.
+- Don't assume that the immediate option is always on the left. The left and right positions of the immediate and delayed options should be counterbalancing across trials to control for position preference bias. Verify that the conditions file already contains position-balanced trials, or if you need code to randomize left and right positions at runtime.
+- Do not assume there is no reaction time limit. Although preference measurement tasks typically do not have a response deadline, some implementations set a maximum response window (e.g., 4000 ms) and flag or reject responses that are too fast below the expected threshold (e.g., RT < 200 ms). Confirm whether response time limits are required.
+- Do not assume that all delays use the same time unit. Delays may be measured in days, weeks, months or years. Column naming in the conditions file and subsequent data analysis (such as the dimensions of the k values) must be consistent with the actual units used. The time unit to confirm the delay.
+The columns in the
 
 ## Condition File Columns
 
-条件文件（xlsx/csv）中定义每个试次选择对的列：
+condition file (xlsx/csv) that define the choice pairs for each trial:
 
 | Column | Type | Description |
 |--------|------|-------------|
-| amount1 | str | 左侧按钮的文本标签（如 "现在 ¥20" 或 "¥20 today"） |
-| amount2 | str | 右侧按钮的文本标签（如 "30天后 ¥50" 或 "¥50 in 30 days"） |
-| delay_days | int | 延迟天数（延迟选项的等待时间，若单位为非天则相应调整列名） |
-| immediate_amount | float | 即时选项的金额数值（用于后续 k 值拟合） |
-| delayed_amount | float | 延迟选项的金额数值（用于后续 k 值拟合） |
+| amount1 | str | The text label of the left button (such as "¥20 now" or "¥20 today") |
+| amount2 | str | Text label of the button on the right (such as "¥50 in 30 days" or "¥50 in 30 days") |
+| delay_days | int | Number of delay days (waiting time for the delay option, if the unit is not days, adjust the column name accordingly) |
+| immediate_amount | float | The amount value of the immediate option (used for subsequent k-value fitting) |
+| delayed_amount | float | The amount value of the delayed option (used for subsequent k-value fitting) |
 
 ## Variants
 
-- **固定选择集延迟折扣 (Fixed-Choice Delay Discounting)**：最常用的实现方式。所有即时金额、延迟金额和延迟时间的组合预先在条件文件中指定，以随机顺序呈现。每个试次为独立的二元选择，无适应性调整。数据分析通过拟合双曲线折扣模型 V = A / (1 + kD) 估计 k 值，或计算曲线下面积 (AUC) 作为无模型替代指标。本文件主要描述此变体。
-- **滴定/调整延迟折扣 (Titrating/Adjusting Delay Discounting)**：即时奖励金额根据参与者在同一延迟条件下的前序选择动态调整，以逼近无差异点。例如，若参与者选择延迟奖励，则下次提高即时金额；若选择即时奖励，则降低即时金额。参考 Mazur (1987) 的调整程序。此变体可减少试次总数，但需要更复杂的试次间逻辑。可交叉参考 staircase.md。
-- **跨商品延迟折扣 (Cross-Commodity Delay Discounting)**：同一参与者对不同奖励类型（如金钱、食物、香烟、酒精）分别完成延迟折扣任务。每种商品在独立的 block 中呈现，或将商品类型作为试次条件变量。用于考察折扣率的领域特异性（domain specificity）。可交叉参考 concurrent-schedule.md。
+- **Fixed-Choice Delay Discounting**: The most commonly used implementation. All combinations of immediate amounts, delayed amounts, and delayed times are prespecified in the condition file and presented in random order. Each trial is an independent binary choice without adaptive adjustment. Data analysis estimated k values ​​by fitting a hyperbolic discount model V = A / (1 + kD), or calculated the area under the curve (AUC) as a model-free surrogate. This document mainly describes this variant.
+- **Titrating/Adjusting Delay Discounting**: The instant reward amount is dynamically adjusted based on the participant's previous choices under the same delay condition to approach the indifference point. For example, if a participant chooses a delayed reward, the immediate amount will be increased next time; if a participant chooses an immediate reward, the immediate amount will be reduced. Reference is made to Mazur (1987) for the adjustment procedure. This variation reduces the total number of trials but requires more complex inter-trial logic. May be cross-referenced to staircase.md.
+- **Cross-Commodity Delay Discounting**: The same participant completes delay discounting tasks for different reward types (such as money, food, cigarettes, alcohol). Each item is presented in a separate block, or the item type is used as a trial condition variable. Domain specificity used to examine discount rates. Can be cross-referenced to concurrent-schedule.md.
 
 ---
 
@@ -88,7 +89,7 @@ Kirby, K. N., Petry, N. M., & Bickel, W. K. (1999). Heroin addicts have higher d
 
 ### User Request
 
-> "我要做一个延迟折扣实验，用PsychoPy。屏幕左右各有一个按钮，左边是即时较小奖励（如'现在获得 ¥30'），右边是延迟较大奖励（如'90天后获得 ¥100'）。延迟奖励金额固定为 ¥100。延迟时间包括7天、30天、90天、180天、365天五个水平。每个延迟水平下，即时金额从 ¥10 到 ¥95 变化（以¥5为步长）。所有试次随机呈现。试次间有500ms的注视点'+'。实验开始前显示指导语，结束后显示致谢。参与者用鼠标点击按钮选择。无反馈。无练习试次。"
+> "I want to do a delay discount experiment, using PsychoPy. There is a button on the left and right of the screen. The left is an immediate smaller reward (such as 'Get ¥30 now'), and the right is a delayed larger reward (such as 'Get ¥100 after 90 days'). The delayed reward amount is fixed at ¥100. The delay time includes five levels: 7 days, 30 days, 90 days, 180 days, and 365 days. At each delay level, the immediate amount starts from ¥10 to ¥95 (in steps of ¥5). All trials were presented with a 500ms fixation point '+' before the experiment started and acknowledgment was displayed after the experiment. No feedback.
 
 ### Trial Window Timeline
 
@@ -96,11 +97,11 @@ Kirby, K. N., Petry, N. M., & Bickel, W. K. (1999). Heroin addicts have higher d
 ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐
 │ Window 1                 │ →  │ Window 2                 │ →  │ Window 3                 │
 │ Fixation                 │    │ Choice Display           │    │ ITI                      │
-│ Content: +               │    │ Content: 左右两个按钮    │    │ Content: 空白            │
-│ Duration: 500 ms         │    │ 左: 即时奖励文本         │    │ Duration: 500 ms         │
-│ Response: none           │    │ 右: 延迟奖励文本         │    │ Response: none           │
-│ File: none               │    │ Duration: 直到点击       │    │ File: none               │
-│ Condition: none          │    │ Response: 鼠标点击按钮   │    │ Condition: none          │
+│ Content: + │ │ Content: left and right buttons │ │ Content: blank │
+│ Duration: 500 ms │ │ Left: Instant reward text │ │ Duration: 500 ms │
+│ Response: none │ │ Right: Delay reward text │ │ Response: none │
+│ File: none │ │ Duration: Until click │ │ File: none │
+│ Condition: none │ │ Response: Mouse click button │ │ Condition: none │
 │ Data: none               │    │ File: none               │    │ Data: none               │
 │                          │    │ Condition: {amount1,      │    │                          │
 │                          │    │   amount2, delay_days}    │    │                          │
@@ -113,55 +114,55 @@ Kirby, K. N., Petry, N. M., & Bickel, W. K. (1999). Heroin addicts have higher d
 | Window | Content | Duration | Response | File/Folder | Condition | Data |
 |--------|---------|----------|----------|-------------|-----------|------|
 | Fixation | + | 500 ms | none | none | none | none |
-| Choice Display | 左右按钮 (即时 vs 延迟) | 直到鼠标点击 | 鼠标点击左/右按钮 | none | {amount1, amount2, delay_days, immediate_amount, delayed_amount} | chosen_button, choice_rt, chose_immediate |
-| ITI | 空白 | 500 ms | none | none | none | none |
+| Choice Display | Left and right buttons (immediate vs delayed) | Until mouse click | Mouse click left/right button | none | {amount1, amount2, delay_days, immediate_amount, delayed_amount} | chosen_button, choice_rt, chose_immediate |
+| ITI | Blank | 500 ms | none | none | none | none |
 
 ### Parsed Experiment Specification
 
 | Field | Value |
 |-------|-------|
-| Experiment name | 延迟折扣任务 (Delay Discounting Task) |
+| Experiment name | Delay Discounting Task (Delay Discounting Task) |
 | Platform | PsychoPy |
-| Task type | 延迟折扣 / 跨期选择 (Delay Discounting / Intertemporal Choice) |
-| Reward type | 金钱 (¥) |
-| Delayed amount | 固定 ¥100 |
-| Delay levels | 7, 30, 90, 180, 365 天（5个水平） |
-| Immediate amounts | ¥10–¥95（步长 ¥5，共18个水平） |
-| Total trials | ~90 (5 delays × 18 immediate amounts; 立即金额超过延迟金额的组合保留) |
-| Choice format | 固定选择集 (fixed choice set)，随机呈现 |
+| Task type | Delay Discounting / Intertemporal Choice (Delay Discounting / Intertemporal Choice) |
+| Reward type | Money (¥) |
+| Delayed amount | Fixed ¥100 |
+| Delay levels | 7, 30, 90, 180, 365 days (5 levels) |
+| Immediate amounts | ¥10–¥95 (step size ¥5, 18 levels in total) |
+| Total trials | ~90 (5 delays × 18 immediate amounts; the combination of immediate amounts exceeding delayed amounts is reserved) |
+| Choice format | fixed choice set (fixed choice set), randomly presented |
 | Fixation duration | 500 ms |
 | ITI duration | 500 ms |
-| Response mode | 鼠标点击按钮 (ButtonStim) |
+| Response mode | Mouse click button (ButtonStim) |
 | Phases | Instruction → Formal trials → End thanks |
 
 ### Missing Information
 
-1. 按钮的左右位置是否需要平衡（counterbalancing）——同一对金额和延迟是否需要在左右位置各出现一次？当前描述未明确说明，需确认。
-2. 指导语的具体内容未提供 —— 需确认指导语文本、是否包含示例试次、以及过渡提示的措辞。
-3. 是否需要对过快反应（如 RT < 200 ms）进行标记或剔除？需确认最低反应时阈值。
+1. Do the left and right positions of the button need to be counterbalancing - does the same pair of amount and delay need to appear once in the left and right positions? The current description is not clear and requires confirmation.
+2. The specific content of the instruction is not provided - it is necessary to confirm the text of the instruction, whether it contains sample trials, and the wording of the transition prompt.
+3. Do responses that are too fast (such as RT < 200 ms) need to be marked or eliminated? The minimum reaction time threshold needs to be confirmed.
 
 ### Critical Assumptions
 
-- 即时金额变化范围为 ¥10–¥95，以 ¥5 为步长，共 18 个即时金额 × 5 个延迟 = 90 个试次。即时金额超过延迟金额的组合（如 ¥95 现在 vs ¥100 在 7 天后）仍保留在设计中，因为这是合理的偏好测量（极端情况下可能全选即时选项，反映极高的折扣率）。
-- 无练习试次，直接进入正式实验。这与用户描述一致。
-- 左右位置不进行试次内随机化——按钮文本由条件文件的 amount1（左）和 amount2（右）列直接确定。若需要左右平衡，条件文件中需包含交换位置的额外行。
-- 无反馈、无 ITI 注视点以外的额外间隔。试次间直接推进。
-- 按钮文本标签的格式（如 "现在 ¥30" vs "90天后 ¥100"）由条件文件的 amount1/amount2 列定义，代码直接读取并显示，不做额外格式化。
+- The range of the instant amount is ¥10–¥95, with ¥5 as the step, a total of 18 instant amounts × 5 delays = 90 trials. Combinations in which the immediate amount exceeds the delayed amount (e.g. ¥95 now vs ¥100 in 7 days) remain in the design as this is a reasonable preference measure (the extreme case might be to select the immediate option all, reflecting extremely high discount rates).
+- No practice trials, enter the formal experiment directly. This is consistent with the user description.
+- There is no within-trial randomization of the left and right positions - the button text is determined directly from the amount1 (left) and amount2 (right) columns of the condition file. If left-right balancing is required, the condition file needs to include extra lines with swapped positions.
+- No feedback, no extra space beyond the ITI fixation point. Advance directly between trials.
+- The format of the button text label (such as "¥30 now" vs "¥100 in 90 days") is defined by the amount1/amount2 column of the condition file, and the code directly reads and displays it without additional formatting.
 
 ### Code Architecture
 
 ```
 delay_discounting.py
 ├── Parameters (n_trials, fixation_dur=0.5, iti_dur=0.5, delayed_amount=100)
-├── Window setup (全屏或窗口)
+├── Window setup (full screen or window)
 ├── Stimulus preloading (TextStim for fixation +, ButtonStim × 2 for choice options)
 ├── Load condition file (conditions.xlsx: amount1, amount2, delay_days, immediate_amount, delayed_amount)
-├── Instruction screen (指导语)
+├── Instruction screen
 ├── Formal trial loop:
 │   ├── Fixation (500 ms: +)
-│   ├── Choice display (直到鼠标点击: 左按钮=即时, 右按钮=延迟)
+│ ├── Choice display (until mouse click: left button=immediate, right button=delayed)
 │   ├── Record response (chosen_button, RT, chose_immediate)
-│   └── ITI (500 ms: 空白)
+│ └── ITI (500 ms: blank)
 ├── End thanks screen
 ├── Data: try/finally CSV with incremental writes
 ```
@@ -170,11 +171,11 @@ delay_discounting.py
 
 | Column | Type | Description |
 |--------|------|-------------|
-| amount1 | str | 左侧按钮文本（如 "现在 ¥30"） |
-| amount2 | str | 右侧按钮文本（如 "90天后 ¥100"） |
-| delay_days | int | 延迟天数 |
-| immediate_amount | float | 即时奖励金额 (¥) |
-| delayed_amount | float | 延迟奖励金额 (¥) |
-| chosen_button | str | 被点击的按钮标签（"left" / "right"） |
-| choice_rt | float | 选择反应时（秒） |
-| chose_immediate | int | 1=选择即时奖励, 0=选择延迟奖励 |
+| amount1 | str | Left button text (such as "Now ¥30") |
+| amount2 | str | Right button text (such as "¥100 after 90 days") |
+| delay_days | int | Number of delay days |
+| immediate_amount | float | Instant reward amount (¥) |
+| delayed_amount | float | delayed reward amount (¥) |
+| chosen_button | str | Clicked button label ("left" / "right") |
+| choice_rt | float | Choice reaction time (seconds) |
+| chose_immediate | int | 1=Choose immediate reward, 0=Choose delayed reward |

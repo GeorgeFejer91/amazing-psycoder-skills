@@ -35,12 +35,12 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
         --scope)
-            [[ $# -ge 2 ]] || { echo "--scope 需要 user 或 project"; exit 1; }
+            [[ $# -ge 2 ]] || { echo "--scope requires user or project"; exit 1; }
             SCOPE="$2"
             shift 2
             ;;
         --project-dir)
-            [[ $# -ge 2 ]] || { echo "--project-dir 需要路径"; exit 1; }
+            [[ $# -ge 2 ]] || { echo "--project-dir requires a path"; exit 1; }
             PROJECT_DIR="$2"
             shift 2
             ;;
@@ -49,12 +49,12 @@ while [[ $# -gt 0 ]]; do
             exit 0
             ;;
         --*)
-            echo "未知参数: $1"
+            echo "Unknown argument: $1"
             usage
             exit 1
             ;;
         *)
-            [[ -z "$REQUESTED" ]] || { echo "只能指定一个平台或安装路径"; exit 1; }
+            [[ -z "$REQUESTED" ]] || { echo "Specify only one platform or install path"; exit 1; }
             REQUESTED="$1"
             shift
             ;;
@@ -62,7 +62,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 [[ "$SCOPE" == "user" || "$SCOPE" == "project" ]] || {
-    echo "未知 scope: $SCOPE（仅支持 user 或 project）"
+    echo "Unknown scope: $SCOPE (use user or project)"
     exit 1
 }
 
@@ -91,27 +91,27 @@ detect_platform() {
 PLATFORM=$(detect_platform "$REQUESTED")
 
 if [[ "$PLATFORM" == ambiguous:* ]]; then
-    echo "检测到多个宿主：${PLATFORM#ambiguous:}"
-    echo "请显式指定 claude、codex、hermes 或 openclaw。"
+    echo "Multiple hosts detected: ${PLATFORM#ambiguous:}"
+    echo "Specify claude, codex, hermes, or openclaw explicitly."
     exit 1
 fi
 
 if [[ -z "$PLATFORM" ]]; then
-    echo "无法自动检测平台，请手动指定："
+    echo "Could not detect a platform; specify one:"
     echo "  ./install.sh claude"
     echo "  ./install.sh codex"
     echo "  ./install.sh hermes"
     echo "  ./install.sh openclaw"
-    echo "  或直接指定路径： ./install.sh /path/to/skills"
+    echo "  Or specify a path: ./install.sh /path/to/skills"
     exit 1
 fi
 
-# 如果参数是路径，直接使用
+# Use an explicit path directly.
 if [[ "$PLATFORM" == /* ]]; then
     SKILLS_DIR="$PLATFORM"
 else
     if [[ -z "${HOME:-}" ]]; then
-        echo "无法确定安装目录：HOME 环境变量未设置。请传入绝对路径。"
+        echo "Cannot determine the install directory: HOME is unset. Pass an absolute path."
         exit 1
     fi
     if [[ "$SCOPE" == "project" ]]; then
@@ -119,7 +119,7 @@ else
         case "$PLATFORM" in
             claude) SKILLS_DIR="$PROJECT_DIR/.claude/skills" ;;
             codex|openclaw) SKILLS_DIR="$PROJECT_DIR/.agents/skills" ;;
-            *) echo "$PLATFORM 暂不支持 --scope project；请传入绝对安装路径"; exit 1 ;;
+            *) echo "$PLATFORM does not support --scope project; pass an absolute install path"; exit 1 ;;
         esac
     else
         case "$PLATFORM" in
@@ -127,7 +127,7 @@ else
             codex)    SKILLS_DIR="$HOME/.agents/skills" ;;
             hermes)   SKILLS_DIR="$HOME/.hermes/skills" ;;
             openclaw) SKILLS_DIR="$HOME/.openclaw/skills" ;;
-            *)        echo "未知平台: $PLATFORM"; exit 1 ;;
+            *)        echo "Unknown platform: $PLATFORM"; exit 1 ;;
         esac
     fi
 fi
@@ -135,20 +135,20 @@ fi
 if [[ "$MODE" == "install" ]]; then
     mkdir -p "$SKILLS_DIR"
 elif [[ ! -d "$SKILLS_DIR" ]]; then
-    echo "未安装：目录不存在 $SKILLS_DIR"
+    echo "Not installed: directory does not exist: $SKILLS_DIR"
     exit 1
 fi
 
-echo "平台: $PLATFORM"
-echo "范围: $SCOPE"
-echo "目录: $SKILLS_DIR"
+echo "Platform: $PLATFORM"
+echo "Scope: $SCOPE"
+echo "Directory: $SKILLS_DIR"
 echo ""
 
 SKILL_ROOT="$(cd "$(dirname "$0")" && pwd)"
 VALIDATOR_PYTHON="${PYTHON_BIN:-python3}"
 
 if [[ "$MODE" == "install" ]]; then
-    echo "验证源 skill..."
+    echo "Validating source skills..."
     "$VALIDATOR_PYTHON" "$SKILL_ROOT/scripts/validate_skills.py" --portable
     echo ""
 fi
@@ -174,8 +174,8 @@ rollback_transaction() {
     set -e
 }
 
-trap 'status=$?; if [[ -n "$TX_DIR" ]]; then echo "安装中断；回滚整批 skill。"; rollback_transaction; fi; exit "$status"' ERR
-trap 'if [[ -n "$TX_DIR" ]]; then echo "安装中断；回滚整批 skill。"; rollback_transaction; fi; exit 130' INT TERM HUP
+trap 'status=$?; if [[ -n "$TX_DIR" ]]; then echo "Installation interrupted; rolling back all skills."; rollback_transaction; fi; exit "$status"' ERR
+trap 'if [[ -n "$TX_DIR" ]]; then echo "Installation interrupted; rolling back all skills."; rollback_transaction; fi; exit 130' INT TERM HUP
 
 install_all() {
     local pairs=(
@@ -212,7 +212,7 @@ install_all() {
             if [[ -e "$backup" || -L "$backup" ]]; then
                 mv "$backup" "$dest"
             fi
-            echo "  ✗ 安装失败: ${name}；回滚整批 skill"
+            echo "  ✗ Failed to install ${name}; rolling back all skills"
             rollback_transaction
             return 1
         fi
@@ -230,13 +230,13 @@ check_dir() {
     local name="$2"
     local dest="$SKILLS_DIR/$name"
     if [[ ! -d "$dest" ]]; then
-        echo "  ✗ 未安装 $name"
+        echo "  ✗ $name is not installed"
         return 1
     fi
     if diff -qr "$src" "$dest" >/dev/null; then
-        echo "  ✓ $name 与工作区一致"
+        echo "  ✓ $name matches the source workspace"
     else
-        echo "  ✗ $name 已漂移或版本落后"
+        echo "  ✗ $name differs from the source or is outdated"
         return 1
     fi
 }
@@ -266,25 +266,25 @@ run_for_all() {
 }
 
 if [[ "$MODE" == "check" ]]; then
-    echo "检查已安装 skill 与当前工作区..."
+    echo "Checking installed skills against the source workspace..."
     if run_for_all check_dir; then
-        echo "全部已安装 skill 与工作区一致。"
+        echo "All installed skills match the source workspace."
         exit 0
     fi
-    echo "检测到安装漂移；确认后重新运行安装命令以同步。"
+    echo "Installation differs; rerun the install command to synchronize."
     exit 1
 fi
 
-echo "安装 Amazing PsyCoder..."
+echo "Installing Amazing PsyCoder..."
 
 install_all
 
 echo ""
-echo "完成。启动方式（因平台而异）："
+echo "Done. Invoke it according to your platform:"
 echo "  Claude Code: /amazing-psycoder"
 echo "  Codex:       \$amazing-psycoder"
-echo "  Hermes:      /amazing-psycoder (或自动匹配)"
-echo "  OpenClaw:    /amazing-psycoder (或自动匹配)"
+echo "  Hermes:      /amazing-psycoder (or automatic matching)"
+echo "  OpenClaw:    /amazing-psycoder (or automatic matching)"
 echo ""
-echo "实验流水线: psy-exp-designer → psy-exp-coder → psy-exp-reviewer"
-echo "分析流水线: psy-ana-designer → psy-ana-coder → psy-ana-reviewer"
+echo "Experiment pipeline: psy-exp-designer → psy-exp-coder → psy-exp-reviewer"
+echo "Analysis pipeline: psy-ana-designer → psy-ana-coder → psy-ana-reviewer"

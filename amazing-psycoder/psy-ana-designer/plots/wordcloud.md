@@ -1,17 +1,17 @@
-# 词云 (Word Cloud)
+# Word Cloud
 
-## 概述
+## Overview
 
-词云用字体大小表示词频,快速展示文本数据中最重要的词汇。
+The word cloud uses font size to represent word frequency and quickly displays the most important words in text data.
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| 场景 | 文本数据频率展示 |
-| 用途 | 定性摘要,非精确分析 |
+| Scenario | Text data frequency display |
+| Purpose | Qualitative summary, imprecise analysis |
 
-## R 代码
+## R code
 
 ```r
 library(wordcloud2)
@@ -19,21 +19,21 @@ wordcloud2(data=word_freq, size=0.5, shape="circle",
            color="random-dark", backgroundColor="white")
 ```
 
-## 关键参数
+## Key parameters
 
-| 参数 | 作用 |
+| Parameters | Function |
 |------|------|
-| `size` | 字体大小缩放 |
-| `shape` | 形状(circle/cardioid/diamond) |
-| `color` | 配色(random-dark/random-light) |
-| `backgroundColor` | 背景色 |
+| `size` | Font size scaling |
+| `shape` | shape(circle/cardioid/diamond) |
+| `color` | Color matching (random-dark/random-light) |
+| `backgroundColor` | Background color |
 
-## 解读
+## Interpretation
 
-- 字号大=高频词
-- 中心位置=更突出
-- 配色区分词类
+- Large font size = high frequency words
+- Center position = more prominent
+- Color matching to distinguish parts of speech
 
-## 注意事项
+## Notes
 
-不适合精确分析(人眼不擅长比较面积)。推荐只用于定性展示。中文需先分词(jieba包)。
+is not suitable for precise analysis (the human eye is not good at comparing areas). Recommendations are for qualitative presentation only. Chinese needs to be segmented first (jieba package).

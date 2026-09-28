@@ -1,44 +1,44 @@
-# 结构方程模型 (SEM)
+# Structural Equation Modeling (SEM)
 
-## 概述
+## Overview
 
-SEM结合了因子分析(测量模型)和路径分析(结构模型),可以同时估计潜变量之间的关系。是中介、调节、纵向分析的通用框架。
+SEM combines factor analysis (measurement model) and path analysis (structural model) to simultaneously estimate the relationship between latent variables. It is a general framework for mediation, moderation, and longitudinal analysis.
 
-**典型场景**: 检验"执行功能"(潜变量,由3个任务测量)是否中介了年龄对Stroop效应的影响。
+**Typical scenario**: Test whether "executive function" (latent variable, measured by 3 tasks) mediates the impact of age on the Stroop effect.
 
-## 何时使用
+## When to use
 
-| 条件 | 要求 |
+| Conditions | Requirements |
 |------|------|
-| 研究设计 | 横断或纵向观察性设计,基于明确的理论模型;也可用于实验设计中的中介/调节路径检验 |
-| 因变量类型 | 连续变量(观测指标为连续或有序分类,潜变量及其指标均可连续) |
-| 样本信息 | 由模型自由度、载荷、可靠性、分布、缺失和目标效应决定；用模型特定模拟/功效分析，不使用 N≥200 或每参数固定人数规则 |
-| 核心假设 | 多元正态性(可用MLR等稳健估计放宽)、观测指标线性相关、测量模型满足局部独立性、多组比较时需检验测量不变性 |
+| Research design | Cross-sectional or longitudinal observational design, based on an explicit theoretical model; can also be used to test mediation/moderating paths in experimental designs |
+| Dependent variable type | Continuous variable (observation indicators are continuous or ordered classification, latent variables and their indicators can be continuous) |
+| Sample information | Determined by model degrees of freedom, loadings, reliability, distribution, missingness, and target effects; use model-specific simulation/power analysis, do not use N≥200 or fixed people per parameter rule |
+| Core assumptions | Multivariate normality (can be relaxed with robust estimation such as MLR), linear correlation of observation indicators, measurement model satisfies local independence, and measurement invariance needs to be tested when comparing multiple groups |
 
-## 两个子模型
+## Two sub-models
 
-| 模型 | 内容 | 类似 |
+| Model | Content | Similar |
 |------|------|------|
-| 测量模型 | 潜变量 ↔ 观测指标 | CFA |
-| 结构模型 | 潜变量之间的回归路径 | 路径分析 |
+| Measurement model | Latent variables ↔ Observed indicators | CFA |
+| Structural model | Regression path between latent variables | Path analysis |
 
-## 常用指标
+## Common indicators
 
-| 指标 | 标准 |
+| Indicator | Standard |
 |------|------|
 | CFI | >0.95 |
 | RMSEA | <0.06 |
 | SRMR | <0.08 |
 | χ²/df | <3 |
 
-## R代码
+## R code
 
 ```r
 library(lavaan)
 model <- '
-  # 测量模型
+  # Measurement model
   EF =~ nback_acc + wisconsin_acc + stroop_rt
-  # 结构模型
+  # Structural model
   EF ~ age
   stroop_rt ~ EF + age
 '
@@ -46,10 +46,10 @@ fit <- sem(model, data=data)
 summary(fit, fit.measures=TRUE, standardized=TRUE)
 ```
 
-## 报告
+## Report
 
-采用结构方程模型检验执行功能(EF)在年龄与Stroop效应之间的中介作用。模型拟合良好, χ²(24) = 45.32, p = .005, CFI = .96, RMSEA = .05 (90% CI [.02, .07]), SRMR = .04。EF对年龄与Stroop效应关系的间接效应显著, 间接效应 b = 0.23, 95% CI [0.12, 0.35], p < .001, 标准化间接效应 β = .31。年龄对Stroop效应的直接效应不显著(b = 0.08, β = .11, p = .12),表明EF起到完全中介作用。模型及标准化路径系数见图X。
+Structural equation modeling was used to examine the mediating role of executive function (EF) between age and Stroop effect. The model fit was good, χ²(24) = 45.32, p = .005, CFI = .96, RMSEA = .05 (90% CI [.02, .07]), SRMR = .04. The indirect effect of EF on the relationship between age and Stroop effect was significant, indirect effect b = 0.23, 95% CI [0.12, 0.35], p < .001, standardized indirect effect β = .31. The direct effect of age on the Stroop effect is not significant (b = 0.08, β = .11, p = .12), indicating that EF plays a complete mediating role. The model and standardized path coefficients are shown in Figure X.
 
-## vs 单独中介分析
+## vs individual mediation analysis
 
-SEM可以同时估计多个中介、处理潜变量、评估整体模型拟合度。普通回归中介分析(逐步法)是SEM的特例。
+SEM can simultaneously estimate multiple mediators, process latent variables, and evaluate overall model fit. Ordinary regression mediation analysis (stepwise method) is a special case of SEM.

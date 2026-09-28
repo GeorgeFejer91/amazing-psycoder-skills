@@ -1,10 +1,10 @@
-# 多屏幕与多 GPU 环境适配
+# Multi-screen and multi-GPU environment adaptation
 
-> 来源: 蒋挺老师知乎 PTB 教程 §2.4  
-> 归类: `demo/_raw/other/` — L4 参考
-> 推荐层级: 不参与代码生成，仅作为实验配置参考
+> Source: Teacher Jiang Ting Zhihu PTB Tutorial §2.4
+> Classification: `demo/_raw/other/` — L4 reference
+> Recommended level: Not involved in code generation, only used as experimental configuration reference
 
-## 枚举显示器
+## Enumeration display
 
 ```matlab
 nScreens = Screen('NumDisplays');
@@ -15,38 +15,38 @@ for i = 0:nScreens-1
 end
 ```
 
-编号从 0 开始，0 通常为主屏。创建窗口时指定屏幕索引：
+The number starts from 0, and 0 is usually the main screen. Specify the screen index when creating the window:
 
 ```matlab
-win1 = Screen('OpenWindow', 0, [0 0 0]);        % 主屏（被试看）
-win2 = Screen('OpenWindow', 1, [255 255 255]);  % 副屏（主试监控）
+win1 = Screen('OpenWindow', 0, [0 0 0]);        % Home screen (viewed by the subject)
+win2 = Screen('OpenWindow', 1, [255 255 255]);  % Secondary screen (main test monitoring)
 ```
 
-**注意**: 跨屏窗口无法共享 OpenGL 纹理资源，需分别管理。
+**Note**: Cross-screen windows cannot share OpenGL texture resources and need to be managed separately.
 
-## 双显卡系统 GPU 绑定
+## Dual graphics card system GPU binding
 
-在同时拥有集成显卡（Intel）和独立显卡（NVIDIA）的笔记本上：
+On a laptop with both integrated graphics (Intel) and discrete graphics (NVIDIA):
 
 ```matlab
-% 检查当前活动 GPU
+% Check current active GPU
 info = Screen('GetWindowInfo', win);
 if contains(info.Renderer, 'Intel')
     warning('Running on integrated GPU. Switch to discrete.');
 end
 ```
 
-- **Windows**: NVIDIA 控制面板 > 设置 MATLAB 为"高性能 NVIDIA 处理器"
+- **Windows**: NVIDIA Control Panel > Set MATLAB to "High Performance NVIDIA Processors"
 - **Linux**: `export __NV_PRIME_RENDER_OFFLOAD=1 && matlab -nodesktop`
 
-## 多屏刷新率不同步风险
+## Risk of out-of-synchronization of multi-screen refresh rates
 
-多屏间刷新率可能不同步，导致跨屏实验出现时间偏差。解决方案：
-- 确保主、副屏设置为相同刷新率
-- 实验数据采集仅使用被试屏幕的 Flip 时间戳
+The refresh rates between multiple screens may be out of sync, resulting in time deviations in cross-screen experiments. Solution:
+- Make sure the main and secondary screens are set to the same refresh rate
+- Experimental data collection only uses the Flip timestamp of the subject's screen
 
-## 副屏复合特效干扰
+## Secondary screen composite special effects interference
 
-某些集成显卡无法对副屏关闭复合特效（如 macOS Mission Control 动画）。推荐：
-- 副屏仅用于监控，不用于刺激呈现
-- 若需双屏呈现刺激，两屏使用相同型号并统一显卡驱动
+Some integrated graphics cards cannot turn off composite effects (such as macOS Mission Control animation) on the secondary screen. recommend:
+- The secondary screen is only used for monitoring, not for stimulus presentation
+- If you need dual screens to present stimulation, use the same model for both screens and unify the graphics card driver

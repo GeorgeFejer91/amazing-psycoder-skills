@@ -5,7 +5,7 @@
 
 ## When to Use
 
-User mentions: Simon task, Simon effect, spatial compatibility, spatial Stroop, stimulus-response compatibility, 西蒙任务. Measures the ability to suppress a prepotent spatial response tendency when stimulus location conflicts with the required response hand/location.
+User mentions: Simon task, Simon effect, spatial compatibility, spatial Stroop, stimulus-response compatibility, Simon task. Measures the ability to suppress a prepotent spatial response tendency when stimulus location conflicts with the required response hand/location.
 
 **This file covers the Simon paradigm (spatial stimulus-response compatibility). For the Stroop paradigm (color-word interference), see [stroop.md](stroop.md). For the Eriksen Flanker paradigm (center-surround distractor interference), see [eriksen-flanker.md](eriksen-flanker.md).**
 
@@ -30,10 +30,10 @@ The **Simon effect** = RT_incongruent − RT_congruent. This indexes the ability
 5. **Stimulus shape**: Colored circles, squares, or images?
 6. **Trial count**: How many congruent vs. incongruent trials? Total trials?
 7. **Practice**: Include practice block with loop-until-correct?
-8. **ITI duration**: 试次间隔时间和变化范围？
-9. **OS & font**: 在什么操作系统运行？如使用中文，确认字体
-10. **Display**: 全屏还是窗口？刺激大小和屏幕位置？
-11. **Instruction text**: 指导语内容？如何向被试说明反应规则？
+8. **ITI duration**: Trial interval and variation range?
+9. **OS & font**: What operating system is it running on? If using Chinese, confirm the font
+10. **Display**: Full screen or window? Stimulus size and screen location?
+11. **Instruction text**: Instruction content? How to explain response rules to subjects?
 
 ## Do Not Assume
 
@@ -110,7 +110,7 @@ Simon, J. R. (1969). Reactions toward the source of stimulation. *Journal of Exp
 
 ### User Request
 
-> "我想做一个Simon实验。屏幕左侧或右侧出现红/绿圆，红色按F键（左），绿色按J键（右）。一致条件（红色在左侧、绿色在右侧）和不一致条件（红色在右侧、绿色在左侧）各半。20个练习trial（有反馈）+ 2个正式block各60个trial。注视点500ms，刺激呈现直到按键（deadline 2000ms），反馈500ms，ITI随机500-1000ms。用PsychoPy。"
+> "I want to do a Simon experiment. A red/green circle appears on the left or right side of the screen, press the F key for red (left), and press the J key for green (right). Half and half of consistent conditions (red on the left, green on the right) and inconsistent conditions (red on the right, green on the left). 20 practice trials (with feedback) + 2 formal blocks of 60 trials each. Fixation point 500ms, stimulus presentation until the key (deadline) 2000ms), feedback 500ms, ITI random 500-1000ms. "
 
 ### Trial Window Timeline
 
@@ -118,7 +118,7 @@ Simon, J. R. (1969). Reactions toward the source of stimulation. *Journal of Exp
 ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐
 │ Window 1                 │ →  │ Window 2                 │ →  │ Window 3                 │ →  │ Window 4                 │
 │ Fixation                 │    │ Simon Stimulus           │    │ Feedback                 │    │ ITI                      │
-│ Content: +               │    │ Content: 红/绿圆         │    │ Content: 正确/错误        │    │ Content: empty           │
+│ Content: + │ │ Content: red/green circle │ │ Content: correct/wrong │ │ Content: empty │
 │ Duration: 500 ms         │    │ Duration: until key      │    │ Duration: 500 ms         │    │ Duration: 500-1000 ms    │
 │ Response: none           │    │ Response: f/j            │    │ Response: none           │    │ Response: none           │
 │ Condition: none          │    │ Condition: {color}/{pos} │    │ Condition: none          │    │ Condition: none          │

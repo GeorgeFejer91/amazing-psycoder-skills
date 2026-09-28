@@ -1,17 +1,17 @@
-# 环形条形图 (Circular Barplot)
+# Circular Barplot (Circular Barplot)
 
-## 概述
+## Overview
 
-环形条形图将条形排列在圆形坐标系中,适合展示大量类别的排序比较。
+The donut bar chart arranges the bars in a circular coordinate system, which is suitable for displaying the sorting and comparison of a large number of categories.
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| 场景 | 多类别排序(>10类),需要醒目展示 |
-| ⚠️ | 不适合精确读数(角度难比较) |
+| Scene | Multi-category sorting (>10 categories), need to be displayed prominently |
+| ⚠️ | Not suitable for precise readings (angles are difficult to compare) |
 
-## R 代码
+## R code
 
 ```r
 ggplot(data, aes(x=reorder(label, value), y=value)) +
@@ -21,13 +21,13 @@ ggplot(data, aes(x=reorder(label, value), y=value)) +
   theme_void()
 ```
 
-## vs 普通条形图
+## vs normal bar chart
 
-环形条形图美观但精确度低。推荐只在展示类别的**相对排名**(而非精确值)时使用。
+Ring bar charts are beautiful but have low accuracy. Recommended to only be used when displaying the **relative ranking** of a category (rather than an exact value).
 
-## 关键参数
+## Key parameters
 
-| 参数 | 作用 |
+| Parameters | Function |
 |------|------|
-| `coord_polar(start=0)` | 起始角度 |
-| `ylim` | Y轴范围(需包含负值以留空中心) |
+| `coord_polar(start=0)` | Starting angle |
+| `ylim` | Y-axis range (need to include negative values to leave the center empty) |

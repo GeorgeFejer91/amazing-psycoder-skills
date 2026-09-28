@@ -5,7 +5,7 @@
 
 ## When to Use
 
-User mentions: Priming, 启动, prime-target, masked prime, semantic priming, affective priming.
+User mentions: Priming, priming, prime-target, masked prime, semantic priming, affective priming.
 
 ## Core Logic
 
@@ -23,10 +23,10 @@ Before generating priming code, confirm ALL of these:
 6. **Response type**: lexical decision, categorization, evaluation?
 7. **Catch trials**: prime visibility checks?
 8. **Prime-only condition**: baseline measurement?
-9. **ITI duration**: 试次间隔时间和变化范围？
-10. **OS & font**: 在什么操作系统运行？如使用中文刺激，确认字体
-11. **Display**: 全屏还是窗口？刺激大小和屏幕位置？
-12. **Instruction text**: 指导语内容？
+9. **ITI duration**: Trial interval and variation range?
+10. **OS & font**: What operating system is it running on? If using Chinese stimuli, confirm the font
+11. **Display**: Full screen or window? Stimulus size and screen location?
+12. **Instruction text**: Instruction content?
 
 ## Do Not Assume
 
@@ -94,7 +94,7 @@ Neely, J. H. (1977). Semantic priming and retrieval from lexical memory: Roles o
 
 ### User Request
 
-> "我要做一个掩蔽启动实验。先呈现500 ms的前掩蔽（#####），然后呈现40 ms的启动词（可能是目标词的近义词或无关词），然后立即呈现目标词。被试的任务是判断目标词是真词还是假词（词汇判断），真词按F，假词按J。启动词和目标词都是中文双字词。SOA固定60 ms。先30个练习，然后3个正式block各60个trial。用PsychoPy。"
+> "I want to do a masked priming experiment. First, a 500 ms pre-masker (#####) is presented, and then a 40 ms priming word (which may be a synonym or an unrelated word of the target word) is presented, and then the target word is immediately presented. The subject's task is to judge whether the target word is a real word or a pseudoword (lexical judgment). Press F for real words and J for pseudowords. The priming words and target words are both Chinese two-character words. SOA is fixed at 60 ms. First 30 exercises, then 3 formal blocks of 60 trials each. "
 
 ### Trial Window Timeline
 
@@ -102,7 +102,7 @@ Neely, J. H. (1977). Semantic priming and retrieval from lexical memory: Roles o
 ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐
 │ Window 1                 │ →  │ Window 2                 │ →  │ Window 3                 │ →  │ Window 4                 │ →  │ Window 5                 │
 │ Forward Mask             │    │ Prime                    │    │ Target                   │    │ Feedback                 │    │ ITI                      │
-│ Content: #####           │    │ Content: 启动词           │    │ Content: 目标词           │    │ Content: 正确/错误        │    │ Content: empty           │
+│ Content: ##### │ │ Content: Start word │ │ Content: Target word │ │ Content: Correct/wrong │ │ Content: empty │
 │ Duration: 500 ms         │    │ Duration: 40 ms          │    │ Duration: until key      │    │ Duration: 500 ms         │    │ Duration: 1000 ms        │
 │ Response: none           │    │ Response: none           │    │ Response: f/j            │    │ Response: none           │    │ Response: none           │
 │ File: none               │    │ File: none (text)        │    │ File: none (text)        │    │ File: none               │    │ File: none               │
@@ -114,9 +114,9 @@ Neely, J. H. (1977). Semantic priming and retrieval from lexical memory: Roles o
 | Window | Content | Duration | Response | File/Folder | Condition | Data |
 |--------|---------|----------|----------|-------------|-----------|------|
 | Forward Mask | ##### | 500 ms | none | none | none | none |
-| Prime | 启动词 | 40 ms (frame-counted) | none | none (text) | {prime} | none |
-| Target | 目标词 | until key (deadline 3000 ms) | f=真词, j=假词 | none (text) | {target} | rt, key, acc |
-| Feedback | 正确/错误 | 500 ms | none | none | {correct_response} | none |
+| Prime | Start word | 40 ms (frame-counted) | none | none (text) | {prime} | none |
+| Target | target word | until key (deadline 3000 ms) | f=real word, j=fake word | none (text) | {target} | rt, key, acc |
+| Feedback | Correct/Error | 500 ms | none | none | {correct_response} | none |
 | ITI | empty | 1000 ms | none | none | none | none |
 
 ### Parsed Experiment Specification
@@ -130,17 +130,17 @@ Neely, J. H. (1977). Semantic priming and retrieval from lexical memory: Roles o
 | Prime duration | 40 ms |
 | SOA | 60 ms |
 | Target duration | Until response, deadline 3000 ms |
-| Prime-target relationship | Related (近义词) vs Unrelated (无关词) |
-| Response | Lexical decision: F=真词, J=假词 |
+| Prime-target relationship | Related (synonyms) vs Unrelated (unrelated words) |
+| Response | Lexical decision: F=real word, J=fake word |
 | Stimuli | Chinese two-character words |
 | Phases | Instruction → Practice(30) → Block1-3(60 each) |
 
 ### Missing Information / Questions
 
 1. Backward mask? Not mentioned → assumed none (prime → target directly)
-2. Prime visibility check? Not mentioned → will ask: "是否需要启动词可见性检查试次？"
+2. Prime visibility check? Not mentioned → will ask: "Do you need to start a word visibility check trial?"
 3. Word list: user needs to provide or confirm word pairs
-4. Nonword ratio? Not stated → will ask: "假词试次占多少比例？"
+4. Nonword ratio? Not stated → will ask: "What proportion of false word trials are there?"
 
 ### Assumptions
 

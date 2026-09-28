@@ -123,7 +123,7 @@ def runtime_schema_validator(root: Path, relative: str):
         schema_id = schema.get("$id")
         if not isinstance(schema_id, str) or not schema_id:
             raise ValueError(f"{schema_path}: schema requires a non-empty $id")
-        schemas[str(schema_path.relative_to(root))] = schema
+        schemas[schema_path.relative_to(root).as_posix()] = schema
         registry = registry.with_resource(schema_id, Resource.from_contents(schema))
 
     schema = schemas[relative]

@@ -1,17 +1,17 @@
-# 边缘分布图 (Marginal Distribution)
+# Marginal Distribution
 
-## 概述
+## Overview
 
-在散点图的X轴和Y轴边缘添加直方图或密度图,同时展示两变量关系和各自的分布。是APA推荐的高信息密度图表。
+Add a histogram or density chart to the edges of the X-axis and Y-axis of the scatter plot to simultaneously display the relationship between the two variables and their respective distributions. It is a high information density chart recommended by APA.
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| 场景 | 两连续变量的相关+分布 |
-| 优势 | 一张图展示关系+各自分布 |
+| Scenario | Correlation + distribution of two continuous variables |
+| Advantages | One picture shows the relationship + respective distribution |
 
-## R 代码
+## R code
 
 ```r
 library(ggExtra)
@@ -23,9 +23,9 @@ ggMarginal(p, type="density", fill="#69b3a2", alpha=0.5)
 # type="histogram" for histograms
 ```
 
-## 解读
+## Interpretation
 
-- 主图: 两变量关系(散点+回归线)
-- 顶部: X变量分布
-- 右侧: Y变量分布
-- 分布偏离正态→考虑转换或非参数方法
+- Main picture: Relationship between two variables (scatter points + regression line)
+- Top: X variable distribution
+- Right side: Y variable distribution
+- Distribution deviates from normal → Consider transformation or non-parametric methods

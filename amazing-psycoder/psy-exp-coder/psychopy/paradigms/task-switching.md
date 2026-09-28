@@ -26,14 +26,14 @@ Fixation (500ms) → Cue (CSI duration) → Target (until response, merged) → 
 TASKS = [
     {
         'name': 'parity',
-        'cue': '红色边框',  # or visual cue type
+        'cue': 'Red border',  # or visual cue type
         'cue_color': 'red',
         'rule': 'odd_even',
         'response_mapping': {'f': 'odd', 'j': 'even'}
     },
     {
         'name': 'magnitude',
-        'cue': '蓝色边框',
+        'cue': 'Blue border',
         'cue_color': 'blue',
         'rule': 'greater_less_5',
         'response_mapping': {'f': '>5', 'j': '<5'}

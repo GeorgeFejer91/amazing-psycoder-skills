@@ -1,33 +1,33 @@
-# Bland-Altman 分析
+# Bland-Altman Analysis
 
-## 概述
+## Overview
 
-Bland-Altman图用于评估两种测量方法的**一致性**,而非相关性。这是医学和心理学中方法比较的标准。
+Bland-Altman plots are used to evaluate the **consistency** of two measurement methods, not the correlation. This is the standard for method comparison in medicine and psychology.
 
-**典型场景**: 比较手动RT编码和自动RT编码是否一致; 比较两个版本的Stroop任务是否给出等价的干扰效应。
+**Typical scenario**: Compare whether manual RT coding and automatic RT coding are consistent; compare whether the two versions of the Stroop task give equivalent interference effects.
 
-## 何时使用
+## When to use
 
-Bland-Altman分析适用于评估两种测量方法一致性(agreement)的场景。使用前确认以下条件是否满足:
+Bland-Altman analysis is suitable for evaluating the agreement between two measurement methods. Before use, confirm whether the following conditions are met:
 
-| 条件 | 要求 |
+| Conditions | Requirements |
 | --- | --- |
-| 设计类型 | 方法比较研究 (method-comparison / agreement study) — 同一批被试同时接受两种测量方法 |
-| 因变量类型 | 连续变量 (如反应时、量表得分、生理指标) |
-| 样本信息 | 根据目标一致限区间宽度、重复测量结构、异方差和临床容许误差设计；报告一致限的不确定性，不设通用 N 门槛 |
-| 关键假设 | 差值服从正态分布; 差值与均值之间无相关(无比例偏倚); 差值方差在测量范围内恒定(方差齐性) |
-| 不适用场景 | 两种方法测量的是不同构念; 因变量为分类或等级变量; 新方法为金标准的替代且仅关心新方法误差时(此时应使用测量误差模型) |
+| Design type | Method-comparison / agreement study — the same group of subjects receive two measurement methods at the same time |
+| Dependent variable type | Continuous variable (such as reaction time, scale score, physiological index) |
+| Sample information | Designed based on target agreement limit interval width, repeated measures structure, heteroskedasticity, and clinical tolerance; reporting uncertainty in agreement limits, no universal N threshold |
+| Key assumptions | Conventional bias ± 1.96 SD limits require approximately normal, independent differences with roughly constant spread; inspect trends and use a suitable alternative model when these conditions fail |
+| Not applicable scenarios | The two methods measure different constructs; the dependent variable is a categorical or hierarchical variable; the new method is a replacement for the gold standard and only the error of the new method is concerned (in this case, the measurement error model should be used) |
 
-## vs 相关分析
+## vs related analysis
 
-相关系数r=0.95≠两种方法可以互换。Bland-Altman图直接回答"两种方法的差异有多大,是否有系统偏差"。
+Correlation coefficient r=0.95≠The two methods are interchangeable. The Bland-Altman diagram directly answers "How big is the difference between the two methods and whether there is systematic bias".
 
-## 指标
+## Indicator
 
-- **偏倚 (Bias)**: 两种方法差的均值(±0=完美)
-- **95%一致限 (Limits of Agreement)**: Bias ± 1.96×SD_diff。95%的差异应在此范围内。如果这个范围在临床上可接受,则可以互换使用。
+- **Bias**: The mean difference between the two methods (±0=perfect)
+- **95% Limits of Agreement**: For approximately normal differences, bias ± 1.96×SD_diff estimates an interval containing about 95% of future differences. Assess uncertainty in the limits and compare them with prespecified acceptable differences before considering interchangeability.
 
-## R代码
+## R code
 
 ```r
 library(blandr)
@@ -35,18 +35,14 @@ blandr.draw(data$method1, data$method2)
 blandr.statistics(data$method1, data$method2)
 ```
 
-## 报告
+## Report
 
-APA 7th 格式报告示例:
+APA 7th format report example:
 
-> A Bland-Altman analysis was conducted to assess the agreement between manual and automated RT coding. The mean difference (bias) was 2.3 ms (SD = 5.5), with 95% limits of agreement ranging from -8.5 ms to 13.1 ms. Inspection of the Bland-Altman plot revealed no systematic relationship between the difference and the mean of the two methods (r = .04, p = .713), indicating the absence of proportional bias. The 95% LoA fell within the pre-specified clinically acceptable margin of ±20 ms, supporting the interchangeability of manual and automated coding in this context.
+> In an illustrative method-comparison analysis, the mean difference was 2.3 ms (SD = 5.5), giving conventional 95% limits of agreement of about -8.5 to 13.1 ms. The plot and a suitably specified trend estimate should be inspected for proportional bias; a nonsignificant correlation test alone cannot establish its absence. Compare uncertainty around the limits with the prespecified acceptable margin before claiming interchangeability.
 
-中文格式参考:
-
-> 采用Bland-Altman分析评估手动与自动RT编码的一致性。两种方法差值的均值(偏倚)为2.3 ms (SD = 5.5),95%一致限为[-8.5, 13.1] ms。Bland-Altman图中差值与均值无显著相关(r = .04, p = .713),表明不存在比例偏倚。95%一致限在预先设定的临床可接受范围(±20 ms)之内,支持两种编码方法可互换使用。
-
-**报告要点**:
-- 报告偏倚(bias)及其标准差
-- 报告95%一致限(95% LoA)的上下界及置信区间
-- 检查并报告比例偏倚(差值与均值的相关)
-- 结合领域可接受标准讨论一致限是否足够窄
+**Report Highlights**:
+- Report bias and its standard deviation
+- Report upper and lower bounds and confidence intervals for the 95% limits of agreement (95% LoA)
+- Check and report proportionality bias (correlation of difference to mean)
+- Discuss whether the agreement limit is narrow enough in conjunction with the acceptance criteria in the field

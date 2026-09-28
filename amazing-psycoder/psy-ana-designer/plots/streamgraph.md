@@ -1,17 +1,17 @@
-# 流图 (Streamgraph)
+# Streamgraph
 
-## 概述
+## Overview
 
-流图是堆叠面积图的变体,中心对称排列,用流动的形状展示组成随时间的变化。比堆叠面积图更具美感。
+A flow chart is a variation of a stacked area chart, arranged symmetrically around the center, using flowing shapes to show changes in composition over time. More aesthetically pleasing than a stacked area chart.
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| 场景 | 多类别随时间变化的组成 |
-| 数据 | 时间 × 类别 × 数值 |
+| Scene | Multi-category composition over time |
+| Data | Time × Category × Value |
 
-## R 代码
+## R code
 
 ```r
 library(streamgraph)
@@ -20,14 +20,14 @@ streamgraph(data, key="category", value="count", date="year") %>%
   sg_legend(show=TRUE)
 ```
 
-## vs 堆叠面积图
+## vs stacked area chart
 
-流图中心对称,视觉上更平衡,但读数值不如堆叠面积图精确。适合展示整体趋势而非精确值。
+Flow charts are centered and visually more balanced, but their readings are not as accurate as stacked area charts. Suitable for showing overall trends rather than precise values.
 
-## 关键参数
+## Key parameters
 
-| 参数 | 作用 |
+| Parameters | Function |
 |------|------|
-| `key` | 类别列 |
-| `value` | 数值列 |
-| `date` | 时间列 |
+| `key` | category column |
+| `value` | Numeric column |
+| `date` | time column |

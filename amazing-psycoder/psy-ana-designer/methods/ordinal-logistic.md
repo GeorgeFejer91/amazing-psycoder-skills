@@ -1,26 +1,26 @@
-# 有序逻辑回归 (Ordinal Logistic Regression)
+#Ordinal Logistic Regression
 
-## 概述
+## Overview
 
-有序逻辑回归处理有序分类因变量,如Likert量表(1-7分)、教育等级、满意度评级。
+Ordered logistic regression processes ordered categorical dependent variables, such as Likert scale (1-7 points), education level, and satisfaction rating.
 
-**典型场景**: 检验实验条件对Likert量表评分(1-7)的影响; 检验年级对学业等级的影响。
+**Typical scenario**: Test the impact of experimental conditions on Likert scale scores (1-7); test the impact of grade on academic grade.
 
-## 何时使用
+## When to use
 
-| 条件 | 要求 |
+| Conditions | Requirements |
 |------|------|
-| DV | 有序分类(如Likert 1-7) |
-| IV | 连续或分类 |
+| DV | Ordered classification (such as Likert 1-7) |
+| IV | Continuous or Categorical |
 
-## 为什么不用普通ANOVA
+## Why not use ordinary ANOVA
 
-- Likert数据不是连续变量——是离散有序类别
-- 相邻分数差不等距(4→5的难度可能≠1→2的难度)
-- 数据被截断(不能低于1,不能高于7)
-- 有序逻辑回归不假设等距,只假设顺序
+- Likert data is not a continuous variable - it is a discrete ordinal category
+- The difference between adjacent scores is not equal (the difficulty of 4→5 may ≠ the difficulty of 1→2)
+- Data is truncated (cannot be lower than 1, cannot be higher than 7)
+- Ordinal logistic regression does not assume isometry, only order
 
-## R代码
+## R code
 
 ```r
 library(ordinal)
@@ -28,10 +28,10 @@ model <- clm(factor(rating) ~ condition + (1|subject), data=data)
 summary(model)
 ```
 
-## 效应量
+## Effect size
 
-OR (Odds Ratio): exp(estimate)。OR>1=更高评分的概率增加。
+OR (Odds Ratio): exp(estimate). OR>1=increased probability of higher rating.
 
-## 报告
+## Report
 
 > Ordinal logistic regression examined the effect of condition on Likert ratings (1-7). The congruent condition was associated with higher confidence ratings, OR=1.85, 95%CI [1.42,2.41], p<.001.

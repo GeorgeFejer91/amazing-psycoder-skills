@@ -37,11 +37,11 @@ The Stroop interference effect is the difference in RT/accuracy between incongru
 6. **Stimulus modality**: Text-based (TextStim) or image-based (colored word images)?
 7. **Trial count**: How many trials per condition? Total trials?
 8. **Language**: Which language contains the classic color words?
-9. **OS & font**: 在什么操作系统运行？如使用中文，确认字体路径（macOS: PingFang, Windows: msyh, Linux: Noto CJK）
-10. **Display**: 全屏还是窗口？屏幕分辨率和背景颜色？
-11. **Stimulus size**: 刺激文字大小（高度）和屏幕位置？
-12. **ITI duration**: 试次间隔时间和变化范围？
-13. **Instruction text**: 指导语内容？练习和正式阶段的过渡提示？
+9. **OS & font**: What operating system is it running on? If using Chinese, confirm the font path (macOS: PingFang, Windows: msyh, Linux: Noto CJK)
+10. **Display**: Full screen or window? Screen resolution and background color?
+11. **Stimulus size**: Stimulus text size (height) and screen position?
+12. **ITI duration**: Trial interval and variation range?
+13. **Instruction text**: Instruction content? Transition tips between practice and formal phases?
 
 ## Do Not Assume
 
@@ -125,7 +125,7 @@ Stroop, J. R. (1935). Studies of interference in serial verbal reactions. *Journ
 
 ### User Request
 
-> "我想做一个Stroop实验。屏幕上呈现汉字'红'、'绿'、'蓝'，每个字的墨水颜色可能是红、绿、蓝之一。被试判断墨水颜色（不是字义），红色按F，绿色按J，蓝色按K。一致条件（字义=墨水颜色）和不一致条件（字义≠墨水颜色）各半。先指导语，然后20个练习trial（有反馈），然后4个正式block各48个trial（无反馈）。刺激呈现直到按键，反应窗口2000 ms，ITI随机600-900 ms。用PsychoPy。"
+> "I want to do a Stroop experiment. The Chinese characters 'red', 'green', and 'blue' are presented on the screen. The ink color of each character may be one of red, green, and blue. The subjects judge the ink color (not the meaning of the word), press F for red, J for green, and K for blue. Consistent condition (meaning of the word) = ink color) and half incongruent conditions (word meaning ≠ ink color). First the instruction, then 20 practice trials (with feedback), then 4 formal blocks of 48 trials each (without feedback) until the key is pressed, and the response window is 2000. ms, ITI randomly 600-900 ms. "
 
 ### Trial Window Timeline
 
@@ -133,7 +133,7 @@ Stroop, J. R. (1935). Studies of interference in serial verbal reactions. *Journ
 ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐
 │ Window 1                 │ →  │ Window 2                 │ →  │ Window 3                 │ →  │ Window 4                 │
 │ Fixation                 │    │ Stroop Stimulus          │    │ Feedback                 │    │ ITI                      │
-│ Content: +               │    │ Content: 色词(如"红")    │    │ Content: 正确/错误        │    │ Content: empty           │
+│ Content: + │ │ Content: color word (such as "red") │ │ Content: correct/wrong │ │ Content: empty │
 │ Duration: 500 ms         │    │ Duration: until key      │    │ Duration: 500 ms         │    │ Duration: 600-900 ms     │
 │ Response: none           │    │ Response: f/j/k          │    │ Response: none           │    │ Response: none           │
 │ File: none               │    │ File: none (text)        │    │ File: none               │    │ File: none               │
@@ -148,9 +148,9 @@ Stroop, J. R. (1935). Studies of interference in serial verbal reactions. *Journ
 |-------|-------|
 | Experiment name | Color-Word Stroop Task |
 | Platform | PsychoPy |
-| Target dimension | Ink color (红/绿/蓝) |
-| Distractor dimension | Word meaning (红/绿/蓝) |
-| Response mapping | F=红色, J=绿色, K=蓝色 |
+| Target dimension | Ink color (red/green/blue) |
+| Distractor dimension | Word meaning (red/green/blue) |
+| Response mapping | F=red, J=green, K=blue |
 | Congruency ratio | 50:50 congruent:incongruent |
 | Conditions | 3 words × 3 ink colors = 9 factorial conditions |
 | Blocks | Practice(20) → Block1-4(48 each) |

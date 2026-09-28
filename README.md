@@ -2,7 +2,7 @@
 
 # 🧠 Amazing PsyCoder 💻
 
-> 让心理学研究者更专注于研究问题，而不是代码。
+> Helping psychology researchers focus more on research questions, not code.
 
 [![Version](https://img.shields.io/badge/version-v1.4.0-2563eb.svg)](amazing-psycoder/SKILL.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -13,59 +13,62 @@
 [![agentskills.io](https://img.shields.io/badge/agentskills.io-standard-333)](https://agentskills.io)
 [![Stars](https://img.shields.io/github/stars/soupandpsy/amazing-psycoder-skills?style=social)](https://github.com/soupandpsy/amazing-psycoder-skills)
 
-[**简体中文**](README.md) · [**繁體中文**](docs/README_ZH-HANT.md) · [**English**](docs/README_EN.md) · [**日本語**](docs/README_JA.md) · [**Deutsch**](docs/README_DE.md) · [**Français**](docs/README_FR.md)
+[**简体中文**](docs/README_ZH.md) · [**繁體中文**](docs/README_ZH-HANT.md) · [**English**](README.md) · [**日本語**](docs/README_JA.md) · [**Deutsch**](docs/README_DE.md) · [**Français**](docs/README_FR.md)
 
 <br>
 
-[📖 为什么](#-为什么做这个项目) · [👥 适合谁](#-适合这些人) · [⚡ 安装](#-安装) · [🚀 快速开始](#-快速开始) · [🧪 实验编程](#-实验编程) · [📊 数据分析](#-数据分析) · [📂 文件结构](#-文件结构)
+[📖 Why](#-why) · [👥 Who It's For](#-who-its-for) · [⚡ Install](#-install) · [🚀 Quick Start](#-quick-start) · [🧪 Experiment Programming](#-experiment-programming) · [📊 Data Analysis](#-data-analysis) · [🎬 Demo](#-demo) · [📂 File Structure](#-file-structure)
 
 </div>
 
+> **English fork.** This fork translates the seven PsyCoder skill instructions and their Markdown references into English. It was prepared with machine-assisted translation and manual review of the skill entry points and selected high-impact method cards. The [original Simplified Chinese README](docs/README_ZH.md), upstream attribution, and MIT license are retained. Example analyses and paradigm code are teaching material: validate their assumptions, formulas, software APIs, and generated data on the intended study before use. See [Scientific review](docs/SCIENTIFIC_REVIEW.md) for corrections and review limits.
+
 <br>
 
-## 📖 为什么做这个项目
-
-<h3 align="center">🔍 心理学研究从设计到分析的常见困难</h3>
-
-🔬 研究想法要转化为可用于收集数据的实验程序，研究者往往还需要掌握 Python、JavaScript 或 MATLAB。<br>
-📦 实验室已有代码可能因运行环境变化而无法使用，依赖关系和核心逻辑也常常难以维护。<br>
-📊 如果统计方法主要依照惯例选择，研究者可能难以说明方法与研究问题、变量类型和数据结构之间的关系。<br>
-🔁 如果没有记录软件版本和依赖环境，分析结果可能难以在其他电脑上复现。<br>
-✂️ 如果实验设计与分析计划彼此脱节，可能在数据收集后才发现现有设计无法支持原定分析。
-
-<h3 align="center">🧱 研究进行中的两类主要困难</h3>
-
-**第一类：实验编程。** 为了检验一个假设，需要把实验设计转化为程序。PsychoPy Builder 在部分复杂设计中可能不够灵活，使用 Coder 需要 Python；jsPsych 需要 JavaScript 和时间线逻辑；Psychtoolbox 需要 MATLAB 和显示同步知识。反应时从哪个画面开始计算、按键如何映射、程序中断后怎样保留数据，都需要明确设计并逐项检查。
-
-**第二类：数据分析。** 分析方案最好在数据收集前就开始规划，并在获得数据后根据实际结构落实。被试内设计应使用配对 t 检验还是混合模型？正确率接近上限时应如何建模？为什么选择这个方法？换一台电脑后能否复现相同结果？这些问题需要结合研究目标、数据层级和软件环境回答。
-
-这些困难不仅涉及编程，也涉及实验设计、统计推断、数据管理和研究复现。
-
-<h3 align="center">✨ Amazing PsyCoder 如何提供帮助</h3>
-
-你可以先描述实验想法、已有设计或现有数据。Amazing PsyCoder 会逐步协助你确认研究规则、生成代码并检查问题；在需要时，你仍需提供配置、数据说明、排除依据和运行记录。系统不会仅凭 AI 输出就宣称“可以收数据”或“可以发表”：实验仍要在正式电脑上试跑，分析也必须真正运行并检查结果。
-
-Amazing PsyCoder 由 7 个 Skill 组成——1 个总入口加 6 个专业 Skill。它遵循 [agentskills.io](https://agentskills.io) 开放标准，可安装到 Claude Code、Codex、Hermes 和 OpenClaw 这四个 AI Agent 中。
-
-**把时间还给研究本身。**
 
 ---
 
-## 👥 适合这些人
+## 📖 Why
 
-- 🎓 正在或准备写实验代码的心理学本科生、研究生
-- 🧠 做认知、行为、社会心理实验的研究者
-- 😵‍💫 经常遇到反应时、随机化或条件表问题，希望系统化检查常见风险
-- 📊 收完数据不确定该用什么统计方法，希望有系统化分析方案
-- 🐍 PsychoPy · 🌐 jsPsych · 🧮 Psychtoolbox / MATLAB 用户
+<h3 align="center">🔍 Common Challenges from Study Design to Data Analysis</h3>
 
-如果只是问一个 API、改一行普通代码或了解一个统计概念，直接提问即可，不需要启动完整流程。
+🔬 Turning a research idea into an experiment that can collect data often requires Python, JavaScript, or MATLAB.<br>
+📦 Existing laboratory code may stop working when the environment changes, while its dependencies and core logic can be difficult to maintain.<br>
+📊 When statistical methods are chosen mainly by convention, it can be difficult to explain how they match the research question, outcome type, and data structure.<br>
+🔁 Without recorded software versions and dependencies, an analysis may be difficult to reproduce on another computer.<br>
+✂️ When experiment design and analysis planning are disconnected, researchers may discover after data collection that the design cannot support the intended analysis.
+
+<h3 align="center">🧱 Two Main Challenges in Conducting Research</h3>
+
+**First: experiment programming.** Testing a hypothesis requires translating the design into a program. PsychoPy Builder may not be flexible enough for some complex designs; Coder requires Python, jsPsych requires JavaScript and timeline logic, and Psychtoolbox requires MATLAB and knowledge of display synchronization. RT onset, key mapping, and data recovery after interruption all need explicit decisions and careful checks.
+
+**Second: data analysis.** Analysis planning should ideally begin before data collection and be implemented against the observed data structure afterwards. Should a within-subject design use a paired t-test or a mixed model? How should near-ceiling accuracy be modeled? Why is a particular method appropriate? Can the result be reproduced on another computer? These questions depend on the research aim, data hierarchy, and software environment.
+
+These challenges involve not only programming, but also study design, statistical inference, data management, and reproducibility.
+
+<h3 align="center">✨ How Amazing PsyCoder Helps</h3>
+
+You can begin with an experiment idea, an existing design, or current data. Amazing PsyCoder then helps you confirm research rules, generate code, and check for problems step by step. When needed, you still provide configurations, data descriptions, exclusion sources, and execution records. AI output alone is never treated as “ready for data collection” or “ready for publication”: experiments require a target-machine test run, and analyses must actually run with their outputs reviewed.
+
+Amazing PsyCoder contains 7 skills—1 entry skill and 6 specialist skills—and follows the [agentskills.io](https://agentskills.io) open standard. It can be installed in four AI agents: Claude Code, Codex, Hermes, and OpenClaw.
+
+So you can give the time back to the research itself.
 
 ---
 
-## ⚡ 安装
+## 👥 Who It's For
 
-推荐使用仓库自带的安装脚本。它会先检查全部 7 个 Skill；如果中途失败，会恢复原来的文件。
+- 🎓 Psychology undergrads and grad students writing (or about to write) experiment code
+- 🧠 Researchers running cognitive, behavioral, or social psychology experiments
+- 😵‍💫 Researchers who repeatedly encounter RT, randomization, or condition-table problems and want systematic checks for common risks
+- 📊 Anyone who's collected data and isn't sure which statistical method to use — and wants a structured analysis plan
+- 🐍 PsychoPy · 🌐 jsPsych · 🧮 Psychtoolbox / MATLAB users
+
+---
+
+## ⚡ Install
+
+Use the repository installer. It checks all 7 skills before changing the destination and restores the previous files if an installation fails.
 
 ```bash
 git clone https://github.com/soupandpsy/amazing-psycoder-skills
@@ -78,7 +81,7 @@ cd amazing-psycoder-skills/amazing-psycoder
 ./install.sh claude
 ```
 
-安装后使用 `/amazing-psycoder`。默认安装到 `${CLAUDE_CONFIG_DIR:-~/.claude}/skills`。
+Use `/amazing-psycoder` after installation. Default destination: `${CLAUDE_CONFIG_DIR:-~/.claude}/skills`.
 
 **Codex**
 
@@ -86,7 +89,7 @@ cd amazing-psycoder-skills/amazing-psycoder
 ./install.sh codex
 ```
 
-安装后使用 `$amazing-psycoder`。默认安装到 `~/.agents/skills`。
+Use `$amazing-psycoder` after installation. Default destination: `~/.agents/skills`.
 
 **Hermes**
 
@@ -94,7 +97,7 @@ cd amazing-psycoder-skills/amazing-psycoder
 ./install.sh hermes
 ```
 
-安装后使用 `/amazing-psycoder`。默认安装到 `~/.hermes/skills`。
+Use `/amazing-psycoder` after installation. Default destination: `~/.hermes/skills`.
 
 **OpenClaw**
 
@@ -102,10 +105,10 @@ cd amazing-psycoder-skills/amazing-psycoder
 ./install.sh openclaw
 ```
 
-安装后直接描述任务，由 OpenClaw Agent 匹配 Skill。默认安装到 `~/.openclaw/skills`。
+Describe your task after installation and let the OpenClaw agent match the skill. Default destination: `~/.openclaw/skills`.
 
 <details>
-<summary><b>项目级安装、自定义目录和安装检查</b></summary>
+<summary><b>Project install, custom directories, and installation checks</b></summary>
 
 <br>
 
@@ -116,286 +119,293 @@ cd amazing-psycoder-skills/amazing-psycoder
 ./install.sh --check codex
 ```
 
-Hermes 当前没有稳定的项目级目录，因此只提供用户级安装。更多说明见
-[`PLATFORMS.md`](amazing-psycoder/PLATFORMS.md)。
+Hermes currently has no stable project-level skill directory, so its installer supports user scope only. See [`PLATFORMS.md`](amazing-psycoder/PLATFORMS.md).
 
 </details>
 
 ---
 
-## 🚀 快速开始
+## 🚀 Quick Start
 
-安装后，在对应的 AI Agent 中调用 Amazing PsyCoder，并直接描述你想做什么：
+After installation, invoke Amazing PsyCoder in the relevant AI agent and describe what you want to do:
 
-> “我要做一个 Stroop 任务，红绿蓝三色，按键判断墨色” → 自动进入实验设计
+> "I want a Stroop task, red/green/blue, key-press response" → auto-enters experiment design
 
-> “帮我分析 Stroop 数据，一致和不一致条件的反应时有没有差异” → 自动进入分析设计
+> "Analyze my Stroop data — is there an RT difference between congruent and incongruent?" → auto-enters analysis design
 
-> “帮我检查这份实验代码，重点看反应时起点和数据保存” → 自动进入代码检查
+> "Review this experiment code, especially RT onset and data saving" → auto-enters code review
 
-通常不需要指定应该使用哪个专业 Skill。总入口会根据任务内容选择设计、代码生成或代码检查；如果请求不足以判断是在设计实验还是分析数据，它会先向你确认。
-
-下面是实验编程和数据分析的详细介绍，每个部分末尾都有完整的交互 Demo。
+You normally do not need to choose a specialist skill. The entry skill selects design, code generation, or review from the request. If it cannot determine whether you want to build an experiment or analyze data, it asks for clarification.
 
 ---
 
-## 🧪 实验编程
+## 🧪 Experiment Programming
 
-从想法到可以开始试跑的实验代码，分三步——设计、生成、检查。
+From idea to experiment code that is ready for a test run: three steps — design, generate, review.
 
-### 技能
+### Skills
 
-| # | 技能 | 功能 |
-|---|---|---|
-| ① | **设计编排** `psy-exp-designer` | 把实验想法变成完整说明，逐步确认画面、按键、条件、顺序和保存内容 |
-| ② | **代码生成** `psy-exp-coder` | 根据已确认设计生成平台代码，并拦截阻塞等待、只在结尾保存等常见问题 |
-| ③ | **代码检查** `psy-exp-reviewer` | 检查代码与设计是否一致；没有正式电脑试跑记录时，不会说“可以收数据” |
+| # | Skill | What It Does | Key Details |
+|---|------|--------|---------|
+| ① | **Design Orchestration** `psy-exp-designer` | Turns experiment ideas into complete design specifications | 5-phase progressive confirmation. Phase 2 generates trial-window timeline diagrams — per-screen duration, keys, RT onset at a glance. 5 hard gates. 38 paradigm references |
+| ② | **Code Generation** `psy-exp-coder` | Generates runnable code from design specs | 4-layer priority architecture. A 10-item quality gate checks timing, response handling, saving, cleanup, dependencies, and other blocking risks before delivery |
+| ③ | **Code Review** `psy-exp-reviewer` | Checks code against the confirmed design | Without recorded test runs on the real collection machine, it will not claim the experiment is ready for data collection |
 
-### 平台
+### Platforms
 
-| 平台 | 适合什么 |
-|---|---|
-| 🐍 **[PsychoPy](https://psychopy.org/)** | 在实验室电脑上运行的 Python 实验；实际计时仍需在目标设备验证 |
-| 🌐 **[jsPsych](https://www.jspsych.org/)** | 浏览器或在线实验；需要在实际浏览器和设备上测试 |
-| 🧮 **[Psychtoolbox](https://psychtoolbox.org/)** | MATLAB/Octave 实验；适合精细控制显示和设备，但必须做同步与硬件校准 |
+| Platform | Strengths |
+|------|------|
+| 🐍 **[PsychoPy](https://psychopy.org/)** | Python experiments on lab computers; timing still needs validation on the target machine |
+| 🌐 **[jsPsych](https://www.jspsych.org/)** | Browser and online experiments; test on the actual browser and participant devices |
+| 🧮 **[Psychtoolbox](https://psychtoolbox.org/)** | MATLAB/Octave experiments with detailed display and device control; synchronization and hardware calibration remain necessary |
 
-### 实验设计参考
+### Experiment Design References
 
-**38 个实验设计参考**，每个按统一思路整理：何时使用 → 核心逻辑 → 必须确认 → 不要假设 → 试次画面顺序 → 条件表 → 数据分析 → 变体与参考。
+**38 experiment-design references**, each organized with unified meta-logic: When to use → Core logic → Must confirm → Don't assume → Trial window timeline → Condition table → Data analysis → Variants & references.
 
-这里的 38 个参考用于帮助你把实验想清楚，**不等于 38 × 3 个已经在三种平台实机验证过的生成器**。
+These references help define an experiment. They do **not** mean 38 × 3 generators have already been verified on real machines across all three platforms.
 
-| 类别 | 范式 |
-|---|---|
-| 🎯 **注意与抑制控制** | Stroop · Eriksen Flanker · Simon · Go/No-go · Stop-signal · ANT · Posner Cuing · Visual Search · Dot-probe · Navon · CPT · Antisaccade |
-| 🧠 **记忆与工作记忆** | N-back · Sternberg · Corsi Blocks · Change Detection · Drag and Drop |
-| 🔄 **执行功能与认知灵活性** | Task Switching · WCST · Choice RT |
-| 👥 **社会认知与情绪** | Cyberball · Climate Reflection · Phone a Friend · Rating · Priming · IAT · EAST |
-| 💰 **决策与奖励** | BART · Delay Discounting · Rating to Choice · Ultimatum Game |
-| 👁️ **感知与心理物理** | Psychophysics Staircase · Multisensory Nature · Mental Rotation |
-| 🌱 **发展与个体差异** | Children Flanker · Bilingual Stroop · Numerical Stroop · Writing Distraction |
+| Category | Paradigms |
+|------|------|
+| 🎯 **Attention & Inhibitory Control** | Stroop · Eriksen Flanker · Simon · Go/No-go · Stop-signal · ANT · Posner Cuing · Visual Search · Dot-probe · Navon · CPT · Antisaccade |
+| 🧠 **Memory & Working Memory** | N-back · Sternberg · Corsi Blocks · Change Detection · Drag and Drop |
+| 🔄 **Executive Function & Cognitive Flexibility** | Task Switching · WCST · Choice RT |
+| 👥 **Social Cognition & Emotion** | Cyberball · Climate Reflection · Phone a Friend · Rating · Priming · IAT · EAST |
+| 💰 **Decision Making & Reward** | BART · Delay Discounting · Rating to Choice · Ultimatum Game |
+| 👁️ **Perception & Psychophysics** | Psychophysics Staircase · Multisensory Nature · Mental Rotation |
+| 🌱 **Development & Individual Differences** | Children Flanker · Bilingual Stroop · Numerical Stroop · Writing Distraction |
 
-### 🎬 Demo：做一个 Stroop 实验
+---
 
-> “我要做一个 Stroop，红绿蓝三色文字，按键判断墨色，50:50 一致不一致，2 个正式 block，每个 60 试次”
+## 📊 Data Analysis
 
-```text
-用户             ❯ 我要做一个 Stroop 任务
+Analysis can be planned before data collection and implemented further once data are available: design the analysis plan, generate the code, and review the executed results.
 
-Amazing PsyCoder ❯ 🟢 第 1/5 阶段 · 了解需求
-                   确认使用 PsychoPy？
+### Skills
 
-用户             ❯ 对，PsychoPy。
+| # | Skill | What It Does | Key Details |
+|---|------|--------|---------|
+| ④ | **Analysis Design** `psy-ana-designer` | Starts from your scientific question, designs a complete analysis plan | 5-phase progressive confirmation. Phase 2 confirms file organization and the participant/stimulus/session hierarchy. Phase 3 compares viable alternatives on the dimensions that matter for this decision; the full 12-dimension matrix is reserved for genuinely competitive or high-impact choices |
+| ⑤ | **Analysis Coding** `psy-ana-coder` | Generates reproducible scripts from the analysis plan | Phase 0 validates config → confirms R/Python → 12-step script generation. 10-item quality gate. R: tidyverse/lme4/ggplot2. Python: pandas/statsmodels/seaborn. Fully config-driven |
+| ⑥ | **Analysis Audit** `psy-ana-reviewer` | Separates static code review from executed-result review | Static review can reach `ready_for_execution` only. `ready_for_publication` additionally requires a successful clean run plus reviewed logs, tables, figures, dependency record, and environment |
 
-Amazing PsyCoder ❯ 🟢 第 2/5 阶段 · 试次画面和反应规则
-                   墨色红绿蓝 → f=红 j=绿 k=蓝。试次顺序：
+### Analysis Languages and Environments
 
-                       画面 1: 注视点             画面 2: 刺激呈现            画面 3: 空屏等待
+| Language and environment | Strengths |
+|------|------|
+| 📊 **[R](https://www.r-project.org/)** | Statistical modeling and academic reporting, with tools such as lme4, ggplot2, Quarto, and R Markdown |
+| 🐍 **[Python](https://www.python.org/)** | General data processing, statistical analysis, visualization, and Jupyter workflows |
+
+### Analysis Methods
+
+**60 method references and 48 chart references** help identify candidates; they are not automatic prescriptions. Compare viable choices on the factors that can change the decision. Use the full 12-dimension comparison only when alternatives are genuinely close or the choice has major consequences.
+
+| Category | Method Examples |
+|------|------|
+| **Mean Comparison** | Paired/independent t-test, within/between/mixed ANOVA, ANCOVA, MANOVA |
+| **Mixed Models** | Linear mixed models (LMM), logistic mixed models (GLMM), Gamma GLMM, crossed random effects |
+| **Mediation & Moderation** | Mediation analysis, moderation analysis, moderated mediation, structural equation modeling |
+| **Regression & Longitudinal** | Multiple regression, quantile regression, growth curves, cross-lagged panel, time series |
+| **Correlation & Classification** | Pearson/Spearman correlation, repeated measures correlation, chi-square, canonical correlation |
+| **Nonparametric & Robust** | Wilcoxon, Friedman, permutation tests, bootstrap, robust regression |
+| **Bayesian** | Bayesian t-test, Bayesian ANOVA, Bayesian mixed models |
+| **Measurement & Psychometrics** | Reliability (α/ω/ICC), exploratory/confirmatory factor analysis, multidimensional scaling |
+| **Signal Detection & Diagnostics** | d', ROC curves, psychometric functions |
+| **RT & Decision Modeling** | Ex-Gaussian distribution, drift diffusion model (DDM) |
+| **Meta-analysis & Power** | Meta-analysis, power analysis, equivalence testing |
+| **Specialized Methods** | Multiple imputation, LASSO/Ridge, network analysis, cluster analysis, latent class analysis |
+
+---
+
+## 🎬 Demo
+
+### 🧪 Experiment · PsychoPy Stroop
+
+> "I want a Stroop task, red/green/blue text, key-press to judge ink color, 50:50 congruent:incongruent, 2 blocks of 60 trials each"
+
+```
+User             ❯ I want a Stroop task
+
+Amazing PsyCoder ❯ 🟢 Phase 1/5 · Assess
+                   Paradigm Stroop · Confirm platform: PsychoPy?
+
+User             ❯ Yes, PsychoPy.
+
+Amazing PsyCoder ❯ 🟢 Phase 2/5 · Trial Windows + Response Rules (most critical)
+                   Ink colors → f=red j=green k=blue. Trial timeline:
+                      Window 1: Fixation            Window 2: Stimulus             Window 3: Blank
                    ┌──────────────────────┐      ┌──────────────────────┐      ┌──────────────────────┐
                    │                      │      │                      │      │                      │
-                   │          +           │  →   │       红色“绿”       │  →   │                      │
+                   │          +           │  →   │     Red "green"      │  →   │                      │
                    │                      │      │                      │      │                      │
                    └──────────────────────┘      └──────────────────────┘      └──────────────────────┘
-                            500ms                         最长 2000ms                    400–800ms
-                            不接收反应                    f / j / k                       不接收反应
-                                                        ← 反应时起点
+                            500ms                         2000ms                        500ms
+                           no resp                      f / j / k                      no resp
+                                                       ← RT onset
 
-                       画面 4: 练习反馈
+                      Window 4: Feedback
                    ┌──────────────────────┐
-                   │        正确！         │   仅练习阶段出现
+                   │                      │
+                   │       Correct!       │
+                   │                      │
                    └──────────────────────┘
                             1000ms
+                           no resp
+                   Gate 1 ✅ Windows complete, response mapping confirmed
 
-                   ✅ 画面顺序和按键已确认
+User             ❯ Timeline and keys look good. ITI 400-800ms random.
 
-用户             ❯ 时间线和按键没问题。空屏 400–800ms 随机。
+Amazing PsyCoder ❯ 🟢 Phase 3/5 · Conditions
+                   Congruent:incongruent = 60:60 → 120-trial condition table generated
+                   Gate 2 ✅
 
-Amazing PsyCoder ❯ 🟢 第 3/5 阶段 · 条件表
-                   一致:不一致 = 60:60，共 120 个正式试次。✅
+Amazing PsyCoder ❯ 🟢 Phase 4/5 · Blocks
+                   2 blocks × 60 trials · Feedback in practice block only
+                   Gate 3 ✅
 
-Amazing PsyCoder ❯ 🟢 第 4/5 阶段 · Block 结构
-                   练习阶段有反馈；2 个正式 block × 60 试次，不提供反馈。✅
-
-Amazing PsyCoder ❯ 🟢 第 5/5 阶段 · 最终确认
+Amazing PsyCoder ❯ 🟢 Phase 5/5 · Final Review
                    ┌──────────────────────────────────────────────┐
-                   │ 已确认内容                                   │
-                   │ 平台 PsychoPy                  ← 用户确认    │
-                   │ 按键 f/j/k · 一致:不一致 50:50 ← 用户确认    │
-                   │ 空屏 400–800ms 随机            ← 用户确认    │
-                   │ 试次顺序和练习反馈              ← 用户确认    │
+                   │ Design Decision Registry                     │
+                   │ Paradigm Stroop · Platform PsychoPy  ← user  │
+                   │ Keys f/j/k · Congruent:Incongruent 50:50 ← user│
+                   │ ITI 400-800ms random               ← user    │
+                   │ Trial timeline 4 windows           ← convention│
                    └──────────────────────────────────────────────┘
-                   ✅ 可以生成代码
+                   Gate 5 ✅ All confirmed → Route to code generation
 
-用户             ❯ 生成。
+User             ❯ Generate.
 
-Amazing PsyCoder ❯ ✅ stroop_task.py + README.md 已生成
-                   参数集中设置 · 中文字体方案 · 每试次及时保存
+Amazing PsyCoder ❯ ✅ stroop_task.py + README.md generated
+                   Params at top · CJK font configured · Incremental save
+                   → Auto-routing to audit
 
-Amazing PsyCoder ❯ 🔍 代码检查没有发现必须修的问题
-                   现在可以在正式电脑上试跑，但还不能直接开始收数据。
-                   请完成：启动退出、短程完整运行、数据完整性和中断恢复检查。
+Amazing PsyCoder ❯ 🔍 Static code review found no blocking issue.
+                   The experiment is ready for a test run, not yet for data collection.
+                   Run startup/exit, short-session, data-integrity, and interruption-
+                   recovery checks on the real collection machine.
 
-用户             ❯ 已在正式采集电脑完成并保存这些检查记录，全部通过。
+User             ❯ Those checks passed on the collection machine. Here are the logs and data files.
 
-Amazing PsyCoder ❯ 🔍 已检查试跑记录和数据文件
-                   当前状态：ready_for_collection
-                   可以开始正式采集。
+Amazing PsyCoder ❯ 🔍 Runtime evidence and saved data reviewed.
+                   Readiness: ready_for_collection
+                   Data collection can begin.
+```
+
+### 📊 Analysis · R Stroop
+
+> "Analyze my Stroop data — is there a significant RT difference between congruent and incongruent conditions?"
+
+```
+User             ❯ Analyze my Stroop data — RT difference congruent vs incongruent?
+
+Amazing PsyCoder ❯ 🟢 Phase 1/5 · Understand experiment & scientific question
+                   Please provide experiment config or describe the design
+
+User             ❯ Within-subject, IV: condition (congruent/incongruent), DV: rt+acc. 30 subjects
+
+Amazing PsyCoder ❯ 🟢 Phase 2/5 · Understand data structure
+                   How is your data stored? One file per subject or combined?
+
+User             ❯ One CSV per subject, named sub-001_stroop.csv
+                   Columns: subject_id, stimulus, condition, rt, acc, trial
+
+Amazing PsyCoder ❯ Are the stimuli unique to each subject, or does the same set
+                   appear for multiple subjects?
+
+User             ❯ All subjects see the same 60 color-word combinations, with
+                   repeated trials within each subject.
+
+Amazing PsyCoder ❯ Confirmed: observations repeat within both subject and stimulus.
+                   Gate 2 ✅
+
+Amazing PsyCoder ❯ 🟢 Phase 3/5 · Define the estimand, then choose the method
+                   Primary estimand: the population-average RT contrast,
+                   incongruent minus congruent.
+
+                   Proposed RT model:
+                   rt ~ condition + (1 + condition | subject_id) + (1 | stimulus)
+
+                   Accuracy can be a supplementary binomial mixed model.
+                   A paired t-test is a simpler alternative, but it answers the
+                   question at an aggregated subject-mean level.
+                   If the random-effects structure cannot be estimated reliably,
+                   follow a predeclared simplification order and report diagnostics.
+
+User             ❯ Confirm the estimand, formula, and subject/stimulus hierarchy.
+                   Use the mixed model for RT and accuracy as supplementary.
+
+Amazing PsyCoder ❯ Gate 3 ✅ Estimand, formula, hierarchy, and alternatives confirmed
+
+Amazing PsyCoder ❯ 🟢 Phase 4/5 · Cleaning rules, runtime, and outputs
+                   Please provide RT, missing-data, and participant-exclusion rules
+                   from the task protocol or preregistration. No fixed threshold or
+                   SD rule will be inserted without a source and confirmation.
+
+User             ❯ The preregistration says: the primary RT analysis uses correct
+                   trials with non-missing RT only; no fixed RT bounds, SD trimming,
+                   or automatic participant exclusion. Add a log-RT sensitivity
+                   analysis. The lab uses R 4.4.1, renv.lock, and R Markdown.
+
+Amazing PsyCoder ❯ 🟢 Phase 5/5 · Final Review
+                   ┌──────────────────────────────────────────────┐
+                   │ Analysis Decision Registry                   │
+                   │ Question: congruent vs incongruent RT ← user │
+                   │ Formula: subject slope + stimulus intercept   │
+                   │ Cleaning: preregistered rules + audit log     │
+                   │ Runtime: R 4.4.1 + renv.lock          ← user  │
+                   │ Outputs: contrast, interval, diagnostics, plots│
+                   └──────────────────────────────────────────────┘
+                   Gate 5 ✅ Save analysis_config.yaml → Route to code gen
+
+User             ❯ Generate.
+
+Amazing PsyCoder ❯ ✅ analysis.R + report.Rmd + renv.lock generated
+                   Dependency versions recorded · static review completed
+
+Amazing PsyCoder ❯ 🔍 Readiness: ready_for_execution
+                   The code is ready to run, but the results are not yet ready to report.
+
+User             ❯ It ran in a clean environment. Here are the log, tables, plots, and versions.
+
+Amazing PsyCoder ❯ 🔍 Execution outputs reviewed.
+                   Readiness: ready_for_publication
 ```
 
 ---
 
-## 📊 数据分析
-
-分析方案既可以在数据收集前规划，也可以在获得数据后进一步落实，分三步——设计分析方案、生成代码、检查运行结果。
-
-### 技能
-
-| # | 技能 | 功能 |
-|---|---|---|
-| ④ | **分析设计** `psy-ana-designer` | 先明确真正要回答的问题，再结合数据结构选择方法并记录备选方案 |
-| ⑤ | **分析代码** `psy-ana-coder` | 生成 R/Python 脚本、报告和软件版本记录 |
-| ⑥ | **分析检查** `psy-ana-reviewer` | 区分“代码看起来没问题”和“结果已经实际运行并检查过” |
-
-### 分析语言与环境
-
-| 语言与环境 | 适合什么 |
-|---|---|
-| 📊 **[R](https://www.r-project.org/)** | 统计建模和学术报告，可按需要使用 lme4、ggplot2、Quarto/R Markdown 等 |
-| 🐍 **[Python](https://www.python.org/)** | 通用数据处理、统计分析、可视化和 Jupyter 工作流 |
-
-### 分析方法
-
-**60 个方法参考、48 个图表参考**用于寻找候选方案，不是自动处方。选择方法时先看研究问题、结果变量是什么类型，以及同一被试、刺激或会话中的数据是否彼此相关。
-
-| 类别 | 方法举例 |
-|---|---|
-| **均值比较** | 配对/独立 t 检验、被试内/间 ANOVA、混合 ANOVA、ANCOVA、MANOVA |
-| **混合模型** | 线性混合模型（LMM）、逻辑混合模型（GLMM）、Gamma GLMM、交叉随机效应 |
-| **中介调节** | 中介分析、调节分析、有调节的中介、结构方程模型 |
-| **回归与纵向** | 多元回归、分位数回归、增长曲线、交叉滞后面板、时间序列 |
-| **相关与分类** | Pearson/Spearman 相关、重复测量相关、卡方检验、典型相关 |
-| **非参数与稳健方法** | Wilcoxon、Friedman、置换检验、Bootstrap、稳健回归 |
-| **贝叶斯** | 贝叶斯 t 检验、贝叶斯 ANOVA、贝叶斯混合模型 |
-| **测量与量表** | 信度分析（α/ω/ICC）、探索性/验证性因子分析、多维标度法 |
-| **信号检测与诊断** | d'、ROC 曲线、心理测量函数 |
-| **反应时与决策建模** | Ex-Gaussian 分布、漂移扩散模型（DDM） |
-| **元分析与效力** | 元分析、效力分析、等效性检验 |
-| **专项方法** | 多重插补、LASSO/Ridge、网络分析、聚类分析、潜在类别分析 |
-
-### 🎬 Demo：分析一组 Stroop 数据
-
-> “帮我分析 Stroop 数据，一致和不一致条件的反应时有没有差异”
-
-```text
-用户             ❯ 帮我分析 Stroop 数据，一致和不一致反应时有没有差异
-
-Amazing PsyCoder ❯ 🟢 第 1/5 阶段 · 了解实验和研究问题
-                   请提供实验配置，或者描述实验设计。
-
-用户             ❯ 被试内设计。条件是一致/不一致，结果是反应时和正确率，共 30 个被试。
-
-Amazing PsyCoder ❯ 🟢 第 2/5 阶段 · 了解数据
-                   数据怎么存？每个被试一个文件，还是已经合并？
-
-用户             ❯ 每个被试一个 CSV。
-                   列是 subject_id, stimulus, condition, rt, acc, trial。
-
-Amazing PsyCoder ❯ 这些 stimulus 是每个被试各自不同，还是同一组刺激会被多人看到？
-
-用户             ❯ 同一组 60 个颜色词组合会被所有被试看到，每个被试都有重复试次。
-
-Amazing PsyCoder ❯ ✅ 已确认：30 个被试，每人一个文件，每行一个试次；
-                   数据同时按被试和刺激重复。
-
-Amazing PsyCoder ❯ 🟢 第 3/5 阶段 · 明确要估计什么，再选择方法
-                   主要问题定义为：总体上，不一致条件相对一致条件的平均 RT 差异。
-                   因为同一被试有很多试次，同一刺激也会被多人看到，
-                   不能把所有行当成互不相关。
-
-                   建议：
-                   · RT 主分析：
-                     rt ~ condition + (1 + condition | subject_id) + (1 | stimulus)
-                   · 正确率补充分析：用二项分布混合模型，同时考虑被试和刺激；
-                   · 配对 t 检验可作为更简单的备选方案，但它回答的是按被试汇总后的问题。
-                   如果随机效应结构无法稳定估计，会记录诊断并按预先写明的顺序简化，
-                   不会看到结果后临时换模型。
-
-用户             ❯ 确认这个问题、公式和数据层级。RT 用线性混合模型，
-                   正确率作为补充分析。
-
-Amazing PsyCoder ❯ ✅ 方法、公式和数据层级已确认。
-
-Amazing PsyCoder ❯ 🟢 第 4/5 阶段 · 清理规则、运行环境和输出
-                   请提供任务说明或预注册中的反应时、缺失和被试排除规则。
-                   如果没有依据，不自动套用“150–2000ms”或“±2.5 SD”。
-                   每一步会记录删掉多少行，并保留原始数据。
-
-用户             ❯ 预注册规定：RT 主分析只用正确且 RT 非缺失的试次；
-                   不做固定 RT 上下限或 ±SD 剔除，也不自动排除被试；
-                   另做 log-RT 敏感性分析。实验室环境是 R 4.4.1，
-                   依赖用 renv.lock 固定，报告用 R Markdown。
-
-Amazing PsyCoder ❯ 🟢 第 5/5 阶段 · 最终确认
-                   ┌──────────────────────────────────────────────┐
-                   │ 已确认内容                                   │
-                   │ 问题：一致 vs 不一致反应时       ← 用户确认  │
-                   │ 公式：被试随机斜率 + 刺激随机截距 ← 用户确认  │
-                   │ 清理：按预注册规则并记录每步数量  ← 用户确认  │
-                   │ 环境：R 4.4.1 + renv.lock         ← 用户确认  │
-                   │ 输出：条件差、区间、诊断和图表    ← 用户确认  │
-                   └──────────────────────────────────────────────┘
-                   ✅ 保存 analysis_config.yaml，可以生成代码
-
-用户             ❯ 生成。
-
-Amazing PsyCoder ❯ ✅ analysis.R + report.Rmd + renv.lock 已生成
-                   已记录软件版本并完成代码检查。
-
-Amazing PsyCoder ❯ 🔍 当前状态：ready_for_execution
-                   可以运行，但还不能说结果已经适合写入论文。
-
-用户             ❯ 已在新环境运行，提供运行记录、结果表、图和软件版本。
-
-Amazing PsyCoder ❯ 🔍 已检查运行结果
-                   当前状态：ready_for_publication
-                   可以进入报告和论文写作阶段。
-```
-
----
-
-## 📂 文件结构
+## 📂 File Structure
 
 ```text
 amazing-psycoder-skills/
-├── amazing-psycoder/                  ← 总入口（v1.4.0）
-│   ├── SKILL.md                       ← 任务分流和全局规则
-│   ├── PLATFORMS.md · install.sh      ← 平台说明和安装器
-│   ├── STANDALONE.md                  ← 在 Agent 中直接使用
-│   ├── PSYCODER_STUDIO.md             ← 网站接入说明
-│   ├── runtime/                       ← 网站使用的数据格式和能力范围
-│   ├── scripts/ · tests/              ← 自动检查
-│   ├── requirements-dev.txt           ← 完整检查所需的软件版本
+├── amazing-psycoder/                  ← Main entry point (v1.4.0)
+│   ├── SKILL.md                       ← Routing and global rules
+│   ├── PLATFORMS.md · install.sh      ← Platform notes and installer
+│   ├── STANDALONE.md                  ← Direct use inside an agent
+│   ├── PSYCODER_STUDIO.md             ← Website integration
+│   ├── runtime/                       ← Website contracts and capability scope
+│   ├── scripts/ · tests/              ← Automated checks
+│   ├── requirements-dev.txt           ← Pinned validation dependencies
 │   │
-│   │   # 🧪 实验编程
-│   ├── psy-exp-designer/              ← ① 实验设计（5 阶段 + 38 个设计参考）
-│   ├── psy-exp-coder/                 ← ② 实验代码生成（PsychoPy/jsPsych/Psychtoolbox）
-│   └── psy-exp-reviewer/              ← ③ 实验代码检查
+│   │   # 🧪 Experiment Programming
+│   ├── psy-exp-designer/              ← ① Experiment design (5 phases + 38 design references)
+│   ├── psy-exp-coder/                 ← ② Experiment code generation (PsychoPy/jsPsych/Psychtoolbox)
+│   └── psy-exp-reviewer/              ← ③ Experiment code review
 │   │
-│   │   # 📊 数据分析
-│   ├── psy-ana-designer/              ← ④ 分析设计（60 个方法参考 + 48 个图表参考）
-│   ├── psy-ana-coder/                 ← ⑤ 分析代码生成（R/Python）
-│   └── psy-ana-reviewer/              ← ⑥ 分析代码与结果检查
+│   │   # 📊 Data Analysis
+│   ├── psy-ana-designer/              ← ④ Analysis design (60 method + 48 chart references)
+│   ├── psy-ana-coder/                 ← ⑤ Analysis code generation (R/Python)
+│   └── psy-ana-reviewer/              ← ⑥ Analysis code and output review
 │
-├── docs/                              ← 多语言 README（繁/英/日/德/法）
-├── .github/                           ← 自动测试
-└── README.md                          ← 简体中文项目首页
+├── docs/                              ← Translated READMEs (TW/EN/JP/DE/FR)
+├── .github/                           ← Automated checks
+└── README.md                          ← English project page
 ```
 
 ---
 
 <div align="center">
 
-💡 有想法或建议？欢迎来信 [tangdingyi04@outlook.com](mailto:tangdingyi04@outlook.com)<br>
+💡 Have ideas or suggestions? Reach out at [tangdingyi04@outlook.com](mailto:tangdingyi04@outlook.com)<br>
 🪄 Made by [soupandpsy](https://github.com/soupandpsy) · MIT License
 
 </div>

@@ -1,38 +1,38 @@
-# McNemar 检验
+# McNemar Test
 
-## 概述
+## Overview
 
-McNemar检验用于**配对二分类数据**,检验前后测或两种条件下分类结果的变化是否对称。
+McNemar test is used for **paired binary data** to test whether the changes in classification results between pre- and post-test or two conditions are symmetrical.
 
-**典型场景**: 治疗前后"符合临床诊断"的比例变化; 两种Stroop版本做对/做错模式的差异。
+**Typical scenario**: The change in the proportion of "in line with clinical diagnosis" before and after treatment; the difference in the right/wrong mode of the two Stroop versions.
 
-## 何时使用
+## When to use
 
-| 条件 | 要求 |
+| Conditions | Requirements |
 |------|------|
-| DV类型 | 二分类（是/否、对/错、阳性/阴性） |
-| 设计类型 | 配对设计（每个被试接受两种条件或前后测） |
-| 样本要求 | 配对样本；被试内两个时间点/条件均需完整数据 |
-| 关键假设 | 仅关注不一致对（b和c）；b+c ≥ 10 时可用标准近似，否则需用精确二项检验 |
-| 数据格式 | 2×2列联表，对角线为一致结果（a和d），反对角线为变化（b和c） |
+| DV type | Two categories (yes/no, right/wrong, positive/negative) |
+| Design type | Paired design (each subject receives two conditions or pre- and post-test) |
+| Sample requirements | Paired samples; complete data are required for both time points/conditions within the subject |
+| Key assumptions | Only focus on inconsistent pairs (b and c); standard approximation can be used when b+c ≥ 10, otherwise the exact binomial test needs to be used |
+| Data format | 2×2 contingency table, the diagonal is the consistent result (a and d), and the anti-diagonal is the change (b and c) |
 
-## 2×2表解读
+## Interpretation of 2×2 table
 
 ```
-          条件B
-          对    错
-条件A 对  a(一致) b(变错)
-      错  c(变对)  d(一致)
+          Condition B
+          True False
+Condition A is correct for a (consistent) b (wrong)
+      Wrong c(change to right) d(consistent)
 ```
 
-McNemar检验b和c是否对称——即"变对"和"变错"的人是否一样多。
+McNemar tests whether b and c are symmetrical - that is, whether the number of people who "get right" and "get wrong" is the same.
 
-## R代码
+## R code
 
 ```r
 mcnemar.test(table(data$pre, data$post))
 ```
 
-## 报告
+## Report
 
 > McNemar's test examined whether classification changed from pre to post treatment. Significantly more patients moved from clinical to non-clinical (n=18) than vice versa (n=3), χ²(1)=9.14, p=.002.

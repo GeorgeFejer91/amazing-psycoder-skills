@@ -3,7 +3,7 @@ name: amazing-psycoder
 description: >-
   Route Amazing PsyCoder requests to the correct psychological experiment or
   behavioral-data analysis stage: Designer, Coder, or Reviewer. Use for
-  end-to-end or multi-stage work, ambiguous requests such as “帮我做 Stroop”,
+  end-to-end or multi-stage work, ambiguous requests such as “Help me do Stroop”,
   cross-pipeline work, system-capability questions, or explicit invocations of
   Amazing PsyCoder. Supports PsychoPy, jsPsych, Psychtoolbox, R, and Python.
   For a clearly scoped single-stage request, route directly to the matching
@@ -62,7 +62,7 @@ independent unless their complete confirmed semantics are identical.
 ### Experiment Pipeline
 
 ```
-User describes experiment (English / 中文)
+User describes experiment (English / Chinese)
        │
        ▼
 ┌──────────────────────────────────────┐
@@ -149,67 +149,67 @@ Analyze the user's request — what do they actually want?
   │
   ├─ 🧪 EXPERIMENT — they want to build/design/code/review an experiment
   │
-  │   ├─ "I want to build an experiment" / "我要做一个…实验" / "设计一个…范式"
+  │ ├─ "I want to build an experiment" / "I want to build an experiment" / "Design a paradigm of..."
   │   │    → psy-exp-designer (start Phase 1)
   │   │
-  │   ├─ "Generate experiment code from this config" / "用这个config生成实验代码"
+  │ ├─ "Generate experiment code from this config" / "Use this config to generate experiment code"
   │   │    → User has config → psy-exp-coder
   │   │
-  │   ├─ "Generate experiment code" / "生成实验代码"  (no config visible)
-  │   │    → "你有实验 config YAML 吗？如果没有，需要先通过 psy-exp-designer 设计实验。"
+  │ ├─ "Generate experiment code" / "Generate experiment code" (no config visible)
+  │ │ → "Do you have an experiment config YAML? If not, you need to design the experiment through psy-exp-designer first."
   │   │       Has config → psy-exp-coder
   │   │       No config → psy-exp-designer
   │   │
-  │   ├─ "Review this experiment code" / "审计这个实验" / "实验代码有没有问题"
+  │ ├─ "Review this experiment code" / "Audit this experiment" / "Is there any problem with the experiment code?"
   │   │    → psy-exp-reviewer
   │   │
-  │   └─ "Experiment code error" / "实验代码报错"
+  │ └─ "Experiment code error" / "Experiment code error"
   │        → Design error → psy-exp-designer
   │           Code error   → psy-exp-coder
   │
   ├─ 📊 ANALYSIS — they want to design/code/review a data analysis
   │
-  │   ├─ "Design my analysis" / "设计分析方案" / "用什么统计方法" / "怎么分析这个数据"
+  │ ├─ "Design my analysis" / "Design analysis plan" / "What statistical method to use" / "How to analyze this data"
   │   │    → psy-ana-designer (start Phase 1)
   │   │
-  │   ├─ "Analyze my data" / "分析我的数据" / "帮我做统计分析"
+  │ ├─ "Analyze my data" / "Analyze my data" / "Help me do statistical analysis"
   │   │    → psy-ana-designer (design before code — never jump straight to coder)
   │   │
-  │   ├─ "Generate analysis code from this config" / "用这个analysis config生成代码"
+  │ ├─ "Generate analysis code from this config" / "Use this analysis config to generate code"
   │   │    → User has analysis_config.yaml → psy-ana-coder
   │   │
-  │   ├─ "Generate analysis code" / "生成分析代码"  (no config visible)
-  │   │    → "你有 analysis_config.yaml 吗？如果没有，需要先通过 psy-ana-designer 设计分析方案。"
+  │ ├─ "Generate analysis code" / "Generate analysis code" (no config visible)
+  │ │ → "Do you have analysis_config.yaml? If not, you need to design the analysis solution through psy-ana-designer first."
   │   │       Has config → psy-ana-coder
   │   │       No config → psy-ana-designer
   │   │
-  │   ├─ "Review this analysis" / "审计分析代码" / "检查分析脚本"
+  │ ├─ "Review this analysis" / "Audit analysis code" / "Check analysis script"
   │   │    → psy-ana-reviewer
   │   │
-  │   └─ "Analysis script error" / "分析代码报错" / "分析结果不对"
+  │ └─ "Analysis script error" / "Analysis code error" / "Analysis result is wrong"
   │        → Design error (wrong method) → psy-ana-designer
   │           Code error (API misuse)    → psy-ana-coder
   │
   ├─ 🔀 CROSS-PIPELINE — experiment done, now want analysis
   │
-  │   ├─ "Experiment passed review, now analyze the data" / "实验做完了，分析数据"
+  │ ├─ "Experiment passed review, now analyze the data" / "Experiment passed review, now analyze the data"
   │   │    → psy-ana-designer
-  │   │    → "如果有实验 config YAML 可以直接复用；没有的话我帮你手动收集实验信息。"
+  │ │ → "If there is an experimental config YAML, it can be reused directly; if not, I will help you collect the experimental information manually."
   │   │
-  │   └─ "Build experiment AND analyze" / "设计实验并分析数据"
+  │ └─ "Build experiment AND analyze" / "Design experiments and analyze data"
   │        → psy-exp-designer first → after pipeline completes, remind user to return for analysis
   │
   ├─ ❓ AMBIGUOUS — unclear which pipeline
   │
-  │   └─ "帮我做 Stroop" / "I want to do a Stroop study"
-  │        → "你需要设计实验程序，还是分析已有数据？"
+  │ └─ "Help me do a Stroop" / "I want to do a Stroop study"
+  │ → "Do you need to design an experimental procedure or analyze existing data?"
   │           Build experiment → psy-exp-designer
   │           Analyze data      → psy-ana-designer
   │
   └─ ℹ️ GENERAL
-       ├─ "有哪些范式" → Paradigm Coverage Matrix
-       ├─ "有哪些分析方法" → method/chart reference inventory summary; do not imply verified implementation coverage
-       └─ "这个系统怎么用" → System overview + both pipelines
+       ├─ "What paradigms are there" → Paradigm Coverage Matrix
+       ├─ "What are the analysis methods?" → method/chart reference inventory summary; do not imply verified implementation coverage
+       └─ "How to use this system" → System overview + both pipelines
 ```
 
 ### End-to-End Execution Order
@@ -481,7 +481,7 @@ Antisaccade · ANT · BART · Bilingual Stroop · Change Detection · Children F
 ### Language Consistency
 
 Code comments and README language MUST match the user's language:
-- 中文用户 → 中文 README + 中文代码注释
+- Chinese users → Chinese README + Chinese code comments
 - English user → English README + English code comments
 
 ## Resource Routing

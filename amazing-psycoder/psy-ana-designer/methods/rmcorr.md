@@ -1,55 +1,55 @@
-# 重复测量相关 (Repeated Measures Correlation / rmcorr)
+# Repeated Measures Correlation / rmcorr
 
-## 概述
+## Overview
 
-rmcorr 用于计算被试内重复测量数据中两个变量的相关,解决了普通Pearson r在处理每个被试多行数据时的独立性违反问题。
+rmcorr is used to calculate the correlation between two variables in repeated measurement data within a subject, solving the independence violation problem of ordinary Pearson r when processing multiple rows of data for each subject.
 
-**典型场景**: RT与trial序号的被试内关联, 每个trial的刺激强度与RT的关联。
+**Typical scenario**: intra-subject correlation between RT and trial number, correlation between stimulation intensity of each trial and RT.
 
-## 何时使用
+## When to use
 
-| 条件 | 要求 |
+| Conditions | Requirements |
 |------|------|
-| 实验设计类型 | 被试内设计 (within-subject design)，每个被试在多个条件下重复测量 |
-| 因变量类型 | 两个变量均为连续变量 (continuous) |
-| 自变量类型 | 连续变量 (continuous) 或可视为连续的离散变量 |
-| 样本信息 | 每人至少需重复观测以识别被试内关系；人数、每人次数和缺失由目标区间精度/斜率异质性决定，不设通用总数 |
-| 数据层级 | 两水平嵌套数据：重复测量 (Level 1) 嵌套于被试 (Level 2) |
-| 核心假设 | (1) 线性关系：两变量在被试内呈线性关系；(2) 残差正态性；(3) 方差齐性 (homoscedasticity)；(4) 各被试的斜率方向一致（rmcorr 估计共同斜率，不适用于被试间方向相反的情况） |
-| 不适用情形 | 被试间斜率方向不一致（应使用混合模型或个体回归）；数据有非线性趋势；两个变量中任一为分类变量 |
+| Experimental design type | Within-subject design (within-subject design), each subject is measured repeatedly under multiple conditions |
+| Dependent variable type | Both variables are continuous variables (continuous) |
+| Argument type | Continuous variable (continuous) or a discrete variable that can be regarded as continuous |
+| Sample information | At least repeated observations per person are required to identify within-subject relationships; the number of people, times per person, and missingness are determined by target interval accuracy/slope heterogeneity, and there is no universal total number |
+| Data hierarchy | Two levels of nested data: repeated measures (Level 1) nested within subjects (Level 2) |
+| Core assumptions | (1) Linear relationship: the two variables are linearly related within subjects; (2) Residual normality; (3) Homoscedasticity; (4) The slope direction of each subject is consistent (rmcorr estimates a common slope and is not suitable for situations where the direction is opposite between subjects) |
+| Not applicable | The direction of the slope is inconsistent between subjects (mixed model or individual regression should be used); the data has a nonlinear trend; either of the two variables is a categorical variable |
 
-## 为什么不能用普通Pearson r
+## Why can’t I use ordinary Pearson r?
 
-被试内数据(每人60个trial):
-- Pearson r 把 30人×60=1800行当成独立观测 → 假阳性膨胀
-- 均值化(每被试一个r)→丢失被试内信息
-- rmcorr: 用ANCOVA去除被试间差异,只分析被试内的共变
+Intra-subject data (60 trials per person):
+- Pearson r Treat 30 people × 60 = 1800 rows as independent observations → False positive inflation
+- Averaging (one r for each subject) → losing within-subject information
+- rmcorr: Use ANCOVA to remove differences between subjects and only analyze covariation within subjects
 
-## R代码
+## R code
 
 ```r
 library(rmcorr)
 rmcorr(participant = subject_id, measure1 = rt, measure2 = trial_number, dataset = data)
 ```
 
-## 输出
+## Output
 
-- r_rm: 重复测量相关系数(解释同Pearson r)
-- p值
+- r_rm: repeated measurement correlation coefficient (interpretation is the same as Pearson r)
+- p value
 - 95% CI
-- 个体拟合线图(ggplot)
+- Individual fitting line graph (ggplot)
 
-## 报告格式 (APA 7th)
+## Report Format (APA 7th)
 
-**中文报告模板**：
+**Chinese report template**:
 
-> 采用重复测量相关 (repeated measures correlation, rmcorr) 检验反应时 (RT) 与试次序号 (trial number) 的被试内关联。结果表明两者存在显著的负相关，*r*~rm~(1428) = -.28, *p* < .001, 95% CI [-.33, -.23]，说明随实验进程推进，被试的反应时逐渐下降。
+> Use repeated measures correlation (rmcorr) to examine the within-subject correlation between reaction time (RT) and trial number (trial number). The results show that there is a significant negative correlation between the two, *r*~rm~(1428) = -.28, *p* < .001, 95% CI [-.33, -.23], indicating that as the experiment progresses, the subjects' reaction time gradually decreases.
 
-**英文报告模板**：
+**English report template**:
 
 > A repeated measures correlation (rmcorr) was conducted to examine the within-subject association between reaction time (RT) and trial number. The results revealed a significant negative correlation, *r*~rm~(1428) = -.28, *p* < .001, 95% CI [-.33, -.23], indicating that RT decreased as the experiment progressed.
 
-**报告要点**：
-- 报告 *r*~rm~ 值、自由度（总观测数 − 被试数）、*p* 值和 95% 置信区间。
-- 自由度计算公式：*df* = *N* − *k*，其中 *N* 为总观测行数，*k* 为被试数。
-- 效应量解释：|*r*~rm~| ≈ .10 为小效应，≈ .30 为中等效应，≈ .50 为大效应（与 Pearson *r* 相同）。
+**Report Highlights**:
+- Reports *r*~rm~ values, degrees of freedom (total observations − subjects), *p* values, and 95% confidence intervals.
+- Degree of freedom calculation formula: *df* = *N* − *k*, where *N* is the total number of observation rows and *k* is the number of subjects.
+- Effect size interpretation: |*r*~rm~| ≈ .10 is a small effect, ≈ .30 is a medium effect, and ≈ .50 is a large effect (same as Pearson *r*).

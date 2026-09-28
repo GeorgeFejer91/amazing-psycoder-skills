@@ -1,17 +1,17 @@
-# 森林图 (Forest Plot)
+# Forest Plot
 
-## 概述
+## Overview
 
-森林图是元分析的标准可视化。每个研究用一条水平线表示效应量和CI，菱形表示合并效应量。
+Forest plots are the standard visualization for meta-analysis. A horizontal line represents the effect size and CI for each study, and a diamond represents the pooled effect size.
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| 场景 | 元分析 |
-| 变量 | 效应量+SE/CI |
+| Scenario | Meta-Analysis |
+| Variable | Effect size+SE/CI |
 
-## R 代码
+## R code
 
 ```r
 library(metafor)
@@ -20,16 +20,16 @@ forest(res, slab=paste(Author, Year),
        xlab="Cohen's d", mlab="RE Model")
 ```
 
-## 解读
+## Interpretation
 
-- 先标明效应尺度及其零值（差值通常为 0，比值通常为 1）；区间是否跨零值只对应所画置信水平下的检验，不等于“无效应”。
-- 合并区间需与模型、异质性和预测区间一起解释；菱形位于零值一侧不能说明所有目标研究/场景都有同方向效应。
-- 线长度反映该尺度上的区间宽度；精度还受模型、依赖、研究质量和异质性估计影响。
+- First indicate the effect scale and its zero value (the difference is usually 0, the ratio is usually 1); whether the interval crosses the zero value only corresponds to the test under the drawn confidence level, and does not equal "no effect".
+- The combined interval needs to be interpreted together with the model, heterogeneity and prediction interval; the diamond being on one side of zero does not mean that all target studies/scenarios have the same directional effect.
+- Line length reflects the width of the interval on that scale; accuracy is also affected by model, dependencies, study quality, and heterogeneity estimates.
 
-## 关键参数
+## Key parameters
 
-| 参数 | 作用 |
+| Parameters | Function |
 |------|------|
-| `slab` | 研究标签 |
-| `xlab` | X轴标签(效应量名称) |
-| `mlab` | 合并效应量标签 |
+| `slab` | research tags |
+| `xlab` | X-axis label (effect size name) |
+| `mlab` | Merge effect size labels |

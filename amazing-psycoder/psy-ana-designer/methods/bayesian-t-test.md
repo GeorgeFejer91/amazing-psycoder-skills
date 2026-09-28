@@ -1,29 +1,29 @@
-# 贝叶斯 t 检验 (Bayesian t-test)
+# Bayesian t-test
 
-## 概述
+## Overview
 
-贝叶斯t检验量化了H1和H0的相对证据强度。不输出p值,输出**贝叶斯因子(BF10)**。
+The Bayesian t-test quantifies the relative strength of evidence for H1 and H0. Do not output p value, output **Bayes factor (BF10)**.
 
-## 何时使用
+## When to use
 
-- 需要量化"没有差异"的证据 (传统t检验不能)
-- 小样本(传统方法效力不足)
-- 预注册分析计划中预先指定
-- 需要连续监控证据(序贯分析)
+- Need to quantify evidence of "no difference" (traditional t-test cannot)
+- Small sample (traditional methods are not powerful enough)
+- Pre-specified in the pre-registered analysis plan
+- Continuous monitoring of evidence required (sequential analysis)
 
-## BF10 解读
+## BF10 Interpretation
 
-| BF10 | 证据强度 | 含义 |
+| BF10 | Strength of evidence | Meaning |
 |------|---------|------|
-| >100 | 极端 | H1极强支持 |
-| 30-100 | 非常强 | H1强支持 |
-| 10-30 | 强 | H1支持 |
-| 3-10 | 中等 | H1中等支持 |
-| 1/3-3 | 弱 | 数据不敏感 |
-| 1/10-1/3 | 中等 | H0中等支持 |
-| 1/30-1/10 | 强 | H0强支持 |
+| >100 | Extreme | H1 extremely strong support |
+| 30-100 | Very strong | H1 strong support |
+| 10-30 | Strong | H1 support |
+| 3-10 | Medium | H1 Medium Support |
+| 1/3-3 | Weak | Data is not sensitive |
+| 1/10-1/3 | Moderate | H0 Moderate Support |
+| 1/30-1/10 | Strong | H0 strong support |
 
-## R代码
+## R code
 
 ```r
 library(BayesFactor)
@@ -31,26 +31,26 @@ bf <- ttestBF(formula = rt ~ condition, data = data_agg, paired = TRUE)
 print(bf)  # BF10
 ```
 
-## 报告格式
+## Report format
 
 > A Bayesian paired t-test compared the two conditions. The Bayes factor (BF10=5.32) provided moderate evidence for H1 over H0.
 
-## 报告
+## Report
 
-APA 第七版格式报告示例(以贝叶斯配对t检验为例):
+APA seventh edition format report example (taking Bayesian paired t test as an example):
 
-**方法部分**：使用贝叶斯配对t检验(BayesFactor R包, 默认先验: 柯西分布, scale = √2/2), 以BF10作为贝叶斯因子, 报告后验分布的中位数及95%最高密度区间(HDI)。
+**Method Section**: Use Bayesian paired t-test (BayesFactor R package, default prior: Cauchy distribution, scale = √2/2), use BF10 as the Bayes factor, and report the median and 95% highest density interval (HDI) of the posterior distribution.
 
-**结果部分示例**：
+**Result Part Example**:
 
-> 对两种实验条件下的反应时进行贝叶斯配对t检验。结果显示, 贝叶斯因子BF10 = 5.32, 为H1(存在差异)相对于H0(无差异)提供了中等程度的证据(Jeffreys, 1961)。后验分布的中位数为 δ = 0.48, 95% HDI [0.12, 0.85], 效应量对应中等偏小水平。先验设定为柯西分布(scale = √2/2), 稳健性检验显示, 在r = 0.5至1.0的先验范围内, BF10的变化不超过12%, 结论较为稳健。
+> Perform a Bayesian paired t-test on the response times under the two experimental conditions. The results show that the Bayes factor BF10 = 5.32 provides moderate evidence for H1 (there is a difference) relative to H0 (no difference) (Jeffreys, 1961). The median of the posterior distribution is δ = 0.48, 95% HDI [0.12, 0.85], and the effect size corresponds to a moderately small level. The prior is set to Cauchy distribution (scale = √2/2). The robustness test shows that within the prior range of r = 0.5 to 1.0, the change of BF10 does not exceed 12%, and the conclusion is relatively robust.
 
-**模板(英文)**：
+**Template (English)**:
 
 > A Bayesian paired t-test was conducted to compare response times between the two conditions. The analysis yielded a Bayes factor BF10 = [value], providing [anecdotal/substantial/strong/very strong/decisive] evidence in favor of H[1/0]. The posterior median for the standardized effect size was δ = [value], 95% credible interval [[lower], [upper]]. A default Cauchy prior (scale = √2/2) was used for the effect size under H1.
 
-## 注意事项
+## Notes
 
-- BF10>3 不代表"效应存在"——是连续证据,不是二值决策
-- 仍需报告效应量(后验分布的均值+95%可信区间)
-- 先验设置影响BF值(默认Cauchy scale=√2/2)
+- BF10>3 does not mean "the effect exists" - it is continuous evidence, not a binary decision
+- Effect size still needs to be reported (mean of posterior distribution + 95% confidence interval)
+- The prior setting affects the BF value (default Cauchy scale=√2/2)

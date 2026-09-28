@@ -1,17 +1,17 @@
-# 树图 (Treemap)
+# Treemap
 
-## 概述
+## Overview
 
-树图用嵌套矩形展示层次数据的组成比例。面积=数值大小。适合展示多层级组成。
+Treemaps use nested rectangles to display the proportions of hierarchical data. Area = numerical size. Suitable for displaying multi-level compositions.
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| 场景 | 层次比例数据 |
-| 优势 | 比饼图更有效利用空间 |
+| Scene | Hierarchical scale data |
+| Advantages | More efficient use of space than pie charts |
 
-## R 代码
+## R code
 
 ```r
 library(treemap)
@@ -24,15 +24,15 @@ treemap(data,
         title="Hierarchical Composition")
 ```
 
-## vs 饼图
+## vs pie chart
 
-树图比饼图更高效地利用空间,可以展示多层级的层次结构。适合>5个类别。
+Tree charts use space more efficiently than pie charts and can display multi-level hierarchies. Fits >5 categories.
 
-## 关键参数
+## Key parameters
 
-| 参数 | 作用 |
+| Parameters | Function |
 |------|------|
-| `index` | 层级分类变量 |
-| `vSize` | 面积变量 |
-| `vColor` | 颜色变量 |
-| `palette` | 配色方案 |
+| `index` | Hierarchical categorical variable |
+| `vSize` | area variable |
+| `vColor` | Color variable |
+| `palette` | color scheme |

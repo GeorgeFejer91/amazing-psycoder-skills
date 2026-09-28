@@ -1,6 +1,6 @@
 # Psychtoolbox — Platform Index
 
-> **Status**: Reference-complete, manual generation | **范式**: 5 | **Demo**: 100 `.md` (_raw/)
+> **Status**: Reference-complete, manual generation | **Paradigm**: 5 | **Demo**: 100 `.md` (_raw/)
 
 ## Quick links
 

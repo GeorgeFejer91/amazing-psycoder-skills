@@ -1,51 +1,51 @@
-# Log-Rank 检验 / 生存曲线比较
+# Log-Rank test/survival curve comparison
 
-## 概述
+## Overview
 
-Log-Rank检验比较两组或多组的事件时间曲线，是带删失组间比较的候选检验之一。它回答的是整条曲线的加权差异问题，不自动提供领域可解释的效应估计。
+The Log-Rank test compares the event-time curves of two or more groups and is one of the candidate tests for censored group comparisons. It answers the question of weighted differences across the entire curve and does not automatically provide domain-interpretable effect estimates.
 
-**典型场景**: 两种治疗方案下到复发/缓解的时间，或不同招募策略下到研究退出的时间。
+**Typical scenario**: The time to relapse/remission under two treatment options, or the time to study withdrawal under different recruitment strategies.
 
-**硬排除**: 不得用 Log-Rank/Kaplan–Meier 曲线估计或比较 SSRT；stop-signal 原始试次并不因此成为普通删失生存结局。
+**Hard exclusion**: SSRT requires an established stop-signal estimator. Raw stop-signal trials are not censored survival outcomes, so survival curves do not support an SSRT comparison.
 
-## 何时使用
+## When to use
 
-| 条件 | 要求 |
+| Conditions | Requirements |
 |------|------|
-| 研究设计 | 组间设计（两组或多组比较） |
-| 因变量类型 | 时间-事件（time-to-event），含删失数据 |
-| 样本/信息 | 依据事件数、删失、曲线差异形态、分配比例与目标功效设计；没有通用“每组 20–30”门槛 |
-| 核心条件 | 明确定义事件/时间起点、独立或已建模的观察单位、可辩护的删失机制；交叉风险会改变 Log-Rank 的功效和解释，应预先考虑替代 estimand/检验 |
+| Research design | Between-group design (comparison of two or more groups) |
+| Dependent variable type | time-to-event, including censored data |
+| Sample/Information | Design based on number of events, censoring, curve difference shape, allocation ratio, and target power; no universal “20–30 per group” threshold |
+| Core Conditions | Well-defined event/time starting points, independent or modeled observation units, defensible censoring mechanisms; risk of crossover altering the power and interpretation of Log-Rank, alternative estimands/tests should be considered in advance |
 
-## vs Cox回归
+## vs Cox regression
 
-Log-Rank: 给出曲线差异检验；仍应配套报告预先指定的生存概率差、限制平均生存时间差或其他可解释估计与区间
-Cox回归: 半参数模型，可加入协变量并估计条件 HR，但依赖其模型结构与诊断
+Log-Rank: Gives a curve difference test; it should still be accompanied by a pre-specified survival probability difference, restricted mean survival time difference, or other interpretable estimates and intervals.
+Cox regression: semi-parametric model, which can add covariates and estimate conditional HR, but relies on its model structure and diagnosis
 
-## R代码
+## R code
 
 ```r
 library(survival)
-# Kaplan-Meier曲线
+# Kaplan-Meier curve
 fit <- survfit(Surv(time, event) ~ group, data=data)
 plot(fit, col=c("red","blue"), lty=1:2)
-# Log-Rank检验
+# Log-Rank test
 survdiff(Surv(time, event) ~ group, data=data)
 ```
 
-## 报告
+## Report
 
-### APA 7th 格式示例
+### APA 7th format example
 
 > In this illustrative report, a log-rank test compared time-to-relapse curves for an intervention group (n = 45) and a control group (n = 48), χ²(1, N = 93) = 6.45, p = .011. Kaplan–Meier estimates were accompanied by a prespecified absolute survival-probability difference at six months with a confidence interval; censoring counts and follow-up distributions were reported by group.
 
-### 中文报告示例
+### Chinese report example
 
-> 在此示例中，采用 Log-Rank 检验比较干预组（n = 45）与对照组（n = 48）的复发时间曲线，χ²(1, N = 93) = 6.45, p = .011。同时报告六个月无复发概率差及其置信区间，并按组报告删失数量和随访分布。
+> In this example, the Log-Rank test is used to compare the time-to-relapse curves of the intervention group (n = 45) to the control group (n = 48), χ²(1, N = 93) = 6.45, p = .011. The six-month recurrence-free probability difference and its confidence interval are also reported, and the number of censoring and follow-up distribution are reported by group.
 
-### 必报信息
+### Required information
 
-- 检验统计量 χ²、自由度
-- 样本量 (N)
-- p 值及预先指定的、可解释的效应估计与不确定性
-- 各组删失/风险集信息；中位生存时间只在可估且符合 estimand 时报告
+- test statistic χ², degrees of freedom
+-Sample size (N)
+- p-values and prespecified, interpretable effect estimates and uncertainties
+- censoring/risk set information for each group; median survival time is only reported when estimable and consistent with estimand

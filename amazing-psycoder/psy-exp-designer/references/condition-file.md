@@ -4,7 +4,7 @@
 
 > **Related**: [config-schema.md](config-schema.md) · [data-recording.md](data-recording.md)
 
-> ⚠️ **LANGUAGE NOTE**: Example values in this document (e.g., `"正确"`, `"错误"`, `"太慢"` for feedback text) are Chinese-language placeholders. When generating condition files, use the equivalent text in the user's language. See [Language Consistency (Red Line)](../../psy-exp-coder/SKILL.md#language-consistency-red-line).
+> ⚠️ **LANGUAGE NOTE**: Example values in this document (e.g., `"correct"`, `"wrong"`, `"too slow"` for feedback text) are Chinese-language placeholders. When generating condition files, use the equivalent text in the user's language. See [Language Consistency (Red Line)](../../psy-exp-coder/SKILL.md#language-consistency-red-line).
 
 ## File Format
 
@@ -71,7 +71,7 @@ Result: Trial 1 shows "X" and expects "space"; Trial 2 shows "O" and expects no 
 | `{subject_id}` | Runtime input | Subject identifier |
 | `{block_name}` | Block definition | Current block name |
 | `{trial_number}` | Trial loop counter | Current trial index |
-| `{feedback_text}` | Accuracy evaluation | `"正确"`, `"错误"`, or `"太慢"` |
+| `{feedback_text}` | Accuracy evaluation | `"correct"`, `"wrong"`, or `"too slow"` |
 
 ## Validation Rules
 

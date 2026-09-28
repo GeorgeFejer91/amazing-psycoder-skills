@@ -5,7 +5,7 @@
 
 ## When to Use
 
-User mentions: Rating, 评分, Likert, VAS, visual analog scale, subjective rating, valence rating, arousal rating, preference rating.
+User mentions: Rating, rating, Likert, VAS, visual analog scale, subjective rating, valence rating, arousal rating, preference rating.
 
 ## Core Logic
 
@@ -21,9 +21,9 @@ Participants rate stimuli on one or more dimensions. Used for subjective judgmen
 6. **Self-paced or timed**: does the rating have a deadline?
 7. **Response device**: keyboard, mouse, touchscreen?
 8. **Trial structure**: stimulus first then rating, or both on same screen?
-9. **OS & font**: 在什么操作系统运行？如使用中文量表，确认字体
-10. **Display**: 全屏还是窗口？量表文字大小和屏幕位置？
-11. **Instruction text**: 指导语内容？量表锚点说明文字？
+9. **OS & font**: What operating system is it running on? If using Chinese scale, confirm the font
+10. **Display**: Full screen or window? Gauge text size and screen location?
+11. **Instruction text**: What is the instruction content? Scale anchor description text?
 
 ## Do Not Assume
 
@@ -84,7 +84,7 @@ Wewers, M. E., & Lowe, N. K. (1990). A critical review of visual analogue scales
 
 ### User Request
 
-> "我想做一个情绪图片评分实验。从IAPS图片库选了60张图片（20正性、20中性、20负性），每张图片呈现后，被试需要在两个维度上评分：效价（1=非常负性, 9=非常正性）和唤醒度（1=非常平静, 9=非常激动）。9点Likert量表，用鼠标点击数字。图片呈现3秒后量表才出现（防止冲动评分），量表不限时。两个维度的评分顺序在被试间平衡。用PsychoPy。"
+> "I want to do an emotional picture scoring experiment. 60 pictures (20 positive, 20 neutral, 20 negative) were selected from the IAPS picture library. After each picture was presented, subjects were asked to rate it on two dimensions: valence (1=very negative, 9=very positive) and arousal (1=very calm, 9=very excited). 9-point Likert scale, click on the number. The scale appears after 3 seconds of picture presentation (to prevent impulsive scoring), and the order of scoring of the two dimensions is balanced between subjects. "
 
 ### Trial Window Timeline
 
@@ -92,7 +92,7 @@ Wewers, M. E., & Lowe, N. K. (1990). A critical review of visual analogue scales
 ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐
 │ Window 1                 │ →  │ Window 2                 │ →  │ Window 3                 │ →  │ Window 4                 │
 │ Fixation                 │    │ Image Only               │    │ Rating - Valence         │    │ Rating - Arousal         │
-│ Content: +               │    │ Content: IAPS图片        │    │ Content: 图片+量表        │    │ Content: 图片+量表        │
+│ Content: + │ │ Content: IAPS picture │ │ Content: picture + scale │ │ Content: picture + scale │
 │ Duration: 500 ms         │    │ Duration: 3000 ms        │    │ Duration: self-paced     │    │ Duration: self-paced     │
 │ Response: none           │    │ Response: none           │    │ Response: mouse 1-9      │    │ Response: mouse 1-9      │
 │ File: none               │    │ File: stimuli/iaps/*.jpg │    │ File: none               │    │ File: none               │
@@ -104,9 +104,9 @@ Wewers, M. E., & Lowe, N. K. (1990). A critical review of visual analogue scales
 | Window | Content | Duration | Response | File/Folder | Condition | Data |
 |--------|---------|----------|----------|-------------|-----------|------|
 | Fixation | + | 500 ms | none | none | none | none |
-| Image Only | IAPS图片 | 3000 ms (mandatory viewing) | none | stimuli/iaps/*.jpg | {stimulus} | none |
-| Rating - Valence | 图片 + Likert 1-9 | self-paced | mouse click 1-9 | none | none | valence_rating, valence_rt |
-| Rating - Arousal | 图片 + Likert 1-9 | self-paced | mouse click 1-9 | none | none | arousal_rating, arousal_rt |
+| Image Only | IAPS picture | 3000 ms (mandatory viewing) | none | stimuli/iaps/*.jpg | {stimulus} | none |
+| Rating - Valence | Image + Likert 1-9 | self-paced | mouse click 1-9 | none | none | valence_rating, valence_rt |
+| Rating - Arousal | Image + Likert 1-9 | self-paced | mouse click 1-9 | none | none | arousal_rating, arousal_rt |
 
 ### Parsed Experiment Specification
 
@@ -116,7 +116,7 @@ Wewers, M. E., & Lowe, N. K. (1990). A critical review of visual analogue scales
 | Platform | PsychoPy |
 | Task type | Rating (9-point Likert) |
 | Rating dimensions | Valence (1-9), Arousal (1-9) |
-| Scale anchors | Valence: 1=非常负性, 9=非常正性 / Arousal: 1=非常平静, 9=非常激动 |
+| Scale anchors | Valence: 1=very negative, 9=very positive / Arousal: 1=very calm, 9=very excited |
 | Stimulus source | IAPS images (60 total: 20 pos, 20 neu, 20 neg) |
 | Mandatory viewing | 3000 ms before rating scale appears |
 | Dimension order | Counterbalanced across subjects |

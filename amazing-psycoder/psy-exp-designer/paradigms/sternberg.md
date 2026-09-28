@@ -6,7 +6,7 @@
 
 ## When to Use
 
-User mentions: Sternberg task, memory scanning, short-term memory search, set size effect, 斯滕伯格任务, 记忆扫描. Measures the speed and nature of short-term memory retrieval by varying the number of items held in a memory set and measuring the time to determine whether a probe was present.
+User mentions: Sternberg task, memory scanning, short-term memory search, set size effect, Sternberg task, memory scanning. Measures the speed and nature of short-term memory retrieval by varying the number of items held in a memory set and measuring the time to determine whether a probe was present.
 
 ## Core Logic
 
@@ -52,115 +52,115 @@ Sternberg, S. (1969). Memory-scanning: Mental processes revealed by reaction-tim
 
 ## Do Not Assume
 
-- Do not assume 记忆集以同时呈现方式显示。Sternberg任务也可以是序列呈现（逐项呈现），这两种方式的编码过程和扫描策略可能不同，需与用户确认。
-- Do not assume 探测刺激出现在屏幕中央位置。有的实现将探测项显示在固定位置之外的位置（如随机位置），以叠加空间成分，需确认探测项的位置和大小。
-- Do not assume 刺激材料一定是数字。字母、单词、图片或其他符号也常用于该范式，需确认刺激类型及是否需要字体支持。
-- Do not assume 正负试次的比率为1:1。虽然标准设计中两种试次数量相等，但用户可能有意调整比例（如2:1），需明确确认。
-- Do not assume 记忆集大小范围固定为1–6。根据被试群体和实验目的，范围可能是1–4、2–6或其他，需确认记忆集大小的取值。
-- Do not assume 练习block中必须包含反馈。反馈可能仅在练习中、仅在正式中、两者都有或都没有，需向用户确认反馈策略。
+- Do not assume that memory sets are displayed in simultaneous presentation mode. The Sternberg task can also be a sequential presentation (item-by-item presentation). The coding process and scanning strategy of these two methods may be different and need to be confirmed with the user.
+- Do not assume that the probe stimulus appears in the center of the screen. Some implementations display detection items at positions other than fixed locations (such as random positions) to superimpose spatial components, and the location and size of the detection items need to be confirmed.
+- Do not assume that the stimulus materials must be numbers. Letters, words, pictures, or other symbols are also commonly used in this paradigm, and the type of stimulus and whether font support is needed need to be confirmed.
+- Do not assume that the ratio of positive and negative trials is 1:1. Although the number of trials in both types is equal in the standard design, the user may intentionally adjust the ratio (such as 2:1), which needs to be explicitly confirmed.
+- Do not assume that the memory set size range is fixed at 1–6. Depending on the subject group and the purpose of the experiment, the range may be 1–4, 2–6 or other, and the value of the memory set size needs to be confirmed.
+- Do not assume feedback must be included in the exercise block. Feedback may be in exercises only, in formals only, both, or neither, and the feedback strategy needs to be confirmed with the user.
 
 ## Condition File Columns
 
 | Column | Type | Description |
 |--------|------|-------------|
-| numberSet | str | 记忆集字符串，各项以空格分隔，如 `"3 7 1"` |
-| target | str | 探测刺激，如 `"7"`（存在于记忆集中）或 `"5"`（不存在） |
-| corrAns | str | 正确按键，`"left"`（不在记忆中）或 `"right"`（在记忆中） |
-| setSize | int | 记忆集中的项目数量（可从numberSet推导，但显式记录更方便分析） |
+| numberSet | str | Memory set string, each item is separated by spaces, such as `"3 7 1"` |
+| target | str | Probe stimulus, such as `"7"` (present in the memory set) or `"5"` (not present) |
+| corrAns | str | Correct key, `"left"` (not in memory) or `"right"` (in memory) |
+| setSize | int | The number of items in the memory set (can be deduced from numberSet, but explicit recording is more convenient for analysis) |
 
 ## Variants
 
-- **序列呈现变式 (Sequential Presentation)**：记忆集中的项目逐个依次呈现（如每项500 ms），而非同时显示。这种变式用于研究编码策略和时间压力下的扫描过程。相关参考：[n-back](../paradigms/n-back.md)。
-- **视觉搜索对照变式 (Visual Search Comparison)**：完成一项Sternberg任务后，被试再完成对应的视觉搜索任务（刺激同时呈现但无需记忆），通过对比记忆扫描斜率与视觉搜索斜率揭示工作记忆扫描与知觉搜索的差异。
-- **双重任务变式 (Dual-task)**：在进行记忆扫描的同时执行第二任务（如发音抑制、按键分心等），用于考察中央执行器在工作记忆扫描过程中的作用。相关参考：complex-span（复杂广度任务，可用于工作记忆容量个体差异测量）。
+- **Sequential Presentation variant (Sequential Presentation)**: The items in the memory set are presented one by one in sequence (such as 500 ms for each item), rather than displayed simultaneously. This variant is used to study encoding strategies and scanning processes under time pressure. Related reference: [n-back](../paradigms/n-back.md).
+- **Visual Search Comparison**: After completing a Sternberg task, the subject then completed the corresponding visual search task (stimuli were presented at the same time but no memory was required), and the difference between working memory scanning and perceptual search was revealed by comparing the slope of memory scanning and the slope of visual search.
+- **Dual-task variant (Dual-task)**: perform a second task (such as articulatory suppression, key distraction, etc.) while performing memory scanning, used to examine the role of the central executive in the working memory scanning process. Related reference: complex-span (complex span task, which can be used to measure individual differences in working memory capacity).
 
 ---
 
 ## Example
 
-### 用户请求
+### User request
 
-> "我想做一个Sternberg记忆扫描实验。屏幕中央先出现注视点500 ms，然后同时显示2到5个随机数字作为记忆集，呈现1.5秒让被试记住。空屏保持2秒后，出现一个探测数字。如果探测数字在记忆集中，按右箭头键；如果不在，按左箭头键。探测数字最多呈现2秒。先做12个练习trial带反馈，再做4个正式block各24个trial。ITI随机800-1200 ms。用jsPsych实现。"
+> "I want to do a Sternberg memory scanning experiment. The fixation point 500 appears in the center of the screen first ms, and then display 2 to 5 random numbers as a memory set for 1.5 seconds. After the screen remains blank for 2 seconds, a detection number appears. If the detection number is not in the memory set, press the left arrow key. First do 12 practice trials with feedback, and then do 4 formal blocks of 24 ms. "
 
-### 试次窗口时间线
+### Trial window timeline
 
 ```text
 ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐
 │ Window 1                 │ →  │ Window 2                 │ →  │ Window 3                 │ →  │ Window 4                 │ →  │ Window 5                 │
-│ 注视点                   │    │ 记忆集                   │    │ 保持间隔                 │    │ 探测项                   │    │ 反馈（仅练习）           │
-│ Content: +               │    │ Content: "3 7 1 9"       │    │ Content: blank           │    │ Content: "7"             │    │ Content: "正确! RT=452ms"│
+│ Fixation point │ │ Memory set │ │ Hold interval │ │ Probe item │ │ Feedback (practice only) │
+│ Content: + │ │ Content: "3 7 1 9" │ │ Content: blank │ │ Content: "7" │ │ Content: "Correct! RT=452ms"│
 │ Duration: 500 ms         │    │ Duration: 1500 ms        │    │ Duration: 2000 ms        │    │ Duration: ≤2000 ms       │    │ Duration: 1000 ms        │
 │ Response: none           │    │ Response: none           │    │ Response: none           │    │ Response: left/right     │    │ Response: none           │
 │ Data: none               │    │ Data: none               │    │ Data: none               │    │ Data: rt, key, acc       │    │ Data: none               │
 └──────────────────────────┘    └──────────────────────────┘    └──────────────────────────┘    └──────────────────────────┘    └──────────────────────────┘
 ```
 
-### 解析后的实验规格
+### Analyzed experimental specifications
 
-| 字段 | 值 |
+| Field | Value |
 |------|-----|
-| 实验名称 | 数字Sternberg记忆扫描任务 |
-| 平台 | jsPsych |
-| 任务类型 | Sternberg记忆扫描 |
-| 刺激材料 | 数字 (0-9) |
-| 记忆集大小 | 2, 3, 4, 5 |
-| 记忆集呈现方式 | 同时呈现 |
-| 记忆集呈现时长 | 1500 ms |
-| 注视点时长 | 500 ms |
-| 保持间隔 | 2000 ms |
-| 探测项最大呈现时长 | 2000 ms |
-| 反应映射 | 右箭头=在记忆中，左箭头=不在记忆中 |
-| 阶段 | 指导语 → 练习(12 trial) → Block1-4(各24 trial) |
-| ITI | 800-1200 ms 随机 |
+| Experiment Name | Digital Sternberg Memory Scan Task |
+| Platform | jsPsych |
+| Task Type | Sternberg Memory Scan |
+| Stimulus | Number (0-9) |
+| Memory set size | 2, 3, 4, 5 |
+| Memory set presentation method | Simultaneous presentation |
+| Memory set presentation time | 1500 ms |
+| Fixation point duration | 500 ms |
+| Hold interval | 2000 ms |
+| Maximum presentation time of detection items | 2000 ms |
+| Reaction mapping | Right arrow = in memory, left arrow = not in memory |
+| Stage | Instructions → Practice (12 trials) → Block1-4 (24 trials each) |
+| ITI | 800-1200 ms random |
 
-### 缺失信息
+### Missing information
 
-1. **字体和中文支持**：用户使用数字作为刺激，不需要中文字体。但如果需要呈现中文指导语，需确认字体加载路径。
-2. **反馈方式**：用户仅提到练习有反馈，未说明反馈的具体格式（仅文字还是包含声音/颜色），需确认。
-3. **block间休息**：用户未提及block之间的休息时间，需确认是否需要休息页面及休息时长。
+1. **Font and Chinese Support**: Users use numbers as stimuli, no Chinese fonts are required. However, if you need to present Chinese instructions, you need to confirm the font loading path.
+2. **Feedback method**: The user only mentioned that there is feedback for the exercise, but did not specify the specific format of the feedback (only text or including sounds/colors), which needs to be confirmed.
+3. **Break between blocks**: The user has not mentioned the rest time between blocks. You need to confirm whether a rest page is needed and the duration of the rest.
 
-### 关键假设
+### Key assumptions
 
-- 正负试次比率默认为1:1（探测项有一半概率在记忆集中）
-- 练习阶段反馈显示"正确/错误"并附带RT（标准Sternberg练习设置）
-- 记忆集中的数字在同一试次内不重复（无放回抽样）
-- 预期RT阈值：200 ms（低于此视为提前反应）
-- 全屏运行，默认白色背景黑色文字
+- The default ratio of positive and negative trials is 1:1 (half of the probability of the detection item is in the memory set)
+- Practice phase feedback shows "Correct/Incorrect" with RT (standard Sternberg practice settings)
+- Numbers in the memory set are not repeated within the same trial (sampling without replacement)
+- Expected RT threshold: 200 ms (below this is considered a premature response)
+- Run in full screen, default white background and black text
 
-### 代码架构
+### Code structure
 
 ```
-sternberg.html (或 sternberg.js)
-├── 参数配置 (setSizes, timing, key mapping)
-├── 试次条件生成（交叉setSize与正负类型）
-├── jsPsych初始化 + 插件加载
-├── 时间线构建:
-│   ├── 指导语页面
-│   ├── 练习block（12试次 + 反馈）
-│   ├── 过渡页面
-│   └── 正式实验（4 blocks × 24试次）:
-│       ├── block开始提示
-│       ├── 试次循环:
-│       │   ├── 注视点 (500 ms)
-│       │   ├── 记忆集 (1500 ms)
-│       │   ├── 保持间隔 (2000 ms)
-│       │   ├── 探测项 (≤2000 ms，左/右箭头反应)
-│       │   └── ITI (800-1200 ms 随机)
-│       └── block结束（如需要休息）
-└── 数据保存（jsPsych数据 + CSV导出）
+sternberg.html (or sternberg.js)
+├── Parameter configuration (setSizes, timing, key mapping)
+├── Trial condition generation (cross setSize and positive and negative types)
+├── jsPsych initialization + plug-in loading
+├── Timeline construction:
+│ ├── Instructions page
+│ ├── Practice block (12 trials + feedback)
+│ ├── Transition page
+│ └── Formal experiment (4 blocks × 24 trials):
+│ ├── block start prompt
+│ ├── Trial cycle:
+│ │ ├── fixation point (500 ms)
+│ │ ├── Memory Set (1500 ms)
+│ │ ├── Hold interval (2000 ms)
+│ │ ├── Detection item (≤2000 ms, left/right arrow response)
+│ │ └── ITI (800-1200 ms random)
+│ └── End of block (if you need to rest)
+└── Data saving (jsPsych data + CSV export)
 ```
 
-### 预期数据列
+### Expected data column
 
 | Column | Type | Description |
 |--------|------|-------------|
-| numberSet | str | 该试次的记忆集字符串 |
-| target | str | 探测数字 |
-| corrAns | str | 正确按键 (`"left"` 或 `"right"`) |
-| setSize | int | 记忆集大小 |
-| probeInSet | int | 探测项是否在记忆中 (1=在, 0=不在) |
-| rt | float | 反应时 (ms) |
-| acc | int | 正确性 (1=正确, 0=错误) |
-| keyPressed | str | 实际按下的键 |
-| block | int | block编号 (0=练习, 1-4=正式) |
-| trialType | str | `"positive"` 或 `"negative"` |
+| numberSet | str | The memory set string for this trial |
+| target | str | detection number |
+| corrAns | str | Correct key (`"left"` or `"right"`) |
+| setSize | int | memory set size |
+| probeInSet | int | Whether the probe item is in memory (1=yes, 0=not) |
+| rt | float | reaction time (ms) |
+| acc | int | correctness (1=correct, 0=wrong) |
+| keyPressed | str | The actual key pressed |
+| block | int | block number (0=practice, 1-4=formal) |
+| trialType | str | `"positive"` or `"negative"` |

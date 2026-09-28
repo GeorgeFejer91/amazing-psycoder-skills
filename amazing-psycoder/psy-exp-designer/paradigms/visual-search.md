@@ -5,7 +5,7 @@
 
 ## When to Use
 
-User mentions: Visual search, 视觉搜索, attention, pop-out, conjunction search, feature search, set size.
+User mentions: Visual search, visual search, attention, pop-out, conjunction search, feature search, set size.
 
 ## Core Logic
 
@@ -31,10 +31,10 @@ Before generating visual search code, confirm ALL of these:
 6. **Response mapping**: Two keys (present/absent) or go/no-go (respond only to present)?
 7. **Display layout**: Random positions on imaginary grid/circle, or fixed positions?
 8. **Stimulus dimensions**: Color, shape, orientation, size — which vary, which are task-relevant?
-9. **Display area**: 搜索区域大小（视觉角度）和刺激大小？
-10. **ITI duration**: 试次间隔时间和变化范围？
-11. **OS & font**: 在什么操作系统运行？如使用中文，确认字体
-12. **Instruction text**: 指导语内容？
+9. **Display area**: Search area size (visual angle) and stimulus size?
+10. **ITI duration**: Trial interval time and variation range?
+11. **OS & font**: What operating system is it running on? If using Chinese, confirm the font
+12. **Instruction text**: Instruction content?
 
 ## Do Not Assume
 
@@ -101,7 +101,7 @@ Duncan, J., & Humphreys, G. W. (1989). Visual search and stimulus similarity. *P
 
 ### User Request
 
-> "我想做一个视觉搜索实验。目标是一个红色X，干扰子为红色O和绿色X。set size有4、8、12三种。目标出现在50%的试次中。被试判断目标是否存在，存在按F，不存在按J。刺激随机排列在假想圆形上。先30个练习，然后4个正式block各60个trial。刺激呈现直到按键，截止4000 ms。ITI随机600-900 ms。用PsychoPy。"
+> "I want to do a visual search experiment. The target is a red ms. ITI random 600-900 ms."
 
 ### Trial Window Timeline
 
@@ -109,7 +109,7 @@ Duncan, J., & Humphreys, G. W. (1989). Visual search and stimulus similarity. *P
 ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐
 │ Window 1                 │ →  │ Window 2                 │ →  │ Window 3                 │ →  │ Window 4                 │
 │ Fixation                 │    │ Search Display           │    │ Feedback                 │    │ ITI                      │
-│ Content: +               │    │ Content: 多个色字        │    │ Content: 正确/错误        │    │ Content: empty           │
+│ Content: + │ │ Content: multiple color words │ │ Content: correct/wrong │ │ Content: empty │
 │ Duration: 500 ms         │    │ Duration: until key      │    │ Duration: 500 ms         │    │ Duration: 600-900 ms      │
 │ Response: none           │    │ Response: f/j            │    │ Response: none           │    │ Response: none           │
 │ File: none               │    │ File: none (generated)   │    │ File: none               │    │ File: none               │
@@ -121,8 +121,8 @@ Duncan, J., & Humphreys, G. W. (1989). Visual search and stimulus similarity. *P
 | Window | Content | Duration | Response | File/Folder | Condition | Data |
 |--------|---------|----------|----------|-------------|-----------|------|
 | Fixation | + | 500 ms | none | none | none | none |
-| Search Display | 红色X + 干扰子 | until key (deadline 4000 ms) | f=存在, j=不存在 | none (generated) | {set_size}, {target_present} | rt, key, acc |
-| Feedback | 正确/错误/太慢 | 500 ms | none | none | {correct_response} | none |
+| Search Display | Red
+| Feedback | Correct/Wrong/Too Slow | 500 ms | none | none | {correct_response} | none |
 | ITI | empty | 600-900 ms random | none | none | none | none |
 
 ### Parsed Experiment Specification

@@ -102,9 +102,9 @@ class SemanticContractTests(unittest.TestCase):
             for readme in readmes:
                 self.assertIn(documented, readme.read_text(encoding="utf-8"))
 
-    def test_primary_readme_preserves_original_user_journey_safely(self) -> None:
+    def test_archived_chinese_readme_preserves_original_user_journey_safely(self) -> None:
         repository = ROOT.parent
-        primary = (repository / "README.md").read_text(encoding="utf-8")
+        primary = (repository / "docs" / "README_ZH.md").read_text(encoding="utf-8")
         original_structure = (
             "> 让心理学研究者更专注于研究问题，而不是代码。",
             "## 📖 为什么做这个项目",
@@ -166,7 +166,10 @@ class SemanticContractTests(unittest.TestCase):
         for claim in stale_or_unsafe_claims:
             self.assertNotIn(claim, primary)
 
-        translated_readmes = sorted((repository / "docs").glob("README_*.md"))
+        translated_readmes = [
+            path for path in sorted((repository / "docs").glob("README_*.md"))
+            if path.name != "README_ZH.md"
+        ]
         synchronized_slogans = {
             "README_EN.md": "> Helping psychology researchers focus more on research questions, not code.",
             "README_ZH-HANT.md": "> 讓心理學研究者更專注於研究問題，而不是程式碼。",

@@ -1,17 +1,17 @@
-# 相关椭圆图 (Correlation Ellipse)
+# Correlation Ellipse
 
-## 概述
+## Overview
 
-在散点图上叠加置信椭圆,展示两变量关系的强度和方向。椭圆越窄越长=相关越强。
+Superimpose the confidence ellipse on the scatter plot to show the strength and direction of the relationship between the two variables. Narrower and longer ellipses = stronger correlation.
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| 场景 | 散点图+相关性视觉强化 |
-| 优势 | 椭圆形状=相关强度和方向 |
+| Scenario | Scatter plot + visual enhancement of correlation |
+| Advantages | Ellipse shape = correlation strength and direction |
 
-## R 代码
+## R code
 
 ```r
 ggplot(data, aes(x=rt, y=accuracy)) +
@@ -21,9 +21,9 @@ ggplot(data, aes(x=rt, y=accuracy)) +
   theme_minimal()
 ```
 
-## 解读
+## Interpretation
 
-- 椭圆窄长=强相关
-- 椭圆接近圆=弱相关
-- 椭圆倾斜方向=正/负相关
-- 椭圆包含约95%的数据点
+- Ellipse is narrow and long = strong correlation
+- Ellipse is close to circle = weak correlation
+- Ellipse tilt direction = positive/negative correlation
+- The ellipse contains about 95% of the data points

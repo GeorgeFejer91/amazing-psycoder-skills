@@ -1,7 +1,7 @@
 ---
 name: psy-exp-reviewer
 description: >-
-  Audit psychological experiment ideas, configs, implementation plans, or code without modifying them. Use for code review, design review, readiness for data collection, timing/RT correctness, condition balance, data integrity, PsychoPy/jsPsych/Psychtoolbox anti-patterns, smoke-test guidance, or “实验代码 有没有问题/能不能正式采集”. Select code-audit, config-audit, implementation-plan-review, triage-only, or blocked mode from the available input. Report graded findings and a readiness label; do not generate fixes.
+  Audit psychological experiment ideas, configs, implementation plans, or code without modifying them. Use for code review, design review, readiness for data collection, timing/RT correctness, condition balance, data integrity, PsychoPy/jsPsych/Psychtoolbox anti-patterns, smoke-test guidance, or “Is there any problem with the experimental code/can it be formally collected?”. Select code-audit, config-audit, implementation-plan-review, triage-only, or blocked mode from the available input. Report graded findings and a readiness label; do not generate fixes.
 ---
 
 # Psychological Experiment Code Reviewer
@@ -431,20 +431,20 @@ Load and include the pre-first-subject checklist from [references/smoke-test.md]
 
 ## Recovery Loop
 
-审计不是一次性报告——发现问题后进入 **检查 → 修复 → 再检查** 循环，直到通过。
+Audit is not a one-time report - after discovering the problem, enter the **check → repair → check again** cycle until it passes.
 
 ```
-psy-exp-coder 生成代码
+psy-exp-coder generates code
        │
        ▼
-psy-exp-reviewer 审计
+psy-exp-reviewer audit
        │
-       ├── Critical/Major 问题 → 修复 → 重新审计
+       ├── Critical/Major issue → Repair → Re-audit
        │                              ↑         │
        │                              └─────────┘
-       │                              循环直到 0 Critical + 0 Major
+       │ Loop until 0 Critical + 0 Major
        │
-       └── 0 Critical + 0 Major → 静态通过 → 目标机 smoke test → 最终就绪判断
+       └── 0 Critical + 0 Major → static pass → target machine smoke test → final readiness judgment
 ```
 
 | Issue type | Who fixes | How to fix |
@@ -455,20 +455,20 @@ psy-exp-reviewer 审计
 | Missing parameter / hardcoded value | psy-exp-designer or psy-exp-coder | Fix in design or code → regenerate |
 | CJK font missing / tofu characters | psy-exp-coder | Add the platform-appropriate explicit font strategy and target-machine glyph/layout check → re-audit |
 
-> "第 N 轮审计：发现 X 个问题。修复后进入第 N+1 轮。"
+> "Nth round of audit: X problems found. After repairs, proceed to round N+1."
 
-每次修复后必须重新审计。审计轮次和每轮问题数记录在最终报告中。
+Must be re-audited after each repair. Audit rounds and the number of issues per round are recorded in the final report.
 
 ### After Runtime-Evidenced PASS
 
 When the audit passes with `ready_for_collection`:
 
-> "审计通过。下一步:
+> "Audit passed. Next step:
 >
-> 1.  保存已完成的 [First-Run Checklist](#first-run-checklist-pre-first-subject) 和目标机 Smoke Test 证据
-> 2.  保存审计报告、运行环境和验证产物路径
-> 3.  首名正式被试前复核设备、版本与刺激资源未改变
-> 4.  如需分析数据，使用 `/amazing-psycoder` 进入分析流水线"
+> 1. Save the completed [First-Run Checklist](#first-run-checklist-pre-first-subject) and target machine Smoke Test evidence
+> 2. Save the audit report, operating environment and verification product path
+> 3. Review the device, version and stimulus resources before the first formal subject has not changed
+> 4. If you need to analyze data, use `/amazing-psycoder` to enter the analysis pipeline"
 
 ---
 

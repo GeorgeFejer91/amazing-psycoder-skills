@@ -5,7 +5,7 @@ description: >-
   it. Use for statistical-method review, reproducibility review, publication
   readiness, seeds, exclusion logging, effect sizes, multiple-comparison
   correction, assumptions, sensitivity analyses, figures, session information,
-  and “检查分析代码/统计方法审查/分析脚本有没有问题”. Select the review mode from
+  and "Check the analysis code/statistical method review/analysis script for problems". Select the review mode from
   the available input and report graded findings plus a readiness label. Do not
   generate or fix analysis code.
 ---

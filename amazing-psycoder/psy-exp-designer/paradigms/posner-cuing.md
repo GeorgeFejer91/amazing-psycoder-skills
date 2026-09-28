@@ -6,7 +6,7 @@
 
 ## When to Use
 
-User mentions: Posner cuing, spatial cuing, covert attention, endogenous/exogenous attention, 波斯纳线索任务, 空间注意. Measures the ability to orient covert spatial attention in response to predictive or non-predictive cues, dissociating voluntary (endogenous) and reflexive (exogenous) orienting.
+User mentions: Posner cuing, spatial cuing, covert attention, endogenous/exogenous attention, Posner cue task, spatial attention. Measures the ability to orient covert spatial attention in response to predictive or non-predictive cues, dissociating voluntary (endogenous) and reflexive (exogenous) orienting.
 
 ## Core Logic
 
@@ -68,117 +68,117 @@ Scarfe, P. (n.d.). Posner cuing experiment (Psychtoolbox demo). https://petersca
 
 ## Do Not Assume
 
-- Do not assume 线索有效性比例为 80%/20%，须显式确认。虽然经典设计使用 80% 有效试次，但有些实验使用 50%/50% 或包含中性试次，须直接询问用户。
-- Do not assume 外周线索总是出现在目标位置。外周线索通常为方框闪烁或亮度变化，确认线索的视觉属性（方框、圆点、亮度增减）及其与目标位置的空间关系。
-- Do not assume 中央线索一定是箭头符号。中央线索可为箭头、文字（"左"/"右"）、数字或注视线索（gaze cue），确认线索的具体呈现形式。
-- Do not assume 仅使用单一 SOA 值。Posner 范式的核心在于绘制注意的时间进程曲线，通常需要多个 SOA（如 100、300、500、800 ms），须确认 SOA 集合。
-- Do not assume 目标刺激类型默认为简单方块。确认目标的视觉属性：Gabor 光栅、字母、形状、大小、对比度等。
-- Do not assume 被试反应方式为左右按键。可能为探测反应（单键检测目标出现）或辨别反应（区分目标属性），确认反应映射规则。
+- Do not assume that the clue validity ratio is 80%/20% and must be explicitly confirmed. While classic designs use 80% valid trials, some experiments use 50%/50% or include neutral trials, and the user must be asked directly.
+- Do not assume that peripheral cues always appear at the target location. Peripheral cues are usually box flashes or brightness changes, confirming the visual attributes of the cues (boxes, dots, brightness increases and decreases) and their spatial relationship with the target location.
+- Do not assume that the central clue must be the arrow symbol. The central cue can be an arrow, text ("left"/"right"), a number or a gaze cue, confirming the specific presentation form of the cue.
+- Do not assume only use a single SOA value. The core of the Posner paradigm is to draw the time course curve of attention, which usually requires multiple SOAs (such as 100, 300, 500, 800 ms), and the SOA set must be confirmed.
+- Do not assume that the target stimulus type defaults to simple square. Confirm the visual properties of the target: Gabor raster, letters, shape, size, contrast, etc.
+- Do not assume that the subject responded by pressing the left and right buttons. It may be a detection reaction (single-key detection of target presence) or a discrimination reaction (distinguishing target attributes), confirming the reaction mapping rules.
 
 ## Condition File Columns
 
 | Column | Type | Description |
 |--------|------|-------------|
-| cue_pos | int | 线索位置：0=左侧，1=右侧 |
-| target_pos | int | 目标位置：0=左侧，1=右侧 |
-| soa | float | 线索-目标呈现异步（SOA），单位 ms |
-| validity | str | `"valid"`（线索与目标同侧）、`"invalid"`（异侧）或 `"neutral"`（无线索） |
-| cue_type | str | `"peripheral"`（外周线索）或 `"central"`（中央线索） |
+| cue_pos | int | cue position: 0=left, 1=right |
+| target_pos | int | Target position: 0=left, 1=right |
+| soa | float | Cue-target presentation asynchronous (SOA), unit ms |
+| validity | str | `"valid"` (cue on same side as target), `"invalid"` (opposite side) or `"neutral"` (no clue) |
+| cue_type | str | `"peripheral"` (peripheral cue) or `"central"` (central cue) |
 
 ## Variants
 
-- **外周线索变式（外源性注意）**：在目标可能出现的周边位置短暂呈现方框闪烁或亮度变化（典型 50-150 ms），引发自下而上的反射性注意定向。短 SOA 下产生易化效应，长 SOA（>300 ms）下出现返回抑制（IOR）。这是 Posner 经典实验的原始形式。
-- **中央线索变式（内源性注意）**：在中央注视点呈现箭头、文字或符号线索（如 "←" 或 "→"），引发自上而下的意志性注意定向。需要更长的 SOA（通常 >300 ms）才能产生易化效应，且不易出现返回抑制。可关联范式：[stroop](../paradigms/stroop.md)（涉及中央符号加工）。
-- **注视线索变式（社会性注意）**：中央呈现面孔图片，其眼睛注视方向作为线索，引发社会性注意定向。即使告知被试线索无预测性，仍会产生注意转移效应。可关联范式：[dot-probe](../paradigms/dot-probe.md)（涉及面孔与注意偏向）。
+- **Peripheral Cue Variant (Exogenous Attention)**: A box flash or brightness change is briefly presented (typically 50-150 ms) at a peripheral location where the target may appear, inducing bottom-up reflexive attentional orienting. A facilitation effect occurs under short SOA, and an inhibition of return (IOR) occurs under long SOA (>300 ms). This is the original form of Posner's classic experiment.
+- **Central cue variant (endogenous attention)**: Present arrows, text, or symbolic cues (such as "←" or "→") at the central fixation point, triggering top-down volitional attentional orientation. Longer SOAs (typically >300 ms) are required to produce facilitation effects and are less prone to return inhibition. Associable paradigm: [stroop](../paradigms/stroop.md) (involves central symbol processing).
+- **Gaze cue variant (social attention)**: A face picture is presented in the center, and its eye gaze direction is used as a cue to trigger social attention orientation. Even when subjects are told that the cues are not predictive, the attentional shift effect still occurs. Associable paradigm: [dot-probe](../paradigms/dot-probe.md) (involving faces and attentional bias).
 
 ## Example
 
-### 用户请求
+### User request
 
-> "做一个波斯纳线索任务。屏幕左右两侧各有一个方框，中央是注视点。试次开始时，左侧或右侧的方框会短暂闪烁（50ms）作为外周线索。80% 的试次目标出现在线索一侧（有效），20% 出现在另一侧（无效）。闪烁后间隔 200ms 出现目标（字母 E），要求被试看到目标后尽快按空格键。目标呈现 200ms，反应窗口 1500ms。共 200 个试次，分 4 个 block。用 PsychoPy。"
+> "Do a Posner cue task. There is a box on the left and right sides of the screen, with a fixation point in the center. At the beginning of the trial, the left or right box will flash briefly (50ms) as a peripheral cue. 80% of the trials the target appears on one side of the cue (valid), 20% appears on the other side (invalid). The target (letter E) appears 200ms after the flash, and the subject is asked to press the space bar as soon as possible after seeing the target. Target presentation 200ms, 1500ms response window. 200 trials in 4 blocks using PsychoPy.
 
-### 试次窗口时间线
+### Trial window timeline
 
 ```text
 ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐
 │ Window 1                 │ →  │ Window 2                 │ →  │ Window 3                 │ →  │ Window 4                 │ →  │ Window 5                 │
-│ 注视点                   │    │ 线索                     │    │ SOA 间隔                 │    │ 目标                     │    │ 反应 + ITI               │
-│ Content: 中央+ 左右方框   │    │ Content: 单侧方框闪烁     │    │ Content: 中央+ 左右方框   │    │ Content: 字母 E         │    │ Content: 空屏            │
-│ Duration: 500 ms         │    │ Duration: 50 ms          │    │ Duration: 150 ms         │    │ Duration: 200 ms         │    │ Duration: 至按键         │
-│ Response: 无             │    │ Response: 无             │    │ Response: 无             │    │ Response: 无             │    │   (deadline 1500 ms)     │
-│ Condition: 无            │    │ Condition: {cue_pos}     │    │ Condition: {cue_pos}     │    │ Condition: {target_pos}  │    │ Response: 空格键         │
-│ Data: 无                 │    │ Data: 无                 │    │ Data: 无                 │    │ Data: 无                 │    │ Data: rt, acc            │
+│ Fixation │ │ Cue │ │ SOA Interval │ │ Target │ │ Response + ITI │
+│ Content: Center + left and right boxes │ │ Content: Single-sided box flashing │ │ Content: Center + left and right boxes │ │ Content: Letter E │ │ Content: Blank screen │
+│ Duration: 500 ms │ │ Duration: 50 ms │ │ Duration: 150 ms │ │ Duration: 200 ms │ │ Duration: to key │
+│ Response: None │ │ Response: None │ │ Response: None │ │ Response: None │ │ (deadline 1500 ms) │
+│ Condition: None │ │ Condition: {cue_pos} │ │ Condition: {cue_pos} │ │ Condition: {target_pos} │ │ Response: Space bar │
+│ Data: None │ │ Data: None │ │ Data: None │ │ Data: None │ │ Data: rt, acc │
 └──────────────────────────┘    └──────────────────────────┘    └──────────────────────────┘    └──────────────────────────┘    └──────────────────────────┘
 ```
 
 | Window | Content | Duration | Response | Condition | Data |
 |--------|---------|----------|----------|-----------|------|
-| 注视点 | 中央+ 左右方框 | 500 ms | 无 | 无 | 无 |
-| 线索 | 单侧方框闪烁 | 50 ms | 无 | {cue_pos} | 无 |
-| SOA 间隔 | 中央+ 左右方框 | 150 ms | 无 | {cue_pos} | 无 |
-| 目标 | 字母 E | 200 ms | 无 | {target_pos} | 无 |
-| 反应+ITI | 空屏 | 至按键（deadline 1500 ms） | 空格键 | 无 | rt, acc |
+| Fixation point | Center + left and right boxes | 500 ms | None | None | None |
+| Cue | One-sided box flash | 50 ms | None | {cue_pos} | None |
+| SOA interval | center + left and right boxes | 150 ms | None | {cue_pos} | None |
+| target | letter E | 200 ms | None | {target_pos} | None |
+| reaction+ITI | blank screen | to key (deadline 1500 ms) | space bar | none | rt, acc |
 
-### 解析的实验规格
+### Analyzed experimental specifications
 
 | Field | Value |
 |-------|-------|
-| 实验名称 | Posner 外周线索任务 |
-| 平台 | PsychoPy |
-| 任务类型 | Posner cuing（外源性空间注意） |
-| 线索类型 | 外周方框闪烁（外源性） |
-| 线索持续时间 | 50 ms |
-| 目标刺激 | 字母 E |
-| 目标持续时间 | 200 ms |
-| SOA | 200 ms（50 ms 线索 + 150 ms 间隔） |
-| 线索有效性 | 80% 有效 / 20% 无效 |
-| 反应方式 | 单键探测（空格键） |
-| 试次数量 | 200 试次（4 blocks × 50） |
+| Experiment Name | Posner Peripheral Cue Task |
+| Platform | PsychoPy |
+| Task type | Posner cuing (exogenous spatial attention) |
+| Cue type | Peripheral box flashing (exogenous) |
+| Lead duration | 50 ms |
+| Target stimulus | Letter E |
+| target duration | 200 ms |
+| SOA | 200 ms (50 ms clue + 150 ms interval) |
+| Lead validity | 80% valid / 20% invalid |
+| Reaction mode | Single key detection (space bar) |
+| Number of trials | 200 trials (4 blocks × 50) |
 
-### 缺失信息
+### Missing information
 
-1. 注视点持续时间未明确说明 → 假定为 500 ms（设计假设，需标注）
-2. ITI 持续时间未提及 → 将询问用户（固定/随机范围）
-3. 练习试次未提及 → 将询问是否需要练习阶段及试次数量
-4. 是否告知被试线索的预测性（80% 有效）→ 将确认指导语内容
+1. The fixation point duration is not clearly stated → assumed to be 500 ms (design assumption, needs to be noted)
+2. ITI duration not mentioned → user will be asked (fixed/random range)
+3. Practice trials are not mentioned → You will be asked whether a practice phase and the number of trials are required
+4. Whether to inform the subjects of the predictability of the clues (80% effective) → confirm the content of the instructions
 
-### 关键假设
+### Key assumptions
 
-- 外周线索为方框亮度变化（加粗或高亮），非其他视觉属性变化
-- 无中性试次（仅包含有效和无效两种条件）
-- 试次间无反馈（正式阶段不呈现反馈）
-- 预期 RT 阈值：100 ms（低于此值标记为预期反应）
-- 线索-目标 SOA 固定为 200 ms（用户未要求多个 SOA）
+- Peripheral clues are changes in box brightness (bold or highlighted), not changes in other visual attributes
+- No neutral trials (only valid and invalid conditions)
+- No feedback between trials (no feedback is presented in the formal phase)
+- Expected RT threshold: 100 ms (below this is marked as an expected response)
+- Cue-target SOA fixed at 200 ms (user did not request multiple SOA)
 
-### 代码架构
+### Code structure
 
 ```
 posner_cuing.py
-├── 参数定义（线索时长、SOA、目标时长、反应截止时间、试次数量）
-├── 窗口设置（全屏/窗口模式）
-├── 刺激预加载（注视点、方框、目标字母 E）
-├── 条件表生成（cue_pos × target_pos 矩阵，80/20 比例）
-├── 指导语呈现
-├── 试次循环：
-│   ├── 注视点 (500 ms)
-│   ├── 线索呈现 (50 ms — 闪烁方框)
-│   ├── SOA 间隔 (150 ms)
-│   ├── 目标呈现 (200 ms — 字母 E)
-│   ├── 反应窗口 (deadline 1500 ms)
+├── Parameter definition (cue duration, SOA, target duration, response deadline, number of trials)
+├── Window settings (full screen/window mode)
+├── Stimulus preloading (fixation point, box, target letter E)
+├── Condition table generation (cue_pos × target_pos matrix, 80/20 ratio)
+├── Instructions presented
+├── Trial cycle:
+│ ├── fixation point (500 ms)
+│ ├── Cue presentation (50 ms — flashing box)
+│ ├── SOA interval (150 ms)
+│ ├── Target presentation (200 ms — letter E)
+│ ├── Response window (deadline 1500 ms)
 │   ├── ITI
-│   └── 数据记录 (rt, acc, cue_pos, target_pos, validity)
-├── 数据保存：try/finally CSV 增量写入
+│ └── Data record (rt, acc, cue_pos, target_pos, validity)
+├── Data saving: try/finally CSV incremental writing
 ```
 
-### 预期数据列
+### Expected data column
 
 | Column | Type | Description |
 |--------|------|-------------|
-| cue_pos | int | 线索位置（0=左，1=右） |
-| target_pos | int | 目标位置（0=左，1=右） |
-| validity | str | 线索有效性：`"valid"` 或 `"invalid"` |
-| soa | float | 线索-目标 SOA（ms） |
-| rt | float | 反应时间（ms） |
-| acc | int | 正确反应=1，错误=0 |
-| trial_index | int | 试次序号（0-based） |
-| block | int | Block 编号 |
+| cue_pos | int | cue position (0=left, 1=right) |
+| target_pos | int | Target position (0=left, 1=right) |
+| validity | str | Clue validity: `"valid"` or `"invalid"` |
+| soa | float | clue-target SOA (ms) |
+| rt | float | reaction time (ms) |
+| acc | int | Correct response=1, Error=0 |
+| trial_index | int | Trial number (0-based) |
+| block | int | Block number |

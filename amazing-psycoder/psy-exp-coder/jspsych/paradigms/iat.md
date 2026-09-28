@@ -41,7 +41,7 @@ Counterbalancing is achieved via `jsPsych.randomization.factorial` which randoml
 document.head.innerHTML +=
     `<style>
     body { user-select: none; -ms-user-select: none; -moz-user-select: none; -webkit-user-select: none; }
-    .jspsych-btn { font-size: 16pt; font-family: 微软雅黑; font-weight: normal; margin: 1em 0em; }
+    .jspsych-btn { font-size: 16pt; font-family: Microsoft Yahei; font-weight: normal; margin: 1em 0em; }
     .tag-left { font-size: 24pt; position: absolute; top: 15%; left: 25%; }
     .tag-right { font-size: 24pt; position: absolute; top: 15%; right: 25%; }
     .tag-bottom { font-size: 20pt; position: absolute; bottom: 5%; left: 0; right: 0; }
@@ -52,14 +52,14 @@ function set_html_style() {
     document.body.style.backgroundColor = 'rgb(250, 250, 250)' // background color
     document.body.style.color = 'black' // font color
     document.body.style.fontSize = '20pt'
-    document.body.style.fontFamily = '微软雅黑'
+    document.body.style.fontFamily = 'Microsoft Yahei'
     document.body.style.fontWeight = 'normal' // 'normal', 'bold'
     document.body.style.lineHeight = '1.6em' // line space
     document.body.style.cursor = 'default' // 'default', 'none', 'wait', ...
     document.body.onselectstart = function() { return false }
     document.body.oncontextmenu = function() { return false }
     document.onkeydown = function() {
-        // 屏蔽键盘按键 (https://www.bejson.com/othertools/keycodes/)
+        // Block keyboard keys (https://www.bejson.com/othertools/keycodes/)
         if ((event.keyCode in { 27: 'Esc', 116: 'F5', 123: 'F12' }) ||
             (event.ctrlKey && event.keyCode in { 85: 'U' })
         ) { return false }
@@ -70,7 +70,7 @@ function set_html_style_iat() {
     document.body.style.backgroundColor = 'black'
     document.body.style.color = 'white'
     document.body.style.fontSize = '32pt'
-    document.body.style.fontFamily = '微软雅黑'
+    document.body.style.fontFamily = 'Microsoft Yahei'
     document.body.style.fontWeight = 'normal'
     document.body.style.lineHeight = '1.2em'
     document.body.style.cursor = 'none'
@@ -90,7 +90,7 @@ function timer() {
         if (second.innerHTML > 1) {
             second.innerHTML = second.innerHTML - 1
         } else {
-            button.innerHTML = '继续'
+            button.innerHTML = 'Continue'
             button.disabled = false
         }
     }
@@ -126,19 +126,19 @@ var open_fullscreen = {
         user_agent: navigator.userAgent,
     },
     message: `
-    <p style="font: 16pt 微软雅黑; text-align: left; line-height: 1.6em">
+    <p style="font: 16pt Microsoft Yahei; text-align: left; line-height: 1.6em">
     <b>
-    测验将在一个「全屏页面」开始，为确保最佳效果，请你：<br/>
-    （1）在电脑上进行测验，并使用主流浏览器打开本网页<br/>
-    &emsp;&emsp;（Chrome、Edge、Firefox、Safari等，不要用IE）<br/>
-    （2）关掉电脑上其他正在运行的程序或将其最小化<br/>
-    （3）将手机调至静音，并尽可能减少环境噪音干扰<br/>
-    （4）在测验过程中不要退出全屏<br/>
-    （5）务必认真作答<br/><br/>
+    The quiz will start on a "full screen page". To ensure the best results, please:<br/>
+    (1) Take the test on your computer and use a mainstream browser to open this webpage<br/>
+    (Chrome, Edge, Firefox, Safari, etc., do not use IE)<br/>
+    (2) Close other running programs on the computer or minimize them<br/>
+    (3) Set your mobile phone to silent and minimize environmental noise interference<br/>
+    (4) Do not exit full screen during the test<br/>
+    (5) Be sure to answer carefully<br/><br/>
     </b>
-    如果你同意参与，并且清楚理解了上述要求，请点击开始：
+    If you agree to participate and clearly understand the above requirements, please click Start:
     </p>`,
-    button_label: '点击这里全屏开始',
+    button_label: 'Click here to start in full screen',
     delay_after: 100
 }
 
@@ -157,10 +157,10 @@ var key_L = 'f'
 var key_R = 'j'
 var iat_temp = {
     // Pairs A & Pairs B should be compatible
-    attribA: { label: '好', items: ['聪明', '成功', '高尚', '优秀', '幸福'] },
-    attribB: { label: '坏', items: ['愚蠢', '失败', '卑鄙', '差劲', '悲惨'] },
-    targetA: { label: '自我', items: ['我', '我的', '自己', '俺', '咱'] },
-    targetB: { label: '他人', items: ['他', '他的', '他们', '她', '它'] },
+    attribA: { label: 'Okay', items: ['Smart', 'Success', 'Noble', 'Excellent', 'Happiness'] },
+    attribB: { label: 'bad', items: ['Stupid', 'failed', 'Despicable', 'Bad', 'Misery'] },
+    targetA: { label: 'Self', items: ['I', 'me', 'my', 'mine', 'myself'] },
+    targetB: { label: 'Other', items: ['they', 'them', 'their', 'theirs', 'themselves'] },
 }
 var attrib_color = 'white'
 var target_color = 'rgb(150, 250, 100)'
@@ -170,7 +170,7 @@ var target_color = 'rgb(150, 250, 100)'
 var version = jsPsych.randomization.factorial({ attrib: [1, 2], target: [1, 2] })[0] // one of four, e.g., { attrib: 2, target: 1 }
 var compatible_first = (version.attrib == version.target) ? true : false
 
-var iat = JSON.parse(JSON.stringify(iat_temp)) // 深复制（iat_temp仅为指针，浅复制会同步修改两者）
+var iat = JSON.parse(JSON.stringify(iat_temp)) // Deep copy (iat_temp is only a pointer, shallow copy will modify both simultaneously)
 if (version.attrib == 2) {
     iat.attribA.label = iat_temp.attribB.label
     iat.attribA.items = iat_temp.attribB.items
@@ -186,33 +186,33 @@ if (version.target == 2) {
 
 // Top-left and top-right tags
 
-var tag_IAT_prac_attrib = `<div class="tag-left">按“${key_L.toUpperCase()}”键:<br/>
+var tag_IAT_prac_attrib = `<div class="tag-left">Press the "${key_L.toUpperCase()}" key:<br/>
                            <span style="color:${attrib_color}">${iat.attribA.label}</span></div>
-                           <div class="tag-right">按“${key_R.toUpperCase()}”键:<br/>
+                           <div class="tag-right">Press the "${key_R.toUpperCase()}" key:<br/>
                            <span style="color:${attrib_color}">${iat.attribB.label}</span></div>`
 
-var tag_IAT_prac_target_1 = `<div class="tag-left">按“${key_L.toUpperCase()}”键:<br/>
+var tag_IAT_prac_target_1 = `<div class="tag-left">Press the "${key_L.toUpperCase()}" key:<br/>
                              <span style="color:${target_color}">${iat.targetA.label}</span></div>
-                             <div class="tag-right">按“${key_R.toUpperCase()}”键:<br/>
+                             <div class="tag-right">Press the "${key_R.toUpperCase()}" key:<br/>
                              <span style="color:${target_color}">${iat.targetB.label}</span></div>`
 
-var tag_IAT_prac_target_2 = `<div class="tag-left">按“${key_L.toUpperCase()}”键:<br/>
+var tag_IAT_prac_target_2 = `<div class="tag-left">Press the "${key_L.toUpperCase()}" key:<br/>
                              <span style="color:${target_color}">${iat.targetB.label}</span></div>
-                             <div class="tag-right">按“${key_R.toUpperCase()}”键:<br/>
+                             <div class="tag-right">Press the "${key_R.toUpperCase()}" key:<br/>
                              <span style="color:${target_color}">${iat.targetA.label}</span></div>`
 
-var tag_IAT_test_1 = `<div class="tag-left">按“${key_L.toUpperCase()}”键:<br/>
-                      <span style="color:${attrib_color}">${iat.attribA.label}</span><br/>或<br/>
+var tag_IAT_test_1 = `<div class="tag-left">Press the "${key_L.toUpperCase()}" key:<br/>
+                      <span style="color:${attrib_color}">${iat.attribA.label}</span><br/>or<br/>
                       <span style="color:${target_color}">${iat.targetA.label}</span></div>
-                      <div class="tag-right">按“${key_R.toUpperCase()}”键:<br/>
-                      <span style="color:${attrib_color}">${iat.attribB.label}</span><br/>或<br/>
+                      <div class="tag-right">Press the "${key_R.toUpperCase()}" key:<br/>
+                      <span style="color:${attrib_color}">${iat.attribB.label}</span><br/>or<br/>
                       <span style="color:${target_color}">${iat.targetB.label}</span></div>`
 
-var tag_IAT_test_2 = `<div class="tag-left">按“${key_L.toUpperCase()}”键:<br/>
-                      <span style="color:${attrib_color}">${iat.attribA.label}</span><br/>或<br/>
+var tag_IAT_test_2 = `<div class="tag-left">Press the "${key_L.toUpperCase()}" key:<br/>
+                      <span style="color:${attrib_color}">${iat.attribA.label}</span><br/>or<br/>
                       <span style="color:${target_color}">${iat.targetB.label}</span></div>
-                      <div class="tag-right">按“${key_R.toUpperCase()}”键:<br/>
-                      <span style="color:${attrib_color}">${iat.attribB.label}</span><br/>或<br/>
+                      <div class="tag-right">Press the "${key_R.toUpperCase()}" key:<br/>
+                      <span style="color:${attrib_color}">${iat.attribB.label}</span><br/>or<br/>
                       <span style="color:${target_color}">${iat.targetA.label}</span></div>`
 
 // Instructions
@@ -221,17 +221,17 @@ var IAT_instr0 = {
     type: 'html-button-response',
     data: { version_attrib: version.attrib, version_target: version.target },
     stimulus: `
-    <h3>词语分类任务</h3>
-    <p>在接下来的任务中，你需要对一系列词语进行分类。<br/>
-    请先熟悉这些词语，这有利于你完成接下来的任务。</p>
+    <h3>Word classification task</h3>
+    <p>In the next task, you will need to classify a series of words. <br/>
+    Please familiarize yourself with these words first, which will help you complete the following tasks. </p>
     <table align="center" border=1 cellpadding=3 cellspacing=0>
-    <tr> <th>类别</th> <th>词语</th> </tr>
+    <tr> <th>Category</th> <th>Word</th> </tr>
     <tr> <td>&emsp;${iat_temp.attribA.label}&emsp;</td> <td>&emsp;${iat_temp.attribA.items.join('、')}&emsp;</td> </tr>
     <tr> <td>&emsp;${iat_temp.attribB.label}&emsp;</td> <td>&emsp;${iat_temp.attribB.items.join('、')}&emsp;</td> </tr>
     <tr> <td>&emsp;${iat_temp.targetA.label}&emsp;</td> <td>&emsp;${iat_temp.targetA.items.join('、')}&emsp;</td> </tr>
     <tr> <td>&emsp;${iat_temp.targetB.label}&emsp;</td> <td>&emsp;${iat_temp.targetB.items.join('、')}&emsp;</td> </tr>
     </table><br/>`,
-    choices: ['<span id="timer">10</span>秒后继续'],
+    choices: ['<span id="timer">Continue in 10</span> seconds'],
     button_html: btn_html_timer,
     on_finish: set_html_style_iat
 }
@@ -240,12 +240,12 @@ var IAT_instr1 = {
     type: 'html-keyboard-response',
     stimulus: `
     <div class="tag-bottom"><p>
-    —— 任务1：对“${iat.attribA.label}”词和“${iat.attribB.label}”词分类 ——<br/>
-    不同词语会出现在屏幕中央，类别标签将始终显示在屏幕上方<br/>
-    <span style="color:#FFD866"><b>请根据上方标签的提示，尽可能正确并且快速地做出按键反应</b></span><br/>
-    当按键错误时屏幕中会出现<span style="color:red"> X </span>，需要按另一个键纠正才能继续<br/><br/>
-    请把双手食指分别放在键盘的“${key_L.toUpperCase()}”键和“${key_R.toUpperCase()}”键上<br/>
-    按<空格键>开始
+    —— Task 1: Classify the words “${iat.attribA.label}” and “${iat.attribB.label}” ——<br/>
+    Different words will appear in the center of the screen, and category labels will always be displayed at the top of the screen<br/>
+    <span style="color:#FFD866"><b>Please follow the prompts on the label above and respond to the keystrokes as correctly and quickly as possible</b></span><br/>
+    If you press the wrong key, <span style="color:red"> X </span> will appear. Press the other key to correct your response and continue.<br/><br/>
+    Please place the index fingers of both hands on the "${key_L.toUpperCase()}" key and the "${key_R.toUpperCase()}" key respectively<br/>
+    Press <Spacebar> to start
     </p></div>`,
     choices: [' '],
     prompt: tag_IAT_prac_attrib
@@ -255,12 +255,12 @@ var IAT_instr2 = {
     type: 'html-keyboard-response',
     stimulus: `
     <div class="tag-bottom"><p>
-    —— 任务2：对“${iat.targetA.label}”词和“${iat.targetB.label}”词分类 ——<br/>
-    <span style="color:#78DCE8"><b>注意上方，类别标签和需要分类的词语都已经改变</b></span><br/>
-    <span style="color:#FFD866"><b>请根据上方标签的提示，尽可能正确并且快速地做出按键反应</b></span><br/>
-    当按键错误时屏幕中会出现<span style="color:red"> X </span>，需要按另一个键纠正才能继续<br/><br/>
-    请把双手食指分别放在键盘的“${key_L.toUpperCase()}”键和“${key_R.toUpperCase()}”键上<br/>
-    按<空格键>开始
+    —— Task 2: Classify the words “${iat.targetA.label}” and “${iat.targetB.label}” ——<br/>
+    <span style="color:#78DCE8"><b>Note above that the category labels and words to be classified have changed</b></span><br/>
+    <span style="color:#FFD866"><b>Please follow the prompts on the label above and respond to the keystrokes as correctly and quickly as possible</b></span><br/>
+    If you press the wrong key, <span style="color:red"> X </span> will appear. Press the other key to correct your response and continue.<br/><br/>
+    Please place the index fingers of both hands on the "${key_L.toUpperCase()}" key and the "${key_R.toUpperCase()}" key respectively<br/>
+    Press <Spacebar> to start
     </p></div>`,
     choices: [' '],
     prompt: tag_IAT_prac_target_1
@@ -270,12 +270,12 @@ var IAT_instr3 = {
     type: 'html-keyboard-response',
     stimulus: `
     <div class="tag-bottom"><p>
-    —— 任务3：对“${iat.attribA.label}/${iat.targetA.label}”词和“${iat.attribB.label}/${iat.targetB.label}”词分类 ——<br/>
-    <span style="color:#78DCE8"><b>注意上方，之前的四类词语将混合在一起交替呈现</b></span><br/>
-    <span style="color:#FFD866"><b>请根据上方标签的提示，尽可能正确并且快速地做出按键反应</b></span><br/>
-    当按键错误时屏幕中会出现<span style="color:red"> X </span>，需要按另一个键纠正才能继续<br/><br/>
-    请把双手食指分别放在键盘的“${key_L.toUpperCase()}”键和“${key_R.toUpperCase()}”键上<br/>
-    按<空格键>开始
+    —— Task 3: Classify the words “${iat.attribA.label}/${iat.targetA.label}” and “${iat.attribB.label}/${iat.targetB.label}” ——<br/>
+    <span style="color:#78DCE8"><b>Pay attention to the top, the previous four types of words will be mixed together and presented alternately</b></span><br/>
+    <span style="color:#FFD866"><b>Please follow the prompts on the label above and respond to the keystrokes as correctly and quickly as possible</b></span><br/>
+    If you press the wrong key, <span style="color:red"> X </span> will appear. Press the other key to correct your response and continue.<br/><br/>
+    Please place the index fingers of both hands on the "${key_L.toUpperCase()}" key and the "${key_R.toUpperCase()}" key respectively<br/>
+    Press <Spacebar> to start
     </p></div>`,
     choices: [' '],
     prompt: tag_IAT_test_1
@@ -285,12 +285,12 @@ var IAT_instr4 = {
     type: 'html-keyboard-response',
     stimulus: `
     <div class="tag-bottom"><p>
-    —— 任务4：对“${iat.attribA.label}/${iat.targetA.label}”词和“${iat.attribB.label}/${iat.targetB.label}”词分类 ——<br/>
-    <span style="color:#78DCE8"><b>与刚才的任务完全相同，请再次对这四类词语分类</b></span><br/>
-    <span style="color:#FFD866"><b>请根据上方标签的提示，尽可能正确并且快速地做出按键反应</b></span><br/>
-    当按键错误时屏幕中会出现<span style="color:red"> X </span>，需要按另一个键纠正才能继续<br/><br/>
-    请把双手食指分别放在键盘的“${key_L.toUpperCase()}”键和“${key_R.toUpperCase()}”键上<br/>
-    按<空格键>开始
+    —— Task 4: Classify the words “${iat.attribA.label}/${iat.targetA.label}” and “${iat.attribB.label}/${iat.targetB.label}” ——<br/>
+    <span style="color:#78DCE8"><b>It is exactly the same as the task just now, please classify these four types of words again</b></span><br/>
+    <span style="color:#FFD866"><b>Please follow the prompts on the label above and respond to the keystrokes as correctly and quickly as possible</b></span><br/>
+    If you press the wrong key, <span style="color:red"> X </span> will appear. Press the other key to correct your response and continue.<br/><br/>
+    Please place the index fingers of both hands on the "${key_L.toUpperCase()}" key and the "${key_R.toUpperCase()}" key respectively<br/>
+    Press <Spacebar> to start
     </p></div>`,
     choices: [' '],
     prompt: tag_IAT_test_1
@@ -300,12 +300,12 @@ var IAT_instr5 = {
     type: 'html-keyboard-response',
     stimulus: `
     <div class="tag-bottom"><p>
-    —— 任务5：对“${iat.targetB.label}”词和“${iat.targetA.label}”词分类 ——<br/>
-    <span style="color:#FF6188"><b>注意上方，仍然是两个类别标签，但互换了位置！</b></span><br/>
-    <span style="color:#FFD866"><b>请根据上方标签的提示，尽可能正确并且快速地做出按键反应</b></span><br/>
-    当按键错误时屏幕中会出现<span style="color:red"> X </span>，需要按另一个键纠正才能继续<br/><br/>
-    请把双手食指分别放在键盘的“${key_L.toUpperCase()}”键和“${key_R.toUpperCase()}”键上<br/>
-    按<空格键>开始
+    —— Task 5: Classify the words “${iat.targetB.label}” and “${iat.targetA.label}” ——<br/>
+    <span style="color:#FF6188"><b>Attention above, there are still two category labels, but their positions have been swapped!</b></span><br/>
+    <span style="color:#FFD866"><b>Please follow the prompts on the label above and respond to the keystrokes as correctly and quickly as possible</b></span><br/>
+    If you press the wrong key, <span style="color:red"> X </span> will appear. Press the other key to correct your response and continue.<br/><br/>
+    Please place the index fingers of both hands on the "${key_L.toUpperCase()}" key and the "${key_R.toUpperCase()}" key respectively<br/>
+    Press <Spacebar> to start
     </p></div>`,
     choices: [' '],
     prompt: tag_IAT_prac_target_2
@@ -315,12 +315,12 @@ var IAT_instr6 = {
     type: 'html-keyboard-response',
     stimulus: `
     <div class="tag-bottom"><p>
-    —— 任务6：对“${iat.attribA.label}/${iat.targetB.label}”词和“${iat.attribB.label}/${iat.targetA.label}”词分类 ——<br/>
-    <span style="color:#FF6188"><b>注意上方，四类词语将以新的组合方式交替呈现！</b></span><br/>
-    <span style="color:#FFD866"><b>请根据上方标签的提示，尽可能正确并且快速地做出按键反应</b></span><br/>
-    当按键错误时屏幕中会出现<span style="color:red"> X </span>，需要按另一个键纠正才能继续<br/><br/>
-    请把双手食指分别放在键盘的“${key_L.toUpperCase()}”键和“${key_R.toUpperCase()}”键上<br/>
-    按<空格键>开始
+    —— Task 6: Classify the words “${iat.attribA.label}/${iat.targetB.label}” and “${iat.attribB.label}/${iat.targetA.label}” ——<br/>
+    <span style="color:#FF6188"><b>Attention above, the four types of words will appear alternately in new combinations! </b></span><br/>
+    <span style="color:#FFD866"><b>Please follow the prompts on the label above and respond to the keystrokes as correctly and quickly as possible</b></span><br/>
+    If you press the wrong key, <span style="color:red"> X </span> will appear. Press the other key to correct your response and continue.<br/><br/>
+    Please place the index fingers of both hands on the "${key_L.toUpperCase()}" key and the "${key_R.toUpperCase()}" key respectively<br/>
+    Press <Spacebar> to start
     </p></div>`,
     choices: [' '],
     prompt: tag_IAT_test_2
@@ -330,12 +330,12 @@ var IAT_instr7 = {
     type: 'html-keyboard-response',
     stimulus: `
     <div class="tag-bottom"><p>
-    —— 任务7：对“${iat.attribA.label}/${iat.targetB.label}”词和“${iat.attribB.label}/${iat.targetA.label}”词分类 ——<br/>
-    <span style="color:#FF6188"><b>与刚才的任务完全相同，请再次对这四类词语分类</b></span><br/>
-    <span style="color:#FFD866"><b>请根据上方标签的提示，尽可能正确并且快速地做出按键反应</b></span><br/>
-    当按键错误时屏幕中会出现<span style="color:red"> X </span>，需要按另一个键纠正才能继续<br/><br/>
-    请把双手食指分别放在键盘的“${key_L.toUpperCase()}”键和“${key_R.toUpperCase()}”键上<br/>
-    按<空格键>开始
+    —— Task 7: Classify the words “${iat.attribA.label}/${iat.targetB.label}” and “${iat.attribB.label}/${iat.targetA.label}” ——<br/>
+    <span style="color:#FF6188"><b>It is exactly the same as the previous task, please classify these four types of words again</b></span><br/>
+    <span style="color:#FFD866"><b>Please follow the prompts on the label above and respond to the keystrokes as correctly and quickly as possible</b></span><br/>
+    If you press the wrong key, <span style="color:red"> X </span> will appear. Press the other key to correct your response and continue.<br/><br/>
+    Please place the index fingers of both hands on the "${key_L.toUpperCase()}" key and the "${key_R.toUpperCase()}" key respectively<br/>
+    Press <Spacebar> to start
     </p></div>`,
     choices: [' '],
     prompt: tag_IAT_test_2
@@ -576,7 +576,7 @@ var debrief_IAT = {
         var n_trials_less_than_300ms = df.filterCustom(function(trial) { return trial.rt < 300 }).count()
         var p_too_fast = n_trials_less_than_300ms / df.count()
         var validity = (p_too_fast < 0.1) ? `` :
-            `<span style="color:red">抱歉，由于你的随意按键反应过多（${(100 * p_too_fast).toFixed(1)}%），你的结果无效！</span><br/>`
+            `<span style="color:red">Too many responses were faster than the prespecified threshold (${(100 * p_too_fast).toFixed(1)}%). This session has been flagged for review.</span><br/>`
 
         var iat_compat_prac = df.filter(block_ids.compat[0])
         var iat_compat_test = df.filter(block_ids.compat[1])
@@ -602,18 +602,18 @@ var debrief_IAT = {
 
         return `
         <p style="text-align: left">
-        <b>结果反馈：</b><br/>
+        <b>Result feedback:</b><br/>
         ${validity}
-        你的内隐联系测验<em>D </em>分数 = <b>${IAT_D.toFixed(2)}</b><br/>
-        ——练习任务<em>D </em>分数 = ${IAT_D_prac.toFixed(2)}<br/>
-        &emsp;&emsp;（反应时之差 = ${mean_diff_prac.toFixed(0)}ms，合并标准差 = ${sd_pooled_prac.toFixed(0)}ms）<br/>
-        ——正式任务<em>D </em>分数 = ${IAT_D_test.toFixed(2)}<br/>
-        &emsp;&emsp;（反应时之差 = ${mean_diff_test.toFixed(0)}ms，合并标准差 = ${sd_pooled_test.toFixed(0)}ms）<br/>
-        <br/><b><em>D </em>分数解释：</b><br/>
-        大于0：对「${iat_temp.attribA.label} + ${iat_temp.targetA.label}」「${iat_temp.attribB.label} + ${iat_temp.targetB.label}」的内隐联系更紧密<br/>
-        小于0：对「${iat_temp.attribA.label} + ${iat_temp.targetB.label}」「${iat_temp.attribB.label} + ${iat_temp.targetA.label}」的内隐联系更紧密<br/>
-        绝对值：0.2 = 小效应，0.5 = 中等效应，0.8 = 大效应<br/>
-        <br/>（按任意键继续）</p>`
+        Your Implicit Association Test <em>D </em> score = <b>${IAT_D.toFixed(2)}</b><br/>
+        ——Practice task<em>D </em> score = ${IAT_D_prac.toFixed(2)}<br/>
+        (reaction time difference = ${mean_diff_prac.toFixed(0)}ms, pooled standard deviation = ${sd_pooled_prac.toFixed(0)}ms)<br/>
+        ——Formal task<em>D </em> score = ${IAT_D_test.toFixed(2)}<br/>
+        (reaction time difference = ${mean_diff_test.toFixed(0)}ms, pooled standard deviation = ${sd_pooled_test.toFixed(0)}ms)<br/>
+        <br/><b><em>D </em>Explanation of scores:</b><br/>
+        Greater than 0: The implicit connection between "${iat_temp.attribA.label} + ${iat_temp.targetA.label}" and "${iat_temp.attribB.label} + ${iat_temp.targetB.label}" is closer<br/>
+        Less than 0: The implicit connection between "${iat_temp.attribA.label} + ${iat_temp.targetB.label}" and "${iat_temp.attribB.label} + ${iat_temp.targetA.label}" is closer<br/>
+        Absolute values: 0.2 = small effect, 0.5 = medium effect, 0.8 = large effect<br/>
+        <br/>(Press any key to continue)</p>`
     },
     on_finish: function(data) {
         data.varname = 'IAT_feedback'
@@ -652,7 +652,7 @@ jsPsych.init({
     timeline: main_timeline,
     on_finish: function() {
         jsPsych.data.get().localSave('csv', `data_iat_demo_${subID}.csv`) // download from browser
-        document.getElementById('jspsych-content').innerHTML += '实验结束，感谢您的参与！'
+        document.getElementById('jspsych-content').innerHTML += 'The experiment is over, thank you for your participation!'
         setTimeout(window.close, 10 * 1000) // not effective in Edge
     }
 })

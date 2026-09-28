@@ -1,18 +1,18 @@
-# QQ 图 (Quantile-Quantile Plot)
+# QQ Plot (Quantile-Quantile Plot)
 
-## 概述
+## Overview
 
-QQ图比较数据分位数与理论正态分布分位数。点落在对角线上=数据正态。是正态性检验的视觉辅助。
+QQ plot compares data quantiles with theoretical normal distribution quantiles. Points falling on the diagonal = data are normal. Is a visual aid for normality testing.
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| 场景 | 正态性假设检验 |
-| 分组 | 按条件分面 |
-| 配合 | Shapiro-Wilk检验值 |
+| Scenario | Normality Hypothesis Test |
+| Group | Facet by condition |
+| Fit | Shapiro-Wilk test value |
 
-## R 代码
+## R code
 
 ```r
 ggplot(data, aes(sample=rt)) +
@@ -22,17 +22,17 @@ ggplot(data, aes(sample=rt)) +
   theme_minimal()
 ```
 
-## 解读
+## Interpretation
 
-- 点紧密贴合对角线 → 正态 ✓
-- 两端偏离对角线（上翘/下垂）→ 重尾分布
-- S形偏离 → 偏态分布
-- 一端大幅偏离 → 异常值
+- Points closely fit the diagonal → Normal ✓
+- Both ends deviate from the diagonal (upward/sag) → heavy tail distribution
+- S-shaped deviation → skewed distribution
+- One end deviates significantly → outlier
 
-## 关键参数
+## Key parameters
 
-| 参数 | 作用 |
+| Parameters | Function |
 |------|------|
-| `sample=var` | 检验的变量 |
-| `geom_qq_line(color='red')` | 参考对角线 |
-| `facet_wrap(~group)` | 分组分面 |
+| `sample=var` | Variable to test |
+| `geom_qq_line(color='red')` | Reference diagonal |
+| `facet_wrap(~group)` | Group facets |

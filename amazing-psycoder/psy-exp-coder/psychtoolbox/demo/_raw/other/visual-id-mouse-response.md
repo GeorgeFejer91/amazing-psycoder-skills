@@ -1,18 +1,18 @@
-# 视觉识别实验 — 鼠标空间反应 + 多区组自适应学习
+# Visual recognition experiment - mouse spatial response + multi-block adaptive learning
 
-> 来源: [Matt Jones, University of Colorado](http://matt.colorado.edu/teaching/exptworkshop/example/main.m)  
-> 参考层级: L4 demo（仅参考实验逻辑 — 鼠标反应、自适应区组、反馈显示）
+> Source: [Matt Jones, University of Colorado](http://matt.colorado.edu/teaching/exptworkshop/example/main.m)
+> Reference level: L4 demo (only refer to the experimental logic - mouse response, adaptive blocking, feedback display)
 
-## 实验逻辑
+## Experimental logic
 
-- **任务**: 看到蜥蜴图片，用鼠标点击 9 个圆形反应区之一，指出它生活在哪
-- **刺激**: 9 种蜥蜴图片（`stimuli/lizard1.jpg` ~ `lizard9.jpg`）
-- **反应**: 9 个圆形区域均匀环绕刺激排列，鼠标点击
-- **区组**: 36 试次/区组，错误 ≤ 2 个则实验结束（自适应学习标准）
-- **反馈**: 正确=绿色，错误=红色→显示正确答案
-- **数据**: 按被试独立保存 `.mat` + 合并到总数据文件 `dataMaster_*.mat`
+- **Task**: When you see a picture of a lizard, use your mouse to click on one of the 9 circular response areas to indicate where it lives.
+- **stimuli**: 9 species of lizard pictures (`stimuli/lizard1.jpg` ~ `lizard9.jpg`)
+- **Response**: 9 circular areas evenly arranged around the stimulus, mouse click
+- **Block**: 36 trials/block, the experiment ends if there are ≤ 2 errors (adaptive learning standard)
+- **Feedback**: Correct = Green, Wrong = Red → Display the correct answer
+- **Data**: Save `.mat` independently by subject + merge into the total data file `dataMaster_*.mat`
 
-## 原始代码（main.m，241 行）
+## Original code (main.m, line 241)
 
 ```matlab
 function main
@@ -245,23 +245,23 @@ disp('Experiment aborted by escape sequence')
 end
 ```
 
-## 反模式标注
+## Anti-pattern annotation
 
-| 问题 | 位置 | 规范替代 |
+| Issues | Locations | Canonical Overrides |
 |------|------|---------|
-| 全局变量 `global` | 文件顶部 | 结构体传参或嵌套函数闭包 |
-| `WaitSecs` 多处 | ITI、反馈 | 帧循环定时 |
-| `Screen('PutImage')` 而非 `MakeTexture` 预加载 | 试次循环 | 循环前 `Screen('MakeTexture')` 预处理所有纹理 |
-| 依赖外部文件 `setup.m`, `instruct.m`, `demo.m`, `getResp.m` | 多处 | 自包含单文件 |
-| `Screen('CloseAll')` | 清理 | `sca` |
-| 无 `try-catch` | 全局 | 必须包裹 |
-| `save()` 块结束后保存 | 数据保存 | 增量写入每试次 |
-| 鼠标 RT 来源不透明 | `getResp` 函数 | 需确认 RT 基于 `GetSecs` 还是 `VBLTimestamp` |
+| Global variable `global` | Top of file | Structure parameters or nested function closure |
+| `WaitSecs` multiple places | ITI, feedback | Frame loop timing |
+| `Screen('PutImage')` instead of `MakeTexture` preload | trial loop | `Screen('MakeTexture')` preprocess all textures before loop |
+| Depends on external files `setup.m`, `instruct.m`, `demo.m`, `getResp.m` | Multiple places | Self-contained single file |
+| `Screen('CloseAll')` | Cleanup | `sca` |
+| None `try-catch` | Global | Must wrap |
+| `save()` Save after end of block | Data saving | Incremental write per trial |
+| Mouse RT source is opaque | `getResp` function | Need to confirm whether RT is based on `GetSecs` or `VBLTimestamp` |
 
-## 实验逻辑要点（可用于 Programming 层范式设计）
+## Experimental logic points (can be used for programming layer paradigm design)
 
-- **刺激-反应映射**: 9 个蜥蜴图片 → 9 个空间位置（圆形排列，`2π/9` 弧度间隔）
-- **自适应区组**: 每区组 36 试次，错误 ≤ 2 即通过
-- **反馈设计**: 正确=绿色高亮+文字，错误=红色高亮→短暂延迟→显示正确答案
-- **错误反馈分两阶段**: 先红色闪烁 50ms → 切换为绿色正确答案
-- **数据合并**: 独立文件 + 总合文件双写，防止重复被试号（加随机后缀）
+- **stimulus-response mapping**: 9 lizard images → 9 spatial locations (circular arrangement, `2π/9` radians intervals)
+- **Adaptive Block**: 36 trials per block, pass if error ≤ 2
+- **Feedback Design**: Correct = green highlight + text, wrong = red highlight → short delay → display the correct answer
+- **Error feedback is divided into two stages**: first flash red for 50ms → switch to green for correct answer
+- **Data merge**: independent file + double write of the combined file to prevent duplicate subject numbers (add random suffix)

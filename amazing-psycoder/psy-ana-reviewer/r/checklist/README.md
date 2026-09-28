@@ -1,29 +1,29 @@
-# Reviewer — R 审计清单
+# Reviewer — R audit list
 
-先读取已确认的 `analysis_config.yaml`。本清单不以 grep 命中替代统计判断，也不机械要求所有脚本包含 seed、Shapiro、Levene、敏感性分析或多重比较。
+First read the confirmed `analysis_config.yaml`. This list does not substitute grep hits for statistical judgment, nor does it mechanically require that all scripts include seed, Shapiro, Levene, sensitivity analysis, or multiple comparisons.
 
-## 证据门
+## Evidence door
 
-| 检查 | 通过标准 |
+| Inspection | Pass Standard |
 |------|----------|
-| Config/schema | 脚本读取 config；输入列、类型、ID、层级与单位被验证 |
-| 数据流转 | 每项排除/缺失/变换有来源、理由和前后计数；原始数据不被覆盖 |
-| Estimand/model | 公式、似然/链接与目标 estimand、观测层级、重复测量/项目结构一致 |
-| 随机步骤 | 仅当 config 声明 stochastic 时，检查 `set.seed()` 及采样/并行设置 |
-| 诊断 | 使用适合所选模型的残差、收敛、奇异性、过度离散或影响诊断 |
-| 推断 | 每个主要结论保存目标估计、不确定性和必要的 multiplicity 处理 |
-| 输出/环境 | 结果表图写入声明路径；保存 config、执行日志、`sessionInfo()` 和包版本 |
+| Config/schema | Script reads config; input columns, types, IDs, levels and units are validated |
+| Data flow | Each exclusion/deletion/transformation has a source, reason and count before and after; the original data will not be overwritten |
+| Estimand/model | Formula, likelihood/link consistent with target estimand, observation hierarchy, repeated measures/item structure |
+| Random steps | Check `set.seed()` and sampling/parallel settings only if config declares stochastic |
+| Diagnosis | Use residual, convergence, singularity, overdispersion, or impact diagnostics as appropriate for the selected model |
+| Inference | Each main conclusion saves target estimates, uncertainties, and necessary multiplicity processing |
+| Output/Environment | Write the result table to the declaration path; save config, execution log, `sessionInfo()` and package version |
 
-## 高风险模式（结合上下文判定）
+## High risk mode (determined based on context)
 
-- `setwd()`、用户专属绝对路径、交互式手工步骤导致不可迁移。
-- 在重复/聚类数据中使用独立观测模型而未聚合、建模相关性或提供稳健协方差依据。
-- 二元/计数/序数结局使用不相容的高斯模型。
-- 先查看焦点结局再选择 confirmatory 清洗阈值、协变量或模型。
-- 把 `performance::r2()` 当作目标效应估计，或只报告 p 值。
-- 事后对比存在多个推断却没有预先声明的校正/层级策略。
-- `save.image()` 或工作区隐式状态替代显式输入输出。
+- `setwd()`, user-specific absolute paths, and interactive manual steps lead to non-migration.
+- Use independent observation models in repeated/clustered data without aggregating, modeling correlations, or providing a basis for robust covariance.
+- Binary/counting/ordinal endings use incompatible Gaussian models.
+- View the focal outcome before selecting confirmatory cleaning thresholds, covariates, or models.
+- Treat `performance::r2()` as a target effect estimate, or just report p-values.
+- Post hoc comparisons with multiple inferences but no pre-stated correction/tiering strategy.
+- `save.image()` or workspace implicit state instead of explicit input and output.
 
-## 结果审查附加项
+## Result Review Additional Items
 
-`result-audit` 还需核对 clean run、警告/收敛、样本流转、表图数值与单位、主要估计方向，以及报告文本是否超出结果支持范围。没有这些证据，最高只能是 `ready_for_execution`。
+`result-audit` also needs to check clean run, warning/convergence, sample flow, table and figure values ​​and units, main estimation direction, and whether the report text exceeds the result support range. Without this evidence, the highest possible result is `ready_for_execution`.

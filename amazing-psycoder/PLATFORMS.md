@@ -150,11 +150,11 @@ When a sub-skill references an action, use the capability actually exposed by th
 ```bash
 git clone https://github.com/soupandpsy/amazing-psycoder-skills
 cd amazing-psycoder-skills/amazing-psycoder
-./install.sh              # 自动检测平台
-./install.sh claude       # 或手动指定
+./install.sh              # Automatic detection platform
+./install.sh claude       # or manually specify
 ./install.sh --scope project --project-dir /path/to/repo codex
 ./install.sh --scope project --project-dir /path/to/workspace openclaw
-./install.sh --check codex # 只检查安装漂移，不修改文件
+./install.sh --check codex # Only checks installation drift, does not modify files
 ```
 
 Auto-detection installs only when one supported host can be identified

@@ -1,33 +1,33 @@
-# 广义估计方程 (GEE)
+# Generalized Estimating Equations (GEE)
 
-## 概述
+## Overview
 
-GEE是处理重复测量数据的**总体平均**方法,适合关注群体平均效应而非个体差异的场景。是混合模型的替代选项。
+GEE is a **overall average** method for processing repeated measurement data, which is suitable for scenarios that focus on the group average effect rather than individual differences. is an alternative to hybrid models.
 
-**典型场景**: 关心"平均被试"的条件效应,不关心被试间变异; 二分类DV且不需要随机效应解释。
+**Typical scenario**: Care about the conditional effect of the "average subject" and not about inter-subject variation; two-category DV and no random effect explanation is required.
 
-## 何时使用
+## When to use
 
-| 条件 | 要求 |
+| Conditions | Requirements |
 |------|------|
-| 设计类型 | 重复测量/纵向数据（可处理不平衡测量次数） |
-| 因变量类型 | 连续（Gaussian）、二分类（Binomial）、计数（Poisson）等 |
-| 信息要求 | 稳健 sandwich 推断依赖聚类数、簇大小/不平衡和相关结构；小聚类数需设计适配的修正/替代方法，而非固定 30–50 门槛 |
-| 缺失数据机制 | 标准 GEE 对结局缺失通常需要更强条件；MAR 下考虑加权 GEE、多重插补或其他与 estimand 相容的方法，并做敏感性分析 |
-| 工作相关结构 | 需预先指定（如exchangeable、AR-1、unstructured） |
-| 模型关注点 | 总体平均效应（群体水平），不适用于个体预测 |
+| Design Type | Repeated Measurements/Longitudinal Data (can handle unbalanced number of measurements) |
+| Dependent variable type | Continuous (Gaussian), binary classification (Binomial), count (Poisson), etc. |
+| Information requirements | Robust sandwich inference relies on cluster number, cluster size/imbalance and correlation structure; small cluster numbers require the design of adapted corrections/alternatives rather than a fixed 30–50 threshold |
+| Missing data mechanism | Standard GEE usually requires stronger conditions for missing outcomes; consider weighted GEE, multiple imputation or other estimand-compatible methods under MAR, and do sensitivity analysis |
+| Work-related structure | Need to be specified in advance (such as exchangeable, AR-1, unstructured) |
+| Model concerns | Overall average effect (group level), not applicable to individual predictions |
 
-## GEE vs 混合模型
+## GEE vs hybrid model
 
-| | GEE | 混合模型 |
+| | GEE | Mixed model |
 |------|-----|---------|
-| 解释 | 总体平均 | 被试特定 |
-| 随机效应 | 无 | 有 |
-| 相关结构 | 工作相关矩阵 | 方差-协方差 |
-| 缺失数据 | 标准/加权 GEE 与所需假设不同，必须明示 | 似然模型在其 MAR/模型假设下处理不完整结局；也需诊断/敏感性分析 |
-| 结论推广 | 平均被试 | 个体被试 |
+| Explanation | Overall average | Subject-specific |
+| Random effects | None | Yes |
+| Correlation Structure | Working Correlation Matrix | Variance-Covariance |
+| Missing data | Standard/weighted GEE differs from required assumptions and must be stated | Likelihood model handles incomplete outcomes under its MAR/model assumptions; diagnostic/sensitivity analysis also required |
+| Conclusion generalization | Average subject | Individual subject |
 
-## R代码
+## R code
 
 ```r
 library(geepack)
@@ -36,14 +36,14 @@ model <- geeglm(rt ~ condition, id=subject_id, data=data,
 summary(model)
 ```
 
-## 何时用GEE
+## When to use GEE
 
-- 需要总体平均效应(不做个体预测)
-- 科学 estimand 是总体平均效应，且 GEE 的相关/缺失/小样本推断契约可满足；不能仅因 GLMM 不收敛就改变 estimand
-- 工作相关结构已知(如exchangeable)
+- requires overall average effect (no individual prediction)
+- Scientific estimand is the population average effect, and GEE's correlation/missing/small sample inference covenants are met; estimand cannot be changed just because the GLMM does not converge
+- The work-related structure is known (such as exchangeable)
 
-## 报告格式 (APA 7th)
+## Report Format (APA 7th)
 
-**范例**：
+**Example**:
 
-使用广义估计方程（GEE）分析重复测量反应时数据，以实验条件（实验组 vs. 控制组）为被试内因子。模型设定Gaussian分布族，采用可交换工作相关结构（exchangeable）。结果显示条件主效应显著，Wald χ²(1) = 12.34, p = .001。实验组反应时（M = 350, SE = 15）显著短于控制组（M = 420, SE = 18）。
+Use generalized estimating equations (GEE) to analyze repeated measurement reaction time data, with experimental condition (experimental group vs. control group) as the within-subject factor. The model sets the Gaussian distribution family and adopts an exchangeable work-related structure. The results showed a significant main effect of condition, Wald χ²(1) = 12.34, p = .001. The reaction time of the experimental group (M = 350, SE = 15) was significantly shorter than that of the control group (M = 420, SE = 18).

@@ -1,34 +1,34 @@
-# 多维标度法 (Multidimensional Scaling / MDS)
+# Multidimensional Scaling (MDS)
 
-## 概述
+## Overview
 
-MDS将高维相似性/距离数据降维到2D/3D空间,可视化对象间的"心理距离"。
+MDS reduces high-dimensional similarity/distance data to 2D/3D space to visualize the "psychological distance" between objects.
 
-**典型场景**: 8种情绪的相似性判断→2D情绪空间(valence × arousal); 面孔的知觉相似性→"面孔空间"。
+**Typical scenario**: Similarity judgment of 8 emotions → 2D emotion space (valence × arousal); Perceptual similarity of faces → "face space".
 
-## 何时使用
+## When to use
 
-| 条件 | 要求 |
+| Conditions | Requirements |
 |------|------|
-| 数据类型 | 距离矩阵或相似性矩阵 (n × n) |
-| 测量水平 | Metric MDS需等距/等比数据; Non-metric MDS仅需顺序数据 |
-| 样本要求 | 单个距离矩阵即可; INDSCAL需多个被试的矩阵 (建议≥10) |
-| 关键假设 | Metric MDS: 距离满足三角不等式; Non-metric MDS: 单调变换下保持秩次关系 |
-| 维度数 | k < n-1, 通常k=2或3以便可视化 |
-| 适用情境 | 探索刺激空间结构、检验维度理论、品牌感知定位、心理距离可视化 |
+| Data type | Distance matrix or similarity matrix (n × n) |
+| Measurement level | Metric MDS requires equidistant/equal ratio data; Non-metric MDS only requires sequential data |
+| Sample requirements | A single distance matrix is enough; INDSCAL requires multiple subject matrices (recommended ≥10) |
+| Key assumptions | Metric MDS: distance satisfies triangle inequality; Non-metric MDS: maintains rank relationship under monotonic transformation |
+| Number of dimensions | k < n-1, usually k=2 or 3 for visualization |
+| Applicable situations | Exploring stimulus spatial structure, testing dimensional theory, brand perception positioning, and visualizing psychological distance |
 
-## 类型
+## Type
 
-| 方法 | 输入 | 输出 |
+| Method | Input | Output |
 |------|------|------|
-| Metric MDS | 距离矩阵 | 坐标 |
-| Non-metric MDS | 排序(相似度) | 坐标(保持秩次) |
-| INDSCAL | 多个被试的距离矩阵 | 公共空间+个体权重 |
+| Metric MDS | Distance matrix | Coordinates |
+| Non-metric MDS | Sorting (similarity) | Coordinates (maintaining rank) |
+| INDSCAL | Distance matrix of multiple subjects | Common space + individual weight |
 
-## R代码
+## R code
 
 ```r
-# 从相似性矩阵到2D坐标
+# From similarity matrix to 2D coordinates
 fit <- cmdscale(dist_matrix, k=2)
 plot(fit, type="n"); text(fit, labels=names)
 
@@ -37,14 +37,14 @@ library(MASS)
 fit <- isoMDS(dist_matrix, k=2)
 ```
 
-## 报告
+## Report
 
-APA 7th格式报告示例:
+APA 7th format report example:
 
-> 采用非计量多维标度法(Non-metric MDS)对8种情绪词的相似性评分矩阵进行分析。二维解的Stress值为0.06,表明模型拟合良好(Stress < 0.10)。维度1解释为"愉悦度"(Valence: 高负荷端为"快乐""满足",低负荷端为"愤怒""悲伤"),维度2解释为"唤醒度"(Arousal: 高负荷端为"愤怒""恐惧",低负荷端为"平静""困倦")。二维构形图呈现环状结构,与Russell(1980)的情绪环状模型一致。
+> Use the non-metric multidimensional scaling method (Non-metric MDS) to analyze the similarity scoring matrix of 8 kinds of emotional words. The Stress value of the two-dimensional solution is 0.06, indicating that the model fits well (Stress < 0.10). Dimension 1 is interpreted as "pleasure" (Valence: high-load end is "happy" and "satisfied", low-load end is "angry" and "sadness"), and dimension 2 is interpreted as "arousal" (Arousal: high-load end is "angry" and "fear", low-load end is "calm" and "sleepy"). The two-dimensional topographic map shows a ring structure, which is consistent with Russell's (1980) emotional ring model.
 
-**报告要素**: ①MDS类型(Metric / Non-metric / INDSCAL) ②距离/相似性输入与数据来源 ③解的维度和Stress值 ④各维度的命名、解释依据与典型刺激坐标 ⑤结果与理论预期或前人研究的对比。
+**Report elements**: ①MDS type (Metric / Non-metric / INDSCAL) ②Distance/similarity input and data source ③Dimensions and Stress values ​​of the solution ④The naming, explanation basis and typical stimulus coordinates of each dimension ⑤Comparison of results with theoretical expectations or previous studies.
 
-## 评估
+## Evaluation
 
-Stress 必须结合维度数、距离结构、样本规模、随机基线/置换和用途解释；固定的 `.05/.10/.20` 标签不是跨数据集通用的拟合判据。
+Stress must incorporate the number of dimensions, distance structure, sample size, random baseline/permutation, and usage explanation; the fixed `.05/.10/.20` labels are not universal fit criteria across datasets.

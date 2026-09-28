@@ -1,17 +1,17 @@
-# 六边形分箱图 (Hexbin Plot)
+# Hexbin Plot
 
-## 概述
+## Overview
 
-当散点图数据量极大(>10000点)导致重叠看不清密度时,六边形分箱用颜色表示每个六边形内的点数。
+When the amount of scatter plot data is extremely large (>10,000 points) and the density cannot be seen clearly due to overlap, hexagonal binning uses color to represent the number of points in each hexagon.
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| 场景 | 超大样本散点图(>5000点) |
-| 优势 | 颜色编码密度,无重叠问题 |
+| Scenario | Very large sample scatter plot (>5000 points) |
+| Advantages | Color-coded density, no overlapping issues |
 
-## R 代码
+## R code
 
 ```r
 ggplot(data, aes(x=rt, y=accuracy)) +
@@ -21,13 +21,13 @@ ggplot(data, aes(x=rt, y=accuracy)) +
   theme_minimal()
 ```
 
-## vs 散点图
+## vs scatter plot
 
-散点图>5000点时严重重叠看不清密度。六边形分箱用颜色编码密度,适合大样本探索。
+When the scatter plot is >5000 points, there is serious overlapping and the density cannot be seen clearly. Hexagonal binning is color-coded for density, suitable for large sample exploration.
 
-## 关键参数
+## Key parameters
 
-| 参数 | 作用 |
+| Parameters | Function |
 |------|------|
-| `bins` | 六边形数量(分辨率) |
-| `scale_fill_viridis_c()` | 色盲友好颜色梯度 |
+| `bins` | Number of hexagons (resolution) |
+| `scale_fill_viridis_c()` | Color blindness friendly color gradient |

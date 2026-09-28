@@ -6,7 +6,7 @@
 
 ## When to Use
 
-User mentions: Corsi blocks, Corsi span, spatial working memory, visuospatial span, 科西方块, 空间工作记忆. Measures visuospatial short-term/working memory span by requiring participants to reproduce a sequence of spatial locations.
+User mentions: Corsi blocks, Corsi span, spatial working memory, visuospatial span, Corsi blocks, spatial working memory. Measures visuospatial short-term/working memory span by requiring participants to reproduce a sequence of spatial locations.
 
 ## Core Logic
 
@@ -60,36 +60,36 @@ Kessels, R. P. C., van Zandvoort, M. J. E., Postma, A., Kappelle, L. J., & de Ha
 
 ## Do Not Assume
 
-- Do not assume recall direction is forward-only without confirmation. 逆向回忆（backward Corsi）同样常见，且涉及不同的认知过程——逆向需要中央执行功能的参与（信息的保持和操纵），而正向主要测量视空间存储。确认是正向、逆向还是两者都包含。
-- Do not assume the classic 9-block Corsi布局 without confirmation. 虽然9块是最经典的配置，但部分研究使用简化版（如5块用于儿童或严重认知障碍患者）或自定义空间排列以适应特殊人群或屏幕尺寸。
-- Do not assume mouse click is the only valid response modality. 触摸屏点击在平板实验和临床床边评估中同样常见，其点击检测逻辑与鼠标不同（直接触屏坐标 vs. 鼠标光标跟踪+点击事件），需要不同的hit detection实现。
-- Do not assume a fixed SOA across studies without confirmation. 典型SOA为750-1000 ms，但部分研究使用500 ms或1500 ms。更快的SOA增加任务难度，影响编码深度，需与现有文献对齐。
-- Do not assume the stopping rule is always two-attempts-per-span. 有些实现使用单次尝试、三次尝试、或固定总试次数（如每个span长度固定4个试次）。停止规则直接影响span分数的计算方式和统计效力。
-- Do not assume condition files are used. 与其他大多数PsychoJS实验不同，Corsi任务通常完全通过代码生成序列、控制呈现时序和收集响应，不使用条件电子表格。
+- Do not assume recall direction is forward-only without confirmation. Reverse recall (backward Corsi) is equally common and involves different cognitive processes—reverse requires the involvement of central executive functions (retention and manipulation of information), while forward primarily measures visuospatial storage. Confirm whether it is forward, reverse, or both.
+- Do not assume the classic 9-block Corsi layout without confirmation. Although 9-block is the most classic configuration, some studies use simplified versions (such as 5-block for children or patients with severe cognitive impairment) or customize the spatial arrangement to accommodate special populations or screen sizes.
+- Do not assume mouse click is the only valid response modality. Touch screen clicks are also common in tablet experiments and clinical bedside evaluations. The click detection logic is different from that of the mouse (direct touch screen coordinates vs. mouse cursor tracking + click events), requiring different hit detection implementations.
+- Do not assume a fixed SOA across studies without confirmation. Typical SOA is 750-1000 ms, but some studies use 500 ms or 1500 ms. Faster SOA increases task difficulty, affects coding depth, and needs to be aligned with existing literature.
+- Do not assume the stopping rule is always two-attempts-per-span. Some implementations use a single attempt, three attempts, or a fixed total number of attempts (such as a fixed 4 attempts per span length). Stopping rules directly affect the calculation method and statistical power of span scores.
+- Do not assume condition files are used. Unlike most other PsychoJS experiments, Corsi tasks typically generate sequences, control presentation timing, and collect responses entirely through code, without using conditional spreadsheets.
 
 ## Condition File Columns
 
-Corsi任务通常**不使用条件文件**——所有序列生成、呈现时序和响应收集均在代码组件中以编程方式实现。如果出于实验设计需要创建条件文件（例如固定跨被试序列以实现精确复制），最简列如下：
+Corsi tasks typically do not use conditional files - all sequence generation, presentation timing, and response collection are implemented programmatically in code components. If you need to create a condition file for experimental design (e.g. fixing a sequence across subjects for exact replication), the simplest form is as follows:
 
 | Column | Type | Description |
 |--------|------|-------------|
-| sequence | str | 本次trial的块序列，用逗号分隔的块编号列表（如 `"3,7,2,5"`） |
-| span_length | int | 序列长度（如 4） |
-| direction | str | `"forward"` 或 `"backward"` |
+| sequence | str | The block sequence of this trial, a comma-separated list of block numbers (such as `"3,7,2,5"`) |
+| span_length | int | sequence length (such as 4) |
+| direction | str | `"forward"` or `"backward"` |
 
 ## Variants
 
-### 逆向Corsi（Backward Corsi）
+### Backward Corsi
 
-参与者需要以**相反顺序**再现呈现的序列。与正向Corsi相比，逆向Corsi对中央执行功能的要求更高（需要保持并操纵信息），典型逆向span比正向span低1-2个项。在临床群体中，逆向Corsi对额叶功能缺陷更敏感，常与stroop任务（见 [stroop.md](stroop.md)）和n-back任务（见 [n-back.md](n-back.md)）联合使用以全面评估执行功能。
+Participants are required to reproduce the presented sequence in **reverse order**. Compared with forward Corsi, reverse Corsi has higher requirements on central executive function (the need to maintain and manipulate information), and the typical reverse span is 1-2 terms lower than the forward span. In clinical populations, reverse Corsi is more sensitive to deficits in frontal lobe function and is often used in conjunction with the stroop task (see [stroop.md](stroop.md)) and the n-back task (see [n-back.md](n-back.md)) to comprehensively assess executive function.
 
-### Corsi超span学习（Corsi Supraspan Learning）
+### Corsi Supraspan Learning
 
-在固定序列长度（通常设置为被试span+1或span+2）下重复呈现同一序列，测量达到一次完全正确再现所需的学习次数。这一变体评估视空间**学习**能力而非简单的短时记忆span，对海马和内侧颞叶功能更敏感。
+The same sequence is repeatedly presented at a fixed sequence length (usually set to the subject span+1 or span+2), and the number of learning times required to achieve a completely correct reproduction is measured. This variant assesses visuospatial learning ability rather than simple short-term memory span and is more sensitive to hippocampal and medial temporal lobe function.
 
-### 触摸屏/平板Corsi（Touchscreen/Tablet Corsi）
+### Touchscreen/Tablet Corsi（Touchscreen/Tablet Corsi）
 
-针对移动设备或平板电脑的适配版本，使用触摸事件替代鼠标点击。除了输入方式差异外，还需考虑手指遮挡问题（触摸时手指可能遮挡目标块）、块尺寸的物理大小适配、以及不同屏幕分辨率的坐标校准。9块布局在小平板上可能拥挤，有时缩减为5块或7块版本。
+An adapted version for mobile devices or tablets that uses touch events instead of mouse clicks. In addition to the differences in input methods, it is also necessary to consider the problem of finger occlusion (the finger may block the target block when touching), physical size adaptation of the block size, and coordinate calibration for different screen resolutions. The 9-tile layout can be crowded on smaller tablets, and is sometimes reduced to a 5-tile or 7-tile version.
 
 ---
 
@@ -97,28 +97,28 @@ Corsi任务通常**不使用条件文件**——所有序列生成、呈现时�
 
 ### User Request
 
-> "我要做一个Corsi方块任务实验。屏幕上呈现9个不规则的方块，每个trial依次高亮其中几个方块（从长度2开始）。高亮结束后，被试需要用鼠标按相同顺序点击刚才高亮的方块。每个序列长度有2次尝试机会，如果2次都错了就停止。如果至少1次正确，序列长度+1继续。正向回忆。高亮每个方块750 ms，间隔500 ms。用PsychoPy。"
+> "I am going to do a Corsi square task experiment. 9 irregular squares are presented on the screen, and each trial highlights several of the squares in sequence (starting from length 2). After the highlighting is completed, the subject needs to use the mouse to click on the highlighted squares in the same order. There are 2 attempts for each sequence length, and if both are wrong, stop. If at least 1 is correct, the sequence length + 1 continues. Forward recall. Highlight each square for 750 ms, with an interval of 500 ms. using PsychoPy.
 
 ### Trial Window Timeline
 
 ```text
 ┌──────────────────────────┐    ┌──────────────────────────┐
 │ Window 1                 │ →  │ Window 2                 │
-│ 呈现阶段                  │    │ 回忆阶段                  │
-│ Content: 9个方块静态     │    │ Content: 9个方块静态     │
-│   依次高亮N个方块         │    │   （无高亮）             │
-│ Duration: N × 750 ms     │    │ Duration: 直到点击完成    │
-│   + (N-1) × 500 ms ISI   │    │   （自定步速）           │
-│ Response: none           │    │ Response: 鼠标点击方块   │
+│ Presentation stage │ │ Recall stage │
+│ Content: 9 static blocks │ │ Content: 9 static blocks │
+│ Highlight N blocks in sequence │ │ (no highlighting) │
+│ Duration: N × 750 ms │ │ Duration: until click complete │
+│ + (N-1) × 500 ms ISI │ │ (custom pace) │
+│ Response: none │ │ Response: Mouse click on the box │
 │ Condition: {span_length} │    │ Condition: none          │
-│ Data: 呈现序列           │    │ Data: 点击序列, acc      │
+│ Data: Presentation sequence │ │ Data: Click sequence, acc │
 └──────────────────────────┘    └──────────────────────────┘
 ```
 
 | Window | Content | Duration | Response | Condition | Data |
 |--------|---------|----------|----------|-----------|------|
-| 呈现阶段 | 9个方块，依次高亮 | N×750ms呈现 + (N-1)×500ms间隔 | none | {span_length} | presented_sequence |
-| 回忆阶段 | 9个方块静态 | 自定步速（直到点击N次） | 鼠标点击方块 | none | clicked_sequence, acc |
+| Presentation stage | 9 squares, highlighted in sequence | N×750ms presentation + (N-1)×500ms interval | none | {span_length} | presented_sequence |
+| Recall stage | 9 static squares | Self-set pace (until clicked N times) | Mouse click on the square | none | clicked_sequence, acc |
 
 ### Parsed Experiment Specification
 
@@ -139,17 +139,17 @@ Corsi任务通常**不使用条件文件**——所有序列生成、呈现时�
 
 ### Missing Information
 
-1. 方块的具体屏幕位置未指定 → 默认使用经典Corsi 9块不规则布局坐标（需确认屏幕分辨率以缩放坐标）
-2. 指导语内容未说明 → 需询问：指导语措辞、是否包含示例演示
-3. 是否收集练习数据未明确 → 需确认：是否包含练习阶段？练习数据是否保存？
+1. The specific screen position of the block is not specified → the classic Corsi 9-block irregular layout coordinates are used by default (need to confirm the screen resolution to scale the coordinates)
+2. The content of the guidance is not specified → Need to ask: the wording of the guidance and whether it contains sample demonstrations
+3. Whether to collect practice data is not clear → Need to confirm: Does it include a practice phase? Is the practice data saved?
 
 ### Critical Assumptions
 
-- 使用经典9块Corsi不规则布局（非网格排列，防止言语编码）
-- 正向回忆（非逆向），鼠标点击输入，无时间限制的回忆阶段
-- 无练习阶段——直接进入正式测试；若用户期望练习，需补充
-- Span分数 = 至少1次正确的最长序列长度（经典计分法）
-- 序列中同一方块不重复出现（无放回抽样）
+- Uses classic 9-block Corsi irregular layout (non-grid arrangement to prevent speech coding)
+- Forward recall (not reverse), mouse click input, no time limit recall stage
+- No practice stage - directly enter the formal test; if the user expects to practice, additional information is required
+- Span score = longest sequence length correct at least 1 time (classic scoring method)
+- The same block does not appear repeatedly in the sequence (sampling without replacement)
 
 ### Expected Code Architecture
 
@@ -157,7 +157,7 @@ Corsi任务通常**不使用条件文件**——所有序列生成、呈现时�
 corsi_blocks.py
 ├── Parameters (n_blocks=9, start_span=2, max_attempts=2,
 │               highlight_dur=0.75, isi=0.5)
-├── Window setup (全屏 or 窗口)
+├── Window setup (full screen or window)
 ├── Block position definition (classic Corsi 9-block layout)
 │   └── List of (x, y) coordinates, scaled to window size
 ├── Trial generation (programmatic — no condition file):
@@ -165,9 +165,9 @@ corsi_blocks.py
 │   ├── while stopping criterion not met:
 │   │   ├── for attempt in range(2):
 │   │   │   ├── Generate random sequence of span_length blocks
-│   │   │   ├── 呈现阶段: Highlight each block in sequence
+│ │ │ ├── Presentation phase: Highlight each block in sequence
 │   │   │   │   (highlight_dur + isi between)
-│   │   │   ├── 回忆阶段: Wait for N mouse clicks on blocks
+│ │ │ ├── Recall phase: Wait for N mouse clicks on blocks
 │   │   │   ├── Score: compare clicked vs. presented sequence
 │   │   │   └── Record: span_length, attempt, sequence, acc
 │   │   ├── If at least 1 correct: span_length += 1
@@ -180,9 +180,9 @@ corsi_blocks.py
 
 | Column | Type | Description |
 |--------|------|-------------|
-| span_length | int | 当前序列长度 |
-| attempt | int | 当前长度下的第几次尝试 (1 or 2) |
-| presented_sequence | str | 呈现的方块序列（如 `"3,7,2,5"`） |
-| clicked_sequence | str | 被试点击的方块序列（如 `"3,7,2,5"`） |
-| acc | int | 1 = 完全正确（顺序一致），0 = 错误 |
-| span_score | float | 最终span分数（任务结束后统一写入） |
+| span_length | int | Current sequence length |
+| attempt | int | Number of attempts at the current length (1 or 2) |
+| presented_sequence | str | presented block sequence (such as `"3,7,2,5"`) |
+| clicked_sequence | str | The sequence of blocks clicked by the subject (such as `"3,7,2,5"`) |
+| acc | int | 1 = completely correct (same order), 0 = wrong |
+| span_score | float | Final span score (written uniformly after the task ends) |

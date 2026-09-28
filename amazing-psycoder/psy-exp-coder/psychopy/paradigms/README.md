@@ -1,12 +1,12 @@
 # PsychoPy Paradigms
 
-> **Layer 3**: 范式参考文件 — 每个范式一个 `.md` 文件，包含实验逻辑和代码示例。
+> **Layer 3**: Paradigm reference files — one `.md` file per paradigm, containing experimental logic and code examples.
 
-## 范式索引
+## Paradigm index
 
-### 核心范式（14个条目，13个文件 + 1个交叉引用）
+### Core Paradigm (14 entries, 13 files + 1 cross-reference)
 
-| 范式 | 文件 | 类型 |
+| Paradigm | File | Type |
 |------|------|------|
 | Stroop | [stroop.md](stroop.md) | Pavlovia demo |
 | Go/No-go | [go-nogo.md](go-nogo.md) | Pavlovia demo |
@@ -21,11 +21,11 @@
 | Priming | [priming.md](priming.md) | Pavlovia demo |
 | Rating | [rating.md](rating.md) | Pavlovia demo |
 | Navon | [navon.md](navon.md) | CONFIG-DRIVEN |
-| EAST | (参见 jspsych) | — |
+| EAST | (see jspsych) | — |
 
-### 扩展范式（14个，参考描述）
+### Extended paradigm (14, refer to the description)
 
-| 范式 | 文件 |
+| Paradigm | File |
 |------|------|
 | Antisaccade | [antisaccade.md](antisaccade.md) |
 | Change Detection | [change-detection.md](change-detection.md) |
@@ -42,8 +42,8 @@
 | Wisconsin Card Sorting | [wisconsin-card-sorting.md](wisconsin-card-sorting.md) |
 | Writing Distraction | [writing-distraction.md](writing-distraction.md) |
 
-> **重要：范式 ≠ API 参考。** 以下文件中的代码示例来自 Pavlovia demo（多为 PsychoPy v3.1），使用旧版 API（如 `event.getKeys(maxWait=)`、`exec()` 条件注入、`trialClock.getTime()`）。**生成实验代码时，API 模式以 [spec/README.md](../spec/README.md) 的 Canonical Code Skeleton 为准**（PTB keyboard、`key.rt`、`getFutureFlipTime`、`try/finally`）。范式文件仅提供实验逻辑：窗口序列、条件结构、正确性规则。
+> **Important: Paradigm ≠ API Reference. ** The code examples in the following files are from the Pavlovia demo (mostly PsychoPy v3.1), using legacy APIs (e.g. `event.getKeys(maxWait=)`, `exec()` conditional injection, `trialClock.getTime()`). **When generating experimental code, the API mode is based on the Canonical Code Skeleton of [spec/README.md](../spec/README.md)** (PTB keyboard, `key.rt`, `getFutureFlipTime`, `try/finally`). The paradigm file only provides experimental logic: window sequences, conditional structures, correctness rules.
 
-每个文件的**实验逻辑**章节可用于设计模式、窗口序列和评分语义。历史代码块属于隔离来源，不能直接运行或复制；必须用 config 固定版本的 L1-L2 API 重写并验证。
+Each file's **Experimental Logic** chapters are available for design patterns, window sequences, and scoring semantics. The historical code block is an isolated source and cannot be run or copied directly; it must be rewritten and verified with the config fixed version of the L1-L2 API.
 
-另有 13 个范式仅有 jsPsych/PsychoJS 代码（无 Python 实现），参见 [jspsych/paradigms/README.md](../../jspsych/paradigms/README.md)。
+Another 13 paradigms have only jsPsych/PsychoJS code (no Python implementation), see [jspsych/paradigms/README.md](../../jspsych/paradigms/README.md).

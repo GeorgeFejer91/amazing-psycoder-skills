@@ -1,71 +1,71 @@
-# R 分析平台 — Config → 代码映射
+# R Analysis Platform — Config → Code Mapping
 
-## 字段映射
+## Field mapping
 
-分析 config YAML 的每个字段直接映射到 R 代码：
+Each field of the parsed config YAML maps directly to R code:
 
-| Config 路径 | R 代码位置 | 映射规则 |
+| Config Path | R Code Location | Mapping Rules |
 |------------|-----------|---------|
-| `experiment.data_path` + `file_format` + `loader_options` + `multi_file` | 步骤3: format-dispatch loader | 项目内路径；单/多文件按契约加载并保留 source file/row provenance，不固定为 CSV |
-| `runtime.language_version` + `dependency_file` | 步骤2: 启动门禁 + environment manifest | 精确核对 R patch 版本；`renv.lock` 必须存在并与实际加载包一致 |
-| `design.ivs[].name` | 步骤6: `group_by({name})` | 作为分组列 |
-| `design.ivs[].levels` | 步骤6: 描述统计分组数 | 验证列的唯一值数 |
-| `design.dvs[].name` | 步骤6: `summarise(mean_{name}=mean({name}))` | DV列名 |
-| `design.dvs[].type` | 步骤8: outcome-family compatibility check | 只用于核验已确认方法/分布/链接；不能仅凭类型自动选模型 |
-| `design.observation_level` + `design.clustering` | 步骤8: 依赖结构 | 按已确认的 subject/item/session/site 层级实现，不从 within/between 标签机械推断 |
-| `questions[].selected_method` | 步骤8: 估计器 | 必须直接实现；缺失或不兼容时停止并返回 Designer |
-| `questions[].model_formula` | 步骤8: 公式字符串 | 直接替换到 lmer/glmer |
-| `cleaning.rt_lower` / `rt_upper` | 步骤4: reason-coded mask + exclusion log | 按 config 声明的层级、边界和依据执行；保留原始行，不静默删除 |
-| `cleaning.accuracy_min` | 步骤4: subject-level QC table + reason-coded exclusion | 仅按已确认的分母、层级和规则计算 |
-| `cleaning.trial_exclusion` | 步骤4: config-specific rule function | 不把任意值机械解释成 SD trimming |
-| `cleaning.missing_policy` | 步骤4: policy-specific implementation + diagnostics/sensitivity | 删除、插补、似然或权重方法必须匹配缺失机制、层级和 estimand；不自动 `na.omit()` 或 `mice()` |
-| `model.stochastic` + `model.seed` | 步骤2 | 仅随机步骤需要 `set.seed()`；同时记录并行/采样设置 |
-| `model.contrast` | 步骤2: `options(contrasts=c("{value}", "contr.poly"))` | treatment/sum/helmert |
-| `model.correction` | 步骤10: claim-family-aware inference | planned/hierarchical/Tukey/Holm/Bonferroni/FDR/none 等按声明的 claim family 与 estimator 支持实现 |
-| `output.save_path` | 步骤11: project-bound output directory | 校验不越出项目根目录后创建；所有结果写入该目录 |
-| `output.report_format` | 步骤12: YAML output字段 | RMarkdown/Quarto |
-| `output.figures` | 步骤11: 条件分支 | raincloud/boxplot/interaction/scatter |
-| `output.effect_sizes` | 步骤9: 估计与不确定性分支 | 输出 config 声明的 raw/standardized/probability/OR 等 claim-compatible 估计；不统一映射成 d/η²/R² |
+| `experiment.data_path` + `file_format` + `loader_options` + `multi_file` | Step 3: format-dispatch loader | Path within the project; single/multiple files are loaded by contract and retained source file/row provenance, not fixed to CSV |
+| `runtime.language_version` + `dependency_file` | Step 2: Start access control + environment manifest | Accurately check the R patch version; `renv.lock` must exist and be consistent with the actual loaded package |
+| `design.ivs[].name` | Step 6: `group_by({name})` | as grouping column |
+| `design.ivs[].levels` | Step 6: Describe the number of statistical groupings | Verify the number of unique values in the column |
+| `design.dvs[].name` | Step 6: `summarise(mean_{name}=mean({name}))` | DV column name |
+| `design.dvs[].type` | Step 8: outcome-family compatibility check | Only used to verify confirmed methods/distributions/links; cannot automatically select models based on type alone |
+| `design.observation_level` + `design.clustering` | Step 8: Dependency structure | Implemented by confirmed subject/item/session/site level, not mechanically inferred from within/between tags |
+| `questions[].selected_method` | Step 8: Estimator | Must be implemented directly; if missing or incompatible, stop and return to Designer |
+| `questions[].model_formula` | Step 8: Formula string | Replace directly to lmer/glmer |
+| `cleaning.rt_lower` / `rt_upper` | Step 4: reason-coded mask + exclusion log | Execute according to the level, boundary and basis declared by config; retain the original row and do not delete silently |
+| `cleaning.accuracy_min` | Step 4: subject-level QC table + reason-coded exclusion | Calculate only by confirmed denominator, level and rule |
+| `cleaning.trial_exclusion` | Step 4: config-specific rule function | Do not mechanically interpret arbitrary values into SD trimming |
+| `cleaning.missing_policy` | Step 4: policy-specific implementation + diagnostics/sensitivity | Deletion, imputation, likelihood or weighting methods must match missing mechanism, hierarchy and estimand; not automatic `na.omit()` or `mice()` |
+| `model.stochastic` + `model.seed` | Step 2 | Only random step requires `set.seed()`; also log parallel/sampling settings |
+| `model.contrast` | Step 2: `options(contrasts=c("{value}", "contr.poly"))` | treatment/sum/helmert |
+| `model.correction` | Step 10: claim-family-aware inference | planned/hierarchical/Tukey/Holm/Bonferroni/FDR/none etc. are supported by the declared claim family and estimator |
+| `output.save_path` | Step 11: project-bound output directory | Created after verifying that it does not exceed the project root directory; all results are written to this directory |
+| `output.report_format` | Step 12: YAML output field | RMarkdown/Quarto |
+| `output.figures` | Step 11: Conditional branch | raincloud/boxplot/interaction/scatter |
+| `output.effect_sizes` | Step 9: Estimation and uncertainty branch | Output the raw/standardized/probability/OR and other claim-compatible estimates of the config statement; not uniformly mapped to d/η²/R² |
 
-## 模型实现门禁
+## Model implements access control
 
 ```
 selected_method + estimand + outcome family + observation hierarchy
-  ├── 兼容且 R API 已验证 → 按 config 实现
-  ├── 公式缺少已声明的 subject/item/session 依赖 → 阻断
-  └── 方法未确认/不兼容 → 返回 psy-ana-designer，不静默换模型
+  ├── Compatible and R API verified → Implemented by config
+  ├── Formula lacks declared subject/item/session dependency → Block
+  └── Method is not confirmed/incompatible → Return to psy-ana-designer, do not change model silently
 ```
 
-## 数据聚合规则
+## Data aggregation rules
 
-| 分析 | 聚合级别 | 代码 |
+| Analysis | Aggregation Level | Code |
 |------|---------|------|
-| 配对 t 检验 | 仅当 estimand 是被试×条件摘要且 item 依赖已处理/论证时聚合 | `group_by(subj, cond) %>% summarise(m=mean(dv))`，并记录分母/缺失规则 |
-| lmer | 试次级（不聚合） | 直接传入 data_rt |
-| 描述统计 | 条件 | `group_by(cond) %>% summarise(...)` |
-| 被试排除 | 被试 | `group_by(subj) %>% summarise(acc=mean(acc))` |
+| Paired t-test | Aggregate only if estimand is subject × condition summary and item depends on processed/argument | `group_by(subj, cond) %>% summarise(m=mean(dv))`, and record denominator/missing rules |
+| lmer | Try secondary (no aggregation) | Pass in data_rt directly |
+| Descriptive Statistics | Conditions | `group_by(cond) %>% summarize(...)` |
+| Subject exclusion | Subject | `group_by(subj) %>% summarize(acc=mean(acc))` |
 
-## 公式核验示例（不是自动默认）
+## Formula verification example (not automatic default)
 
-| 设计 | 固定效应 | 随机效应 |
+| Design | Fixed Effects | Random Effects |
 |------|---------|---------|
-| 单因素被试内 | `dv ~ condition` | `(1 + condition \| subject)` |
-| 单因素被试间 | `dv ~ condition` | — |
-| 两因素被试内 | `dv ~ A * B` | `(1 + A*B \| subject)` |
-| 混合设计 | `dv ~ A * B` | `(1 + A \| subject)` (A被试内, B被试间) |
-| 含协变量 | `dv ~ condition + covariate` | `(1 + condition \| subject)` |
+| Single factor within subject | `dv ~ condition` | `(1 + condition \| subject)` |
+| Single factor between subjects | `dv ~ condition` | — |
+| Two factors within subjects | `dv ~ A * B` | `(1 + A*B \| subject)` |
+| Mixed design | `dv ~ A * B` | `(1 + A \| subject)` (A within subjects, B between subjects) |
+| With covariates | `dv ~ condition + covariate` | `(1 + condition \| subject)` |
 
-## 图表映射
+## Chart mapping
 
-| Config `output.figures` 值 | R 代码 |
+| Config `output.figures` value | R code |
 |---------------------------|--------|
 | `raincloud` | `ggrain::geom_rain()` |
 | `individual` | `geom_line(aes(group=subj))` + `stat_summary()` |
 | `boxplot` | `geom_boxplot()` + `geom_jitter()` |
 | `interaction` | `stat_summary(geom="line")` + `stat_summary(geom="errorbar")` |
 
-## 环境与依赖门禁
+## Environment and dependency access control
 
-- 生成并保存 config 声明的 `renv.lock`，只锁定实际加载和执行所需依赖。
-- 启动时精确比对 R patch 版本；clean run 保存 `sessionInfo()`，Reviewer 核对其与 lockfile 是否一致。
-- 选择的方法在目标 R 版本或锁定包版本中不可用时必须阻断并返回 Designer，不静默替换 API 或模型。
+- Generate and save the `renv.lock` declared in the config, locking only the dependencies required for actual loading and execution.
+- Accurately compare the R patch version at startup; clean run saves `sessionInfo()`, and Reviewer checks whether it is consistent with the lockfile.
+- The selected method must block and return to the Designer when it is not available in the target R version or locked package version, without silently replacing the API or model.

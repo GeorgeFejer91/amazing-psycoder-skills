@@ -1,25 +1,25 @@
-# 逻辑混合模型 (Logistic Mixed Model / glmer)
+# Logistic Mixed Model / glmer
 
-## 概述
+## Overview
 
-逻辑混合模型用于二分类因变量（正确/错误、是/否）。在心理学中主要用于**准确率分析**，尤其当数据接近天花板或地板时。
+Logistic mixed models were used for dichotomous dependent variables (correct/incorrect, yes/no). Mainly used in psychology for **accuracy analysis**, especially when the data is close to the ceiling or floor.
 
-## 何时使用
+## When to use
 
-| 条件 | 要求 |
+| Conditions | Requirements |
 |------|------|
-| DV | 二分类 (0/1, 正确/错误) |
-| 设计 | 被试内,需建模随机效应 |
-| **必须用** | 任何条件准确率 >90% 或 <10% |
+| DV | Two categories (0/1, correct/wrong) |
+| Design | Within subjects, random effects need to be modeled |
+| **Must use** | Any condition accuracy >90% or <10% |
 
-## 为什么不能用ANOVA做准确率
+## Why can’t we use ANOVA to measure accuracy?
 
-- 比例数据天然非正态（被约束在0-1之间）
-- 接近天花板(~95%)时方差被严重压缩→ANOVA假阳性飙升
-- 每个试次是0/1数据,逻辑模型直接建模概率,不是近似
-- 方法学期刊(Psychonomic Bulletin & Review等)明确推荐
+- Proportional data are naturally non-normal (constrained to be between 0-1)
+- The variance is severely compressed when approaching the ceiling (~95%) → ANOVA false positives soar
+- Each trial is 0/1 data, and the logistic model directly models the probability, not an approximation
+- Clearly recommended by methodological journals (Psychonomic Bulletin & Review, etc.)
 
-## 模型公式
+## Model formula
 
 ```r
 glmer(acc ~ condition + (1+condition|subject), 
@@ -27,16 +27,16 @@ glmer(acc ~ condition + (1+condition|subject),
       control=glmerControl(optimizer="bobyqa"))
 ```
 
-## 效应量: Odds Ratio
+## Effect size: Odds Ratio
 
-OR = exp(fixef(model))。OR>1=概率增加, OR<1=概率降低。例如OR=1.5表示条件B下正确概率比条件A高50%。
+OR = exp(fixef(model)). OR>1=increased probability, OR<1=decreased probability. For example, OR=1.5 means that the correct probability under condition B is 50% higher than that under condition A.
 
-## 当准确率在70-90%之间时
+## When the accuracy is between 70-90%
 
-两个方法都可接受,但glmer更安全:
-- 如果期刊对方法要求严格→glmer
-- 如果领域惯例仍是ANOVA→用ANOVA但标注"比例数据,接近正态假设边界"
+Both methods are acceptable, but glmer is safer:
+- If the journal has strict method requirements → glmer
+- If the domain convention is still ANOVA → use ANOVA but label "proportional data, close to the normality assumption boundary"
 
-## 报告示例
+## Report example
 
 > A logistic mixed model examined accuracy across conditions. The odds of correct response were significantly higher in congruent (95%) vs incongruent (88%) condition, OR=2.35, z=4.12, p<.001.

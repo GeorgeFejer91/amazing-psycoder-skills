@@ -6,7 +6,7 @@
 
 ## When to Use
 
-User mentions: EAST, Extrinsic Affective Simon Task, 外在情感西蒙任务, implicit attitudes, 内隐态度, single-target IAT. Use EAST when you need to measure implicit attitudes toward target categories without requiring complementary category pairs (unlike IAT). EAST measures implicit attitudes through the interaction between stimulus valence (attribute) and an extrinsic feature (color). Suitable for single-target attitude measurement, where IAT requires contrasting pairs.
+User mentions: EAST, Extrinsic Affective Simon Task, implicit attitudes, single-target IAT. Use EAST when you need to measure implicit attitudes toward target categories without requiring complementary category pairs (unlike IAT). contrasting pairs.
 
 ## Core Logic
 
@@ -58,10 +58,10 @@ The computation uses only correct trials from the test block (`formal == true`).
 - **Color mapping**: Blue=F/positive, Green=J/negative — or custom?
 - **Trial counts**: Practice trials per stimulus, test trials per stimulus?
 - **Key labels**: What category labels to display on screen?
-- **ITI duration**: 试次间隔时间？各block是否不同？
-- **OS & font**: 在什么操作系统运行？如使用中文词语，确认字体
-- **Display**: 全屏还是窗口？词语大小和屏幕位置？
-- **Instruction text**: 各block的指导语内容？
+- **ITI duration**: Trial interval? Are each block different?
+- **OS & font**: What operating system is it running on? If using Chinese words, confirm the font
+- **Display**: Full screen or window? Word size and screen position?
+- **Instruction text**: What is the instruction content of each block?
 
 ## Trial Window Timeline
 
@@ -138,7 +138,7 @@ The computation uses only correct trials from the test block (`formal == true`).
 ## Example
 
 **User Request**:
-> "做一个 EAST 实验，测量对花卉和昆虫的内隐态度。积极词20个，消极词20个，花卉词4个，昆虫词4个。按键映射：F=积极/蓝色，J=消极/绿色。"
+> "Conduct an EAST experiment to measure implicit attitudes toward flowers and insects. 20 positive words, 20 negative words, 4 flower words, 4 insect words. Key mapping: F=positive/blue, J=negative/green."
 
 **Timeline**:
 
@@ -157,13 +157,13 @@ The computation uses only correct trials from the test block (`formal == true`).
 |-----------|-------|
 | Paradigm | EAST |
 | Platform | PsychoPy / jsPsych |
-| Target categories | 花卉 (flower), 昆虫 (insect) |
+| Target categories | flowers, insects |
 | Attribute words | 20 positive + 20 negative |
 | Target exemplars | 4 per category |
-| Key mapping | F = 积极/蓝色, J = 消极/绿色 |
+| Key mapping | F = Positive/Blue, J = Negative/Green |
 | Practice 1 (Attribute) | 40 trials (20 pos + 20 neg), feedback + forced correction |
-| Practice 2 (Color) | 40 trials (4花卉 × 5rep blue + 4花卉 × 5rep green + 4昆虫 × 5rep blue + 4昆虫 × 5rep green), feedback + forced correction |
-| Test Block | 80 trials (20 attr + 30花卉 + 30昆虫, interleaved), no feedback, black bg |
+| Practice 2 (Color) | 40 trials (4 flowers × 5rep blue + 4 flowers × 5rep green + 4 insects × 5rep blue + 4 insects × 5rep green), feedback + forced correction |
+| Test Block | 80 trials (20 attr + 30 flowers + 30 insects, interleaved), no feedback, black bg |
 | ITI | Practice: 500ms fixed; Test: 1000-2000ms random |
 | Output | block, stim_type, stimulus, stim_color, key_answer, key, rt, acc, formal |
 | Analysis | EAST_flower = RT(green, flower) - RT(blue, flower); EAST_insect = RT(green, insect) - RT(blue, insect) |

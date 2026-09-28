@@ -1,17 +1,17 @@
-# 连接散点图 (Connected Scatter Plot)
+# Connected Scatter Plot
 
-## 概述
+## Overview
 
-连接散点图将时间序列数据的点用线段连接,同时展示两个变量的关系演变。
+A connected scatter plot connects the points of time series data with line segments and displays the evolution of the relationship between two variables at the same time.
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| 场景 | 两变量随时间共同变化 |
-| 优势 | 展示轨迹,而非仅起点和终点 |
+| Scenario | Two variables change together over time |
+| Advantages | Show the trajectory, not just the starting point and end point |
 
-## R 代码
+## R code
 
 ```r
 ggplot(data, aes(x=rt, y=accuracy)) +
@@ -22,14 +22,14 @@ ggplot(data, aes(x=rt, y=accuracy)) +
   theme_minimal()
 ```
 
-## vs 普通散点图
+## vs ordinary scatter plot
 
-连接散点图增加了时间维度(路径方向),展示'如何从A到B'而非仅A和B的位置。
+Connected scatter plots add a time dimension (path direction), showing 'how to get from A to B' rather than just the locations of A and B.
 
-## 关键参数
+## Key parameters
 
-| 参数 | 作用 |
+| Parameters | Function |
 |------|------|
-| `geom_path` | 保持行顺序连接 |
-| `arrow()` | 添加箭头指示方向 |
-| `scale_color_viridis_c()` | 颜色编码时间 |
+| `geom_path` | Maintain row order concatenation |
+| `arrow()` | Add arrow to indicate direction |
+| `scale_color_viridis_c()` | Color encoding time |

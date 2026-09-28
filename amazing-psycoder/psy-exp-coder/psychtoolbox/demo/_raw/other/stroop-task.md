@@ -1,16 +1,16 @@
-# Stroop 任务 — 完整 PTB 实验
+# Stroop Task — Complete PTB Experiment
 
-> 来源: [william-hackett/stroop_task](https://github.com/william-hackett/stroop_task)  
-> 参考层级: L4 demo（仅参考实验逻辑，API 模式以 spec/README.md Canonical Skeleton 为准）
+> Source: [william-hackett/stroop_task](https://github.com/william-hackett/stroop_task)
+> Reference level: L4 demo (only refer to the experimental logic, the API mode is subject to spec/README.md Canonical Skeleton)
 
-## 实验逻辑
+## Experimental logic
 
-- **练习**: 5 试次，色词刺激，按首字母反应（r=红, g=绿, b=蓝, o=橙, p=紫）
-- **任务 1（色词冲突）**: 20 试次，10 一致 + 10 不一致，颜色词以不同墨水色呈现
-- **任务 2（纯色块）**: 10 试次，纯色矩形，按首字母反应
-- **输出**: CSV 文件（FrameID, Condition, Stimulus, RT, Error）
+- **Exercise**: 5 trials, color word stimulation, response according to the first letter (r=red, g=green, b=blue, o=orange, p=purple)
+- **Task 1 (Color-Word Conflict)**: 20 trials, 10 congruent + 10 incongruent, color words presented in different ink colors
+- **Task 2 (Solid Color Block)**: 10 trials, solid color rectangle, response by first letter
+- **Output**: CSV file (FrameID, Condition, Stimulus, RT, Error)
 
-## 原始代码
+## Original code
 
 ```matlab
 sca;
@@ -368,21 +368,21 @@ end
 fclose(fid);
 ```
 
-## 反模式标注
+## Anti-pattern annotation
 
-生成代码时需注意以下问题（以 spec/README.md Canonical Skeleton 为准）：
+Be aware of the following issues when generating code (subject to spec/README.md Canonical Skeleton):
 
-| 问题 | 位置 | 规范替代 |
+| Issues | Locations | Canonical Overrides |
 |------|------|---------|
-| `tic/toc` 测 RT | 任务1/2 试次循环 | `KbQueueCheck` 的 `firstPress - VBLTimestamp` |
-| `KbStrokeWait` 阻塞 | 反应收集循环 | `KbQueueCheck` + 帧循环 |
-| 无 `try-catch` | 全局 | 必须包裹 `try-catch` + `sca` |
-| `sca` 而非结构化清理 | 结束处 | `sca` + `Priority(0)` + `ShowCursor` + `KbQueueRelease` |
-| 实验结束一次性写 CSV | 数据保存 | 需增量保存（每试次 flush） |
+| `tic/toc` test RT | Task 1/2 trial loop | `firstPress - VBLTimestamp` of `KbQueueCheck` |
+| `KbStrokeWait` blocking | reaction collection loop | `KbQueueCheck` + frame loop |
+| None `try-catch` | Global | Must wrap `try-catch` + `sca` |
+| `sca` instead of unstructured cleanup | end | `sca` + `Priority(0)` + `ShowCursor` + `KbQueueRelease` |
+| Write CSV once at the end of the experiment | Data saving | Incremental saving required (flush for each trial) |
 
-## 实验逻辑要点（可用于 Programming 层范式设计）
+## Experimental logic points (can be used for programming layer paradigm design)
 
-- 条件结构: 3 条件（冲突/一致/控制）× 5 颜色（红绿蓝橙紫）
-- 色词冲突用 `randperm` + 禁止 self-match 保证
-- 按键映射: 颜色首字母（r/g/b/o/p）
-- 数据结构: Cell array → CSV（FrameID, Condition, Stimulus, RT, Error）
+- Condition structure: 3 conditions (conflict/consistency/control) × 5 colors (red, green, blue, orange, and purple)
+- Use `randperm` + disable self-match guarantee for color-word conflicts
+-Key mapping: Color initial (r/g/b/o/p)
+- Data structure: Cell array → CSV (FrameID, Condition, Stimulus, RT, Error)

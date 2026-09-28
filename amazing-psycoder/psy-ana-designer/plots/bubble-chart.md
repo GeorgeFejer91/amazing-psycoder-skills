@@ -1,17 +1,17 @@
-# 气泡图 (Bubble Chart)
+# Bubble Chart
 
-## 概述
+## Overview
 
-气泡图是散点图的扩展,用点的大小表示第三个连续变量。适合展示3个变量的关系。
+The bubble chart is an extension of the scatter chart, using the size of the points to represent the third continuous variable. Suitable for showing the relationship between 3 variables.
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| 场景 | 3个连续变量的关系 |
-| 第三变量 | 用点大小(size)表示 |
+| Scenario | Relationship between 3 continuous variables |
+| The third variable | expressed in point size (size) |
 
-## R 代码
+## R code
 
 ```r
 ggplot(data, aes(x=rt, y=accuracy, size=sample_size, color=condition)) +
@@ -21,10 +21,10 @@ ggplot(data, aes(x=rt, y=accuracy, size=sample_size, color=condition)) +
   theme_minimal()
 ```
 
-## 关键参数
+## Key parameters
 
-| 参数 | 作用 |
+| Parameters | Function |
 |------|------|
-| `size` | 映射第三变量的点大小 |
-| `scale_size(range=c(a,b))` | 点大小范围 |
-| `alpha` | 透明度 |
+| `size` | Map the point size of the third variable |
+| `scale_size(range=c(a,b))` | Point size range |
+| `alpha` | transparency |

@@ -1,22 +1,22 @@
-# PTB 安装与环境配置
+# PTB installation and environment configuration
 
-> 来源: 蒋挺老师知乎 PTB 教程  
-> 归类: `demo/_raw/getting-started/` — L4 入门参考
-> 参考层级: L4 demo（仅参考安装流程，API 模式以 spec/README.md 为准）
+> Source: Teacher Jiang Ting Zhihu PTB tutorial
+> Category: `demo/_raw/getting-started/` — L4 Getting Started Reference
+> Reference level: L4 demo (only refer to the installation process, the API mode is subject to spec/README.md)
 
-## 环境要求
+## Environmental requirements
 
-| 环境类型 | 推荐版本 | 必须启用组件 |
+| Environment type | Recommended version | Components must be enabled |
 |---------|---------|------------|
 | MATLAB | R2018a - R2023b | OpenGL, Java Runtime |
-| GNU Octave | ≥6.4 | Graphics Toolkit: gnuplot 或 qt |
-| Windows | 10+ | 显卡驱动正常加载 |
+| GNU Octave | ≥6.4 | Graphics Toolkit: gnuplot or qt |
+| Windows | 10+ | Graphics card driver loads normally |
 | macOS | 10.14+ | Xcode CLI Tools |
 | Linux | Kernel ≥5.4 | build-essential, libx11-dev, libgl1-mesa-dev |
 
-## 安装步骤
+## Installation steps
 
-### 1. 克隆仓库
+### 1. Clone the warehouse
 
 ```matlab
 targetDir = '~/Documents/Psychtoolbox';
@@ -25,65 +25,65 @@ system(['git clone https://github.com/Psychtoolbox-3/Psychtoolbox-3.git ' target
 addpath(genpath(fullfile(targetDir)));
 ```
 
-### 2. 配置 MEX 编译器
+### 2. Configure the MEX compiler
 
 ```matlab
 mex -setup C++
-% 选择编译器: MinGW-w64 (Windows) / Xcode CLI (macOS) / gcc/g++ (Linux)
+% Select compiler: MinGW-w64 (Windows) / Xcode CLI (macOS) / gcc/g++ (Linux)
 ```
 
-### 3. 运行首次初始化
+### 3. Run first initialization
 
 ```matlab
 PsychtoolboxSetup;
 ```
 
-### 4. 验证安装
+### 4. Verify installation
 
 ```matlab
-ver('psychtoolbox')          % 应显示版本号和构建日期
+ver('psychtoolbox')          % should show version number and build date
 [win, rect] = Screen('OpenWindow', 0, [0 0 0]);
 wait(1);
 Screen('CloseAll');
 ```
 
-## 常见安装错误
+## Common installation errors
 
-| 错误 | 原因 | 解决 |
+| Error | Cause | Solution |
 |------|------|------|
-| `Undefined function 'PsychtoolboxSetup'` | 路径未添加 | `addpath(genpath('~/Documents/Psychtoolbox'))` |
-| `Invalid MEX-file` | MEX 未配置 | `mex -setup C++` |
-| MEX 编译失败 (Linux) | 缺少开发库 | `sudo apt-get install build-essential libx11-dev libgl1-mesa-dev` |
-| 权限不足 | 无法写入系统路径 | 安装到用户家目录 + `setenv('PSYCHTOOLBOX_ROOT', '~/Documents/Psychtoolbox')` |
+| `Undefined function 'PsychtoolboxSetup'` | The path is not added | `addpath(genpath('~/Documents/Psychtoolbox'))` |
+| `Invalid MEX-file` | MEX not configured | `mex -setup C++` |
+| MEX compilation failed (Linux) | Missing development library | `sudo apt-get install build-essential libx11-dev libgl1-mesa-dev` |
+| Insufficient permissions | Unable to write to system path | Install to user's home directory + `setenv('PSYCHTOOLBOX_ROOT', '~/Documents/Psychtoolbox')` |
 
-## 系统级性能优化
+## System-level performance optimization
 
-| 干扰源 | 影响机制 | 推荐对策 |
+| Interference source | Impact mechanism | Recommended countermeasures |
 |-------|---------|----------|
-| 屏幕保护程序 | 触发显示器休眠 | 实验前禁用 |
-| 后台更新 | CPU 占用突增 | 关闭自动更新 |
-| 动画效果 | 图形管线阻塞 | 切换至经典主题 (Windows: 调整为最佳性能) |
-| 笔记本节能模式 | 降低 GPU 频率 | 插电并设为高性能 |
-| macOS 通知 | 抢占线程 | 关闭通知中心 |
-| DWM 桌面合成 (Windows) | Flip 无法精确同步 VBLANK | 控制面板 > 调整为最佳性能 |
+| Screensaver | Trigger monitor to sleep | Disable before experiment |
+| Background update | Sudden increase in CPU usage | Turn off automatic updates |
+| Animation Effects | Graphics Pipeline Blocking | Switch to Classic Theme (Windows: Tuned for Best Performance) |
+| Laptop power saving mode | Reduce GPU frequency | Plug in and set to high performance |
+| macOS notifications | Preempt threads | Close notification center |
+| DWM Desktop Compositing (Windows) | Flip cannot sync VBLANK accurately | Control Panel > Adjust for best performance |
 
-## 双显卡系统 GPU 绑定
+## Dual graphics card system GPU binding
 
-在同时拥有集成显卡和独立显卡的笔记本上，需强制 MATLAB 使用高性能 GPU：
+On laptops with both integrated and discrete graphics, MATLAB needs to be forced to use a high-performance GPU:
 
-- **Windows**: NVIDIA 控制面板 → 设置 MATLAB 为"高性能 NVIDIA 处理器"
-- **macOS**: 使用 `gpuDevice()` 检查当前活动 GPU
+- **Windows**: NVIDIA Control Panel → Set MATLAB to "High Performance NVIDIA Processors"
+- **macOS**: Use `gpuDevice()` to check the currently active GPU
 - **Linux**: `export __NV_PRIME_RENDER_OFFLOAD=1 && matlab -nodesktop`
 
 ```matlab
-% 运行时检查当前 GPU
+% Check current GPU at runtime
 info = Screen('GetWindowInfo', win);
 if contains(info.Renderer, 'Intel')
     warning('Running on integrated GPU. Consider switching to discrete.');
 end
 ```
 
-## 时钟精度验证
+## Clock accuracy verification
 
 ```matlab
 t0 = GetSecs;
@@ -94,4 +94,4 @@ dt = diff(t);
 fprintf('Min interval: %.6f s | Max: %.6f s | Jitter: %.6f s\n', min(dt), max(dt), std(dt));
 ```
 
-理想情况下连续调用 `GetSecs` 的时间差应在微秒级别（< 100 μs），且标准差极小。若抖动超过 1 ms，则可能存在中断风暴或调度延迟问题。
+Ideally the time difference between consecutive calls to `GetSecs` should be on the microsecond level (< 100 μs) with a very small standard deviation. If the jitter exceeds 1 ms, there may be an interrupt storm or scheduling delay issue.

@@ -1,17 +1,17 @@
-# 弦图 (Chord Diagram)
+# Chord Diagram
 
-## 概述
+## Overview
 
-弦图展示节点之间的流向和关系。外环=节点,内弦=流向,弦宽=流量大小。
+Chord diagram shows the flow and relationships between nodes. Outer ring = node, inner chord = flow direction, chord width = flow size.
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| 场景 | 组间流向/转换关系 |
-| 数据 | 方阵(从→到的流量) |
+| Scenario | Flow/transformation relationship between groups |
+| data | square matrix (traffic from → to) |
 
-## R 代码
+## R code
 
 ```r
 library(circlize)
@@ -25,16 +25,16 @@ circos.track(track.index=1, panel.fun=function(x,y) {
 }, bg.border=NA)
 ```
 
-## vs 网络图 vs Sankey
+## vs Network Map vs Sankey
 
-- 弦图=圆形流向图,适合方阵数据
-- 网络图=节点+边,适合无向关系
-- Sankey(冲积图)=线性流向,适合阶段转换
+- Chord diagram = circular flow diagram, suitable for square matrix data
+- Network graph = node + edge, suitable for undirected relationships
+- Sankey (alluvial map) = linear flow direction, suitable for stage conversion
 
-## 关键参数
+## Key parameters
 
-| 参数 | 作用 |
+| Parameters | Function |
 |------|------|
-| `transparency` | 弦透明度(0-1) |
-| `annotationTrack` | 外环标签样式 |
-| `grid.col` | 扇区颜色 |
+| `transparency` | String transparency (0-1) |
+| `annotationTrack` | Outer ring label style |
+| `grid.col` | Sector color |

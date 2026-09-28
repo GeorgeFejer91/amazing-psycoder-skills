@@ -1,21 +1,21 @@
-# 条形图 (Bar Chart)
+# Bar Chart
 
-## 概述
+## Overview
 
-条形图用柱高表示均值，误差棒表示SE/CI。是心理学论文中最常见但也最有争议的图表——隐藏了个体差异和分布形状。
+The bar chart uses the column height to represent the mean, and the error bars represent SE/CI. is the most common but also the most controversial graph in psychology papers—hiding individual differences and distribution shapes.
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| 场景 | 被试间设计,多组均值比较 |
-| DV | 连续（均值+误差） |
-| ⚠️ | 被试内设计不推荐——隐藏个体变化 |
+| Scenario | Between-subjects design, multi-group mean comparison |
+| DV | Continuous (mean + error) |
+| ⚠️ | Within-subjects design is not recommended - hide individual changes |
 
-## R 代码
+## R code
 
 ```r
-# 先计算均值和SE
+# First calculate the mean and SE
 desc <- data %>% group_by(condition) %>%
   summarise(mean=mean(rt), se=sd(rt)/sqrt(n()), .groups="drop")
 
@@ -27,17 +27,17 @@ ggplot(desc, aes(x=condition, y=mean, fill=condition)) +
   theme_minimal() + theme(legend.position="none")
 ```
 
-## 争议
+## Dispute
 
-- 隐藏分布形状（正态和双峰可以有相同均值和SE）
-- 隐藏个体数据点
-- 被试内设计用条形图 = 信息损失
-- 推荐替代: 雨云图(被试内)、箱线+散点(被试间)
+- Hide distribution shape (normal and bimodal can have the same mean and SE)
+- Hide individual data points
+- Bar chart for within-subjects design = information loss
+- Recommended alternatives: rain cloud diagram (within subjects), box line + scatter point (between subjects)
 
-## 关键参数
+## Key parameters
 
-| 参数 | 作用 |
+| Parameters | Function |
 |------|------|
-| `width` | 柱宽(0.4-0.8) |
-| `position` | dodge(并排)/stack(堆叠)/fill(比例) |
-| `stat` | identity(给定值)/count(自动计数) |
+| `width` | Column width (0.4-0.8) |
+| `position` | dodge(side by side)/stack(stack)/fill(proportion) |
+| `stat` | identity(given value)/count(automatic count) |

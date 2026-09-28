@@ -6,7 +6,7 @@
 
 ## When to Use
 
-User mentions: Writing distraction, dual-task writing, distractor interference, writing under distraction, 书写干扰. A dual-task paradigm that measures the effect of visual distractors on ongoing text production, combining continuous typing performance with intermittent distractor exposure.
+User mentions: Writing distraction, dual-task writing, distractor interference, writing under distraction, writing interference. A dual-task paradigm that measures the effect of visual distractors on ongoing text production, combining continuous typing performance with intermittent distractor exposure.
 
 ## Core Logic
 
@@ -62,27 +62,27 @@ No canonical reference yet -- this is a custom paradigm. Adapt analyses from dua
 
 ## Do Not Assume
 
-- Do not assume 干扰呈现时间固定为 1 秒。部分变式要求干扰持续至被试恢复输入，或使用 staircase 调整干扰时长。务必确认干扰阶段的确切持续时间及是否可变。
-- Do not assume 输入语言为英文。若目标词为中文，需处理输入法（IME）兼容性（候选词窗口可能遮挡刺激，输入组合键可能被误判为反应键），并明确使用 `keyboard.Keyboard` 收集字符而非 `event.getKeys`。
-- Do not assume 干扰类型仅为图片。干扰物可能是闪烁文本、声音、视频片段或弹窗通知，需确认干扰刺激的模态与文件格式。
-- Do not assume 每次试次后一定呈现问题阶段。部分变式仅在部分试次后提问（如随机抽取 25%），或完全省略问题以缩短实验时长。务必确认问题出现的频率和逻辑。
-- Do not assume `n_distract` 为试次级变量。它可能作为全局固定参数（所有试次相同），此时无需在条件文件中逐行指定。
-- Do not assume 书写阶段的输入框始终可见。在干扰阶段，输入框可能被隐藏、禁用或覆盖。需明确每个阶段输入框的可见性与可编辑状态，确保跨阶段文本状态传递正确。
+- Do not assume that the interference presentation time is fixed at 1 second. Some variations require the interference to continue until the subject resumes input, or use staircase to adjust the duration of the interference. Be sure to confirm the exact duration of the interference phase and whether it is variable.
+- Do not assume the input language is English. If the target word is Chinese, input method (IME) compatibility needs to be addressed (the candidate word window may block the stimulus, and the input key combination may be misjudged as a reaction key), and explicitly use `keyboard.Keyboard` to collect characters instead of `event.getKeys`.
+- Do not assume that the interference type is only pictures. Distractors may be flashing text, sounds, video clips or pop-up notifications. It is necessary to confirm the modality and file format of the interfering stimulus.
+- Do not assume that a problem phase must appear after each trial. Some variations ask questions after only a subset of trials (e.g., 25% randomly selected), or omit questions entirely to shorten the experiment length. Be sure to confirm the frequency and logic of the problem.
+- Do not assume `n_distract` is a secondary variable. It may be used as a global fixed parameter (the same for all trials), in which case there is no need to specify it line by line in the conditions file.
+- Do not assume that the input box during the writing phase is always visible. During the distraction phase, input boxes may be hidden, disabled, or overwritten. It is necessary to clarify the visibility and editable status of the input box at each stage to ensure that the cross-stage text status is transferred correctly.
 
 ## Condition File Columns
 
 | Column | Type | Description |
 |--------|------|-------------|
-| this_word | str | 目标词，被试需输入的词语 |
-| n_distract | int | 干扰出现前需输入的最少字符数 |
-| distractor | str | 干扰图片文件名（含扩展名） |
-| question | str | 试次后呈现的是/否问题文本 |
+| this_word | str | target word, the word that the subject needs to input |
+| n_distract | int | The minimum number of characters that need to be entered before interference occurs |
+| distractor | str | Disturbance image file name (including extension) |
+| question | str | Yes/no question text presented after trial |
 
 ## Variants
 
-- **文本干扰书写（Text-based distraction）**: 干扰物为屏幕上闪现的无关文字或词汇（而非图片），考察语义干扰对书写连续性的影响。刺激生成逻辑参见 [stroop.md](stroop.md) 的词汇干扰部分。
-- **听觉干扰书写（Auditory distraction writing）**: 干扰刺激为听觉通道呈现（如突发噪音、无关语音），被试在打字的同时通过耳机接收干扰。需额外配置音频播放组件及声音文件路径，参见 oddball.md 的听觉刺激参数。
-- **情绪干扰书写（Emotional distraction writing）**: 系统操控干扰物的情绪效价（负性 vs. 中性图片，通常选自 IAPS 或 CAPS 图片库），考察情绪显著性对书写中断的调节效应。条件文件需增加 `valence` 列标记干扰图片的情绪类别。
+- **Text-based distraction**: The distractor is irrelevant text or vocabulary (rather than pictures) flashed on the screen, and the impact of semantic interference on the continuity of writing is examined. See the lexical interference section of [stroop.md](stroop.md) for stimulus generation logic.
+- **Auditory distraction writing**: The interference stimulus is presented in the auditory channel (such as sudden noise, irrelevant speech), and the subject receives the interference through headphones while typing. Additional configuration of the audio playback component and sound file path is required, see the auditory stimulation parameters of oddball.md.
+- **Emotional distraction writing**: The system manipulates the emotional valence of distractors (negative vs. neutral pictures, usually selected from the IAPS or CAPS image library) to examine the moderating effect of emotional salience on writing interruptions. The condition file needs to add a `valence` column to mark the emotional category of the interference image.
 
 ---
 
@@ -90,87 +90,87 @@ No canonical reference yet -- this is a custom paradigm. Adapt analyses from dua
 
 ### User Request
 
-> "我想做一个书写干扰实验。屏幕上方显示一个两字中文词，下方是输入框。被试开始打字，当打到第二个字的第一笔时，屏幕中央弹出一张干扰图片持续1秒，然后图片消失，被试继续打完这个词。试次结束后问'你是否注意到干扰图片？'按Y或N。共60个试次，词语从词表中随机抽取。用PsychoPy实现。"
+> "I want to do a writing interference experiment. A two-character Chinese word is displayed at the top of the screen and an input box is shown below. The subject starts typing. When the first stroke of the second word is typed, an interference picture pops up in the center of the screen for 1 second, then the picture disappears, and the subject continues to type the word. After the trial is over, it is asked 'Did you notice the interference picture?' Press Y or N. There are 60 trials in total, and the words are randomly selected from the vocabulary list. Implemented with PsychoPy."
 
 ### Trial Window Timeline
 
 ```text
 ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐
-│ 阶段1：词语呈现+初始输入    │ →  │ 阶段2：干扰呈现             │ →  │ 阶段3：继续书写             │ →  │ 阶段4：问题回答             │
-│ Content: 目标词 + 输入框    │    │ Content: 干扰图片           │    │ Content: 已有文本 + 输入框   │    │ Content: 问题文本           │
-│ Duration: 最少2 s,         │    │ Duration: 1 s              │    │ Duration: 最多5 s           │    │ Duration: 直到 Y/N 按键    │
-│ 直到输入≥2个字符            │    │ Response: none (输入禁用)   │    │ (完成后自动结束)             │    │ Response: 'y' 或 'n' 键    │
+│ Phase 1: word presentation + initial input │ → │ Phase 2: interference presentation │ → │ Phase 3: continue writing │ → │ Phase 4: question answering │
+│ Content: target word + input box │ │ Content: interference picture │ │ Content: existing text + input box │ │ Content: question text │
+│ Duration: at least 2 s, │ │ Duration: 1 s │ │ Duration: at most 5 s │ │ Duration: until Y/N button │
+│ Until ≥2 characters are entered │ │ Response: none (input disabled) │ │ (automatically ends after completion) │ │ Response: 'y' or 'n' key │
 │ Response: keyboard         │    │ Data: none                 │    │ Response: keyboard          │    │ Data: key_resp.keys        │
-│ Data: 初始输入文本           │    │                            │    │ Data: 完整输入文本           │    │                             │
+│ Data: Initial input text │ │ │ │ Data: Complete input text │ │ │
 └──────────────────────────┘    └──────────────────────────┘    └──────────────────────────┘    └──────────────────────────┘
 ```
 
-| 阶段 | Content | Duration | Response | File | Condition | Data |
+| Stage | Content | Duration | Response | File | Condition | Data |
 |------|---------|----------|----------|------|-----------|------|
-| 词语呈现+初始输入 | 目标词 + 文本输入框 | 最少2 s, 直到输入≥2个字符 | keyboard | none | {this_word} | 初始输入文本 |
-| 干扰呈现 | 干扰图片 | 1 s | none（输入禁用） | {distractor} | none | none |
-| 继续书写 | 已有文本 + 输入框 | 最多5 s（完成后结束） | keyboard | none | none | 完整输入文本 |
-| 问题回答 | 问题文本 | 直到 Y/N 按键 | 'y', 'n' | none | {question} | key_resp.keys, rt |
+| Word presentation + initial input | Target word + text input box | At least 2 s, until ≥ 2 characters are entered | keyboard | none | {this_word} | Initial input text |
+| Distractor presentation | Distractor picture | 1 s | none (input disabled) | {distractor} | none | none |
+| Continue writing | Existing text + input box | Up to 5 s (end after completion) | keyboard | none | none | Complete input text |
+| Question answer | Question text | Until Y/N keys | 'y', 'n' | none | {question} | key_resp.keys, rt |
 
 ### Parsed Experiment Specification
 
 | Field | Value |
 |-------|-------|
-| 实验名称 | 中文书写干扰任务 |
-| 平台 | PsychoPy |
-| 任务类型 | 书写干扰（双任务） |
-| 目标刺激 | 两字中文词（从词表随机抽取） |
-| 干扰刺激 | 图片文件 |
-| 干扰触发条件 | 输入≥2个字符（第二个字第一笔） |
-| 干扰呈现时长 | 1 s |
-| 继续书写时限 | 5 s |
-| 试次后问题 | "你是否注意到干扰图片？"（Y/N） |
-| 试次数 | 60 |
-| 阶段结构 | 词语呈现 → 干扰 → 继续书写 → 问题 |
+| Experiment name | Chinese writing interference task |
+| Platform | PsychoPy |
+| Task type | Writing interference (dual task) |
+| Target stimulus | Two-character Chinese word (randomly selected from the vocabulary list) |
+| Interfering stimulus | Picture file |
+| Interference trigger condition | Enter ≥ 2 characters (the second character and the first stroke) |
+| Interference presentation duration | 1 s |
+| Continue writing time limit | 5 s |
+| Post-trial question | "Did you notice the distractor picture?" (Y/N) |
+| Number of attempts | 60 |
+| Stage structure | Word presentation → Interference → Continue writing → Question |
 
 ### Missing Information
 
-1. **词表未提供** — 未指定具体词语列表或词表文件路径。需明确使用哪个词表，或提供词条清单。
-2. **干扰图片未指定** — 未说明干扰图片来源（IAPS编号 / 自定义图片文件夹路径），以及图片的情绪类别或内容类型。
-3. **练习试次未提及** — 是否包含练习阶段？练习试次数及是否给予反馈未说明。
+1. **Vocabulary not provided** — No specific word list or vocabulary file path is specified. It is necessary to specify which vocabulary to use, or provide a list of terms.
+2. **Interference picture not specified** — The source of the interference picture (IAPS number / custom picture folder path), and the emotion category or content type of the picture are not specified.
+3. **Practice trials not mentioned** — Do they include a practice phase? The number of practice trials and whether feedback was given were not specified.
 
 ### Critical Assumptions
 
-- 中文输入使用 `keyboard.Keyboard` 收集字符级输入，`event.getKeys` 无法正确处理中文输入法组合键。
-- 干扰图片为全屏中央呈现，输入框位于屏幕下方，目标词位于上方。布局为默认上下排列。
-- 60试次从词表中无放回随机抽取；若词表不足60词，则循环抽取（有放回）。
+- Chinese input uses `keyboard.Keyboard` to collect character-level input, and `event.getKeys` cannot correctly handle Chinese input method key combinations.
+- The interference picture is presented in the center of the full screen, the input box is located at the bottom of the screen, and the target word is located at the top. The layout is arranged top to bottom by default.
+- 60 trials are randomly selected from the word list without replacement; if the word list is less than 60 words, the words are drawn cyclically (with replacement).
 
 ### Code Architecture
 
 ```
 writing_distraction.py
-├── 参数区（字符数阈值、阶段时长、窗口尺寸）
-├── 条件文件生成（从词表随机抽取60个目标词，分配干扰图片与问题）
-├── 刺激预加载（目标词TextStim、问题TextStim、干扰图片ImageStim）
-├── 输入框组件（PsychoPy TextBox / 自定义文本累积组件）
-├── 试次循环:
-│   ├── 阶段1: 呈现目标词 + 启用输入框（最小2 s, 直到字符数≥阈值）
-│   ├── 阶段2: 显示干扰图片1 s（禁用输入框，保存当前文本）
-│   ├── 阶段3: 恢复输入框与已输入文本（最多5 s, 回车或字符数达标结束）
-│   ├── 阶段4: 呈现问题，等待 Y/N 按键
-│   └── 保存试次数据
-├── 结束界面（致谢语）
-└── 数据保存: try/finally CSV 增量写入
+├── Parameter area (character threshold, stage duration, window size)
+├── Conditional file generation (randomly select 60 target words from the vocabulary list and assign interference pictures and questions)
+├── Stimulus preloading (target word TextStim, question TextStim, interference picture ImageStim)
+├── Input box component (PsychoPy TextBox/custom text accumulation component)
+├── Trial cycle:
+│ ├── Stage 1: Present target word + enable input box (minimum 2 s, until number of characters ≥ threshold)
+│ ├── Stage 2: Display the interference image for 1 s (disable the input box and save the current text)
+│ ├── Stage 3: Restore the input box and the entered text (up to 5 s, end with carriage return or when the number of characters reaches the limit)
+│ ├── Stage 4: Present problem, wait for Y/N button
+│ └── Save trial data
+├── End interface (thank you)
+└── Data saving: try/finally CSV incremental writing
 ```
 
 ### Expected Data Columns
 
 | Column | Type | Description |
 |--------|------|-------------|
-| this_word | str | 目标词 |
-| n_distract | int | 干扰触发字符阈值 |
-| distractor | str | 干扰图片文件名 |
-| init_text | str | 阶段1结束时的已输入文本 |
-| final_text | str | 阶段3结束时的完整输入文本 |
-| correct | int | 最终文本是否与目标词完全匹配（1/0） |
-| char_count_phase1 | int | 阶段1输入字符数 |
-| char_count_phase3 | int | 阶段3输入字符数 |
-| typing_speed_phase1 | float | 阶段1打字速度（字符/秒） |
-| typing_speed_phase3 | float | 阶段3打字速度（字符/秒） |
-| question_resp | str | 问题回答（'y' / 'n'） |
-| question_rt | float | 问题反应时（秒） |
+| this_word | str | target word |
+| n_distract | int | Disturbance trigger character threshold |
+| distractor | str | interference image file name |
+| init_text | str | The entered text at the end of phase 1 |
+| final_text | str | Complete input text at the end of phase 3 |
+| correct | int | Whether the final text exactly matches the target word (1/0) |
+| char_count_phase1 | int | Number of characters input in phase 1 |
+| char_count_phase3 | int | Number of characters input in phase 3 |
+| typing_speed_phase1 | float | Phase 1 typing speed (characters/second) |
+| typing_speed_phase3 | float | Phase 3 typing speed (characters/second) |
+| question_resp | str | Question answer ('y' / 'n') |
+| question_rt | float | Question response time (seconds) |

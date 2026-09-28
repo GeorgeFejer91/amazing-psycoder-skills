@@ -1,56 +1,57 @@
-# 漂移扩散模型 (Drift Diffusion Model / DDM)
+# Drift Diffusion Model (DDM)
 
-## 概述
+## Overview
 
-DDM将二选一反应时任务的数据分解为认知子成分:信息积累速度、反应谨慎度、非决策时间。是决策神经科学的**标准计算模型**。
+DDM decomposes the data of the two-choice reaction time task into cognitive sub-components: information accumulation speed, reaction caution, and non-decision time. It is the **standard computational model** in decision neuroscience.
 
-**典型场景**: 检验Stroop效应是改变信息积累速度(v)还是反应阈值(a); 比较ADHD和对照组在决策成分上的差异。
+**Typical scenario**: Test whether the Stroop effect changes the speed of information accumulation (v) or the response threshold (a); compare the differences in decision-making components between ADHD and the control group.
 
-## 何时使用
+## When to use
 
-| 条件 | 要求 |
+| Conditions | Requirements |
 |------|------|
-| **实验设计类型** | 二选一追选反应时任务（如知觉辨别、词汇判断、奖赏决策） |
-| **因变量类型** | 反应时 (RT) + 二分类正确率 (accuracy)，二者需联合建模 |
-| **样本要求** | 每实验条件 ≥ 100 试次；层级模型每被试每条件 ≥ 40 试次更稳定 |
-| **关键假设** | (1) 决策过程为带噪声的连续证据积累 (Wiener 扩散过程); (2) 证据积累至阈值触发反应; (3) 仅适用于二选一决策（多选项需改用多选择DDM或LBA） |
+| **Experimental design type** | Two-choice reaction time tasks (such as perceptual discrimination, lexical judgment, reward decision-making) |
+| **Dependent variable type** | Reaction time (RT) + binary classification accuracy (accuracy), the two need to be jointly modeled |
+| **Sample Requirements** | Trial requirements depend on the number of free parameters, error rate, participant count, and desired precision; assess identifiability and recovery by simulation for the planned design |
+| **Key Assumptions** | (1) The decision-making process is continuous evidence accumulation with noise (Wiener diffusion process); (2) Evidence accumulates to a threshold to trigger a reaction; (3) It is only applicable to two-choice decisions (multiple options need to use multi-choice DDM or LBA instead) |
 
-## 核心参数
+## Core parameters
 
-| 参数 | 心理学解释 |
+| Parameters | Psychological explanation |
 |------|-----------|
-| **v (drift rate)** | 信息积累速度—认知加工质量。v越大=越快越准 |
-| **a (boundary)** | 反应阈值—速度/准确性权衡。a越大=慢但准 |
-| **t0 (non-decision time)** | 编码+运动执行(非决策部分) |
-| **z (starting point)** | 先验偏向(通常固定0.5=无偏) |
+| **v (drift rate)** | Information accumulation speed—cognitive processing quality. The bigger v = the faster and more accurate |
+| **a (boundary)** | Response threshold—speed/accuracy trade-off. Bigger a = slower but accurate |
+| **t0 (non-decision time)** | Encoding + motion execution (non-decision part) |
+| **z (starting point)** | Prior bias (usually fixed at 0.5 = unbiased) |
 
-## DDM能回答的问题
+## Questions that DDM can answer
 
-- 条件效应是通过改变**速度**(v)还是**谨慎度**(a)?
-- 组间差异是**决策质量**(v)还是**反应风格**(a)?
-- 速度-准确性权衡是否解释了条件效应?
+- Is the conditional effect by changing **speed**(v) or **caution**(a)?
+- Is the difference between groups **decision quality**(v) or **response style**(a)?
+- Does the speed-accuracy trade-off explain the conditioning effect?
 
-## R代码
+## R code
 
 ```r
-library(hddm)  # 或 rtdists + brms
-# 分层贝叶斯DDM (brms)
-fit <- brm(rt | dec(acc) ~ condition + (1|subject),
-           data=data, family=wiener(),
+library(brms)
+# choice must be coded as the lower (0) or upper (1) decision boundary.
+# Confirm this coding and the task's stimulus-response mapping before fitting.
+fit <- brm(rt | dec(choice) ~ condition + (1 | subject),
+           data = data, family = wiener(),
            control = list(adapt_delta = 0.99, max_treedepth = 15),
            iter = 4000, warmup = 2000, chains = 4, cores = 4)
 ```
 
-## 报告
+## Report
 
-**APA 7th 格式报告示例：**
+**APA 7th format report example:**
 
-> 采用漂移扩散模型（DDM, Ratcliff, 1978）对反应时和正确率进行联合建模，分层贝叶斯估计使用 Wiener 分布族，通过 brms（Bürkner, 2017）实现。模型以条件（一致 vs. 不一致）作为漂移率 (v)、阈值 (a) 和非决策时间 (t0) 的固定效应预测因子，被试作为随机截距。四条链均收敛（所有 R-hat < 1.01，有效样本量 > 400）。结果显示，不一致条件较一致条件的漂移率显著降低（Δv = -0.32, 95% HDI [-0.45, -0.19]），而阈值差异不显著（Δa = 0.02, 95% HDI [-0.08, 0.12]），非决策时间无差异（Δt0 = 0.01, 95% HDI [-0.03, 0.05]）。结果表明 Stroop 效应源于信息积累速度下降，而非速度-准确性权衡的改变。
+> Response choice and response time were jointly modeled with a Wiener diffusion likelihood. The example model above estimates a condition effect on drift rate; it does not estimate condition effects on boundary separation or non-decision time. Report posterior estimates and intervals for each parameter actually modeled, convergence diagnostics, parameter-recovery checks where possible, and posterior predictive checks before interpreting cognitive mechanisms.
 
-> *Note.* DDM = Drift Diffusion Model; HDI = Highest Density Interval. 后验参数估计与轨迹图见补充材料。
+> *Note.* DDM = Drift Diffusion Model; HDI = Highest Density Interval. See the supplementary material for posterior parameter estimates and trajectory plots.
 
-## 注意事项
+## Notes
 
-- DDM需要大量试次(每条件>100)才能可靠估计参数
-- 模型拟合需检查收敛和后验预测
-- 不适合多选项任务(>2选项)
+- Trial requirements must be justified for the particular model and design; there is no universal 100-trial cutoff.
+- Model fitting needs to be checked for convergence and posterior predictions
+- Not suitable for multi-option tasks (>2 options)

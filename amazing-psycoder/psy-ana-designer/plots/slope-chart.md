@@ -1,17 +1,17 @@
-# 斜率图 (Slope Chart)
+# Slope Chart
 
-## 概述
+## Overview
 
-斜率图用多条线段连接两个时间点的值,线的斜率直观展示变化方向和幅度。比哑铃图更简洁,适合同时展示大量被试的变化。
+The slope graph uses multiple line segments to connect the values at two points in time. The slope of the line visually displays the direction and magnitude of change. It is more concise than the dumbbell chart and is suitable for showing the changes of a large number of subjects at the same time.
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| 场景 | 两时间点,多个体/项目 |
-| 优势 | 快速识别"谁变最多" |
+| Scenario | Two points in time, multiple individuals/projects |
+| Advantages | Quickly identify "who has changed the most" |
 
-## R 代码
+## R code
 
 ```r
 ggplot(data, aes(x=time, y=value, group=subject_id)) +
@@ -22,17 +22,17 @@ ggplot(data, aes(x=time, y=value, group=subject_id)) +
   theme_minimal()
 ```
 
-## 解读
+## Interpretation
 
-- 陡峭上升线=大幅增加
-- 陡峭下降线=大幅减少
-- 平线=无变化
-- 颜色编码变化方向→快速识别异常模式
+- steep rising line = large increase
+- Steep descending line = substantial reduction
+- flat line = no change
+- Color-coded change direction → quickly identify abnormal patterns
 
-## 关键参数
+## Key parameters
 
-| 参数 | 作用 |
+| Parameters | Function |
 |------|------|
-| `group` | 按个体分组 |
-| `color` | 按变化方向着色 |
-| `alpha` | 透明度(多线时降低) |
+| `group` | Group by individual |
+| `color` | Color by changing direction |
+| `alpha` | Transparency (reduced when there are multiple lines) |

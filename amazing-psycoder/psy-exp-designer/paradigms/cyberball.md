@@ -6,7 +6,7 @@
 
 ## When to Use
 
-User mentions: Cyberball, ostracism, social exclusion, social rejection, 赛博球, 社会排斥. A virtual ball-tossing game used to experimentally induce feelings of social inclusion or exclusion (ostracism).
+User mentions: Cyberball, ostracism, social exclusion, social rejection, cyberball, social rejection. A virtual ball-tossing game used to experimentally induce feelings of social inclusion or exclusion (ostracism).
 
 ## Core Logic
 
@@ -64,66 +64,66 @@ Williams, K. D., & Jarvis, B. (2006). Cyberball: A program for use in research o
 
 ## Do Not Assume
 
-- Do not assume inclusion/exclusion 条件仅通过被试接球次数来区分。确认具体比例分布：包容条件下被试接球比例约为1/3（等量参与），排斥条件下被试仅在最初几次接到球（通常2-4次），之后完全不再接到球。
-- Do not assume 虚拟玩家数量固定为2个。常见配置为2个虚拟玩家（总计3人）或3个虚拟玩家（总计4人），不同配置会影响排斥强度和生态效度。
-- Do not assume 传球动画是瞬间完成的。有的实现使用线性插值动画（2-3秒），有的则使用瞬时"闪现"传球，动画方式和时长需明确确认。
-- Do not assume 被试通过键盘选择传球目标。常见实现为鼠标点击玩家图标，也可能使用键盘数字键（1、2、3对应玩家），输入方式影响反应时数据的采集方式。
-- Do not assume 实验后问卷可省略。Need-Threat Scale（归属感、自尊、意义性存在、控制感四个分量表）和心情问卷是Cyberball范式的标准组成部分，缺失则难以评估排斥操纵的有效性。
-- Do not assume 指导语中称"与真实玩家对战"是默认选项。有研究明确告知被试对手为计算机程序，但排斥效应仍然显著；指导语的覆盖故事直接影响实验伦理和事后解释（debriefing）流程。
+- Do not assume inclusion/exclusion conditions are distinguished only by the number of times the subject catches the ball. Confirm the specific proportion distribution: in the inclusion condition, the proportion of subjects catching the ball is about 1/3 (equal participation). In the exclusion condition, subjects only caught the ball the first few times (usually 2-4 times), and then no longer caught the ball at all.
+- Do not assume that the number of virtual players is fixed at 2. Common configurations are 2 virtual players (total 3 people) or 3 virtual players (total 4 people). Different configurations will affect the rejection intensity and ecological validity.
+- Do not assume the passing animation is instantaneous. Some implementations use linear interpolation animation (2-3 seconds), while others use instantaneous "flash" passes. The animation method and duration need to be clearly confirmed.
+- Do not assume that the subject selected the passing target via the keyboard. The common implementation is to click the player icon with the mouse, or you may also use the keyboard numeric keys (1, 2, and 3 correspond to the player). The input method affects the data collection method during the reaction.
+- Do not assume the post-experiment questionnaire can be omitted. The Need-Threat Scale (four subscales of belonging, self-esteem, meaningful existence, and sense of control) and the mood questionnaire are standard components of the Cyberball paradigm. Without them, it is difficult to evaluate the effectiveness of the exclusion manipulation.
+- Do not assume the instructions say "Play against real players" is the default option. Some studies clearly informed subjects that the opponent was a computer program, but the repulsion effect was still significant; the story covering the instructions directly affected experimental ethics and the debriefing process.
 
 ## Condition File Columns
 
 | Column | Type | Description |
 |--------|------|-------------|
-| condition | str | `"inclusion"` 或 `"exclusion"`，决定被试接球的比例分布 |
-| total_throws | int | 总传球次数（通常30-60次） |
-| participant_throws | int | 被试在整个游戏中接到球的次数 |
-| throw_sequence | str | 传球顺序的预定义脚本（JSON数组或逗号分隔的列表），指定每一轮哪个玩家传球给哪个玩家 |
+| condition | str | `"inclusion"` or `"exclusion"`, determines the proportion distribution of subjects catching the ball |
+| total_throws | int | Total number of passes (usually 30-60) |
+| participant_throws | int | The number of times the participant caught the ball in the entire game |
+| throw_sequence | str | Predefined script for passing sequence (JSON array or comma-separated list), specifying which player passes to which player in each round |
 
 ## Variants
 
-- **标准 Cyberball（3人版）**：2个虚拟玩家 + 1个被试，共3人参与。总传球次数通常为30-60次，包含包容和排斥两种条件。这是最经典的版本（Williams et al., 2000），效应量最稳定。相关范式参考：[ultimatum-game.md](ultimatum-game.md)（社会决策范式）。
-- **Cyberball 4人版**：3个虚拟玩家 + 1个被试，共4人参与。增加一个虚拟玩家可操纵群体排斥（集体排斥 vs. 部分排斥），用于研究群体认同和排斥的交互效应。也可设置两个虚拟玩家排斥被试、另一个不排斥的条件。
-- **fMRI 版 Cyberball**：适配功能磁共振成像环境，通常在block设计中将包容block和排斥block交替呈现，增加jitter time（2-8秒随机间隔）。用于研究社会排斥相关的神经激活区域，特别是前扣带皮层（ACC）和前脑岛的活动（Eisenberger et al., 2003）。相关范式参考：[dot-probe.md](dot-probe.md)（社会认知偏向范式）。
+- **Standard Cyberball (3-player version)**: 2 virtual players + 1 subject, a total of 3 people participating. The total number of passes is usually 30-60, including both inclusion and exclusion conditions. This is the most classic version (Williams et al., 2000) and has the most stable effect sizes. Related paradigm reference: [ultimatum-game.md](ultimatum-game.md) (social decision-making paradigm).
+- **Cyberball 4-player version**: 3 virtual players + 1 subject, a total of 4 people participated. Adding a virtual player to manipulate group exclusion (collective vs. partial exclusion) was used to study the interactive effects of group identification and exclusion. It is also possible to set conditions in which two virtual players exclude the subject and the other does not.
+- **fMRI version of Cyberball**: Adapted to the functional magnetic resonance imaging environment, usually the inclusion block and the exclusion block are alternately presented in the block design, and the jitter time (random interval of 2-8 seconds) is increased. Used to study neural activation areas related to social rejection, specifically activity in the anterior cingulate cortex (ACC) and anterior insula (Eisenberger et al., 2003). Related paradigm reference: [dot-probe.md](dot-probe.md) (social cognitive bias paradigm).
 
 ## Example
 
 ### User Request
 
-> "我要做一个Cyberball社会排斥实验，使用PsychoPy。3个玩家（被试+2个虚拟玩家），总共30次传球。排斥条件下，被试只在第2、5次传球时接到球，之后再也接不到球。包容条件下，被试接到10次球（均匀分布在整个游戏中）。被试通过鼠标点击另外两个玩家的头像来传球。球需要有移动动画（2秒动画）。实验前有指导语，告诉被试他们正在和另外两个在线参与者一起玩一个心理想象训练游戏。实验后包含12题的Need-Threat Scale和4题的心情问卷（7点Likert量表）。"
+> "I'm going to do a Cyberball social exclusion experiment, using PsychoPy. 3 players (subject + 2 virtual players), a total of 30 passes. Under the exclusion condition, the subject only caught the ball on the 2nd and 5th pass, and then never caught the ball again. Under the inclusion condition, the subject caught the ball 10 times (evenly Distributed throughout the game). The subjects clicked on the avatars of the other two players to pass the ball. The ball needed to have a moving animation (2 seconds of animation). There were instructions before the experiment to tell the subjects that they were playing a 12-question Need-Threat game with two other online participants. Scale and 4-item mood questionnaire (7-point Likert scale).
 
 ### Trial Window Timeline
 
 ```text
 ┌──────────────────────────┐    ┌──────────────────────────────────────┐
-│ 被试传球回合              │    │ 虚拟玩家传球回合（被动观察）          │
+│ Subject’s passing round │ │ Virtual player’s passing round (passive observation) │
 │ (ball_to == "choose")     │    │ (ball_to != "choose")                │
 │                           │    │                                      │
-│ 内容: 3个玩家图标         │    │ 内容: 3个玩家图标 + 球在传球者位置   │
-│ + 球在被试位置            │    │                                      │
-│ 时长: 直到点击 (无限制)   │    │ 时长: 1 秒（观察窗口）               │
-│ 响应: 鼠标点击目标玩家    │    │ 响应: 无                              │
-│ 显示文本: "该你了！"      │    │ 显示文本: "Player X 正在传球..."     │
-│ 数据: chosen_player, RT   │    │ 数据: ball_from, ball_to              │
+│ Content: 3 player icons │ │ Content: 3 player icons + ball at passer's position │
+│ + The ball is at the subject's position │ │ │
+│ Duration: until clicked (unlimited) │ │ Duration: 1 second (observation window) │
+│ Response: Mouse click on the target player │ │ Response: None │
+│ Display text: "It's your turn!" │ │ Display text: "Player X is passing the ball..." │
+│ data: chosen_player, RT │ │ data: ball_from, ball_to │
 ├───────────────────────────┤    ├──────────────────────────────────────┤
 │            ↓              │    │            ↓                         │
 └───────────────────────────┘    └──────────────────────────────────────┘
                  ↓                              ↓
 ┌──────────────────────────────────────────────────────────────────────┐
-│ 传球动画（两种回合共用）                                              │
-│ 内容: 3个玩家图标 + 球从起点到终点线性移动                            │
-│ 时长: 2 秒（每秒60帧线性插值）                                        │
-│ 显示文本: "你传给了 Player X" 或 "Player X 传给了 Player Y"          │
-│ 响应: 无                                                              │
-│ 数据: 无                                                              │
+│ Passing animation (common to both rounds) │
+│ Content: 3 player icons + ball moving linearly from starting point to end point │
+│ Duration: 2 seconds (60 frames per second linear interpolation) │
+│ Display text: "You passed to Player X" or "Player X passed to Player Y" │
+│ Response: None │
+│ Data: None │
 └──────────────────────────────────────────────────────────────────────┘
                  ↓
 ┌──────────────────────────────────────────────────────────────────────┐
-│ 试次间间隔（ITI）                                                     │
-│ 内容: 3个玩家图标（静止）                                            │
-│ 时长: 500 ms                                                          │
-│ 响应: 无                                                              │
-│ 数据: 无                                                              │
+│ Inter-trial interval (ITI) │
+│ Content: 3 player icons (still) │
+│ Duration: 500 ms │
+│ Response: None │
+│ Data: None │
 └──────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -131,83 +131,83 @@ Williams, K. D., & Jarvis, B. (2006). Cyberball: A program for use in research o
 
 | Field | Value |
 |-------|-------|
-| 实验名称 | Cyberball 社会排斥实验 |
-| 平台 | PsychoPy |
-| 范式类型 | Cyberball（社会排斥/社会接纳） |
-| 玩家数量 | 3（1名被试 + 2名虚拟玩家） |
-| 总传球次数 | 30 |
-| 排斥条件接球次数 | 2次（第2、第5次传球） |
-| 包容条件接球次数 | 10次（均匀分布） |
-| 传球方式 | 鼠标点击玩家图标 |
-| 球动画时长 | 2秒（线性插值） |
-| 覆盖故事 | "与在线参与者进行心理想象训练游戏" |
-| 实验后问卷 | Need-Threat Scale（12题）+ 心情问卷（4题），7点Likert |
+| Experiment name | Cyberball social exclusion experiment |
+| Platform | PsychoPy |
+| Paradigm Type | Cyberball (Social Exclusion/Social Acceptance) |
+| Number of players | 3 (1 subject + 2 virtual players) |
+| Total number of passes | 30 |
+| Number of receptions under exclusion conditions | 2 times (2nd and 5th pass) |
+| Number of catches under inclusion conditions | 10 times (uniformly distributed) |
+| Passing method | Click the player icon with the mouse |
+| Ball animation duration | 2 seconds (linear interpolation) |
+| Cover Story | "Mental imagery training game with online participants" |
+| Post-experiment questionnaire | Need-Threat Scale (12 questions) + Mood Questionnaire (4 questions), 7-point Likert |
 
 ### Missing Information
 
-1. 指导语的具体文本内容未提供 → 需确认指导语措辞（是否提示"心理想象训练"、是否提及"反应速度"等干扰任务描述）
-2. 心情问卷的具体题目未提供 → 需确认4个题目的维度和措辞（例如：高兴-悲伤、放松-紧张、愉悦-不悦、兴奋-平静）
-3. 玩家头像/图标的具体样式未提供 → 需确认：卡通人物剪影、字母标签、还是照片？图标大小、颜色、屏幕位置？
+1. The specific text content of the instruction is not provided → The wording of the instruction needs to be confirmed (whether it prompts "mental imagination training", whether it mentions "reaction speed" and other interference task descriptions)
+2. The specific questions of the mood questionnaire are not provided → The dimensions and wording of the four questions need to be confirmed (for example: happy-sad, relaxed-nervous, happy-unpleasant, excited-calm)
+3. The specific style of player avatar/icon is not provided → Need to confirm: cartoon character silhouette, letter label, or photo? Icon size, color, screen position?
 
 ### Critical Assumptions
 
-- 虚拟玩家的传球延迟固定为1秒观察窗口 + 2秒动画，被试回合无时间限制
-- 指导语中的覆盖故事在实验结束后会在debriefing中揭示真相（伦理要求），debriefing文本需额外提供
-- 鼠标点击的有效区域为玩家图标的边界框内，点击空白区域无效且不记录
+- The virtual player's passing delay is fixed at 1 second observation window + 2 seconds animation, and there is no time limit for the subject's turn.
+- The covered story in the instructions will reveal the truth in the debriefing after the experiment (ethical requirement), and the debriefing text needs to be provided additionally
+- The effective area for mouse clicks is within the bounding box of the player icon. Clicking on a blank area is invalid and will not be recorded.
 
 ### Code Architecture
 
 ```
 cyberball.py
-├── 参数配置（condition, total_throws, participant_throws, throw_sequence, animation_duration）
-├── 窗口初始化（全屏/窗口模式，背景色）
-├── 刺激预加载
-│   ├── 玩家图标（3个圆形/头像，屏幕位置：左-中-右或三角形排列）
-│   ├── 球的图标（小球图形）
-│   └── 文本刺激（状态提示文本）
-├── 条件文件加载
-│   ├── throw_sequence 预定义脚本（JSON格式）
-│   └── condition 标签（inclusion / exclusion）
-├── 实验阶段
-│   ├── 指导语阶段
-│   │   ├── 覆盖故事文本展示
-│   │   └── 等待空格键继续
-│   ├── 传球游戏循环（30个回合）
-│   │   ├── if ball_to == "choose"（被试回合）
-│   │   │   ├── 显示球在被试位置
-│   │   │   ├── 显示"该你了！"提示
-│   │   │   ├── 等待鼠标点击（记录RT和chosen_player）
-│   │   │   └── 进入动画阶段
-│   │   └── else（虚拟玩家回合）
-│   │       ├── 显示球在传球者位置
-│   │       ├── 显示"Player X 正在传球..."提示
-│   │       ├── 等待1秒观察窗口
-│   │       └── 进入动画阶段
-│   ├── 传球动画（2秒线性插值，球从起点移动到终点）
-│   ├── ITI（500 ms静止画面）
-│   └── 数据记录（每轮：trial_number, condition, ball_from, ball_to, chosen_player, rt, animation_start/end）
-├── 实验后问卷阶段
-│   ├── Need-Threat Scale（12题，7点Likert，4个分量表各3题）
-│   └── 心情问卷（4题，7点Likert）
-├── Debriefing阶段（揭示真实实验目的，获得知情同意确认）
-└── 数据保存（CSV格式，incremental write + final save）
+├── Parameter configuration (condition, total_throws, participant_throws, throw_sequence, animation_duration)
+├── Window initialization (full screen/window mode, background color)
+├── Stimulus preloading
+│ ├── Player icon (3 circles/avatars, screen position: left-center-right or triangle arrangement)
+│ ├── Ball icon (small ball graphic)
+│ └── Text stimulation (status prompt text)
+├── Conditional file loading
+│ ├── throw_sequence predefined script (JSON format)
+│ └── condition tag (inclusion / exclusion)
+├── Experimental stage
+│ ├── Instruction stage
+│ │ ├── Overlay story text display
+│ │ └── Wait for the space bar to continue
+│ ├── Passing game loop (30 rounds)
+│ │ ├── if ball_to == "choose" (subject's turn)
+│ │ │ ├── Display the ball at the subject's position
+│ │ │ ├── Display the prompt "It's your turn!"
+│ │ │ ├── Wait for mouse click (record RT and chosen_player)
+│ │ │ └── Entering the animation stage
+│ │ └── else (virtual player turn)
+│ │ ├── Shows the ball at the passer's position
+│ │ ├── Display "Player X is passing the ball..." prompt
+│ │ ├── Wait for 1 second observation window
+│ │ └── Entering the animation stage
+│ ├── Passing animation (2 seconds linear interpolation, the ball moves from the starting point to the end point)
+│ ├── ITI (500 ms still image)
+│ └── Data record (each round: trial_number, condition, ball_from, ball_to, chosen_player, rt, animation_start/end)
+├── Post-experiment questionnaire stage
+│ ├── Need-Threat Scale (12 questions, 7-point Likert, 3 questions for each of the 4 subscales)
+│ └── Mood Questionnaire (4 questions, 7-point Likert)
+├── Debriefing stage (revealing the true purpose of the experiment and obtaining informed consent confirmation)
+└── Data saving (CSV format, incremental write + final save)
 ```
 
 ### Expected Data Columns
 
 | Column | Type | Description |
 |--------|------|-------------|
-| trial_number | int | 传球顺序编号（1-30） |
-| condition | str | `"inclusion"` 或 `"exclusion"` |
-| ball_from | str | 传球发起者（`"player_1"`, `"player_2"`, `"participant"`） |
-| ball_to | str | 传球目标（`"player_1"`, `"player_2"`, `"choose"`） |
-| is_participant_turn | int | 是否为被试回合（1=被试传球回合, 0=虚拟玩家回合） |
-| chosen_player | str | 被试选择的传球目标（仅在被试回合有值，否则为 `NaN`） |
-| rt | float | 被试反应时（ms），从球出现到鼠标点击（仅在被试回合有值） |
-| animation_duration | float | 传球动画实际时长（秒） |
-| throw_text_displayed | str | 该回合显示的提示文本 |
-| need_threat_belonging | float | 归属感分量表均分（1-7） |
-| need_threat_self_esteem | float | 自尊分量表均分（1-7） |
-| need_threat_meaningful | float | 意义性存在分量表均分（1-7） |
-| need_threat_control | float | 控制感分量表均分（1-7） |
-| mood_valence | float | 心情效价均分（1-7） |
+| trial_number | int | Pass sequence number (1-30) |
+| condition | str | `"inclusion"` or `"exclusion"` |
+| ball_from | str | Pass initiator (`"player_1"`, `"player_2"`, `"participant"`) |
+| ball_to | str | Pass target (`"player_1"`, `"player_2"`, `"choose"`) |
+| is_participant_turn | int | Whether it is the subject's turn (1=subject's passing round, 0=virtual player's turn) |
+| chosen_player | str | The passing target chosen by the subject (only has a value in the subject's turn, otherwise it is `NaN`) |
+| rt | float | Subject's reaction time (ms), from the appearance of the ball to the mouse click (only has value in the subject's turn) |
+| animation_duration | float | Actual duration of passing animation (seconds) |
+| throw_text_displayed | str | The prompt text displayed in this round |
+| need_threat_belonging | float | Average score of belongingness subscale (1-7) |
+| need_threat_self_esteem | float | Average score of self-esteem subscale (1-7) |
+| need_threat_meaningful | float | Average score of meaningful presence subscale (1-7) |
+| need_threat_control | float | Average score of sense of control subscale (1-7) |
+| mood_valence | float | Average mood valence (1-7) |

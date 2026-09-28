@@ -1,6 +1,6 @@
 # PsychoPy — Platform Index
 
-> **状态**: Full auto code generation | **范式**: 28 | **Demo**: 45 `.py`
+> **Status**: Full auto code generation | **Paradigm**: 28 | **Demo**: 45 `.py`
 
 ## Quick links
 

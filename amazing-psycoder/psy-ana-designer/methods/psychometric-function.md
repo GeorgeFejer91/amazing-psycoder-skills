@@ -1,51 +1,51 @@
-# 心理测量函数拟合
+# Psychometric function fitting
 
-## 概述
+## Overview
 
-心理测量函数描述刺激强度与检测/辨别概率的关系，用于估计由任务、猜测率/失误率和协议定义的阈值或其他曲线参数；阈值并不普遍等于 75% 正确。
+The psychometric function describes the relationship between stimulus intensity and detection/discrimination probability and is used to estimate thresholds or other curve parameters defined by the task, guess/miss rate, and protocol; thresholds are not universally equal to 75% correct.
 
-**典型场景**: 阶梯法中,拟合logistic/Weibull函数估计对比度阈值; 自适应阶梯(1-up-2-down等)收敛到70.7%正确。
+**Typical scenario**: In the ladder method, the contrast threshold is estimated by fitting the logistic/Weibull function; the adaptive ladder (1-up-2-down, etc.) converges to 70.7% correct.
 
-## 何时使用
+## When to use
 
-| 条件 | 要求 |
+| Conditions | Requirements |
 |------|------|
-| 实验设计类型 | 心理物理法(阶梯法、恒定刺激法、自适应阶梯); 被试内或被试间设计均可 |
-| 因变量类型 | 二分类变量(正确/错误、检测到/未检测到)或比例数据 |
-| 信息要求 | 刺激水平覆盖、每水平/条件信息量、猜测/失误率、目标参数和精度共同决定试次数；通过模拟/设计分析确定，不套固定 40 或 100–200 门槛 |
-| 关键假设 | (1)刺激强度与正确率呈单调递增关系; (2)试次间独立; (3)无显著疲劳或练习效应; (4)猜测率(lapse rate)可控或可在模型中参数化 |
+| Experimental design type | Psychophysical method (staircase method, constant stimulus method, adaptive ladder method); within-subjects or between-subjects design is acceptable |
+| Dependent variable type | Binary categorical variable (correct/wrong, detected/not detected) or proportional data |
+| Information Requirements | Stimulus level coverage, amount of information per level/condition, guess/error rate, target parameters, and accuracy determine number of trials; determined by simulation/design analysis, not set to a fixed 40 or 100–200 threshold |
+| Key assumptions | (1) There is a monotonically increasing relationship between stimulus intensity and accuracy; (2) Trial-to-trial independence; (3) No significant fatigue or practice effects; (4) The guessing rate (lapse rate) is controllable or can be parameterized in the model |
 
-## 常用函数
+## Commonly used functions
 
-| 函数 | 参数 | 特点 |
+| Function | Parameters | Features |
 |------|------|------|
-| Logistic | α(阈值), β(斜率) | 最常用 |
-| Weibull | α, β | 视觉心理物理 |
-| Cumulative Gaussian | μ(阈值), σ(SD) | 信号检测框架 |
+| Logistic | α(threshold), β(slope) | Most commonly used |
+| Weibull | α, β | Visual Psychophysics |
+| Cumulative Gaussian | μ(threshold), σ(SD) | Signal detection framework |
 
-## R代码
+## R code
 
 ```r
 library(quickpsy)
 fit <- quickpsy(data, x=stimulus_intensity, k=correct, n=total_trials,
                 grouping=.(condition), fun=logistic_fun)
 plot(fit)
-# 提取阈值
+# Extraction threshold
 fit$thresholds
 ```
 
-## 报告
+## Report
 
-**APA 7th 格式报告示例**:
+**APA 7th format report example**:
 
 > Psychometric functions were fitted using a logistic function to estimate the contrast threshold at 75% correct for each condition. The congruent condition showed a significantly lower contrast threshold (α = 0.12, 95% CI [0.09, 0.15]) compared to the incongruent condition (α = 0.18, 95% CI [0.14, 0.22]), t(19) = 3.45, p = .003, Cohen's d = 0.77. The slope parameter did not differ between conditions (β_congruent = 1.12, β_incongruent = 1.08, p = .62). Goodness-of-fit was assessed by visual inspection of observed versus predicted proportions and the deviance statistic, which indicated acceptable fit (D = 12.34, p = .42).
 
 > Psychometric functions (logistic) estimated the contrast threshold at 75% correct. The congruent condition showed a lower threshold (0.12) than incongruent (0.18), indicating better perceptual sensitivity.
 
-**报告要点**: (1)说明拟合函数类型(logistic/Weibull等); (2)报告阈值与置信区间; (3)报告斜率(如相关); (4)报告拟合优度指标; (5)如有多条件,报告条件间比较的统计量。
+**Reporting points**: (1) Describe the fitting function type (logistic/Weibull, etc.); (2) Report the threshold and confidence interval; (3) Report the slope (if relevant); (4) Report the goodness of fit index; (5) If there are multiple conditions, report the statistics of comparison between conditions.
 
-## 注意事项
+## Notes
 
-- 阶梯法的阈值估计依赖阶梯规则(如1-up-2-down→70.7%)
-- 用参数恢复/模拟、区间宽度和拟合诊断评估阈值稳定性，而不是固定试次数门槛
-- 检查拟合优度: 预测-观测对比图
+- The threshold estimation of the ladder method relies on the ladder rule (such as 1-up-2-down→70.7%)
+- Evaluate threshold stability with parameter recovery/simulation, interval width, and fit diagnostics instead of fixed trial number thresholds
+- Check goodness of fit: prediction-observation comparison plot

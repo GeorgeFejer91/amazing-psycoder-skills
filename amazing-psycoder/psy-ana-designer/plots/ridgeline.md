@@ -1,18 +1,18 @@
-# 山脊图 (Ridgeline Plot)
+# Ridgeline Plot
 
-## 概述
+## Overview
 
-山脊图是多个密度图沿Y轴堆叠,比较3+组或3+时间点的分布形状。当需要比较的条件>=3时,比多个直方图更紧凑优雅。
+Ridge plot is multiple density plots stacked along the Y-axis to compare the distribution shape of 3+ groups or 3+ time points. When the conditions to be compared are >= 3, it is more compact and elegant than multiple histograms.
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| 场景 | 3+组分布比较,纵向多时间点 |
-| DV | 连续 |
-| 优势 | 节省空间,分布变化一目了然 |
+| Scenario | 3+ group distribution comparison, longitudinal multiple time points |
+| DV | Continuous |
+| Advantages | Space saving, distribution changes are clear at a glance |
 
-## R 代码
+## R code
 
 ```r
 library(ggridges)
@@ -23,17 +23,17 @@ ggplot(data, aes(x=rt, y=condition, fill=condition)) +
   theme_ridges()
 ```
 
-## 解读
+## Interpretation
 
-- 峰向右移 → 条件间RT增加
-- 峰变宽 → 变异性增大
-- 多峰 → 可能混合亚群
-- 重叠程度 → 条件间差异大小
+- Peak shifts to the right → RT increases between conditions
+- peak becomes wider → variability increases
+- Multimodal → Possibly mixed subpopulations
+- Degree of overlap → Size of difference between conditions
 
-## 关键参数
+## Key parameters
 
-| 参数 | 作用 |
+| Parameters | Function |
 |------|------|
-| `scale` | 重叠程度(>1=更大重叠) |
-| `quantile_lines` | TRUE=加中位线 |
-| `fill` | 颜色映射 |
+| `scale` | Degree of overlap (>1=greater overlap) |
+| `quantile_lines` | TRUE=Add median lines |
+| `fill` | color map |

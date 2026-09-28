@@ -5,7 +5,7 @@ This file demonstrates the complete 5-phase workflow with a realistic Stroop exp
 > **Note**: This is a condensed example for quick reference. The full Stroop specification is also embedded in [../paradigms/stroop.md](../paradigms/stroop.md) under `## Example`. The paradigm file is authoritative for paradigm-specific logic; this file demonstrates the workflow mechanics.
 
 **User input:**
-> "我想做一个Stroop实验，被试看到颜色词（红、绿、蓝），字本身也有颜色，判断字的颜色，按f/j键反应。先指导语，然后20个练习trial，然后2个正式block各60个trial"
+> "I want to do a Stroop experiment. The subjects see color words (red, green, blue), and the words themselves also have colors. They judge the color of the words and press the f/j key to respond. First, the instructions, then 20 practice trials, and then 2 formal blocks with 60 trials each"
 
 ## Phase 1: Assess
 
@@ -17,13 +17,13 @@ paradigm: stroop
 platform: [MISSING]
 ```
 
-Detected from input: 3 words (红/绿/蓝), 3 ink colors, f/j keys (only 2 keys for 3 colors → conflict flagged), practice 20 trials, 2 formal loop sequences × 60.
+Detected from input: 3 words (red/green/blue), 3 ink colors, f/j keys (only 2 keys for 3 colors → conflict flagged), practice 20 trials, 2 formal loop sequences × 60.
 
 **Questions:**
-1. "使用什么平台？PsychoPy？"
-2. "只有f/j两个键，三种颜色（红/绿/蓝），蓝色对应哪个键？还是只用两种颜色？"
+1. "What platform are you using? PsychoPy?"
+2. "There are only two keys f/j and three colors (red/green/blue). Which key does blue correspond to? Or only two colors?"
 
-### User: "PsychoPy，蓝色按k键"
+### User: "PsychoPy, press k when blue"
 
 ---
 
@@ -32,45 +32,45 @@ Detected from input: 3 words (红/绿/蓝), 3 ink colors, f/j keys (only 2 keys 
 Build the trial window timeline, then immediately finalize key mapping and accuracy rules:
 
 ```text
-序列: 练习
-  execution: loop (每个试次一次，重复 20 次)
+Sequence: Exercise
+  execution: loop (once per trial, repeated 20 times)
 
-  ┌─ 注视点 ────┐  ┌─ 刺激 ──────┐  ┌─ 反应 ────────┐  ┌─ 反馈 ─────────┐  ┌─ ITI ──────┐
-  │ "+"        │  │ "色词文字"   │  │ "色词文字"    │  │ "正确/错误"    │  │ ""         │
+  ┌─ Fixation point ────┐ ┌─ Stimulus ───────┐ ┌─ Response ────────┐ ┌─ Feedback ─────────┐ ┌─ ITI ───────┐
+  │ "+" │ │ "Color word text" │ │ "Color word text" │ │ "Correct/wrong" │ │ "" │
   │ [MISSING]  │→ │ until_key   │→ │ until_key     │→ │ 500ms           │→ │ [MISSING]  │
-  │ 无响应     │  │ 无响应      │  │ [f, j, k]     │  │ 无响应          │  │ 无响应     │
+  │ No response │ │ No response │ │ [f, j, k] │ │ No response │ │ No response │
   └────────────┘  └─────────────┘  └───────────────┘  └─────────────────┘  └────────────┘
                                             RT: self
-                                            数据: rt, key, acc
+                                            data: rt, key, acc
 
-序列: 正式实验
-  execution: loop (每个试次一次，重复 60 次)
+Sequence: Formal experiment
+  execution: loop (once per trial, repeated 60 times)
 
-  ┌─ 注视点 ────┐  ┌─ 刺激 ──────┐  ┌─ 反应 ────────┐  ┌─ ITI ──────┐
-  │ "+"        │  │ "色词文字"   │  │ "色词文字"    │  │ ""         │
+  ┌─ Fixation point ────┐ ┌─ Stimulus ──────┐ ┌─ Response ────────┐ ┌─ ITI ──────┐
+  │ "+" │ │ "Color word text" │ │ "Color word text" │ │ "" │
   │ [MISSING]  │→ │ until_key   │→ │ until_key     │→ │ [MISSING]  │
-  │ 无响应     │  │ 无响应      │  │ [f, j, k]     │  │ 无响应     │
+  │ No response │ │ No response │ │ [f, j, k] │ │ No response │
   └────────────┘  └─────────────┘  └───────────────┘  └────────────┘
                                            RT: self
-                                           数据: rt, key, acc
+                                           data: rt, key, acc
 
-序列: 指导语    → execution: once   → [MISSING]
-序列: 结束      → execution: once   → [MISSING]
+sequence: instruction → execution: once → [MISSING]
+sequence: end → execution: once → [MISSING]
 ```
 
-| 窗口 | 内容 | Duration | 响应 | 条件绑定 | 数据 |
+| Window | Content | Duration | Response | Condition Binding | Data |
 |--------|---------|----------|----------|-----------|------|
-| 注视点 | + | [MISSING] | 无 | 无 | onset |
-| 刺激 | 色词文字 | until_key | [f, j, k] | {word}, {ink_color} | onset, rt, key, acc |
-| 反馈 | 正确/错误 | 500ms | 无 | {correct_response} | 无 |
-| ITI | (blank) | [MISSING] | 无 | 无 | onset |
+| fixation point | + | [MISSING] | none | none | onset |
+| stimulus | color word text | until_key | [f, j, k] | {word}, {ink_color} | onset, rt, key, acc |
+| Feedback | Correct/Incorrect | 500ms | None | {correct_response} | None |
+| ITI | (blank) | [MISSING] | None | None | onset |
 
 **Questions:**
-1. "注视点呈现多久？ITI多久？（通常注视点500ms，ITI随机600-900ms）"
-2. "确认按键映射：f=红色，j=绿色，k=蓝色，可以吗？"
-3. "数据用默认设置保存（data/文件夹），需要修改吗？"
+1. "How long does the fixation point appear? How long is the ITI? (Usually the fixation point is 500ms, ITI is randomly 600-900ms)"
+2. "Confirm key mapping: f=red, j=green, k=blue, is that okay?"
+3. "The data is saved with default settings (data/folder). Does it need to be modified?"
 
-### User: "注视点500ms，ITI随机600-900ms，按键映射没问题，默认保存"
+### User: "Focus point 500ms, ITI random 600-900ms, button mapping no problem, save by default"
 
 Windows + rules complete:
 
@@ -128,9 +128,9 @@ No existing xlsx files → generate from design:
 - Condition xlsx columns: `{word}`, `{ink_color}`, `{correct_response}` (all referenced by windows)
 
 **Questions:**
-1. "刺激是文字直接生成（TextStim），还是需要图片文件？如果是图片，放在哪个文件夹？"
+1. "Is the stimulus directly generated by text (TextStim), or does it require a picture file? If it is a picture, which folder should it be placed in?"
 
-### User: "直接生成文字就行"
+### User: "Just generate text directly"
 
 Conditions structured. Stimulus: text-based, no image folder needed.
 
@@ -143,22 +143,22 @@ Now that the trial is defined (4 windows) and conditions are known (9 types, 50:
 Each sequence runs top-to-bottom. Window order within each sequence is left-to-right.
 
 **Questions:**
-1. "反馈只在练习阶段显示，还是正式实验也有？"
-2. "序列顺序固定还是被试间平衡？"
+1. "Feedback is only displayed during the practice phase, or is it also included in the formal experiment?"
+2. "Is the sequence order fixed or balanced across subjects?"
 
-### User: "反馈只在练习。顺序固定。"
+### User: "Feedback is only for practice. The order is fixed."
 
 Sequences complete:
 
 ```yaml
 sequences:
-  - name: 指导语
+  - name: Instructions
     order: 1
     window_ids: [Welcome]
     execution:
       mode: once
 
-  - name: 练习
+  - name: Exercise
     order: 2
     window_ids: [Fixation, Stroop, Feedback, ITI]
     execution:
@@ -166,21 +166,21 @@ sequences:
       repetitions: 20
     show_in: [practice]
 
-  - name: 正式实验_1
+  - name: Formal experiment_1
     order: 3
     window_ids: [Fixation, Stroop, ITI]
     execution:
       mode: loop
       repetitions: 60
 
-  - name: 正式实验_2
+  - name: Formal experiment_2
     order: 4
     window_ids: [Fixation, Stroop, ITI]
     execution:
       mode: loop
       repetitions: 60
 
-  - name: 结束
+  - name: End
     order: 5
     window_ids: [ThankYou]
     execution:

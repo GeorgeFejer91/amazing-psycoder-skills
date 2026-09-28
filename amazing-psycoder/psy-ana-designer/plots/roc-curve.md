@@ -1,17 +1,17 @@
-# ROC 曲线 (ROC Curve)
+# ROC Curve
 
-## 概述
+## Overview
 
-ROC曲线展示二分类模型在所有可能截断点上的灵敏度vs假阳性率。曲线下面积（AUC）量化整体判别力。
+The ROC curve shows the sensitivity vs. false positive rate of the binary classification model at all possible cutoff points. The area under the curve (AUC) quantifies overall discriminative power.
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| DV | 二分类（患病/健康,正确/错误） |
-| 预测 | 连续分数或概率 |
+| DV | Two categories (sick/healthy, correct/wrong) |
+| Prediction | Continuous score or probability |
 
-## R 代码
+## R code
 
 ```r
 library(pROC)
@@ -19,9 +19,9 @@ roc_obj <- roc(data$diagnosis, data$score)
 plot(roc_obj, print.auc=TRUE, auc.polygon=TRUE)
 ```
 
-## 解读
+## Interpretation
 
-- AUC 是随机抽取一对阳性/阴性样本时评分排序正确的概率解释（在目标总体和取样条件下）；报告区间与内部/外部验证。
-- AUC=0.5 表示该方向下无总体排序判别信息；低于 0.5 也可能反映评分方向编码相反。
-- “可接受/优秀”取决于应用后果、参考标准、类别谱和替代方案，不使用 `.7/.8/.9` 通用标签。
-- ROC 不反映校准、患病率下的预测值或选定阈值的决策效用；这些需另行评估。
+- AUC is the probability interpretation of the correct ordering of scores (given the target population and sampling conditions) when randomly selecting a pair of positive/negative samples; reporting interval with internal/external validation.
+- AUC=0.5 indicates that there is no overall ranking discriminant information in this direction; lower than 0.5 may also reflect that the scoring direction encoding is opposite.
+- "Acceptable/Excellent" depends on application consequences, reference standards, category spectrum, and alternatives and does not use the `.7/.8/.9` generic tags.
+- The ROC does not reflect calibration, predicted values ​​at prevalence, or decision utility at selected thresholds; these need to be evaluated separately.

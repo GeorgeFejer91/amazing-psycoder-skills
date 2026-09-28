@@ -1,72 +1,72 @@
-# psy-exp-designer — 实验设计编排层
+# psy-exp-designer — Experimental design orchestration layer
 
-> **版本**: v1.4.0 | **角色**: 你将实验想法告诉它，它逐步确认每个设计细节，产出完整的设计决策注册表和 config YAML。amazing-psycoder 子技能。
+> **Version**: v1.4.0 | **Role**: You tell it your experimental ideas, and it gradually confirms each design detail and produces a complete design decision registry and config YAML. amazing-psycoder sub-skill.
 
-## 一句话说明
+## One sentence explanation
 
-输入实验想法（中/英文），输出完整 config YAML + 设计决策注册表，经用户最终确认后路由到代码生成。
+Input experimental ideas (Chinese/English), output the complete config YAML + design decision registry, and route to code generation after final confirmation by the user.
 
-## 5阶段工作流
+## 5-stage workflow
 
 ```
-Phase 1: Assess      → 收集已有信息（范式、平台、操作系统/字体）
-Phase 2: Windows     → 定义 Trial + 反应规则（最关键 — 窗口序列+按键映射+准确性规则）
-Phase 3: Conditions  → 定义 trial 序列（条件表生成/验证，刺激文件）
-Phase 4: Blocks      → 定义 block 结构和循环（练习/正式/休息/反馈）
-Phase 5: Validate    → 验证 + 全量设计审查 → 路由至代码生成
+Phase 1: Assess → Collect existing information (paradigm, platform, operating system/font)
+Phase 2: Windows → Define Trial + reaction rules (the most critical - window sequence + key mapping + accuracy rules)
+Phase 3: Conditions → Define trial sequence (condition table generation/verification, stimulus file)
+Phase 4: Blocks → Define block structure and loop (practice/formal/rest/feedback)
+Phase 5: Validate → Verification + Full Design Review → Route to Code Generation
 ```
 
-每阶段结束必须**展示决策清单**，用户确认后才推进。
+At the end of each stage, the decision list must be **displayed** and the user will confirm it before proceeding.
 
-## 5道门禁
+## 5 access control
 
-| Gate | 检查内容 |
+| Gate | Check content |
 |------|---------|
-| Gate 1 | Phase 2 完成后：窗口序列无 `[MISSING]`，按键映射已确认 |
-| Gate 2 | Phase 3 完成后：条件文件列名与窗口 `{column}` 一致 |
-| Gate 3 | Phase 4 完成后：config 无 `[MISSING]`，所有 section 完整 |
-| Gate 4 | Phase 5 技术验证：9条 schema 规则全部通过 |
-| Gate 5 | **最终设计审查**：全量决策注册表展示，用户逐项确认 ⚠️ 默认项 |
+| Gate 1 | Phase 2 completed: Window sequence without `[MISSING]`, key mapping confirmed |
+| Gate 2 | After Phase 3 is completed: the condition file column name is consistent with the window `{column}` |
+| Gate 3 | Phase 4 completed: config without `[MISSING]`, all sections complete |
+| Gate 4 | Phase 5 technical verification: all 9 schema rules passed |
+| Gate 5 | **Final Design Review**: Full decision-making registry display, users confirm item by item ⚠️ Default items |
 
-## 核心机制
+## Core Mechanism
 
-- **Design Decision Registry**: 跨阶段追踪所有设计决策，标记来源（用户确认/范式惯例/自动推断）
-- **Phase Decision Checklist**: 每阶段输出决策清单，用户确认后推进
-- **`[MISSING]` / `[ASSUMED]` 标记**: 缺值标记为 `[MISSING]`，默认值标记为 `[ASSUMED]`，均在 Gate 5 审查
-- **Must-Confirm 跨阶段分配**: 范式文件的 Must-Confirm 项分配到对应阶段提问
+- **Design Decision Registry**: Track all design decisions across stages, marking sources (user confirmation/paradigm convention/automatic inference)
+- **Phase Decision Checklist**: Output a decision list at each stage, and proceed after user confirmation
+- **`[MISSING]` / `[ASSUMED]` flags**: Missing values are flagged as `[MISSING]`, default values are flagged as `[ASSUMED]`, both reviewed at Gate 5
+- **Must-Confirm cross-stage allocation**: The Must-Confirm item of the paradigm file is assigned to the corresponding stage question
 
-## 范式覆盖
+## Paradigm coverage
 
-**38个范式**: 14核心（完整 Must-Confirm + 条件列定义）+ 24扩展（参考描述）
+**38 paradigms**: 14 cores (full Must-Confirm + conditional column definition) + 24 extensions (refer to description)
 
-覆盖: Go/No-go、Navon、Priming、Stroop、Eriksen Flanker、Simon、Rating、Stop-signal、IAT、N-back、Dot-probe、Visual Search、Task Switching、EAST 及更多
+Covered: Go/No-go, Navon, Priming, Stroop, Eriksen Flanker, Simon, Rating, Stop-signal, IAT, N-back, Dot-probe, Visual Search, Task Switching, EAST and more
 
-详见 [paradigms/](paradigms/) 目录。
+See the [paradigms/](paradigms/) directory for details.
 
-## 关键文件
+## Key files
 
-| 文件 | 用途 |
+| File | Purpose |
 |------|------|
-| [SKILL.md](SKILL.md) | 完整工作流规范（Claude 读取） |
-| [paradigms/](paradigms/) | 38个范式规范文件 |
-| [references/config-schema.md](references/config-schema.md) | Config YAML schema + 9条验证规则 |
-| [references/condition-file-generation.md](references/condition-file-generation.md) | 条件文件生成工具 |
-| [references/data-recording.md](references/data-recording.md) | 数据输出列定义规范 |
-| [references/randomization.md](references/randomization.md) | 随机化与平衡规范 |
-| [references/timing.md](references/timing.md) | 计时与RT测量规范 |
+| [SKILL.md](SKILL.md) | Complete workflow specification (read by Claude) |
+| [paradigms/](paradigms/) | 38 paradigm specification files |
+| [references/config-schema.md](references/config-schema.md) | Config YAML schema + 9 validation rules |
+| [references/condition-file-generation.md](references/condition-file-generation.md) | Condition file generation tool |
+| [references/data-recording.md](references/data-recording.md) | Data output column definition specification |
+| [references/randomization.md](references/randomization.md) | Randomization and balancing specifications |
+| [references/timing.md](references/timing.md) | Timing and RT measurement specifications |
 
-## 使用示例
+## Usage example
 
 ```
-用户: "我想做一个点探测实验，情绪面孔配对（愤怒-中性），500ms呈现后探针出现，按f/j判断探针位置"
+User: "I want to do a point detection experiment. Emotional faces are paired (angry-neutral). The probe appears after 500ms of presentation. Press f/j to determine the probe position."
 
-系统:
-  Phase 1 → 识别范式(dot-probe)，确认平台(PsychoPy)，确认OS(macOS)，加载范式Must-Confirm
-  Phase 2 → 构建窗口: Fixation(500ms) → FacePair(500ms) → Probe(until key, f/j)
-             按键映射: f=左, j=右  |  明确确认 RT=Probe 实际呈现→key_down
-             准确性: key==correct_response
-             → 展示Phase 2决策清单，user确认
-  Phase 3 → 条件表: 情绪(愤怒/中性)×探针位置(左/右)×一致性(一致/不一致)
-             → 展示Phase 3决策清单
-  ... → 最终Gate 5全量审查 → 路由至代码生成
+System:
+  Phase 1 → Identify paradigm (dot-probe), confirm platform (PsychoPy), confirm OS (macOS), load paradigm Must-Confirm
+  Phase 2 → Build window: Fixation(500ms) → FacePair(500ms) → Probe(until key, f/j)
+             Key mapping: f=left, j=right | Explicit confirmation RT=Probe actual rendering→key_down
+             Accuracy: key==correct_response
+             → Display the Phase 2 decision list, user confirms
+  Phase 3 → Condition table: Emotion (angry/neutral) × Probe position (left/right) × Consistency (consistent/inconsistent)
+             → Show Phase 3 decision list
+  ... → Final Gate 5 full review → Routed to code generation
 ```

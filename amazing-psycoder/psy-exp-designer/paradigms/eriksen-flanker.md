@@ -5,7 +5,7 @@
 
 ## When to Use
 
-User mentions: Flanker task, Eriksen flanker, flanker interference, response interference, 侧抑制任务, 艾里克森侧翼. Measures the ability to suppress interference from task-irrelevant distractors by responding to a central target while ignoring flanking stimuli.
+User mentions: Flanker task, Eriksen flanker, flanker interference, response interference, lateral inhibition task, Eriksen flanker. Measures the ability to suppress interference from task-irrelevant distractors by responding to a central target while ignoring flanking stimuli.
 
 **This file covers the Eriksen Flanker paradigm (center-surround distractor interference). For the Stroop paradigm (color-word interference), see [stroop.md](stroop.md). For the Simon paradigm (spatial compatibility), see [simon.md](simon.md).**
 
@@ -31,11 +31,11 @@ Typical design: 200–400 total trials, equally split between congruent and inco
 5. **Timing**: Fixation duration, stimulus duration, response deadline?
 6. **Practice**: Include practice block with feedback before the main task?
 7. **Trial count**: How many trials per congruency condition?
-8. **Flanker spacing**: 刺激间距（视觉角度）？间距影响干扰效应强度
-9. **ITI duration**: 试次间隔时间和变化范围？
-10. **OS & font**: 在什么操作系统运行？如使用中文指导语，确认字体
-11. **Display**: 全屏还是窗口？刺激大小和屏幕位置？
-12. **Instruction text**: 指导语内容？如何向被试说明忽略两侧箭头？
+8. **Flanker spacing**: stimulus spacing (visual angle)? Spacing affects the intensity of interference effects
+9. **ITI duration**: Trial interval and variation range?
+10. **OS & font**: What operating system is it running on? If using Chinese instructions, confirm the font
+11. **Display**: Full screen or window? Stimulus size and screen location?
+12. **Instruction text**: Instruction content? How to tell subjects to ignore the arrows on both sides?
 
 ## Do Not Assume
 
@@ -99,7 +99,7 @@ Eriksen, B. A., & Eriksen, C. W. (1974). Effects of noise letters upon the ident
 
 ### User Request
 
-> "我想做一个箭头Flanker实验。屏幕中央呈现一排5个箭头，中间箭头是目标，两侧箭头是干扰。中间箭头向左按F键，向右按J键。一致条件（两侧箭头与中间同向）、不一致条件（两侧箭头与中间反向）各半。20个练习trial（有反馈）+ 4个正式block各48个trial。注视点500-1000ms随机，刺激呈现直到按键（deadline 1500ms），ITI 500-1000ms随机。用PsychoPy。"
+> "I want to do an arrow Flanker experiment. A row of 5 arrows appears in the center of the screen. The middle arrow is the target and the arrows on both sides are distractions. Press the F key to the left for the middle arrow and the J key to the right. Half of the consistent condition (the arrows on both sides are in the same direction as the middle) and the inconsistent condition (the arrows on both sides are in the opposite direction to the middle). 20 practice trials (with feedback) + There are 48 trials in each of the 4 formal blocks. The fixation point is randomized for 500-1000ms, the stimulus is presented until the button is pressed (deadline 1500ms), and the ITI is randomized for 500-1000ms. "
 
 ### Trial Window Timeline
 
@@ -107,7 +107,7 @@ Eriksen, B. A., & Eriksen, C. W. (1974). Effects of noise letters upon the ident
 ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐
 │ Window 1                 │ →  │ Window 2                 │ →  │ Window 3                 │
 │ Fixation                 │    │ Target + Flankers        │    │ ITI                      │
-│ Content: +               │    │ Content: 箭头阵列        │    │ Content: empty           │
+│ Content: + │ │ Content: arrow array │ │ Content: empty │
 │ Duration: 500-1000 ms    │    │ Duration: until key      │    │ Duration: 500-1000 ms    │
 │ Response: none           │    │ Response: f/j            │    │ Response: none           │
 │ Condition: none          │    │ Condition: {target_dir}/ │    │ Condition: none          │

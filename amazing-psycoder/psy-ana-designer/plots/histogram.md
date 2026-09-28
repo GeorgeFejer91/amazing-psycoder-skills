@@ -1,34 +1,34 @@
-# 直方图 (Histogram)
+# Histogram (Histogram)
 
-## 概述
+## Overview
 
-直方图将连续变量分箱计数,用柱高表示频率。是检查单变量分布的基础工具。
+Histogram counts continuous variables in bins, and uses column height to represent frequency. It is a basic tool for examining univariate distributions.
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| 场景 | 单变量分布检查 |
-| DV | 连续变量 |
-| 目标 | 判断偏态、多峰、异常值 |
+| Scenario | Univariate distribution check |
+| DV | Continuous variable |
+| Goal | Determine skewness, multi-peaks, and outliers |
 
-## R 代码
+## R code
 
 ```r
-# 基础直方图
+# Basic histogram
 ggplot(data, aes(x=rt)) +
   geom_histogram(bins=30, fill="#69b3a2", color="#e9ecef", alpha=0.9) +
   labs(title="RT Distribution", x="RT (ms)", y="Count") +
   theme_minimal()
 
-# 添加均值线
+# Add mean line
 ggplot(data, aes(x=rt)) +
   geom_histogram(bins=30, fill="#69b3a2", alpha=0.8) +
   geom_vline(aes(xintercept=mean(rt)), color="red", linetype="dashed", linewidth=1) +
   labs(title="RT Distribution with Mean", x="RT (ms)", y="Count") +
   theme_minimal()
 
-# 分组直方图 (分面)
+# Grouped histogram (faceted)
 ggplot(data, aes(x=rt, fill=condition)) +
   geom_histogram(bins=30, alpha=0.7, position="identity") +
   facet_wrap(~condition, ncol=1) +
@@ -36,7 +36,7 @@ ggplot(data, aes(x=rt, fill=condition)) +
   labs(title="RT by Condition", x="RT (ms)", y="Count") +
   theme_minimal()
 
-# 分组直方图 (重叠)
+# Grouped Histogram (Overlap)
 ggplot(data, aes(x=rt, fill=condition)) +
   geom_histogram(bins=30, alpha=0.5, position="identity") +
   scale_fill_brewer(palette="Set2") +
@@ -44,20 +44,20 @@ ggplot(data, aes(x=rt, fill=condition)) +
   theme_minimal()
 ```
 
-## 关键参数
+## Key parameters
 
-| 参数 | 作用 | 建议 |
+| Parameters | Function | Suggestions |
 |------|------|------|
-| `bins` | 分箱数 | 30-50(试次数据),太少=丢信息,太多=噪声 |
-| `binwidth` | 箱宽 | 替代bins,更精确控制 |
-| `fill` | 填充色 | viridis/brewer色盲友好 |
-| `color` | 边框色 | 白色或浅灰 |
-| `alpha` | 透明度 | 重叠时0.5 |
-| `position` | 位置 | "identity"(重叠)/"dodge"(并排) |
+| `bins` | Number of bins | 30-50 (trial data), too few = lost information, too many = noise |
+| `binwidth` | Box width | Replace bins for more precise control |
+| `fill` | fill color | viridis/brewer color blind friendly |
+| `color` | Border color | White or light gray |
+| `alpha` | transparency | 0.5 when overlapping |
+| `position` | position | "identity" (overlap)/"dodge" (side by side) |
 
-## 解读
+## Interpretation
 
-- 对称钟形 → 近似正态
-- 右尾长 → 正偏态(RT常见)
-- 左尾长 → 负偏态
-- 双峰 → 可能混合两个过程
+- Symmetric bell shape → approximately normal
+- Long right tail → Positive skewness (common in RT)
+- long left tail → negative skewness
+- bimodal → possible mixing of two processes

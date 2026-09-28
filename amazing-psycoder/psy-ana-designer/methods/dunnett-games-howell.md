@@ -1,61 +1,60 @@
-# Dunnett 检验 / Games-Howell 检验
+# Dunnett test / Games-Howell test
 
-## 概述
+## Overview
 
-这两个是事后比较的专项方法,解决ANOVA显著后的特定比较需求。
+These methods address different families of group comparisons. Planned comparisons need not wait for a significant omnibus ANOVA when the family and error-control method were specified in advance.
 
-## 何时使用
+## When to use
 
-| 条件 | 要求 |
+| Conditions | Requirements |
 |------|------|
-| 实验设计 | 单因素被试间设计(one-way between-subjects ANOVA)的事后比较 |
-| 因变量类型 | 连续变量(等距/等比) |
-| 样本要求 (Dunnett) | 一个对照组 + 多个实验组; 样本量可不等,但方差需齐性 |
-| 样本要求 (Games-Howell) | 各组样本量可不相等; 不要求方差齐性 |
-| 关键假设 (Dunnett) | 正态性, 独立性, 方差齐性; 比较次数少→效力高于Tukey |
-| 关键假设 (Games-Howell) | 正态性, 独立性; **不要求**方差齐性, **不要求**等样本量 |
+| Experimental design | Post hoc comparison of one-way between-subjects ANOVA |
+| Dependent variable type | Continuous variable (equal interval/equal ratio) |
+| Sample requirements (Dunnett) | One control group + multiple experimental groups; sample sizes can vary, but the variances must be homogeneous |
+| Sample requirements (Games-Howell) | The sample sizes of each group may not be equal; Homogeneity of variances is not required |
+| Key assumptions (Dunnett) | Normality, independence, homogeneity of variances; fewer comparisons → higher power than Tukey |
+| Key assumptions (Games-Howell) | Normality, independence; **not required** homogeneity of variances, **not required** and other sample sizes |
 
-## Dunnett 检验
+## Dunnett's test
 
-**多组 vs 单一对照组**。检验每个实验组与对照组是否不同,不检验实验组之间。
+**Multiple groups vs single control group**. Test whether each experimental group is different from the control group, but not between experimental groups.
 
-适用: 3种药物剂量 vs 安慰剂; 2个实验条件 vs 基线。
+Applies to: 3 drug doses vs placebo; 2 experimental conditions vs baseline.
 
 ```r
 library(multcomp)
 summary(glht(aov_model, linfct=mcp(group="Dunnett")))
 ```
 
-比Tukey效力更高(比较次数少→校正更轻)。
+is more effective than Tukey (fewer comparisons → lighter correction).
 
-## Games-Howell 检验
+## Games-Howell Test
 
-**方差不齐+样本量不等**时的两两比较。不假设方差齐性,不假设等样本量。
+** Pairwise comparison when variances are uneven + sample sizes are unequal**. Homogeneity of variances and equal sample sizes are not assumed.
 
 ```r
 library(rstatix)
 games_howell_test(data, dv ~ condition)
 ```
 
-当Levene检验显著+各组n不等时,不能用Tukey HSD,需要Games-Howell。
+Choose a method from the estimand, variance structure, sample sizes, and planned comparison family. A Levene p-value is diagnostic evidence, not an automatic switch that makes Games-Howell mandatory.
 
-## 选择
+## Select
 
-| 场景 | 方法 |
+| Scenario | Method |
 |------|------|
-| 所有两两比较,方差齐 | Tukey HSD |
-| 只与对照组比 | **Dunnett** |
-| 方差不齐, n不等 | **Games-Howell** |
+| All pairwise comparisons, homogeneous variance | Tukey HSD |
+| Compared with the control group only | **Dunnett** |
+| Uneven variance, n is not equal | **Games-Howell** |
 
-## 报告
+## Report
 
-APA 7th 格式报告示例:
+APA 7th format report example:
 
-**Dunnett 检验:**
+**Dunnett Test:**
 
-> 以组别为自变量(安慰剂组、低剂量组、中剂量组、高剂量组),以症状评分为因变量进行单因素方差分析,结果显示组间差异显著, F(3, 76) = 5.82, p = .001, η² = .19。Dunnett 事后比较(以安慰剂组为参照)表明,中剂量组(M = 12.40, SD = 3.20)显著低于安慰剂组(M = 18.60, SD = 4.10), p = .003, d = 1.68; 高剂量组(M = 10.80, SD = 2.90)亦显著低于安慰剂组, p < .001, d = 2.19。低剂量组(M = 16.90, SD = 3.80)与安慰剂组差异不显著, p = .342。
+> A one-way analysis of variance was conducted with the group as the independent variable (placebo group, low-dose group, medium-dose group, and high-dose group) and the symptom score as the dependent variable. The results showed that there was a significant difference between the groups, F(3, 76) = 5.82, p = .001, η² = .19. Dunnett's post hoc comparison (taking the placebo group as the reference) showed that the mid-dose group (M = 12.40, SD = 3.20) was significantly lower than the placebo group (M = 18.60, SD = 4.10), p = .003, d = 1.68; the high-dose group (M = 10.80, SD = 2.90) was also significantly lower than the placebo group, p < .001, d = 2.19. The difference between the low-dose group (M = 16.90, SD = 3.80) and the placebo group was not significant, p = .342.
 
-**Games-Howell 检验:**
+**Games-Howell Check:**
 
-> Levene 检验显示方差不齐, F(3, 76) = 4.21, p = .008,且各组样本量不等(n₁=15, n₂=22, n₃=18, n₄=25),故采用 Games-Howell 事后比较。结果显示,组A (M = 23.50, SD = 8.10) 与组C (M = 14.20, SD = 3.40) 差异显著, p = .012; 其余两两比较均不显著, ps > .05。
-
+> Levene's test showed uneven variances, F(3, 76) = 4.21, p = .008, and the sample sizes of each group were unequal (n₁=15, n₂=22, n₃=18, n₄=25), so Games-Howell post hoc comparison was used. The results showed that there was a significant difference between group A (M = 23.50, SD = 8.10) and group C (M = 14.20, SD = 3.40), p = .012; the other pairwise comparisons were not significant, ps > .05.

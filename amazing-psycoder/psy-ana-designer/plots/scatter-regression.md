@@ -1,18 +1,18 @@
-# 散点图+回归线 (Scatter + Regression)
+# Scatter plot + regression line (Scatter + Regression)
 
-## 概述
+## Overview
 
-散点图展示两个连续变量的关系，叠加回归线和置信带。
+A scatterplot shows the relationship between two continuous variables, with overlaid regression lines and confidence bands.
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| 变量 | 两个连续变量 |
-| 目标 | 展示线性关系、个体差异 |
-| 额外 | 可加颜色/形状区分第三变量 |
+| Variable | Two continuous variables |
+| Goal | Show linear relationship, individual differences |
+| Extra | Color/shape can be added to distinguish the third variable |
 
-## R 代码
+## R code
 
 ```r
 ggplot(data, aes(x=anxiety, y=stroop_rt)) +
@@ -22,8 +22,8 @@ ggplot(data, aes(x=anxiety, y=stroop_rt)) +
   theme_minimal(12)
 ```
 
-## 解读
+## Interpretation
 
-- 点均匀散布在回归线两侧 → 线性关系合适
-- 漏斗形（方差随X增大） → 异方差,需处理
-- 离群点 → 标记被试ID,检查是否合理
+- Points are evenly distributed on both sides of the regression line → the linear relationship is appropriate
+- Funnel shape (variance increases with X) → Heteroskedasticity, needs to be processed
+- Outlier → Mark the subject ID and check whether it is reasonable

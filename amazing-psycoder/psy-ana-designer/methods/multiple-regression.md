@@ -1,43 +1,43 @@
-# 多元线性回归 (Multiple Regression)
+# Multiple linear regression (Multiple Regression)
 
-## 概述
+## Overview
 
-多元回归用一个或多个连续型预测变量来预测连续型结果变量。在心理学中广泛用于分析多个因素对行为的共同影响。
+Multiple regression uses one or more continuous predictor variables to predict a continuous outcome variable. It is widely used in psychology to analyze the joint influence of multiple factors on behavior.
 
-**典型场景**: 用年龄、教育年限、焦虑分数预测 Stroop 干扰效应。
+**Typical scenario**: Use age, years of education, and anxiety scores to predict the Stroop interference effect.
 
-## 何时使用
+## When to use
 
-| 条件 | 要求 |
+| Conditions | Requirements |
 |------|------|
-| DV | 连续 |
-| IV | 连续或分类(需虚拟编码) |
-| 目标 | 预测/解释 DV 的方差 |
+| DV | Continuous |
+| IV | Continuous or categorical (requires dummy encoding) |
+| Goal | Predict/explain the variance of DV |
 
-## 关键输出
+## Key output
 
-- **R²**: 模型整体解释的方差比例
-- **ΔR²**: 加入某变量后方差增量(层次回归)
-- **β权重**: 标准化回归系数(可比变量间相对重要性)
-- **b**: 非标准化系数(用于预测)
-- **VIF**: 多重共线性诊断(VIF>5→共线性问题)
+- **R²**: Proportion of variance explained by the model as a whole
+- **ΔR²**: Variance increment after adding a certain variable (hierarchical regression)
+- **β weight**: standardized regression coefficient (relative importance between comparable variables)
+- **b**: Unstandardized coefficient (used for prediction)
+- **VIF**: Multicollinearity diagnosis (VIF>5→collinearity problem)
 
-## 层次回归 (Hierarchical Regression)
+## Hierarchical Regression
 
-分步进入变量,检验每一步的ΔR²是否显著:
+Enter the variables step by step and check whether the ΔR² of each step is significant:
 
-Step 1: 控制变量 (年龄、性别) → R²=.05
-Step 2: 主要预测变量 (焦虑) → ΔR²=.12, p<.001
-Step 3: 交互项 → ΔR²=.03, p=.04
+Step 1: Control variables (age, gender) → R²=.05
+Step 2: Main predictor (anxiety) → ΔR²=.12, p<.001
+Step 3: Interaction term → ΔR²=.03, p=.04
 
-## R 代码
+## R code
 
 ```r
-# 多元线性回归 — 完整分析流程
-library(car)       # vif() 共线性诊断
-library(lm.beta)   # lm.beta() 标准化系数
+# Multiple linear regression - complete analysis process
+library(car)       # vif() collinearity diagnosis
+library(lm.beta)   # lm.beta() standardized coefficient
 
-# ---- 模拟数据 ----
+# ---- Simulated data ----
 set.seed(123)
 n <- 100
 data <- data.frame(
@@ -45,25 +45,25 @@ data <- data.frame(
   education = sample(8:20, n, replace = TRUE),
   anxiety   = rnorm(n, mean = 50, sd = 10)
 )
-# 构造 DV，加入真实效应 + 噪声
+# Construct DV and add real effects + noise
 data$stroop <- 50 + 0.5 * data$age - 1.5 * data$education +
                0.8 * data$anxiety + rnorm(n, 0, 8)
 
-# ---- 1. 描述统计与相关矩阵 ----
+# ---- 1. Descriptive statistics and correlation matrix ----
 summary(data)
 round(cor(data[, c("age", "education", "anxiety", "stroop")]), 3)
 
-# ---- 2. 多元回归 ----
+# ---- 2. Multiple regression ----
 model <- lm(stroop ~ age + education + anxiety, data = data)
 summary(model)
 
-# ---- 3. 标准化回归系数 (β 权重) ----
+# ---- 3. Standardized regression coefficient (β weight) ----
 lm.beta::lm.beta(model)
 
-# ---- 4. 多重共线性诊断 (VIF) ----
-car::vif(model)          # VIF < 5 表示无严重共线性
+# ---- 4. Multicollinearity Diagnosis (VIF) ----
+car::vif(model)          # VIF < 5 means no serious collinearity
 
-# ---- 5. 效应量: Cohen's f² ----
+# ---- 5. Effect size: Cohen's f² ----
 r2 <- summary(model)$r.squared
 f2 <- r2 / (1 - r2)
 cat(sprintf("Cohen's f² = %.3f (%s)\n", f2,
@@ -71,48 +71,48 @@ cat(sprintf("Cohen's f² = %.3f (%s)\n", f2,
     ifelse(f2 < 0.35, "medium", "large"))))
 # f²: 0.02 = small, 0.15 = medium, 0.35 = large
 
-# ---- 6. 层次回归 (Hierarchical Regression) ----
+# ---- 6. Hierarchical Regression ----
 model_step1 <- lm(stroop ~ age, data = data)
 model_step2 <- lm(stroop ~ age + education + anxiety, data = data)
 
-# ΔR² 显著性检验
+# ΔR² Significance test
 anova(model_step1, model_step2)
 
-# 各步骤 R²
+# Each step R²
 cat("Step 1 R²:", round(summary(model_step1)$r.squared, 3), "\n")
 cat("Step 2 R²:", round(summary(model_step2)$r.squared, 3), "\n")
 cat("ΔR²:",
     round(summary(model_step2)$r.squared - summary(model_step1)$r.squared, 3), "\n")
 
-# ---- 7. Durbin-Watson 自相关检验 ----
+# ---- 7. Durbin-Watson autocorrelation test ----
 car::durbinWatsonTest(model)
 
-# ---- 8. 残差诊断图 ----
+# ---- 8. Residual diagnostic chart ----
 par(mfrow = c(2, 2))
 plot(model)
 par(mfrow = c(1, 1))
 ```
 
-## 报告格式
+## Report format
 
 > A hierarchical multiple regression predicted Stroop interference. Age and gender were entered at Step 1 (R²=.05), followed by anxiety at Step 2 which significantly improved prediction (ΔR²=.12, p<.001). In the final model, anxiety was the strongest predictor, β=.35, t(96)=3.78, p<.001.
 
-## 假设
+## Assumptions
 
-- 线性关系 (散点图检查)
-- 残差正态
-- 残差方差齐性
-- 无严重多重共线性 (VIF<5)
-- 无自相关 (Durbin-Watson≈2)
+- Linear relationship (scatter plot check)
+- Residual Normal
+- Homogeneity of residual variances
+- No severe multicollinearity (VIF<5)
+- No autocorrelation (Durbin-Watson≈2)
 
-## 备选方法
+## Alternative method
 
-| 方法 | 适用场景 |
+| Method | Applicable Scenario |
 |------|----------|
-| 逐步回归 (Stepwise Regression) | 预测变量较多，需自动筛选时；注意过拟合风险 |
-| 岭回归 (Ridge Regression) | 严重多重共线性 (VIF > 10) 时替代 OLS |
-| LASSO 回归 | 同时进行变量选择与正则化，适合高维数据 |
-| 逻辑回归 (Logistic Regression) | DV 为二分变量时替代多元回归 |
-| 分层线性模型 (HLM) | 数据存在嵌套结构（如学生嵌套于班级）时替代多元回归 |
-| [调节效应分析 (Moderation)](./moderation.md) | 检验变量间的交互效应 |
-| [中介分析 (Mediation)](./mediation.md) | 检验自变量通过中介变量影响因变量的间接路径 |
+| Stepwise Regression | When there are many predictor variables and automatic screening is required; pay attention to the risk of overfitting |
+| Ridge Regression | Alternative to OLS when severe multicollinearity (VIF > 10) |
+| LASSO regression | Simultaneous variable selection and regularization, suitable for high-dimensional data |
+| Logistic Regression | Replaces multiple regression when DV is a dichotomous variable |
+| Hierarchical Linear Model (HLM) | An alternative to multiple regression when the data has a nested structure (such as students nested within classes) |
+| [Moderation Effect Analysis (Moderation)](./moderation.md) | Test the interaction effect between variables |
+| [Mediation Analysis (Mediation)](./mediation.md) | Test the indirect path through which the independent variable affects the dependent variable through the mediating variable |

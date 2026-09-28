@@ -1,32 +1,32 @@
-# 置换检验 (Permutation Test)
+# Permutation Test (Permutation Test)
 
-## 概述
+## Overview
 
-置换检验是非参数方法的一种,通过随机打乱数据标签来构建零分布的抽样分布,不假设任何理论分布。
+Permutation test is a kind of non-parametric method that constructs a sampling distribution of zero distribution by randomly shuffling data labels without assuming any theoretical distribution.
 
-**典型场景**: 小样本被试内设计(n<15)且怀疑正态性假设不可靠; 使用非标准统计量时没有现成的参数检验。
+**Typical scenario**: Small sample within-subjects design (n<15) and doubt that the normality assumption is unreliable; there is no ready-made parametric test when using non-standard statistics.
 
-## 何时使用
+## When to use
 
-| 条件 | 要求 |
+| Conditions | Requirements |
 |------|------|
-| 实验设计类型 | 被试内设计、被试间设计均可，尤其适合被试内配对设计 |
-| 因变量类型 | 连续变量（如反应时、正确率、评分） |
-| 样本量要求 | 小样本（n < 20），尤其 n < 15 时参数检验正态性假设难以验证 |
-| 关键假设 | 零假设下观测值的可交换性（exchangeability）；不依赖正态性或任何理论分布 |
-| 统计量类型 | 可使用任意自定义统计量（均值差、中位数差、trimmed mean 等），不限于标准检验统计量 |
+| Experimental design type | Within-subjects design and between-subjects design are both possible, especially suitable for within-subjects paired design |
+| Dependent variable type | Continuous variable (such as reaction time, accuracy, score) |
+| Sample size requirements | Small samples (n < 20), especially when n < 15, the normality assumption of parameter testing is difficult to verify |
+| Key assumptions | Exchangeability of observations under the null hypothesis; does not rely on normality or any theoretical distribution |
+| Statistics type | Any custom statistic (mean difference, median difference, trimmed mean, etc.) can be used, not limited to standard test statistics |
 
-## 优势
+## Advantages
 
-- 不假设分布
-- 适用于任何自定义统计量
-- 小样本下更可靠
-- 精确p值(非渐近)
+- No distribution is assumed
+- works with any custom statistic
+- More reliable in small samples
+- Exact p-value (non-asymptotic)
 
-## R代码
+## R code
 
 ```r
-# 简单置换: 配对设计
+# Simple replacement: paired design
 observed_diff <- mean(condA - condB)
 n_perms <- 10000
 perm_diffs <- replicate(n_perms, {
@@ -36,31 +36,31 @@ perm_diffs <- replicate(n_perms, {
 p_value <- mean(abs(perm_diffs) >= abs(observed_diff))
 ```
 
-## 何时用
+## When to use
 
-- n < 20 且不能假设正态
-- 使用非标准统计量(如中位数差)
-- 作为补充: 报告置换p值和参数p值,两者一致→结论稳健
+- n < 20 and normality cannot be assumed
+- Use non-standard statistics (such as median difference)
+- As a supplement: report the replacement p value and parameter p value, both are consistent → the conclusion is robust
 
-## 报告
+## Report
 
-APA 7th 格式报告示例（被试内配对设计，10,000次置换）：
+APA 7th format report example (within-subjects matched design, 10,000 permutations):
 
-> 采用置换检验（10,000次置换）比较条件A（*M* = 350 ms, *SD* = 45 ms）与条件B（*M* = 320 ms, *SD* = 40 ms）的反应时差异。结果显示条件A的反应时显著高于条件B，*p* = .023（置换检验，双尾）。观测到的均值差为 30 ms，95% CI [10, 50]（基于 bootstrap 百分位法）。
+> Use permutation test (10,000 permutations) to compare the difference in reaction time between condition A (*M* = 350 ms, *SD* = 45 ms) and condition B (*M* = 320 ms, *SD* = 40 ms). The results showed that the reaction time of condition A was significantly higher than that of condition B, *p* = .023 (permutation test, two-tailed). The observed mean difference was 30 ms, 95% CI [10, 50] (based on bootstrap percentile method).
 
-英文对照：
+English comparison:
 
 > A permutation test (10,000 permutations) was conducted to compare reaction times between Condition A (*M* = 350 ms, *SD* = 45 ms) and Condition B (*M* = 320 ms, *SD* = 40 ms). Results indicated that reaction times in Condition A were significantly higher than in Condition B, *p* = .023 (permutation test, two-tailed). The observed mean difference was 30 ms, 95% CI [10, 50] (based on bootstrap percentile method).
 
-报告要点：
-- 明确说明置换次数（如 10,000 次）
-- 报告观测到的效应量和置换 *p* 值
-- 注明单尾/双尾
-- 若使用 bootstrap 计算置信区间，应说明方法
-- 建议同时报告参数检验结果作为参照，两者一致则结论更稳健
+Report key points:
+- Explicitly specify the number of substitutions (e.g. 10,000)
+- Reports observed effect sizes and permutation *p* values
+- Indicate single tail/double tail
+- If bootstrap is used to calculate confidence intervals, the method should be stated
+- It is recommended to report the parameter test results at the same time as a reference. If the two are consistent, the conclusion will be more robust.
 
-## 局限
+## Limitations
 
-- 计算密集(n=10000时需几秒)
-- 不能直接给CI(需bootstrap)
+- Computationally intensive (a few seconds for n=10000)
+- Cannot be given directly to CI (bootstrap required)
 

@@ -30,77 +30,77 @@ Every generated PsychoPy experiment must follow these rules. Order matters — s
 ```python
 # {filename}.py
 # ---------------------------------------------------------------
-# 一体化流程：
+# Integrated process:
 #   {stage_1} → {stage_2} → {stage_3}
 #
-# 数据输出：
+# Data output:
 #   {stage} -> <prefix>_{stage}.csv / <prefix>_{stage}.psydat
 #
-# 设计概要：
-#   每个 block：{trial_count} trial
-#   正式阶段：{block_count} block × {trials_per_block} = {total} trial
+# Design summary:
+#   Each block: {trial_count} trial
+#   Formal stage: {block_count} block × {trials_per_block} = {total} trial
 #
-# 当前版本关键修改：
+# Key modifications of the current version:
 #   1) {change_1}
 #   2) {change_2}
 # ---------------------------------------------------------------
 ```
 
-**Rule**: 文件第一行 = 文件名。一体化流程用 `→` 箭头表示阶段顺序。每个阶段的数据输出格式明确写出。关键修改用编号列表。
+**Rule**: First line of file = file name. The integrated process uses `→` arrows to indicate the sequence of stages. The data output format of each stage is clearly written. Use a numbered list of critical changes.
 
 ### 0.2 Section Order (Rules 1, 3, 5, 11)
 
 ```
-一、基本配置区（路径 / 屏幕 / 字体 / 退出键）                              ← Rule 3: 配置在前 1/3
-二、文本常量区（所有指导语 / 反馈 / 提示文字集中定义）                      ← Rule 5
-三、条件表 / 时序 / 约束配置区（数据表名 / 路径 / 约束常量）               ← Rule 6
-四、被试信息区（gui.DlgFromDict）
-五、窗口 + 通用对象区（win / kb / TextStim 池 / show_text 函数）
-六、数据处理器配置区（ExperimentHandler 按阶段独立）                       ← Rule 11
-七、工具函数区（路径合成 / 条件加载 / 安全等待 / 伪随机 / 退出安全网）     ← Rule 7
-八、单次 trial 函数（呈现→ 收集→ 反馈→ ITI→ 写数据）                      ← Rule 12
-九、主流程（try → 各阶段顺序执行 → except → finally 清理）                 ← Rule 8
+1. Basic configuration area (path/screen/font/exit key) ← Rule 3: Configuration first 1/3
+2. Text constant area (all instructions/feedback/prompt texts are centrally defined) ← Rule 5
+3. Condition table/timing/constraint configuration area (data table name/path/constraint constant) ← Rule 6
+4. Subject information area (gui.DlgFromDict)
+5. Window + general object area (win / kb / TextStim pool / show_text function)
+6. Data processor configuration area (ExperimentHandler is independent by stage) ← Rule 11
+7. Tool function area (path synthesis / conditional loading / safe waiting / pseudo-random / exit safety net) ← Rule 7
+8. Single trial function (presentation → collection → feedback → ITI → write data) ← Rule 12
+9. Main process (try → sequential execution of each stage → except → finally cleanup) ← Rule 8
 ```
 
-**Rule**: 每段以 `# ============================================================` 开始，段内子配置以 `# ----------` 分隔。不允许打乱段顺序。
+**Rule**: Each section starts with `# ============================================================`, and sub-configurations within the section are separated by `# ----------`. Interrupting the order of segments is not allowed.
 
 ### 0.3 Variable Naming (Rule 4)
 
 ```
 <STAGE_PREFIX>_<CATEGORY>_<MEANING>
 
-STAGE_PREFIX = KP | NV | PRAC | MAIN | (按实验阶段自定义)
-CATEGORY     = TXT (指导语文本) | KEY (按键) | MS (毫秒时序)
-             | DIR (文件夹路径) | FB (反馈) | EXCEL (条件表文件名)
-             | MAX_CONSEC (伪随机约束) | N_ (计数)
+STAGE_PREFIX = KP | NV | PRAC | MAIN | (customized by experimental stage)
+CATEGORY = TXT (instruction text) | KEY (key) | MS (millisecond timing)
+             | DIR (folder path) | FB (feedback) | EXCEL (condition table file name)
+             | MAX_CONSEC (pseudo-random constraint) | N_ (count)
 
-正例: KP_ITI_MS, NV_FEED_TIMEOUT, NV_MAX_CONSEC_ELLIPSE
-反例: iti, feedback_timeout, max_ellipse  (无阶段前缀, 无分类信息)
+Positive example: KP_ITI_MS, NV_FEED_TIMEOUT, NV_MAX_CONSEC_ELLIPSE
+Counter example: iti, feedback_timeout, max_ellipse (no stage prefix, no classification information)
 ```
 
 ### 0.4 Pseudorandom Constraints (Rule 6)
 
 ```python
-# ---------- 伪随机约束 ----------
-NV_MAX_CONSEC_ELLIPSE     = 2       # 每个约束一个常量, 可独立调整
+# ---------- Pseudo-random constraint ----------
+NV_MAX_CONSEC_ELLIPSE     = 2       # Each constraint has a constant that can be adjusted independently
 NV_MAX_CONSEC_PRIME_WIDTH = 3
 NV_MAX_CONSEC_CORRECT_KEY = 3
-NV_MAX_PSEUDORAND_TRIES   = 5000   # 硬性上限, 防止死循环
+NV_MAX_PSEUDORAND_TRIES   = 5000   # Hard upper limit to prevent infinite loops
 
 def can_append_trial(current_seq, candidate):
-    """检查 candidate 加在 current_seq 末尾是否违反任何约束"""
-    # ... 逐约束检查 ...
+    """Check whether candidate added to the end of current_seq violates any constraints"""
+    # ... constraint-by-constraint check ...
 
 def pseudorandomize(raw_trials, max_tries=NV_MAX_PSEUDORAND_TRIES):
-    """在 max_tries 次内找到合法序列, 失败 = 退出, 不降级"""
+    """Found legal sequence within max_tries times, failure = exit, no downgrade"""
     for _ in range(max_tries):
         # ... shuffle + constraint check ...
         if len(seq) == len(raw_trials):
             return seq
-    exit_without_saving()  # 失败必须退出
+    exit_without_saving()  # Failure must exit
 ```
 
-**Rule**: 约束尝试失败必须退出。不允许降级为简单随机。不允许返回可能违反约束的序列。
+**Rule**: The constraint attempt fails and must exit. Downgrading to simple random is not allowed. Returning sequences that may violate constraints is not allowed.
 
 ### 0.5 Exit Safety (Rule 7)
 
@@ -108,7 +108,7 @@ def pseudorandomize(raw_trials, max_tries=NV_MAX_PSEUDORAND_TRIES):
 aborted_by_user = False
 
 def cleanup_outputs():
-    """删除中途退出的不完整数据文件"""
+    """Delete incomplete data files that exited midway"""
     for prefix in [filename_prefix_kp, filename_prefix_navon]:
         for path in glob.glob(prefix + ".*"):
             try:
@@ -117,7 +117,7 @@ def cleanup_outputs():
                 pass
 
 def exit_without_saving():
-    """Escape / 异常 / 条件校验失败时调用"""
+    """Escape / exception / called when condition verification fails"""
     global aborted_by_user
     aborted_by_user = True
     cleanup_outputs()
@@ -128,78 +128,78 @@ def exit_without_saving():
     core.quit()
 ```
 
-**Rule**: `exit_without_saving()` 必须在以下位置调用：用户按 Escape、文件缺失、条件校验失败、伪随机失败。
+**Rule**: `exit_without_saving()` must be called when: user presses Escape, file is missing, condition check fails, pseudo-random failure.
 
 ### 0.6 Condition Validation (Rule 9)
 
 ```python
-# 先定义合法值集合, 再逐行校验
+# Define the legal value set first, and then verify it line by line
 NV_VALID_PRIME_NAMES  = ["narrow", "broad"]
 NV_VALID_SHAPES       = ["circle", "ellipse"]
 
-# 逐行校验 — 报告具体第几行什么字段非法
+# Line-by-line verification - report which fields are illegal in specific lines
 prime_errors = []
 for i, r in enumerate(nv_prime_rows, start=1):
     if r["prime"].lower() not in NV_VALID_PRIME_NAMES:
-        prime_errors.append(f"prime 表第 {i} 行 prime 非法：{r['prime']}")
+        prime_errors.append(f"prime table row {i} prime is illegal: {r['prime']}")
 
 if prime_errors:
     show_text("Error:\n" + "\n".join(prime_errors[:20]), True)
     exit_without_saving()
 
-# 素材文件预检查
+# Material file pre-check
 missing = [f for f in sorted(needed_files) if not os.path.isfile(f)]
 if missing:
-    show_text(f"Error: 以下素材缺失：\n\n" + "\n".join(missing[:20]), True)
+    show_text(f"Error: The following materials are missing:\\n\\n" + "\n".join(missing[:20]), True)
     exit_without_saving()
 ```
 
-**Rule**: 校验必须覆盖: 列存在性、行数非零、列值在合法集合内、素材文件在磁盘上存在、关键条件数量达标。错误信息截断 (`[:20]`) 防止刷屏。
+**Rule**: The verification must cover: column existence, the number of rows is non-zero, the column value is within the legal set, the material file exists on the disk, and the number of key conditions meets the standards. Error message truncation (`[:20]`) prevents screen spam.
 
 ### 0.7 Trial Function Contract (Rule 12)
 
 ```python
 def {stage}_run_one_trial(
-    row: dict,              # 条件表的一行 — 总是第一个参数, 总是命名为 row
-    trial_index: int,       # block 内 trial 序号 (1-based)
-    block_index: int,       # block 序号
-    phase: str,             # "practice" | "main" — 控制反馈逻辑
-    # ... 其他行为开关作为布尔参数
+    row: dict,              # A row in the conditional table — always the first parameter, always named row
+    trial_index: int,       # trial sequence number in block (1-based)
+    block_index: int,       # block serial number
+    phase: str,             # "practice" | "main" — Control feedback logic
+    # ... additional behavior switches as boolean parameters
 ):
-    """单次 trial: 呈现→ 收集→ 反馈→ ITI→ 写数据"""
+    """Single trial: Present → Collect → Feedback → ITI → Write Data"""
 
-    # ① 刺激呈现（含随机参数如 prime_duration_ms）
-    # ② 反应收集（while 循环 + rt_clock + timeout 检查）
-    # ③ 反馈呈现（根据 phase 分支：practice 全部反馈 / formal 仅超时）
-    # ④ ITI（安全等待）
-    # ⑤ 数据写出（全部字段一次性 addData + nextEntry）
+    # ① Stimulus presentation (including random parameters such as prime_duration_ms)
+    # ② Response collection (while loop + rt_clock + timeout check)
+    # ③ Feedback presentation (according to phase branch: practice all feedback / formal only timeout)
+    # ④ ITI (safety waiting)
+    # ⑤ Data writing (all fields addData + nextEntry at one time)
 ```
 
-**Rule**: trial 函数内部不允许出现裸数字 — 全部引用配置常量。RT 必须用 `int(key.rt * 1000)`。所有布尔值保存为 `0/1` int。运行时动态值（随机 duration、实际 ITI、onset timestamp）必须写入数据。
+**Rule**: Naked numbers are not allowed inside the trial function - all reference configuration constants. RT must use `int(key.rt * 1000)`. All boolean values ​​are stored as `0/1` int. Runtime dynamic values ​​(random duration, actual ITI, onset timestamp) must be written to the data.
 
 ### 0.8 Per-Trial Data Write (Rules 10, 14–16)
 
 ```python
-# ⑤ 数据写出 — 全部字段显式, 一次性完成
+# ⑤ Data writing - all fields are explicit, completed at one time
 for kk in SUBJECT_COLS:
     thisExp.addData(kk, info.get(kk, ""))
 thisExp.addData("phase", phase)
 thisExp.addData("block_index", block_index)
 thisExp.addData("trial_index", trial_index)
 thisExp.addData("resp_key", resp_key)
-thisExp.addData("rt_ms", rt_ms)                            # Rule 14: 整数 ms, 来自 key.rt 而非 clock.getTime()
+thisExp.addData("rt_ms", rt_ms)                            # Rule 14: Integer ms, from key.rt not clock.getTime()
 thisExp.addData("correct", int(correct))                   # Rule 15: 0/1 int
 thisExp.addData("timeout", int(timeout))
-thisExp.addData("prime_duration_ms", prime_duration_ms)    # Rule 16: 运行时值
-thisExp.addData("iti_ms_actual", iti_ms_actual)            # Rule 16: 运行时值
-thisExp.nextEntry()                                         # Rule 10: 立即写盘
+thisExp.addData("prime_duration_ms", prime_duration_ms)    # Rule 16: Runtime value
+thisExp.addData("iti_ms_actual", iti_ms_actual)            # Rule 16: Runtime value
+thisExp.nextEntry()                                         # Rule 10: Write disk immediately
 ```
 
 ### 0.9 Main Flow (Rule 8)
 
 ```python
 try:
-    # 所有实验阶段按顺序调用
+    # All experimental phases are called in sequence
     stage_1_run_and_save()
     stage_2_run_and_save()
     # ...
@@ -226,23 +226,23 @@ finally:
     core.quit()
 ```
 
-**Rule**: 三个 except 分支缺一不可。finally 中每个清理操作独立 try-except。每个阶段结束后必须立即 `saveAsWideText` + `saveAsPickle`，不等实验结束。
+**Rule**: Three except branches are indispensable. Each cleanup operation in finally is a separate try-except. `saveAsWideText` + `saveAsPickle` must be executed immediately after each stage, without waiting for the end of the experiment.
 
 ### 0.10 Comment Rules (Rule 17)
 
 ```python
-# 正例 — 解释意图
+# Positive example — explaining intent
 rt_clock = core.Clock()
-# 已删除 fixation, 仅保留 ITI                           ← 解释设计决策
-prime_duration_ms = random.randint(400, 600)             ← 不写 "# 生成随机数"（废话）
-NV_PRIME_MIN_MS = 400                                    ← 配置值自带注释
+# fixation removed, only ITI retained ← Explain design decisions
+prime_duration_ms = random.randint(400, 600)             ← Avoid an obvious comment such as "# Generate random numbers".
+NV_PRIME_MIN_MS = 400 ← Configuration value comes with comments
 
-# 反例 — 不做
-rt_clock = core.Clock()  # 创建时钟对象                   ← 代码已自明
-win = visual.Window(...) # 创建 PsychoPy 窗口              ← 废话
+# Counterexample - Don't do it
+rt_clock = core.Clock()  # Create clock object ← Code self-explanatory
+win = visual.Window(...) # Create PsychoPy window ← Nonsense
 ```
 
-**Rule**: 禁止 `# 创建 X 对象`、`# 设置 Y 为 Z`。允许且鼓励: 解释为什么删除、为什么选这个值、非标准处理的理由。
+**Rule**: Disallows `# creating an X object`, `# setting Y to Z`. Allowed and encouraged: Explain why it was deleted, why this value was chosen, and the reason for non-standard processing.
 
 ## 1. Timing Rules
 
@@ -299,7 +299,7 @@ from psychopy.hardware import keyboard
 kb = keyboard.Keyboard(backend='ptb')
 ```
 
-**关键**: 不要把后端名称本身当作精度证明。记录 PsychoPy/PTB/OS/设备版本，并用目标硬件的 smoke test 或外部测量验证设计所需的时序精度。
+**Key**: Do not use the backend name itself as proof of accuracy. Document the PsychoPy/PTB/OS/device version and verify the design's required timing accuracy with a smoke test or external measurement of the target hardware.
 
 ### 1.3 Correct RT Measurement
 
@@ -335,35 +335,35 @@ if rt is not None:
     rt *= 1000  # convert to ms
 ```
 
-### 1.4 key.rt vs clock.getTime() — 关键区别
+### 1.4 key.rt vs clock.getTime() — Key differences
 
-| 时间源 | 含义 | 精度 |
+| Time source | Meaning | Accuracy |
 |--------|------|------|
-| `key.rt` | 所选 keyboard backend 报告的 key-down 事件时间，相对 `kb.clock.reset()` | 通常优于轮询代码时间；端到端误差取决于设备/backend/OS，需实测 |
-| `kb.clock.getTime()` | 代码**执行到该行**的时间 | 受轮询与代码路径延迟影响，不能替代设备事件时间戳 |
+| `key.rt` | The key-down event time reported by the selected keyboard backend, relative to `kb.clock.reset()` | Usually better than the polling code time; end-to-end error depends on the device/backend/OS and needs to be measured |
+| `kb.clock.getTime()` | The time when the code **executes to this line** | Affected by polling and code path delays, it cannot replace the device event timestamp |
 
-**永远用 `key.rt` 做 RT，永远不要手动 `clock.getTime()` 计算 RT。**
+**Always use `key.rt` for RT, never manually `clock.getTime()` to calculate RT. **
 
-### 1.5 waitRelease 参数
+### 1.5 waitRelease parameter
 
-| `waitRelease` | 行为 | 适用场景 |
+| `waitRelease` | Behavior | Applicable scenarios |
 |---------------|------|---------|
-| `False` | 返回 key-down 事件，`.rt` 对应按下时刻 | 当 protocol 的 scored event 是 key-down 时使用 |
-| `True`（默认） | 等按键释放后才返回，`.duration` 可用 | 需要按键持续时间的场景 |
+| `False` | Returns the key-down event, `.rt` corresponds to the moment of pressing | Used when the scored event of the protocol is key-down |
+| `True` (default) | Wait for the key to be released before returning, `.duration` is available | Scenarios that require key duration |
 
-**按键按下作为响应的 RT 任务应设置 `waitRelease=False`**。`True` 只返回已经释放的按键，可能推迟程序获得事件；只有研究按键持续时间/释放时刻时才使用，并明确相应 estimand。
+**RT tasks that respond to key presses should set `waitRelease=False`**. `True` only returns the keys that have been released, which may delay the program from obtaining the event; only use it when studying the key duration/release moment, and make the corresponding estimand clear.
 
 ### 1.6 getKeys() vs waitKeys()
 
 ```python
-# getKeys() — 非阻塞，必须在循环中轮询（推荐）
+# getKeys() — non-blocking, must be polled in a loop (recommended)
 keys = kb.getKeys(keyList=['f', 'j'], waitRelease=False, clear=False)
 
-# waitKeys() — 阻塞等待，不适合需要同时做帧循环的场景
+# waitKeys() — blocking waiting, not suitable for scenarios that require simultaneous frame looping
 keys = kb.waitKeys(maxWait=5.0, keyList=['f', 'j'])
 ```
 
-在需要持续刷新、并行触发、动画、超时状态或持续 Escape/窗口事件处理的 trial 中使用非阻塞 `getKeys()` 循环。静态、单一响应的非关键屏幕可使用 `waitKeys()`，但必须包含退出键并保证清理路径；不要把阻塞本身误报成固定的 RT 偏差。
+Use a non-blocking `getKeys()` loop in trials that require continuous refresh, parallel triggering, animation, timeout states, or persistent Escape/window event handling. Static, single-response non-critical screens can use `waitKeys()`, but must include the escape key and ensure a cleanup path; do not misreport the blocking itself as a fixed RT deviation.
 
 ### 1.7 RT Onset Window Resolution
 
@@ -372,7 +372,7 @@ Check the `rt_onset` field on each response window:
 - `rt_onset: Target` → reset `kb.clock` at the actual flip of the window named "Target". Interpret what that interval includes from the confirmed timeline; do not attach a generic cognitive-process label.
 - Missing → **ask the user before generating code**. Do not guess.
 
-### 1.8 core.wait() — 限用
+### 1.8 core.wait() — Restricted
 
 `core.wait(duration)` blocks concurrent event handling. Do not use it for an interactive interval. A hardware protocol may require a measured blocking pulse, but that duration must come from the device contract and the design must preserve cleanup; otherwise use a timed loop:
 
@@ -385,25 +385,25 @@ while timer.getTime() > 0:
     win.flip()
 ```
 
-### 1.9 Canonical Code Skeleton（新项目的契约基线）
+### 1.9 Canonical Code Skeleton (contract baseline for new projects)
 
-以下骨架展示新项目必须保留的安全、计时、数据和清理契约。按 config 选择实际组件/设备/API；有依据的结构偏离必须记录并测试，`modify`/`debug` 不重写无关架构。
+The following skeleton shows the security, timing, data, and cleanup contracts that new projects must preserve. Press config to select the actual component/device/API; justified structural deviations must be documented and tested, `modify`/`debug` does not override irrelevant architecture.
 
 ```python
 #!/usr/bin/env python3
 # {filename}.py
 # ---------------------------------------------------------------
-# 一体化流程：
+# Integrated process:
 #   {stage_1} → {stage_2} → {stage_3}
 #
-# 数据输出：
+# Data output:
 #   {stage} -> <prefix>_{stage}.csv / <prefix>_{stage}.psydat
 #
-# 设计概要：
-#   每个 block：{n} trial
-#   正式阶段：{m} block × {t} = {total} trial
+# Design summary:
+#   Each block: {n} trial
+#   Formal stage: {m} block × {t} = {total} trial
 #
-# 当前版本关键修改：
+# Key modifications of the current version:
 #   1) {change_1}
 #   2) {change_2}
 # ---------------------------------------------------------------
@@ -414,7 +414,7 @@ from psychopy import visual, core, data, gui, event
 from psychopy.hardware import keyboard
 
 # ============================================================
-# 一、基本配置（通用）
+# 1. Basic configuration (general)
 # ============================================================
 EXP_NAME = "{experiment_name}"
 
@@ -427,19 +427,19 @@ SAVE_DIR = os.path.join(BASE_DIR, "data")
 try:
     os.makedirs(SAVE_DIR, exist_ok=True)
 except OSError:
-    # 权限不足 / 磁盘满 / 只读文件系统 — 直接退出，不等实验开始后才发现
-    print(f"无法创建数据文件夹: {SAVE_DIR}")
-    print("请检查磁盘空间和写入权限后重试。")
+    # Insufficient permissions/disk full/read-only file system - exit directly and don’t find out until the experiment starts
+    print(f"Unable to create data folder: {SAVE_DIR}")
+    print("Please check the disk space and write permissions and try again.")
     core.quit()
 
-# ---------- 屏幕 ----------
+# ---------- Screen ----------
 WIN_SIZE  = [1920, 1080]
 FULLSCR   = True
 BG_COLOR  = [0, 0, 0]        # black
 WIN_UNITS = "height"
 
-# ---------- 字体 ----------
-# 显式记录主字体和目标机验证过的回退；启动检查应在正式采集前验证字形覆盖。
+# ---------- Font ----------
+# Explicitly record master font and target-verified fallbacks; startup checks should verify glyph coverage before formal acquisition.
 FONT_CONFIG        = {"primary": "PingFang SC", "fallback": "Noto Sans CJK SC"}
 TEXT_FONT          = FONT_CONFIG["primary"]
 FONT_SIZE          = 0.05
@@ -447,28 +447,28 @@ FEEDBACK_FONT_SIZE = 0.07
 TEXT_WRAP_WIDTH    = 2.5
 TXT_COLOR          = "white"
 
-# ---------- 退出键 ----------
+# ---------- Exit key ----------
 KEY_QUIT = "escape"
 
 # ============================================================
-# 二、文本常量区（所有指导语 / 反馈文字集中在此）
+# 2. Text constant area (all instructions/feedback texts are concentrated here)
 # ============================================================
 TXT_START = (
-    "欢迎参加实验。\n\n"
-    "按任意键开始。"
+    "Welcome to participate in the experiment. \\n\\n"
+    "Press any key to start."
 )
 
 TXT_END = (
-    "实验结束，感谢参与！\n\n"
-    "按任意键退出。"
+    "The experiment is over, thank you for participating! \\n\\n"
+    "Press any key to exit."
 )
 
 # ============================================================
-# 三、条件表 / 时序 / 约束配置
+# 3. Condition table/timing/constraint configuration
 # ============================================================
 CONDITION_XLSX = "conditions.xlsx"
 
-# ---------- 时序 (秒) ----------
+# ---------- Timing (seconds) ----------
 FIXATION_S    = 0.5
 STIMULUS_S    = 1.0
 FEEDBACK_S    = 0.5
@@ -476,15 +476,15 @@ RESP_MAX_S    = 2.0
 ITI_MIN_S     = 0.6
 ITI_MAX_S     = 0.9
 
-# ---------- 按键 ----------
+# ---------- Key ----------
 ALLOWED_KEYS = ["f", "j"]
 
-# ---------- 伪随机约束 ----------
+# ---------- Pseudo-random constraint ----------
 MAX_CONSEC_SAME_CONDITION = 3
 MAX_PSEUDORAND_TRIES      = 5000
 
 # ============================================================
-# 四、被试信息
+# 4. Subject information
 # ============================================================
 fields_order = ["Participant ID", "Age", "Gender", "Handedness"]
 
@@ -517,7 +517,7 @@ BASE_DATA_COLUMNS = [
 ]
 
 # ============================================================
-# 五、窗口与通用对象
+# 5. Window and general objects
 # ============================================================
 win = visual.Window(size=WIN_SIZE, fullscr=FULLSCR, color=BG_COLOR, units=WIN_UNITS)
 kb  = keyboard.Keyboard(backend="ptb")
@@ -529,7 +529,7 @@ msg = visual.TextStim(
 )
 
 def show_text(s: str, wait_key: bool = True, font_size: float = FONT_SIZE, color=None):
-    """通用文本展示 — 指导语 / 反馈 / 结束提示"""
+    """General text display - guidance/feedback/end prompts"""
     msg.text = s
     msg.height = font_size
     msg.color = color or TXT_COLOR
@@ -542,7 +542,7 @@ def show_text(s: str, wait_key: bool = True, font_size: float = FONT_SIZE, color
             raise SystemExit
 
 # ============================================================
-# 六、数据处理器（每个阶段独立 ExperimentHandler）
+# 6. Data processor (independent ExperimentHandler for each stage)
 # ============================================================
 thisExp = data.ExperimentHandler(
     name=EXP_NAME,
@@ -554,10 +554,10 @@ thisExp = data.ExperimentHandler(
 thisExp.extraInfo = {}
 
 # ============================================================
-# 七、工具函数
+# 7. Tool functions
 # ============================================================
 
-# ---------- 退出安全网 ----------
+# ---------- Exit the safety net ----------
 aborted_by_user = False
 
 def cleanup_outputs():
@@ -577,11 +577,11 @@ def exit_without_saving():
         pass
     core.quit()
 
-# ---------- 路径 ----------
+# ---------- Path ----------
 def stim_path(filename: str) -> str:
     return os.path.join(BASE_DIR, "stimuli", filename)
 
-# ---------- 条件加载 + 校验 ----------
+# ---------- Conditional loading + verification ----------
 def load_rows_or_exit(xlsx_path: str, required_cols: list):
     full_path = os.path.join(BASE_DIR, xlsx_path)
     try:
@@ -598,7 +598,7 @@ def load_rows_or_exit(xlsx_path: str, required_cols: list):
         exit_without_saving()
     return rows
 
-# ---------- 安全等待（可被 escape 中断） ----------
+# ---------- Safe waiting (can be interrupted by escape) ----------
 def safe_wait(sec: float):
     """Escape-checking wait. core.wait(0.001) here is a polling yield (~1ms), not a timing block —
     it prevents CPU spinning while keeping the escape path responsive. This is safe. """
@@ -608,9 +608,9 @@ def safe_wait(sec: float):
             exit_without_saving()
         core.wait(0.001)
 
-# ---------- 伪随机 ----------
+# ---------- Pseudo random ----------
 def can_append_trial(seq, candidate):
-    """检查是否违反任何连续性约束"""
+    """Check whether any continuity constraints are violated"""
     key = "condition"
     count = 0
     for row in reversed(seq):
@@ -632,16 +632,16 @@ def pseudorandomize(raw_trials):
             seq.append(remaining.pop(rng.choice(valid)))
         if len(seq) == len(raw_trials):
             return seq
-    show_text("Error: 无法生成满足约束的 trial 顺序。", True)
+    show_text("Error: Unable to generate a trial sequence that satisfies the constraints.", True)
     exit_without_saving()
 
 # ============================================================
-# 八、单次 trial 函数（五步法则）
+# 8. Single trial function (five-step rule)
 # ============================================================
 def run_one_trial(row: dict, trial_index: int, block_index: int, phase: str):
-    """呈现→ 收集→ 反馈→ ITI→ 写数据"""
+    """Present → Collect → Feedback → ITI → Write Data"""
 
-    # ① 刺激呈现
+    # ① Stimulus presentation
     stimText.text = row["stimulus"]
     stimText.draw()
     win.callOnFlip(kb.clock.reset)
@@ -650,7 +650,7 @@ def run_one_trial(row: dict, trial_index: int, block_index: int, phase: str):
     rt_clock = core.Clock()
     onset_ts = datetime.now(timezone.utc).isoformat()
 
-    # ② 反应收集
+    # ② Reaction collection
     resp_key, rt_ms, correct, timeout = "", None, 0, 0
     while rt_clock.getTime() < RESP_MAX_S:
         keys = kb.getKeys(keyList=ALLOWED_KEYS + [KEY_QUIT], waitRelease=False, clear=False)
@@ -659,7 +659,7 @@ def run_one_trial(row: dict, trial_index: int, block_index: int, phase: str):
             if k.name == KEY_QUIT:
                 exit_without_saving()
             resp_key = k.name
-            rt_ms = int(k.rt * 1000)                         # Rule 14: 整数 ms
+            rt_ms = int(k.rt * 1000)                         # Rule 14: Integer ms
             correct = int(resp_key == row["correct_key"])    # Rule 15: 0/1 int
             break
         stimText.draw()
@@ -669,14 +669,14 @@ def run_one_trial(row: dict, trial_index: int, block_index: int, phase: str):
     if rt_ms is None:
         timeout = 1
 
-    # ③ 反馈（根据 phase 分支）
+    # ③ Feedback (according to phase branch)
     if phase == "practice":
         if timeout:
-            t, c = "超时", "red"
+            t, c = "Timeout", "red"
         elif correct:
-            t, c = "正确", "green"
+            t, c = "Correct", "green"
         else:
-            t, c = "错误", "red"
+            t, c = "Error", "red"
         show_text(t, wait_key=False, font_size=FEEDBACK_FONT_SIZE, color=c)
         safe_wait(FEEDBACK_S)
 
@@ -685,7 +685,7 @@ def run_one_trial(row: dict, trial_index: int, block_index: int, phase: str):
     win.flip()
     safe_wait(iti_ms / 1000.0)
 
-    # ⑤ 数据写出 — 全部字段一次性 addData + nextEntry
+    # ⑤ Data writing - all fields at one time addData + nextEntry
     for kk in SUBJECT_COLS:
         thisExp.addData(kk, info.get(kk, ""))
     thisExp.addData("subject_id", info["Participant ID"])
@@ -699,42 +699,42 @@ def run_one_trial(row: dict, trial_index: int, block_index: int, phase: str):
     thisExp.addData("rt", rt_ms)
     thisExp.addData("accuracy", correct)
     thisExp.addData("timeout", timeout)
-    thisExp.addData("iti_ms_actual", iti_ms)                # Rule 16: 运行时值
+    thisExp.addData("iti_ms_actual", iti_ms)                # Rule 16: Runtime value
     thisExp.addData("timestamp", onset_ts)
-    thisExp.nextEntry()                                      # Rule 10: 立即写盘
+    thisExp.nextEntry()                                      # Rule 10: Write disk immediately
     thisExp.saveAsWideText(filename_prefix + ".csv", delim=",")
     with open(filename_prefix + ".csv", "ab") as checkpoint_file:
         checkpoint_file.flush()
-        os.fsync(checkpoint_file.fileno())                    # Rule 10: 耐久 checkpoint
+        os.fsync(checkpoint_file.fileno())                    # Rule 10: Durable checkpoint
 
 # ============================================================
-# 九、主流程
+# 9. Main process
 # ============================================================
 try:
-    # --- 指导语 ---
+    # --- Instructions ---
     show_text(TXT_START, True)
 
-    # --- 条件加载 + 校验 ---
+    # --- Conditional loading + verification ---
     rows = load_rows_or_exit(CONDITION_XLSX, ["stimulus", "correct_key"])
 
-    # --- 正式实验 ---
+    # --- Formal experiment ---
     trials = pseudorandomize(rows)
     for i, row in enumerate(trials, start=1):
         run_one_trial(row, trial_index=i, block_index=1, phase="main")
 
-    # --- 结束 ---
+    # --- End ---
     show_text(TXT_END, True, font_size=FEEDBACK_FONT_SIZE)
 
 except SystemExit:
     exit_without_saving()
 
 except Exception as e:
-    show_text(f"程序异常：{repr(e)}", True)
+    show_text(f"Program exception: {repr(e)}", True)
     exit_without_saving()
 
 finally:
     if not aborted_by_user:
-        thisExp.saveAsWideText(filename_prefix + ".csv")     # Rule 11: 阶段保存
+        thisExp.saveAsWideText(filename_prefix + ".csv")     # Rule 11: Stage save
         thisExp.saveAsPickle(filename_prefix)
     try:
         thisExp.abort()
@@ -747,7 +747,7 @@ finally:
     core.quit()
 ```
 
-**使用方式**：复制此骨架 → 修改配置区参数 → 替换文本常量 → 在 `run_one_trial` 内替换刺激/响应/反馈逻辑 → 添加多阶段/多 block 循环 → 不要改变 API 模式（PTB keyboard、`key.rt`、`callOnFlip`、`try/except/finally`、`nextEntry`）。
+**How ​​to use**: Copy this skeleton → Modify configuration area parameters → Replace text constants → Replace stimulus/response/feedback logic within `run_one_trial` → Add multi-stage/multi-block loop → Do not change API mode (PTB keyboard, `key.rt`, `callOnFlip`, `try/except/finally`, `nextEntry`).
 
 ## 2. Stimulus Rules
 
@@ -770,14 +770,14 @@ for cond in conditions:
 
 ### 2.2 TextBox2 vs TextStim
 
-| 特性 | TextBox2 | TextStim |
+| Properties | TextBox2 | TextStim |
 |------|-----------------|-----------------|
-| 主要用途 | 多行排版、可编辑文本、复杂对齐 | 简单/传统文本刺激 |
-| 字体与非等宽文本 | 支持；需验证目标字体 | 支持；需验证目标字体 |
-| 排版/边界属性 | 以 pinned runtime 的公共 API 为准 | 以 pinned runtime 的公共 API 为准 |
-| 动态颜色/透明度 | 使用该版本公开属性并做视觉测试 | 使用该版本公开属性并做视觉测试；不要写入私有 `_need*` 状态 |
+| Main uses | Multi-line layout, editable text, complex alignment | Simple/traditional text stimulation |
+| Fonts and non-monospaced text | Supported; target font needs to be verified | Supported; target font needs to be verified |
+| Typesetting/border properties | Subject to the public API of pinned runtime | Subject to the public API of pinned runtime |
+| Dynamic color/transparency | Use this version to expose properties and do visual testing | Use this version to expose properties and do visual testing; do not write to private `_need*` state |
 
-按 config 的排版、编辑和兼容性需求选择组件。不要把某一版本的私有实现细节当作跨版本生成规则。
+Select components based on the config's layout, editing, and compatibility needs. Do not treat implementation details private to one version as cross-version build rules.
 
 ### 2.3 Chinese Text Rendering
 
@@ -826,7 +826,7 @@ def get_cjk_font():
 _CJK_FONT = get_cjk_font()
 
 # Usage:
-text_stim = visual.TextStim(win, text='你好', font=_CJK_FONT,
+text_stim = visual.TextStim(win, text='Hello', font=_CJK_FONT,
                             fontFiles=[_CJK_FONT] if _CJK_FONT else None,
                             height=40, color='white', languageStyle='LTR')
 ```
@@ -848,7 +848,7 @@ Key pitfalls:
 | **pyo** | Host/device dependent | Verify installation compatibility and measure the target setup |
 | **pygame** | Basic fallback playback; not the supported path for claim-relevant onset timing | Do not use for timing claims without independent calibration evidence |
 
-**当前支持路径**: 对需要可验证音频起始时间的实验，默认使用并测试 PTB 音频后端，同时记录实际设备/驱动/缓冲设置。若采用其他后端或外部音频硬件，必须给出等价的时间戳、校准和目标机测量证据；不能仅凭后端名称声称精度。
+**Current supported paths**: For experiments that require verifiable audio start times, the PTB audio backend is used and tested by default, while recording the actual device/driver/buffer settings. If other backends or external audio hardware are used, equivalent evidence of timestamps, calibration, and target measurements must be given; accuracy claims cannot be made based on the backend name alone.
 
 ### 3.2 Sound Preloading
 
@@ -903,7 +903,7 @@ Edge cases to handle:
 
 ## 5. Data Management
 
-### 5.1 ExperimentHandler — 顶层容器
+### 5.1 ExperimentHandler — Top-level container
 
 ```python
 from psychopy import data
@@ -919,13 +919,13 @@ exp = data.ExperimentHandler(
 )
 ```
 
-**关键规则**:
-- `addLoop(handler)` **必须在循环运行前**调用 — 不能在实验开始时提前添加所有 loop
-- `nextEntry()` 标记 trial 结束 — Builder 代码自动处理，自定义脚本需显式调用
-- 实验崩溃时 `atexit` 回调会尝试保存已有数据
-- 调用 `exp.abort()` 可阻止数据保存（用于调试运行）
+**Key Rules**:
+- `addLoop(handler)` **must be called before the loop is run** — all loops cannot be added in advance at the beginning of the experiment
+- `nextEntry()` marks the end of the trial - the Builder code handles this automatically, the custom script needs to be called explicitly
+- The `atexit` callback will try to save existing data when the experiment crashes
+- Call `exp.abort()` to prevent data saving (for debug runs)
 
-### 5.2 TrialHandler — 条件循环
+### 5.2 TrialHandler — Conditional loop
 
 ```python
 trials = data.TrialHandler(
@@ -933,50 +933,50 @@ trials = data.TrialHandler(
     nReps=5,
     method='random',       # 'random' | 'sequential' | 'fullRandom'
     extraInfo={'phase': 'main'},
-    seed=RANDOM_SEED,      # 按 config.seed_scope 从任务版本、被试和 session 解析
+    seed=RANDOM_SEED,      # Press config.seed_scope to parse from task version, subject and session
     name='trials'
 )
 
-exp.addLoop(trials)  # 必须在循环前调用
+exp.addLoop(trials)  # must be called before the loop
 
 for thisTrial in trials:
     # ... present trial ...
     trials.addData('rt', rt)
-    # nextEntry 自动调用
+    # nextEntry automatically called
 ```
 
-**随机化方法**:
-| Method | 行为 |
+**Randomization method**:
+| Method | Behavior |
 |--------|------|
-| `'random'` | 每个 repeat 内 shuffle，所有条件出现一次 |
-| `'sequential'` | 按列表顺序呈现 |
-| `'fullRandom'` | 跨 repeat 完全随机（可能连续多次同一条件） |
+| `'random'` | shuffle within each repeat, all conditions appear once |
+| `'sequential'` | Presented in list order |
+| `'fullRandom'` | Completely random across repeat (possibly the same condition multiple times in a row) |
 
 ### 5.3 Column Priorities
 
-添加数据时可设置优先级控制输出列顺序:
+When adding data, you can set the priority to control the output column order:
 
 ```python
 from psychopy.constants import priority
 
-exp.addData('rt', rt, priority=priority.HIGH)     # 排在前面
-exp.addData('debug_var', val, priority=priority.EXCLUDE)  # 排在末尾
+exp.addData('rt', rt, priority=priority.HIGH)     # in front
+exp.addData('debug_var', val, priority=priority.EXCLUDE)  # ranked last
 ```
 
 | Priority | Value | Usage |
 |----------|-------|-------|
-| CRITICAL | 30 | Routine start times（保留） |
-| HIGH | 20 | RT, accuracy — 分析核心变量 |
-| MEDIUM | 10 | 条件信息 |
-| LOW | 0 | 辅助信息 |
-| EXCLUDE | -10 | 调试变量，不用于分析 |
+| CRITICAL | 30 | Routine start times (reserved) |
+| HIGH | 20 | RT, accuracy — Analyze core variables |
+| MEDIUM | 10 | Condition Information |
+| LOW | 0 | Auxiliary information |
+| EXCLUDE | -10 | Debug variable, not used for analysis |
 
 ### 5.4 Data Output Formats
 
 | Format | Method | Notes |
 |--------|--------|-------|
-| CSV/TSV (wide) | `exp.saveAsWideText('data.csv', delim=',')` | 每 trial 一行，"wide" 指所有变量存为列 |
-| Pickle | `exp.saveAsPickle('data.psydat')` | 完整对象，可后续 Python 加载分析 |
+| CSV/TSV (wide) | `exp.saveAsWideText('data.csv', delim=',')` | One row per trial, "wide" means all variables are stored as columns |
+| Pickle | `exp.saveAsPickle('data.psydat')` | Complete object, can be loaded and analyzed by Python later |
 
 ### 5.5 Incremental Save (try/finally)
 
@@ -1011,9 +1011,9 @@ expInfo['date'] = data.getDateStr()
 expInfo['expName'] = expName
 ```
 
-**高级用法**:
+**Advanced usage**:
 ```python
-# 下拉菜单 — value 为 list
+# drop-down menu — value is list
 expInfo = {
     'participant': '',
     'gender': ['male', 'female', 'other'],  # list = dropdown
@@ -1021,11 +1021,11 @@ expInfo = {
     'handedness': ['right', 'left'],
 }
 
-# fixed 参数 — 不可编辑字段
+# fixed parameter — non-editable field
 dlg = gui.DlgFromDict(
     dictionary=expInfo,
     title=expName,
-    fixed=['expVersion'],   # 显示但不可编辑
+    fixed=['expVersion'],   # is displayed but cannot be edited
     order=['participant', 'age', 'gender'],
     tip={'participant': 'Unique subject ID'}
 )
@@ -1098,17 +1098,17 @@ Escape is checked inside the timed response loop AND between trials/ITIs. In the
 ```python
 # At end of experiment, after trial loop:
 debrief_text = f"""
-实验结果:
-你的平均反应时: {np.mean(rts):.0f} ms
-正确率: {np.mean(corrects)*100:.1f}%
-感谢你的参与!
+Experimental results:
+Your average reaction time: {np.mean(rts):.0f} ms
+Correct rate: {np.mean(corrects)*100:.1f}%
+Thank you for participating!
 """
 debrief_stim = visual.TextStim(win, text=debrief_text, color='black')
 debrief_stim.draw()
 win.flip()
 # Wait for any key press
 kb = keyboard.Keyboard()
-kb.waitKeys()  # 这里阻塞等待是 OK 的（实验已结束）
+kb.waitKeys()  # Blocking and waiting here is OK (the experiment has ended)
 ```
 
 ## 10. Anti-Patterns
@@ -1154,32 +1154,32 @@ disallowed_keys = ['escape', 'f5', 'f12']
 
 ## 13. API Reference Index
 
-| 需要实现的功能 | API / 类 | 关键参数 |
+| Functions to be implemented | API / Class | Key parameters |
 |---------------|---------|---------|
-| 创建窗口 | `visual.Window()` | `size`, `fullscr`, `color`, `units`, `screen` |
-| 帧计时 | `win.getFutureFlipTime(clock=None/routineTimer)` | `clock` 参数决定时间基准 |
-| 帧同步回调 | `win.callOnFlip(callback, *args)` | callback + 参数 |
-| 记录 flip 时间 | `win.timeOnFlip(obj, 'attr')` | 对象 + 属性名 |
-| RT 计时键盘 | `keyboard.Keyboard(backend='ptb')` | `backend` 选择精度 |
-| 获取按键 | `kb.getKeys(keyList, waitRelease=False, clear=False)` | 非阻塞轮询 |
-| 清除按键 | `kb.clearEvents(eventType='keyboard')` | flip 前清除 |
-| RT 时间戳 | `key.rt`（`KeyPress` 对象属性） | 从 `kb.clock.reset()` 算起 |
-| 按键名 | `key.name` | 字符串，如 `'f'`, `'left'` |
-| 按键时长 | `key.duration` | 需要 `waitRelease=True` |
-| 倒计时 | `core.CountdownTimer(seconds)` | 响应截止时间 |
-| 文本显示（推荐） | `visual.TextBox2()` | `text`, `font`, `letterHeight`, `color`, `alignment` |
-| 文本显示（经典） | `visual.TextStim()` | `text`, `font`, `height`, `color` |
-| 图片显示 | `visual.ImageStim()` | `image`, `pos`, `size` |
-| 音频播放 | `sound.Sound()` | Pre-create before trials; PTB `play(when=)` where supported; record backend/device/buffer and measured onset |
-| 条件循环 | `data.TrialHandler()` | `trialList`, `nReps`, `method`, `seed` |
-| 条件导入 | `data.importConditions('file.xlsx')` | 返回条件 dict list |
-| 数据容器 | `data.ExperimentHandler()` | `name`, `extraInfo`, `dataFileName` |
-| 添加循环数据 | `exp.addLoop(trials)` | 循环前调用 |
-| 添加 trial 数据 | `trials.addData(name, value)` | 自动转发至 ExperimentHandler |
-| 标记 trial 结束 | `exp.nextEntry()` | 自定义代码需显式调用 |
-| 保存为 CSV | `exp.saveAsWideText('file.csv', delim=',')` | 实验结束时调用 |
-| 保存为 Pickle | `exp.saveAsPickle('file.psydat')` | 完整对象 |
-| 参与者对话框 | `gui.DlgFromDict(dictionary=expInfo, title=expName)` | 下拉菜单用 list 值 |
-| 日期字符串 | `data.getDateStr()` | 格式 `YYYY_Mon_DD_HHMM` |
-| EEG 并口触发 | `parallel.ParallelPort(address=0x378)` | `callOnFlip(port.setData, code)` |
-| 安全退出 | `core.quit()` | Escape 处理中调用 |
+| Create window | `visual.Window()` | `size`, `fullscr`, `color`, `units`, `screen` |
+| Frame timing | `win.getFutureFlipTime(clock=None/routineTimer)` | `clock` parameter determines the time base |
+| Frame synchronization callback | `win.callOnFlip(callback, *args)` | callback + parameters |
+| Record flip time | `win.timeOnFlip(obj, 'attr')` | Object + attribute name |
+| RT timing keyboard | `keyboard.Keyboard(backend='ptb')` | `backend` select precision |
+| Get keys | `kb.getKeys(keyList, waitRelease=False, clear=False)` | Non-blocking polling |
+| Clear keys | `kb.clearEvents(eventType='keyboard')` | Clear before flip |
+| RT timestamp | `key.rt` (`KeyPress` object property) | Counted from `kb.clock.reset()` |
+| Key name | `key.name` | String, such as `'f'`, `'left'` |
+| Key duration | `key.duration` | Requires `waitRelease=True` |
+| Countdown | `core.CountdownTimer(seconds)` | Response deadline |
+| Text display (recommended) | `visual.TextBox2()` | `text`, `font`, `letterHeight`, `color`, `alignment` |
+| Text display (classic) | `visual.TextStim()` | `text`, `font`, `height`, `color` |
+| Image display | `visual.ImageStim()` | `image`, `pos`, `size` |
+| Audio playback | `sound.Sound()` | Pre-create before trials; PTB `play(when=)` where supported; record backend/device/buffer and measured onset |
+| Conditional loop | `data.TrialHandler()` | `trialList`, `nReps`, `method`, `seed` |
+| Conditional import | `data.importConditions('file.xlsx')` | Return conditions dict list |
+| Data container | `data.ExperimentHandler()` | `name`, `extraInfo`, `dataFileName` |
+| Add loop data | `exp.addLoop(trials)` | Call before loop |
+| Add trial data | `trials.addData(name, value)` | Automatically forward to ExperimentHandler |
+| Mark trial end | `exp.nextEntry()` | Custom code needs to be called explicitly |
+| Save as CSV | `exp.saveAsWideText('file.csv', delim=',')` | Called at the end of the experiment |
+| Save as Pickle | `exp.saveAsPickle('file.psydat')` | Complete object |
+| Participant dialog | `gui.DlgFromDict(dictionary=expInfo, title=expName)` | Use list value for drop-down menu |
+| Date string | `data.getDateStr()` | Format `YYYY_Mon_DD_HHMM` |
+| EEG parallel port trigger | `parallel.ParallelPort(address=0x378)` | `callOnFlip(port.setData, code)` |
+| Safe exit | `core.quit()` | Called during Escape processing |

@@ -1,17 +1,17 @@
-# Upset 图 (UpSet Plot)
+# Upset Plot (UpSet Plot)
 
-## 概述
+## Overview
 
-Upset图展示多个集合的交集大小,是韦恩图的现代替代。适合展示多个分类条件的组合模式(如多个症状共存)。
+Upset diagram shows the intersection size of multiple sets and is a modern alternative to Venn diagram. Suitable for displaying combination patterns of multiple classification conditions (such as the coexistence of multiple symptoms).
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| 场景 | 3+集合的交集可视化 |
-| 数据类型 | 每个观测属于0或多个类别 |
+| Scenario | Intersection visualization of 3+ sets |
+| Data type | Each observation belongs to 0 or more categories |
 
-## R 代码
+## R code
 
 ```r
 library(UpSetR)
@@ -20,15 +20,15 @@ upset(data, sets=c("anxiety","depression","stress","fatigue"),
       sets.bar.color="#404080")
 ```
 
-## vs 韦恩图
+## vs Venn Diagram
 
-- 韦恩图: 2-3个集合清晰,>4无法阅读
-- Upset: 任意数量集合,按频率排序,清晰
+- Venn diagram: 2-3 sets are clear, >4 cannot be read
+- Upset: any number of sets, sorted by frequency, clear
 
-## 关键参数
+## Key parameters
 
-| 参数 | 作用 |
+| Parameters | Function |
 |------|------|
-| `sets` | 集合名称向量 |
-| `order.by` | freq(按频率排序)/degree |
-| `main.bar.color` | 主柱颜色 |
+| `sets` | Set name vector |
+| `order.by` | freq(order by frequency)/degree |
+| `main.bar.color` | Main column color |

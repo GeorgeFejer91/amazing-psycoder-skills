@@ -1,17 +1,17 @@
-# 华夫图 (Waffle Chart)
+# Waffle Chart
 
-## 概述
+## Overview
 
-华夫图用方格矩阵表示比例,每个方格代表1%或固定数量。比饼图更准确地传达比例信息。
+The waffle chart uses a square matrix to represent the proportion, with each square representing 1% or a fixed amount. Convey proportional information more accurately than a pie chart.
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| 场景 | 展示组成比例(替代饼图) |
-| 优势 | 1方格=固定单位,直观准确 |
+| Scene | Show composition ratio (replacement of pie chart) |
+| Advantages | 1 square = fixed unit, intuitive and accurate |
 
-## R 代码
+## R code
 
 ```r
 library(waffle)
@@ -20,14 +20,14 @@ waffle(parts, rows=10, colors=c("#69b3a2","#404080"),
        title="Trial Type Distribution")
 ```
 
-## vs 饼图
+## vs pie chart
 
-华夫图比饼图更准确(人类不擅长比较角度和面积)。每个方格=离散单位,容易计数。
+Waffle charts are more accurate than pie charts (humans are not good at comparing angles and areas). Each square = discrete unit, easy to count.
 
-## 关键参数
+## Key parameters
 
-| 参数 | 作用 |
+| Parameters | Function |
 |------|------|
-| `rows` | 行数(控制格子大小) |
-| `colors` | 颜色向量 |
-| `title` | 标题 |
+| `rows` | Number of rows (control grid size) |
+| `colors` | color vector |
+| `title` | title |

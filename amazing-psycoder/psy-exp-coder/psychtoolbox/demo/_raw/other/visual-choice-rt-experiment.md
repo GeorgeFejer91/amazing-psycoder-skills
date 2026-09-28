@@ -1,38 +1,38 @@
-# 视觉选择反应时实验 — 完整 PTB 实验模板
+# Visual Choice Reaction Time Experiment — Complete PTB Experiment Template
 
-> 来源: 蒋挺老师知乎 PTB 教程 §5  
-> 归类: `demo/_raw/other/` — L4 完整实验参考
-> 参考层级: L4 demo（仅参考实验逻辑，API 模式以 spec/README.md Canonical Skeleton 为准）
+> Source: Teacher Jiang Ting Zhihu PTB tutorial §5
+> Category: `demo/_raw/other/` — L4 complete experiment reference
+> Reference level: L4 demo (only refer to the experimental logic, the API mode is subject to spec/README.md Canonical Skeleton)
 
-## 实验逻辑
+## Experimental logic
 
-- **任务**: 红、绿两色光斑随机出现在左/中/右三个位置，按键判断颜色
-- **试次结构**: ITI(1s) → 刺激(0.5s内有响应窗口) → 反馈音 → 数据保存
-- **条件**: 2(颜色) × 3(位置) = 6 种，拉丁方平衡
-- **输出**: `.mat` 结构体数组，含 flipTime / rt / color / xpos / pressedKey
+- **Task**: Red and green light spots appear randomly at the left/middle/right positions, press the button to determine the color
+- **Trial Structure**: ITI(1s) → Stimulation (response window within 0.5s) → Feedback Sound → Data Saving
+- **Conditions**: 2(color) × 3(position) = 6 species, Latin square balance
+- **Output**: `.mat` structure array, including flipTime / rt / color / xpos / pressedKey
 
-## 原始代码
+## Original code
 
 ```matlab
-% 视觉选择反应时实验 (Visual Choice RT Experiment)
-% 蒋挺老师知乎 PTB 教程 §5
+% Visual Choice RT Experiment
+% Teacher Jiang Ting Zhihu PTB tutorial §5
 
 close all; clear; sca;
 
 % ============================================================
-% 实验参数
+% Experimental parameters
 % ============================================================
 expParams.screenNum = 0;
 expParams.fullscreen = 1;
 expParams.monitorHz = 60;
 expParams.trialsPerBlock = 40;
-expParams.ITI = 1.0;                % 试次间间隔（秒）
-expParams.stimDur = 0.5;            % 刺激持续时间（秒）
-expParams.validKeys = [32, 38];     % 空格键和上箭头键
+expParams.ITI = 1.0;                % Inter-trial interval (seconds)
+expParams.stimDur = 0.5;            % Stimulation duration (seconds)
+expParams.validKeys = [32, 38];     % Spacebar and Up Arrow
 
-% 生成试次序列（2颜色 × 3位置 × 重复）
-colors = [1, 2];                    % 1=红色[255,0,0], 2=绿色[0,255,0]
-positions = [-400, 0, 400];         % X坐标（像素），Y=0居中
+% Generate trial sequence (2 colors × 3 positions × repeat)
+colors = [1, 2];                    % 1=red[255,0,0], 2=green[0,255,0]
+positions = [-400, 0, 400];         % X coordinate (pixels), Y=0 centered
 trialList = [];
 for c = 1:length(colors)
     for p = 1:length(positions)
@@ -40,16 +40,16 @@ for c = 1:length(colors)
     end
 end
 trialList = repmat(trialList, expParams.trialsPerBlock / size(trialList,1), 1);
-trialList = trialList(randperm(size(trialList,1)), :);  % 随机打乱
+trialList = trialList(randperm(size(trialList,1)), :);  % Randomly shuffle
 
 % ============================================================
-% 窗口初始化
+% Window initialization
 % ============================================================
 PsychDefaultSetup(2);
 Screen('Preference', 'SkipSyncTests', 0);
 
 [windowPtr, windowRect] = Screen('OpenWindow', expParams.screenNum, [0 0 0], ...
-    [], [], [], [], 2);  % 双缓冲
+    [], [], [], [], 2);  % Double buffering
 Screen('BlendFunction', windowPtr, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
 ifi = Screen('GetFlipInterval', windowPtr);
 [centerX, centerY] = RectCenter(windowRect);
@@ -57,13 +57,13 @@ HideCursor;
 Priority(MaxPriority(windowPtr));
 
 % ============================================================
-% 颜色辅助函数
+% Color helper function
 % ============================================================
 function rgb = GetColorFromList(colorID)
     if colorID == 1
-        rgb = [255, 0, 0];    % 红色
+        rgb = [255, 0, 0];    % Red
     elseif colorID == 2
-        rgb = [0, 255, 0];    % 绿色
+        rgb = [0, 255, 0];    % Green
     else
         rgb = [255, 255, 255];
     end
@@ -74,7 +74,7 @@ function rect = MakeRectFromCenter(cx, cy, w, h)
 end
 
 % ============================================================
-% 主实验循环
+% Main experiment loop
 % ============================================================
 data = struct([]);
 
@@ -84,17 +84,17 @@ for t = 1:expParams.trialsPerBlock
     currentY = 0;
 
     % --- ITI ---
-    vbl = Screen('Flip', windowPtr);  % 清屏
+    vbl = Screen('Flip', windowPtr);  % Clear screen
     WaitSecs(expParams.ITI);
 
-    % --- 绘制刺激 ---
+    % --- Draw stimulus ---
     Screen('FillOval', windowPtr, GetColorFromList(currentColor), ...
         MakeRectFromCenter(currentX, currentY, 50, 50));
 
-    % --- Flip + 时间戳记录 ---
-    stimOnset = Screen('Flip', windowPtr);  % 返回实际翻转时刻
+    % --- Flip + timestamp record ---
+    stimOnset = Screen('Flip', windowPtr);  % Returns the actual flip time
 
-    % --- 响应收集（非阻塞轮询） ---
+    % --- Response collection (non-blocking polling) ---
     responseDetected = false;
     responseKey = NaN;
     rt = NaN;
@@ -104,14 +104,14 @@ for t = 1:expParams.trialsPerBlock
         [keyIsDown, ~, keyCodes] = KbCheck;
         if keyIsDown
             if any(ismember(keyCodes, expParams.validKeys))
-                rt = (GetSecs - stimOnset) * 1000;  % 转换为毫秒
+                rt = (GetSecs - stimOnset) * 1000;  % Convert to milliseconds
                 responseKey = find(keyCodes, 1);
                 responseDetected = true;
             end
         end
     end
 
-    % --- 数据记录 ---
+    % --- Data record ---
     data(t).stimOnset = stimOnset;
     data(t).rt = rt;
     data(t).color = currentColor;
@@ -120,7 +120,7 @@ for t = 1:expParams.trialsPerBlock
 end
 
 % ============================================================
-% 保存与清理
+% Save and clean
 % ============================================================
 save('ExpData_Subj01.mat', 'data');
 sca;
@@ -128,28 +128,28 @@ Priority(0);
 ShowCursor;
 
 % ============================================================
-% 数据预处理示例
+% Data preprocessing example
 % ============================================================
 % load('ExpData_Subj01.mat');
 % validRTs = [data(:).rt];
 % validRTs = validRTs(~isnan(validRTs) & validRTs > 100 & validRTs < 2000);
-% fprintf('平均反应时: %.2f ms ± %.2f ms\n', mean(validRTs), std(validRTs));
+% fprintf('Average reaction time: %.2f ms ± %.2f ms\n', mean(validRTs), std(validRTs));, std(validRTs));
 ```
 
-## 反模式标注
+## Anti-pattern annotation
 
-| 问题 | 位置 | 规范替代（spec Canonical Skeleton） |
+| Issue | Location | Spec Canonical Skeleton |
 |------|------|-------------------------------------|
-| `WaitSecs(expParams.ITI)` 阻塞 | ITI 阶段 | 帧循环 `for f=1:nFrames; Screen('Flip',w,vbl+(wf-0.5)*ifi); end` |
-| `KbCheck` 轮询而非 `KbQueueCheck` | 响应收集 | `KbQueueCreate` + `KbQueueCheck` + `firstPress - VBLTimestamp` |
-| `GetSecs - stimOnset` 手动计算 RT | RT 计算 | `firstPress(keyIdx) - VBLTimestamp`（KbQueue 自动时间戳） |
-| `save()` 实验结束后一次性保存 | 数据保存 | `fopen`/`fprintf` 每试次增量写入 |
-| 无 `try-catch` | 全局 | 必须包裹 |
-| 反馈音 `PlaySound` 未实现 | 反馈阶段 | 使用 `PsychPortAudio` 预加载 + 异步播放 |
+| `WaitSecs(expParams.ITI)` blocking | ITI phase | frame loop `for f=1:nFrames; Screen('Flip',w,vbl+(wf-0.5)*ifi); end` |
+| `KbCheck` polling instead of `KbQueueCheck` | Response collection | `KbQueueCreate` + `KbQueueCheck` + `firstPress - VBLTimestamp` |
+| `GetSecs - stimOnset` manual calculation of RT | RT calculation | `firstPress(keyIdx) - VBLTimestamp` (KbQueue automatic timestamp) |
+| `save()` One-time saving after the experiment | Data saving | `fopen`/`fprintf` Incremental writing for each trial |
+| None `try-catch` | Global | Must wrap |
+| Feedback sound `PlaySound` is not implemented | Feedback stage | Use `PsychPortAudio` to preload + asynchronous playback |
 
-## 实验逻辑要点（可用于 Programming 层范式设计）
+## Experimental logic points (can be used for programming layer paradigm design)
 
-- 2(颜色) × 3(位置) 因子设计，拉丁方平衡
-- 刺激持续时间固定 500ms，内有响应窗口
-- 数据结构: struct 数组 → `.mat` 保存
-- 异常 RT 剔除: < 100ms 或 > 2000ms
+- 2(color) × 3(position) factorial design, Latin square balance
+- Stimulation duration is fixed at 500ms, with a response window within it
+- Data structure: struct array → `.mat` save
+- Abnormal RT culling: < 100ms or > 2000ms

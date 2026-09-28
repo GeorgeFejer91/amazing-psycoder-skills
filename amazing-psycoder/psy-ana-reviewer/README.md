@@ -1,39 +1,39 @@
-# psy-ana-reviewer — 分析审计层
+# psy-ana-reviewer — analysis audit layer
 
-> **版本**: v1.4.0 | 审计分析设计、脚本或已执行结果；不直接修改代码。
+> **Version**: v1.4.0 | Audit analysis design, script, or executed results; do not directly modify the code.
 
-## 审查模式与证据上限
+## Review mode and evidence limit
 
-| 模式 | 最低输入 | 最大标签 |
+| Mode | Minimum Input | Maximum Tags |
 |------|----------|---------|
 | `plan-review` | `analysis_config.yaml` | `analysis_plan_ready` |
-| `analysis-audit` | config + 完整脚本 + 数据 schema | `ready_for_execution` |
-| `result-audit` | 上述材料 + clean execution log + 生成的表/图 + 环境信息 | `ready_for_publication` |
-| `triage-only` | 研究问题/错误描述 | 缺失信息与风险清单 |
-| `blocked` | 无法判断范围或缺少关键输入 | `blocked` |
+| `analysis-audit` | config + full script + data schema | `ready_for_execution` |
+| `result-audit` | The above materials + clean execution log + generated tables/graphs + environment information | `ready_for_publication` |
+| `triage-only` | Research question/bug description | Missing information and risk list |
+| `blocked` | Unable to determine range or missing key input | `blocked` |
 
-静态审查通过只表示脚本可以进入执行验证，不能证明结果正确或可发表。`ready_for_publication` 必须有成功执行和结果审查证据。
+A static review pass only indicates that the script can enter execution verification, but does not prove that the results are correct or publishable. `ready_for_publication` must have evidence of successful execution and review of results.
 
-## 核心审计
+## Core Audit
 
-- 研究问题、estimand、观测层级与模型公式一致；重复测量、项目和会话依赖未被忽略。
-- 变量类型与似然/链接函数匹配；重复二元数据不能把普通 `statsmodels.Logit()` 标成 GLMM。
-- 排除、缺失、变换和派生变量均有来源、理由、计数与敏感性策略。
-- 诊断针对实际模型；不机械要求所有模型做 Shapiro 检验。
-- 每个实质性结论由目标效应估计与不确定性支持，而非仅报告 p 值或 R²。
-- 随机种子只在随机过程存在时要求；始终记录包/运行环境和输入输出清单。
-- 结果审查核对执行日志、样本流转、表图数值、警告/收敛、方向和单位。
+- The research question, estimate, and observation hierarchy are consistent with the model formulation; repeated measures, item, and session dependencies are not ignored.
+- Variable type matches likelihood/link function; repeated binary data cannot mark plain `statsmodels.Logit()` as GLMM.
+- Excluded, missing, transformed, and derived variables have source, justification, counting, and sensitivity strategies.
+- Diagnostics are specific to actual models; there is no mechanical requirement for Shapiro tests on all models.
+- Each substantive conclusion is supported by a target effect estimate with uncertainty, rather than just reporting a p-value or R².
+- Random seeds are only required if a random process exists; package/runtime environment and input and output manifests are always logged.
+- Result review checks execution logs, sample flow, chart values, warnings/convergences, directions and units.
 
-## 严重性
+## Severity
 
-| 级别 | 判定依据 |
+| Level | Judgment basis |
 |------|----------|
-| **Critical** | 会改变主要结论、使用错误数据/模型，或结果无法追溯 |
-| **Major** | 可能实质影响估计/不确定性/重复性，发表前必须解决 |
-| **Minor** | 不改变实质结论的清晰度、维护性或文档问题 |
+| **Critical** | Will change the main conclusion, use wrong data/model, or the results cannot be traced |
+| **Major** | May materially affect estimates/uncertainty/reproducibility and must be resolved before publication |
+| **Minor** | Clarity, maintainability, or documentation issues that do not change the substantive conclusions |
 
-## 最小输出
+## Minimum output
 
-报告必须包含：审查模式、审查范围、证据状态、就绪标签、按严重性分组且带文件/稳定定位的发现、每项修复路径，以及仍未验证的事项。
+The report must include: review mode, review scope, evidence status, readiness label, findings grouped by severity with documentation/stable targeting, each remediation path, and items that remain unverified.
 
-完整工作流见 [SKILL.md](SKILL.md)；平台清单见 [R checklist](r/checklist/README.md) 与 [Python checklist](python/checklist/README.md)。
+For the complete workflow, please see [SKILL.md](SKILL.md); for the platform list, please see [R checklist](r/checklist/README.md) and [Python checklist](python/checklist/README.md).

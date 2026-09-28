@@ -1,31 +1,31 @@
-# Poisson 回归 / 负二项回归
+# Poisson Regression / Negative Binomial Regression
 
-## 概述
+## Overview
 
-Poisson回归用于建模**计数数据**(非负整数)。负二项回归是其扩展,处理过度离散(方差>均值)。
+Poisson regression is used to model **count data** (non-negative integers). Negative binomial regression is its extension and deals with overdispersion (variance > mean).
 
-**典型场景**: 被试在20分钟内自发眨眼次数; 每被试每条件错误次数; 社交互动中言语次数。
+**Typical scenario**: The number of spontaneous blinks by the subject within 20 minutes; the number of errors per condition per subject; the number of utterances in social interactions.
 
-## 何时使用
+## When to use
 
-| 条件 | 要求 |
+| Conditions | Requirements |
 |------|------|
-| 因变量类型 | 计数数据（非负整数：0, 1, 2, ...） |
-| 实验设计 | 被试间或被试内均可 |
-| 样本信息 | 由事件总数/暴露、零值、离散程度、预测参数和聚类决定；检查可识别性与区间精度，不套“每变量固定观测数” |
-| 独立性 | 各观测之间相互独立（不适用于嵌套/重复测量数据，除非使用 GEE 或混合模型） |
-| 离散程度 | Poisson：均值 ≈ 方差；负二项：方差 > 均值可接受 |
-| 零膨胀 | 若零值比例显著高于模型预期，考虑零膨胀模型（zeroinfl） |
-| 链接函数 | 默认 log 链接，效应量解释为 Incidence Rate Ratio (IRR) |
+| Dependent variable type | Count data (non-negative integers: 0, 1, 2, ...) |
+| Experimental design | Between subjects or within subjects |
+| Sample information | Determined by total number of events/exposure, zero value, degree of dispersion, prediction parameters and clustering; check identifiability and interval accuracy, do not apply "fixed number of observations per variable" |
+| Independence | Observations are independent of each other (does not apply to nested/repeated measures data unless using GEE or mixed models) |
+| Degree of dispersion | Poisson: mean ≈ variance; negative binomial: variance > mean acceptable |
+| Zero-inflation | If the proportion of zero values is significantly higher than expected by the model, consider a zero-inflation model (zeroinfl) |
+| Link function | Default log link, effect size is interpreted as Incidence Rate Ratio (IRR) |
 
-## Poisson vs 负二项
+## Poisson vs negative binomial
 
-| 方法 | 假设 | 何时用 |
+| Method | Assumptions | When to use |
 |------|------|--------|
-| Poisson | 均值=方差 | 计数数据 |
-| **负二项** | 方差>均值可接受 | **推荐默认**—真实数据几乎总有过度离散 |
+| Poisson | Mean=variance | Count data |
+| **Negative binomial** | Variance > mean acceptable | **Recommended default**—real data almost always has overdispersion |
 
-## R代码
+## R code
 
 ```r
 library(MASS)
@@ -34,23 +34,23 @@ summary(model)
 exp(coef(model))  # Incidence Rate Ratio
 ```
 
-## 效应量
+## Effect size
 
-IRR (Incidence Rate Ratio): exp(estimate)。IRR=1.5→条件B的错误率比A高50%。
+IRR (Incidence Rate Ratio): exp(estimate). IRR=1.5→The error rate of condition B is 50% higher than A.
 
-## 零膨胀模型
+## Zero-inflation model
 
-如果大量观测值为0(如大部分试次无错误),用零膨胀模型(zeroinfl):
+If a large number of observations are 0 (for example, most trials have no errors), use the zero-inflated model (zeroinfl):
 
 ```r
 library(pscl)
 model <- zeroinfl(error_count ~ condition | 1, data=data, dist="negbin")
 ```
 
-## 报告格式 (APA 7th)
+## Report Format (APA 7th)
 
-负二项回归用于检验实验条件对被试错误次数的影响。结果显示，条件 B 的错误率显著高于条件 A，IRR = 1.52，95% CI [1.18, 1.96]，*z* = 3.21，*p* = .001。模型整体显著，似然比 χ²(1) = 10.85，*p* < .001，McFadden's pseudo *R*² = .06。过度离散参数 θ = 2.34，表明存在轻微过度离散，支持使用负二项而非标准 Poisson 模型。
+Negative binomial regression was used to examine the impact of experimental conditions on the number of errors made by subjects. The results showed that condition B had a significantly higher error rate than condition A, IRR = 1.52, 95% CI [1.18, 1.96], *z* = 3.21, *p* = .001. The model was overall significant, likelihood ratio χ²(1) = 10.85, *p* < .001, McFadden's pseudo *R*² = .06. The overdispersion parameter θ = 2.34 indicates slight overdispersion, supporting the use of negative binomial rather than the standard Poisson model.
 
-### 模板
+### Template
 
-> 使用[Poisson / 负二项]回归检验[自变量]对[因变量]的影响。结果显示，[组/条件 B]的[因变量]显著[高于/低于][组/条件 A]，IRR = [值]，95% CI [[下限], [上限]]，*z* = [值]，*p* = [值]。模型整体显著，似然比 χ²([df]) = [值]，*p* = [值]。过度离散参数 θ = [值]，[支持/不支持]使用[Poisson/负二项]模型。
+> Use [Poisson/negative binomial] regression to test the effect of [independent variable] on [dependent variable]. The results show that [dependent variable] of [Group/Condition B] is significantly [higher/lower than] [Group/Condition A], IRR = [value], 95% CI [[lower limit], [upper limit]], *z* = [value], *p* = [value]. The model is overall significant, likelihood ratio χ²([df]) = [value], *p* = [value]. Overdispersion parameter θ = [value], [supported/unsupported] using the [Poisson/negative binomial] model.

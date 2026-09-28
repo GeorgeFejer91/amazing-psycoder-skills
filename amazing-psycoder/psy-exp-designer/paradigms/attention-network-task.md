@@ -6,7 +6,7 @@
 
 ## When to Use
 
-User mentions: ANT, attention network test, alerting, orienting, executive control, Fan task, 注意网络任务. A combined cued reaction time and flanker task that measures three independent attentional networks — alerting, orienting, and executive control — within a single 30-minute session.
+User mentions: ANT, attention network test, alerting, orienting, executive control, Fan task, attention network task. A combined cued reaction time and flanker task that measures three independent attentional networks — alerting, orienting, and executive control — within a single 30-minute session.
 
 ## Core Logic
 
@@ -60,34 +60,34 @@ Fan, J., McCandliss, B. D., Sommer, T., Raz, A., & Posner, M. I. (2002). Testing
 
 ## Do Not Assume
 
-- Do not assume 4种线索类型全部使用 —— 部分简化版ANT仅保留2或3种线索类型（例如去掉双重线索或中性线索）。需确认用户的具体实验设计。
-- Do not assume空间线索100%有效 —— 标准ANT中空间线索始终指向目标位置，但ANT-I变式引入无效线索试次，用于测量注意网络间的交互作用。需确认是否需要无效线索。
-- Do not assume刺激必须使用预渲染PNG图片 —— PsychoPy可直接使用Polygon组件绘制箭头，或使用TextStim以Unicode箭头字符（← →）呈现刺激。预渲染图片方式需用户提供图片文件，编程绘制则需确认箭头尺寸、间距和颜色。
-- Do not assume中性flanker必须是无方向线条 —— 部分实现以"---"线条作为中性条件，部分使用无箭头线段，部分版本完全不设中性条件（仅congruent和incongruent两种flanker类型）。
-- Do not assume被试反应仅为左右箭头键 —— 部分实现使用键盘左右方向键，部分使用指定手指按键（如左手食指按F、右手食指按J）。需确认按键映射。
-- Do not assume练习试次数为标准值 —— 标准ANT通常包含24个练习试次（1个block），但用户可能自定义练习次数或完全省略练习阶段。
+- Do not assume all 4 clue types are used - some simplified versions of ANT only retain 2 or 3 clue types (e.g. removing double clues or neutral clues). The user’s specific experimental design needs to be confirmed.
+- Do not assume that spatial cues are 100% effective - in standard ANT, spatial cues always point to the target location, but the ANT-I variant introduces invalid cue trials to measure the interaction between attention networks. Need to confirm whether invalid clues are needed.
+- Do not assume that stimuli must use pre-rendered PNG images - PsychoPy can draw arrows directly using the Polygon component, or use TextStim to render stimuli as Unicode arrow characters (← →). The pre-rendered image method requires the user to provide image files, and programmatic drawing requires confirming the arrow size, spacing and color.
+- Do not assume that neutral flanker must be a directionless line - some implementations use "---" lines as neutral conditions, some use arrow-less line segments, and some versions do not set neutral conditions at all (only two flanker types, congruent and incongruent).
+- Do not assume that the subject's reaction is only the left and right arrow keys - some implementations use the left and right arrow keys on the keyboard, and some use designated finger keys (such as pressing F with the left index finger and pressing J with the right index finger). Key mapping needs to be confirmed.
+- Do not assume the number of practice trials is the standard value - standard ANT usually contains 24 practice trials (1 block), but the user may customize the number of practice trials or omit the practice phase entirely.
 
 ## Condition File Columns
 
 | Column | Type | Description |
 |--------|------|-------------|
-| cue_type | str | 线索类型：`"no_cue"`、`"center_cue"`、`"double_cue"`、`"spatial_cue"` |
-| flanker_type | str | Flanker类型：`"congruent"`、`"incongruent"`、`"neutral"` |
-| target_direction | str | 中央箭头的指向：`"left"` 或 `"right"` |
-| correct_response | str | 正确按键：`"left"` 或 `"right"` |
-| stimulus | str | 刺激图片文件名（如图片方式呈现），如 `"congLeft.png"` |
+| cue_type | str | Cue type: `"no_cue"`, `"center_cue"`, `"double_cue"`, `"spatial_cue"` |
+| flanker_type | str | Flanker type: `"congruent"`, `"incongruent"`, `"neutral"` |
+| target_direction | str | The direction of the central arrow: `"left"` or `"right"` |
+| correct_response | str | Correct key: `"left"` or `"right"` |
+| stimulus | str | Stimulus image file name (if presented in image format), such as `"congLeft.png"` |
 
 ## Variants
 
-- **ANT-I（Attention Network Test - Interaction）**：在标准ANT基础上引入无效空间线索试次，用于测量警觉网络与定向网络之间的交互作用。无效线索占比通常为17–25%，与flanker类型交叉平衡。参考 [eriksen-flanker.md](eriksen-flanker.md)。
-- **Child ANT（儿童版ANT）**：将箭头刺激替换为彩色鱼图片（5条鱼排成一行，目标为中央鱼），鱼朝向左右代替箭头方向。线索由鱼出现前的气泡或水草动画替代，大幅降低认知负荷，适用于5–10岁儿童。
-- **ANT-R（ANT-Revised）**：由Fan等人（2009）修订的优化版本，缩短了线索-目标间隔，调整了试次比例以平衡三个网络的信噪比。总试次数减少至144试次，更适合fMRI等神经影像实验。
+- **ANT-I (Attention Network Test - Interaction)**: Invalid spatial cue trials are introduced based on standard ANT to measure the interaction between the alertness network and the orientation network. The proportion of invalid leads is usually 17–25%, cross-balanced with the flanker type. Reference [eriksen-flanker.md](eriksen-flanker.md).
+- **Child ANT**: Replace arrow stimuli with pictures of colored fish (5 fish in a row, target central fish), with fish facing left and right instead of arrow directions. The clues are replaced by animations of bubbles or water plants before the fish appears, which greatly reduces cognitive load and is suitable for children aged 5–10 years.
+- **ANT-R (ANT-Revised)**: Optimized version revised by Fan et al. (2009) with shortened cue-target interval and adjusted trial ratio to balance the signal-to-noise ratio of the three networks. The total number of trials is reduced to 144 trials, which is more suitable for neuroimaging experiments such as fMRI.
 
 ## Example
 
 ### User Request
 
-> "我要做一个注意网络测试（ANT）实验。屏幕中央始终显示注视点'+'。每个试次开始时先呈现线索：无线索（注视点不变）、中央线索（注视点变粗）、双重线索（上方和下方同时变粗）或空间线索（仅目标出现位置变粗）。线索持续100ms，之后注视点恢复400ms，然后在注视点上方或下方呈现5个水平排列的箭头，中央箭头向左或向右，两侧箭头与中央一致、相反或无方向线段。被试任务是在1700ms内按左或右键判断中央箭头方向。共3个block，每个block 96试次。用PsychoPy实现。"
+> "I am going to do an Attention Network Test (ANT) experiment. The fixation point '+' is always displayed in the center of the screen. Each trial starts with the cue presented first: no cue (fixation point remains unchanged), central cue (fixation point becomes bolder), dual cue (upper and lower fixation points become bolder at the same time), or spatial cue (only the location where the target appears becomes bolder). The cue lasts for 100 ms, then the fixation point is restored for 400ms, and then 5 horizontally arranged arrows are presented above or below the fixation point, with the central arrow pointing left or right, and the arrows on both sides are consistent with the center, opposite or have no direction lines. The subject's task is to press the left or right key to determine the direction of the central arrow within 1700ms. There are 3 blocks in total. 96 trials. Implemented with PsychoPy."
 
 ### Trial Window Timeline
 
@@ -97,7 +97,7 @@ Fan, J., McCandliss, B. D., Sommer, T., Raz, A., & Posner, M. I. (2002). Testing
 │ Fixation                 │    │ Cue                      │    │ Target + Flankers        │    │ ITI                      │
 │ Content: +               │    │ Content: * / ** / spatial │    │ Content: ←←←←← or →→→→→ │    │ Content: blank          │
 │ Duration: variable       │    │ Duration: 100 ms          │    │ Duration: until key      │    │ Duration: variable       │
-│ (400-1600 ms random)     │    │ Response: none            │    │ (deadline 1700 ms)       │    │ (随机)                   │
+│ (400-1600 ms random) │ │ Response: none │ │ (deadline 1700 ms) │ │ (random) │
 │ Response: none           │    │ Condition: {cue_type}     │    │ Response: left/right key │    │ Response: none           │
 │ Condition: none          │    │ Data: none                │    │ Condition: {flanker_type}│    │ Condition: none          │
 │ Data: none               │    └──────────────────────────┘    │ Data: rt, key, acc       │    │ Data: none               │
@@ -108,72 +108,72 @@ Fan, J., McCandliss, B. D., Sommer, T., Raz, A., & Posner, M. I. (2002). Testing
 
 | Field | Value |
 |-------|-------|
-| 实验名称 | Attention Network Task (ANT) |
-| 平台 | PsychoPy |
-| 任务类型 | 线索化flanker任务（注意网络测量） |
-| 线索类型 | no_cue, center_cue, double_cue, spatial_cue |
-| Flanker类型 | congruent, incongruent, neutral |
-| 线索持续时间 | 100 ms |
-| 线索-目标间隔 | 400 ms |
-| 反应截止时间 | 1700 ms |
-| Block数 | 3 blocks |
-| 每Block试次数 | 96 trials |
-| 总试次数 | 288 trials |
-| 注视点-线索间隔 | 400-1600 ms 随机 |
-| ITI | 未指定（待确认） |
+| Experiment name | Attention Network Task (ANT) |
+| Platform | PsychoPy |
+| Task type | Cued flanker task (note network measurement) |
+| Cue type | no_cue, center_cue, double_cue, spatial_cue |
+| Flanker type | congruent, incongruent, neutral |
+| Lead duration | 100 ms |
+| cue-target interval | 400 ms |
+| Response deadline | 1700 ms |
+| Number of Blocks | 3 blocks |
+| Number of trials per Block | 96 trials |
+| Total number of trials | 288 trials |
+| Fixation-cue interval | 400-1600 ms random |
+| ITI | Unspecified (pending confirmation) |
 
 ### Missing Information
 
-1. ITI时长未说明 → 将询问（固定还是随机范围？标准ANT的ITI通常为随机变化）
-2. 是否包含练习阶段？标准ANT通常包含24个练习试次，但用户未提及 → 将询问
-3. 箭头的具体尺寸、间距和视觉参数未说明 → 如使用Polygon绘制，需确认箭头大小、线宽、排列间距
+1. The ITI duration is not specified → Will ask (fixed or random range? The ITI of standard ANT usually changes randomly)
+2. Does it include a practice phase? Standard ANT usually contains 24 practice trials, but not mentioned by the user → Will ask
+3. The specific size, spacing and visual parameters of the arrows are not specified → If you use Polygon to draw, you need to confirm the size, line width and arrangement spacing of the arrows
 
 ### Critical Assumptions
 
-- 空间线索100%有效（指向目标出现的实际位置），不包含无效线索试次
-- 刺激使用PsychoPy Polygon组件编程绘制（无需预渲染PNG图片）
-- 反应键为键盘左右方向键（Left / Right arrow keys）
-- ITI默认随机400-1600 ms（与注视点持续时间范围一致，参照标准ANT）
-- 注视点-线索间隔（cue前）默认随机400-1600 ms
+- Spatial cues are 100% valid (pointing to the actual location where the target appears), excluding invalid cue trials
+- Stimulates programmatic drawing using PsychoPy Polygon components (no need to pre-render PNG images)
+- The reaction keys are the left/right arrow keys on the keyboard (Left / Right arrow keys)
+- ITI defaults to random 400-1600 ms (consistent with the fixation point duration range, refer to standard ANT)
+- Fixation point-cue interval (before cue) defaults to random 400-1600 ms
 
 ### Code Architecture
 
 ```
 ant.py
-├── 参数配置（线索类型、flanker类型、持续时间、试次数、按键映射）
-├── 窗口设置（全屏/窗口，背景色，单位）
-├── 刺激组件预创建
-│   ├── 注视点（TextStim: "+"）
-│   ├── 线索刺激（TextStim: "*" 用于中央/双重/空间线索的各个位置）
-│   ├── 箭头刺激（Polygon: 向左/向右箭头）+ 中性线段（Line）
-│   └── 反馈文本（TextStim: 仅在练习阶段使用）
-├── 条件文件生成（所有 cue_type × flanker_type × target_direction 组合，跨block平衡）
-├── 实验阶段
-│   ├── 指导语
-│   ├── 练习阶段（24试次，含反馈）
-│   └── 正式阶段（3 blocks × 96 trials）
-├── 试次循环:
-│   ├── 注视点（随机400-1600 ms）
-│   ├── 线索（100 ms）
-│   ├── 线索-目标间隔（400 ms，注视点恢复）
-│   ├── 目标+flanker呈现（最大1700 ms或直到反应）
-│   ├── 反馈（练习阶段：正确/错误/超时）
-│   └── ITI（随机）
-├── 数据保存：try/finally + CSV逐行写入
-├── 退出控制：Escape键检查
-└── 注意网络分数计算（实验结束后输出alerting/orienting/executive_control分数）
+├── Parameter configuration (lead type, flanker type, duration, number of trials, key mapping)
+├── Window settings (full screen/window, background color, unit)
+├── Stimulus component pre-creation
+│ ├── Gaze point (TextStim: "+")
+│ ├── Cue stimulus (TextStim: "*" for various positions of central/double/spatial cues)
+│ ├── Arrow stimulus (Polygon: left/right arrow) + neutral line segment (Line)
+│ └── Feedback text (TextStim: only used during practice)
+├── Condition file generation (all cue_type × flanker_type × target_direction combinations, balanced across blocks)
+├── Experimental stage
+│ ├── Instructions
+│ ├── Practice phase (24 trials, including feedback)
+│ └── Formal stage (3 blocks × 96 trials)
+├── Trial cycle:
+│ ├── Fixation point (random 400-1600 ms)
+│ ├── clue (100 ms)
+│ ├── Cue-target interval (400 ms, fixation recovery)
+│ ├── target + flanker presentation (max 1700 ms or until response)
+│ ├── Feedback (Practice phase: correct/wrong/timeout)
+│ └── ITI (random)
+├── Data saving: try/finally + CSV write line by line
+├── Exit control: Escape key check
+└── Pay attention to the network score calculation (output the alerting/orienting/executive_control score after the experiment)
 ```
 
 ### Expected Data Columns
 
 | Column | Type | Description |
 |--------|------|-------------|
-| cue_type | str | 线索类型：no_cue / center_cue / double_cue / spatial_cue |
-| flanker_type | str | Flanker类型：congruent / incongruent / neutral |
-| target_direction | str | 中央箭头指向：left / right |
-| correct_response | str | 正确按键：left / right |
-| rt | float | 反应时间（ms） |
-| acc | int | 正确性：1=正确，0=错误 |
-| alerting_score | float | 警觉网络分数：RT(no_cue) - RT(double_cue) |
-| orienting_score | float | 定向网络分数：RT(center_cue) - RT(spatial_cue) |
-| executive_control_score | float | 执行控制分数：RT(incongruent) - RT(congruent) |
+| cue_type | str | Cue type: no_cue / center_cue / double_cue / spatial_cue |
+|flanker_type|str|Flanker type: congruent/incongruent/neutral|
+| target_direction | str | Center arrow points to: left / right |
+| correct_response | str | Correct key: left / right |
+| rt | float | reaction time (ms) |
+| acc | int | Correctness: 1=correct, 0=wrong |
+| alerting_score | float | Alert network score: RT(no_cue) - RT(double_cue) |
+| orienting_score | float | Orienting network score: RT(center_cue) - RT(spatial_cue) |
+| executive_control_score | float | Executive control score: RT(incongruent) - RT(congruent) |

@@ -1,108 +1,108 @@
 # jsPsych (JavaScript)
 
-> **状态**: 当前生成目标为 config 中固定版本的 jsPsych 8.x。L3 的 26 个文件多数来自 PsychoJS/jsPsych 6/lab.js，只能提取范式逻辑，不能复制 API 或声称原样可运行。
+> **Status**: The current build target is the fixed version of jsPsych 8.x in config. Most of L3's 26 files come from PsychoJS/jsPsych 6/lab.js, which can only extract paradigm logic and cannot copy the API or claim to be runnable as-is.
 
-## 生成代码流程（与 PsychoPy 统一，平台特化映射见 mapping/）
+## Code generation process (unified with PsychoPy, see mapping/ for platform-specific mapping)
 
 ```
 config.yaml
     │
     ▼
-1. 确认 `runtime.framework_version` 与兼容的 core/plugin 固定版本，复制 [Canonical Code Skeleton](spec/README.md#8-canonical-code-skeleton)
+1. Confirm that `runtime.framework_version` is compatible with the core/plugin fixed version, copy [Canonical Code Skeleton](spec/README.md#8-canonical-code-skeleton)
     │
     ▼
-2. 参数区：填入 config 的 display / font / output
+2. Parameter area: fill in the display / font / output of config
     │
     ▼
-3. Timeline 结构：config.windows[] → 嵌套 timeline 节点数组
-    → 映射规则见 [mapping/README.md §Windows[] → Timeline 节点](mapping/README.md#windows--timeline-节点映射jspsych-7x)
+3. Timeline structure: config.windows[] → nested timeline node array
+    → For mapping rules, see [mapping/README.md §Windows[] → Timeline node](mapping/README.md#windows--timeline-node mapping jspsych-7x)
     │
     ▼
-4. 条件数组：config.blocks[].condition_file → JavaScript 数组（非外部文件）
-    → 可用 `jsPsych.randomization.factorial()` 或脚本加载时预计算
+4. Condition array: config.blocks[].condition_file → JavaScript array (non-external file)
+    → Available with `jsPsych.randomization.factorial()` or precomputed on script load
     │
     ▼
-5. 响应收集：config.windows[].response → `choices: [keys]` + `response_ends_trial: true`
+5. Response collection: config.windows[].response → `choices: [keys]` + `response_ends_trial: true`
     │
     ▼
-6. 正确性判断：config.response_rules.correct → `on_finish` 回调 + `compareKeys()`
+6. Correctness judgment: config.response_rules.correct → `on_finish` callback + `compareKeys()`
     │
     ▼
-7. 数据保存：config.output → `on_data_update` 耐久 checkpoint + `on_finish` 原始 trial-summary 最终导出；分析排除不在采集端执行
+7. Data saving: config.output → `on_data_update` durable checkpoint + `on_finish` original trial-summary final export; analysis and exclusion are not executed on the collection end
     │
     ▼
-8. 运行 Quality Gate（10 项）→ 修复 → 交付
+8. Run Quality Gate (10 items) → Repair → Deliver
 ```
 
-关键：每个步骤对应的 config 字段映射见 [mapping/README.md](mapping/README.md)。
+Key: For the config field mapping corresponding to each step, see [mapping/README.md](mapping/README.md).
 
-## 文件结构
+## File structure
 
 ```
 jspsych/
-├── README.md              ← 本文件
-├── spec/                  ← L1: jsPsych 8.x API 规范 + Canonical Skeleton
+├── README.md ← This file
+├── spec/ ← L1: jsPsych 8.x API specification + Canonical Skeleton
 │   └── README.md
-├── mapping/               ← L2: Config → jsPsych timeline 节点映射
-│   └── README.md          ← 含 legacy→8.x 迁移表 + PsychoJS 对照
-├── paradigms/              ← L3: 范式参考（实验逻辑，非 API 参考）
-│   ├── README.md          ← 范式索引 + API 醒示
-│   └── *.md               ← 25 个范式文件
-└── demo/                  ← L4: Pavlovia 原始导出
-    └── _raw/              ← 23 个 .js
+├── mapping/ ← L2: Config → jsPsych timeline node mapping
+│ └── README.md ← Contains legacy→8.x migration table + PsychoJS comparison
+├── paradigms/ ← L3: Paradigm reference (experimental logic, non-API reference)
+│ ├── README.md ← Paradigm Index + API Alert
+│ └── *.md ← 25 paradigm files
+└── demo/ ← L4: Pavlovia original export
+    └── _raw/ ← 23 .js
 ```
 
-## 层级填充状态
+## Level filling status
 
-| 层级 | 内容 |
+| Level | Content |
 |------|------|
 | L1 `spec/` | jsPsych 8.x pinned Canonical Skeleton + API contract |
-| L2 `mapping/` | jsPsych 8.x Config→Code mapping；legacy/PsychoJS 仅作迁移对照 |
-| L3 `paradigms/` | 25 个 legacy 逻辑来源。代码块属于隔离区，**API 只能来自 L1-L2** |
-| L4 `demo/` | 23 个 Pavlovia .js — 仅参考实验逻辑 |
+| L2 `mapping/` | jsPsych 8.x Config→Code mapping; legacy/PsychoJS is only for migration control |
+| L3 `paradigms/` | 25 legacy logic sources. Code blocks belong to quarantine, **API can only come from L1-L2** |
+| L4 `demo/` | 23 Pavlovia .js — only for reference experimental logic |
 
-## 强制 API 规则
+## Mandatory API rules
 
-所有生成的 jsPsych 代码遵守（完整规范见 [spec/README.md](spec/README.md)）：
+All generated jsPsych code conforms to (full specification in [spec/README.md](spec/README.md)):
 
-| 类别 | 必须使用 | 禁止使用 |
+| Category | Required | Use prohibited |
 |------|---------|---------|
-| 初始化 | `initJsPsych()` + `jsPsych.run()` | `jsPsych.init()` |
-| 插件类型 | class 引用：`jsPsychHtmlKeyboardResponse` | 字符串：`'html-keyboard-response'` |
-| 无按键 | `"NO_KEYS"`（字符串） | `jsPsych.NO_KEYS` |
-| 任意按键 | `"ALL_KEYS"`（字符串） | `jsPsych.ALL_KEYS` |
-| Timeline variable | static placeholder: `timelineVariable('x')`; function: `evaluateTimelineVariable('x')` | v7 的 `timelineVariable('x', true)` |
-| 条件数组 | 脚本加载时预计算所有条件 | `timeline_variables` 作为函数（运行时生成不支持） |
-| 预加载 | 媒体首次使用前完成 preload | 纯文本也机械添加空 preload，或媒体使用后才 preload |
-| RT | `data.rt`（自动记录） | `Date.now()` 手动计时 |
-| 计时 | `trial_duration: N`（ms） | `setTimeout`/`setInterval` |
-| 数据保存 | `on_data_update` checkpoint + `on_finish` 最终 `localSave` | 仅结束时保存或只保存在内存 |
-| 正确性 | `jsPsych.pluginAPI.compareKeys()` | 手动 `==` 比较（跨浏览器不可靠） |
+| Initialization | `initJsPsych()` + `jsPsych.run()` | `jsPsych.init()` |
+| Plug-in type | class reference: `jsPsychHtmlKeyboardResponse` | string: `'html-keyboard-response'' |
+| No keys | `"NO_KEYS"` (string) | `jsPsych.NO_KEYS` |
+| Any key | `"ALL_KEYS"` (string) | `jsPsych.ALL_KEYS` |
+| Timeline variable | static placeholder: `timelineVariable('x')`; function: `evaluateTimelineVariable('x')` | v7's `timelineVariable('x', true)` |
+| Condition array | Precompute all conditions when script is loaded | `timeline_variables` as function (not supported in runtime generation) |
+| Preloading | Completed before the first use of the media preload | Plain text also mechanically adds empty preload, or preload after the media is used |
+| RT | `data.rt` (automatic recording) | `Date.now()` manual timing |
+| Timing | `trial_duration: N` (ms) | `setTimeout`/`setInterval` |
+| Data save | `on_data_update` checkpoint + `on_finish` final `localSave` | Only save at the end or only save in memory |
+| Correctness | `jsPsych.pluginAPI.compareKeys()` | Manual `==` comparison (not reliable across browsers) |
 
-## 平台特有关键概念
+## Platform-specific key concepts
 
-jsPsych 是**声明式**实验框架 — 与其他平台的核心差异：
+jsPsych is a **declarative** experimentation framework — core differences from other platforms:
 
-| 概念 | jsPsych 方式 | vs PsychoPy/Psychtoolbox |
+| Concept | jsPsych way | vs PsychoPy/Psychtoolbox |
 |------|-------------|--------------------------|
-| 实验结构 | 声明式 timeline 数组（嵌套） | 命令式循环（for/while） |
-| Trial 定义 | 对象 `{type: PluginClass, stimulus: ..., choices: ...}` | 函数/代码块 |
-| 条件控制 | `timeline_variables` 数组（纯数据） | 外部文件加载（xlsx/csv） |
-| 准度判断 | `on_finish` 回调修改 `data.correct` | 手动 `if resp == corrAns` |
-| RT 记录 | 插件自动记录 `data.rt`（ms） | 手动 clock reset + key.rt |
-| 数据保存 | 每 trial checkpoint + 结束时 `.filter().localSave()` | 仅结束时写出 |
-| 预加载 | `jsPsychPreload` plugin（自动扫描） | 显式预创建所有 stimulus 对象 |
+| Experimental structure | Declarative timeline array (nested) | Imperative loop (for/while) |
+| Trial definition | Object `{type: PluginClass, stimulus: ..., choices: ...}` | Function/code block |
+| Conditional control | `timeline_variables` array (pure data) | External file loading (xlsx/csv) |
+| Accuracy judgment | `on_finish` callback modification `data.correct` | Manual `if resp == corrAns` |
+| RT recording | Plug-in automatic recording `data.rt` (ms) | Manual clock reset + key.rt |
+| Data saving | Every trial checkpoint + at the end `.filter().localSave()` | Only written out at the end |
+| Preloading | `jsPsychPreload` plugin (auto-scanning) | Explicitly pre-create all stimulus objects |
 
-## 范式差异速查
+## Quick check on paradigm differences
 
-不同范式在当前 pinned jsPsych 8.x 目标上的实现要点：
+Implementation points of different paradigms on the current pinned jsPsych 8.x target:
 
-| 范式 | 关键插件 | 条件结构 | 特殊逻辑 |
+| Paradigm | Key plug-in | Conditional structure | Special logic |
 |------|---------|---------|---------|
-| Stroop | `jsPsychHtmlKeyboardResponse` | word × color 因子数组 | `stimulus: function()` 动态生成 HTML |
-| IAT | verified current plugin/custom nodes | 7-block 工厂函数 | 采集原始 block/RT/error；D-score 在分析阶段计算 |
-| Go/No-go | `jsPsychHtmlKeyboardResponse` | go × no-go 比例 | `correctness_field` 或 `compareKeys` |
-| Stop-signal | `jsPsychHtmlKeyboardResponse` | SSD staircase | `jsPsychCallFunction` 或自定义 plugin |
-| N-back | `jsPsychHtmlKeyboardResponse` | 程序化序列 | 采集 target/lure/response 状态；d-prime 在分析阶段计算 |
+| Stroop | `jsPsychHtmlKeyboardResponse` | word × color factor array | `stimulus: function()` dynamically generate HTML |
+| IAT | verified current plugin/custom nodes | 7-block factory function | Collect original block/RT/error; D-score is calculated in the analysis phase |
+| Go/No-go | `jsPsychHtmlKeyboardResponse` | go × no-go ratio | `correctness_field` or `compareKeys` |
+| Stop-signal | `jsPsychHtmlKeyboardResponse` | SSD staircase | `jsPsychCallFunction` or custom plugin |
+| N-back | `jsPsychHtmlKeyboardResponse` | Programmed sequence | Collect target/lure/response status; d-prime is calculated during analysis phase |
 
-详细映射见 [mapping/README.md §范式架构对比](mapping/README.md#范式架构对比)。
+For detailed mapping, see [mapping/README.md § Paradigm Architecture Comparison] (mapping/README.md# Paradigm Architecture Comparison).

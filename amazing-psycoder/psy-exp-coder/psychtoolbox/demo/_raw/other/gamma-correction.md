@@ -1,31 +1,31 @@
-# 伽马校正与色彩空间管理
+# Gamma correction and color space management
 
-> 来源: 蒋挺老师知乎 PTB 教程 §3.3.3  
-> 归类: `demo/_raw/other/` — L4 参考
-> 参考层级: L4 demo（生成代码使用 spec/README.md §2.2 色彩规范）
+> Source: Teacher Jiang Ting Zhihu PTB tutorial §3.3.3
+> Classification: `demo/_raw/other/` — L4 reference
+> Reference level: L4 demo (generated code uses spec/README.md §2.2 color specification)
 
-## 原理
+## Principle
 
-Psychtoolbox 默认使用线性 RGB 色彩空间，但大多数显示器具有非线性响应曲线（伽马效应）。未校正的颜色会导致亮度感知失真。
+Psychtoolbox uses the linear RGB color space by default, but most monitors have a non-linear response curve (gamma effect). Uncorrected color can cause distortion in brightness perception.
 
-假设目标呈现 50% 亮度灰度：
+Assume that the target appears in 50% brightness grayscale:
 ```matlab
-linear_gray = 0.5;                           % 线性值
-actual_displayed = linear_gray ^ (1/2.2);    % 未经校正，实际显示更暗
+linear_gray = 0.5;                           % Linear value
+actual_displayed = linear_gray ^ (1/2.2);    % Without correction, the actual display is darker
 ```
 
-## 反向伽马校正
+## Reverse gamma correction
 
 ```matlab
 gamma = 2.2;
 target_luminance = 0.5;
-corrected_value = target_luminance ^ gamma;   % 预补偿
+corrected_value = target_luminance ^ gamma;   % Precompensation
 Screen('FillRect', win, corrected_value, rect);
 ```
 
-## LoadNormalizedGammaTable（推荐）
+## LoadNormalizedGammaTable (recommended)
 
-通过光度计测量 LUT 后加载：
+After measuring the LUT with a photometer, load:
 
 ```matlab
 lut_size = 256;
@@ -37,20 +37,20 @@ b_lut = r_lut;
 Screen('LoadNormalizedGammaTable', win, [r_lut, g_lut, b_lut]);
 ```
 
-一旦加载，所有后续颜色值都自动经过校正路径。
+Once loaded, all subsequent color values automatically go through the correction path.
 
-## 常见显示器伽马参考值
+## Common monitor gamma reference values
 
-| 显示器类型 | 典型伽马值 | 备注 |
+| Monitor Type | Typical Gamma Value | Remarks |
 |-----------|----------|------|
-| CRT | 2.2 ~ 2.5 | 接近理想幂律 |
-| LCD (sRGB) | 2.2 | 标准配置 |
-| OLED | 2.0 ~ 2.1 | 更高对比度 |
-| 投影仪 | 1.8 ~ 2.0 | 需单独校准 |
+| CRT | 2.2 ~ 2.5 | Close to the ideal power law |
+| LCD (sRGB) | 2.2 | Standard configuration |
+| OLED | 2.0 ~ 2.1 | Higher contrast ratio |
+| Projector | 1.8 ~ 2.0 | Requires separate calibration |
 
-## 反模式标注
+## Anti-pattern annotation
 
-| 问题 | 规范替代 |
+| Questions | Canonical Overrides |
 |------|---------|
-| 未校正的线性 RGB 值直接用于亮度关键实验 | 实验前加载 Gamma LUT 或使用校正后的颜色值 |
-| 假设所有显示器 Gamma = 2.2 | 用光度计实测或至少查询显示器规格 |
+| Uncorrected linear RGB values are used directly for brightness critical experiments | Load Gamma LUT before experiment or use corrected color values |
+| Assume all monitors Gamma = 2.2 | Measure with a photometer or at least query the monitor specifications |

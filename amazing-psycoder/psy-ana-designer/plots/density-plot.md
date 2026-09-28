@@ -1,17 +1,17 @@
-# 密度图 (Density Plot)
+# Density Plot
 
-## 概述
+## Overview
 
-密度图展示连续变量的平滑分布曲线，适合比较多个条件的分布形状。
+Density plot displays the smooth distribution curve of continuous variables, which is suitable for comparing the distribution shape of multiple conditions.
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| 场景 | 比较分布形状 |
-| 用途 | 检查多峰、偏态、组间分布差异 |
+| Scenario | Compare distribution shapes |
+| Purpose | Check multimodality, skewness, and distribution differences between groups |
 
-## R 代码
+## R code
 
 ```r
 ggplot(data, aes(x=rt, fill=condition, color=condition)) +
@@ -20,17 +20,17 @@ ggplot(data, aes(x=rt, fill=condition, color=condition)) +
   theme_minimal()
 ```
 
-## 解读
+## Interpretation
 
-- 单峰对称 → 近似正态
-- 右尾长 → 正偏态（RT常见）
-- 双峰 → 可能混合了两个过程
-- 多组密度不重叠 → 组间差异大
+- Unimodal symmetry → approximately normal
+- Long right tail → Positive skewness (common in RT)
+- Bimodal → Possibly a mixture of two processes
+- Multiple groups of densities do not overlap → large differences between groups
 
-## 关键参数
+## Key parameters
 
-| 参数 | 作用 |
+| Parameters | Function |
 |------|------|
-| `adjust` | 带宽乘数(>1平滑,<1细节多) |
-| `alpha` | 透明度(重叠时0.3-0.5) |
-| `bw` | 带宽(替代adjust) |
+| `adjust` | Bandwidth multiplier (>1 smooth, <1 more details) |
+| `alpha` | Transparency (0.3-0.5 when overlapping) |
+| `bw` | Bandwidth (replaces adjust) |

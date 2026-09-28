@@ -1,17 +1,17 @@
-# 平行坐标图 (Parallel Coordinates)
+# Parallel Coordinates
 
-## 概述
+## Overview
 
-平行坐标图用多条平行轴展示高维数据,每条线代表一个观测(被试),穿过多条轴展示该观测在所有变量上的值。
+The parallel coordinate chart uses multiple parallel axes to display high-dimensional data. Each line represents an observation (subject), and the values of the observation on all variables are displayed through multiple axes.
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| 场景 | 4+连续变量的多变量模式 |
-| 优势 | 一张图看所有变量的个体模式 |
+| Scenario | Multivariable mode with 4+ continuous variables |
+| Advantages | See the individual patterns of all variables in one picture |
 
-## R 代码
+## R code
 
 ```r
 library(GGally)
@@ -22,16 +22,16 @@ ggparcoord(data, columns=1:5, groupColumn="condition",
   theme_minimal()
 ```
 
-## 解读
+## Interpretation
 
-- 平行线→该变量不能区分组
-- 交叉线→该变量区分组
-- 线束分离→多变量组间差异
+- Parallel lines → the variable cannot differentiate between groups
+- crosshatch → the variable is grouped
+- Harness Separation→Multivariable Group Differences
 
-## 关键参数
+## Key parameters
 
-| 参数 | 作用 |
+| Parameters | Function |
 |------|------|
-| `columns` | 选择的列范围 |
-| `groupColumn` | 分组变量 |
+| `columns` | Selected column range |
+| `groupColumn` | Grouping variable |
 | `scale` | uniminmax/std/globalminmax |

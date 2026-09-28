@@ -1,17 +1,17 @@
-# 折线图 (Line Plot)
+# Line Plot
 
-## 概述
+## Overview
 
-折线图是最基础的时间序列可视化，用线段连接连续时间点的数据。适合展示趋势和变化。
+The line chart is the most basic time series visualization, using line segments to connect data at consecutive time points. Suitable for displaying trends and changes.
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| 场景 | 单变量随时间变化 |
-| 数据 | 时间 × 连续值 |
+| Scenario | Single variable changes over time |
+| data | time × continuous value |
 
-## R 代码
+## R code
 
 ```r
 ggplot(data, aes(x=time, y=value)) +
@@ -20,7 +20,7 @@ ggplot(data, aes(x=time, y=value)) +
   labs(title="Value Over Time", x="Time", y="Value") +
   theme_minimal()
 
-# 多组折线
+# Multiple groups of polylines
 ggplot(data, aes(x=time, y=value, color=group)) +
   geom_line(linewidth=1) +
   scale_color_brewer(palette="Set2") +
@@ -28,20 +28,20 @@ ggplot(data, aes(x=time, y=value, color=group)) +
   theme_minimal()
 ```
 
-## 关键参数
+## Key parameters
 
-| 参数 | 作用 |
+| Parameters | Function |
 |------|------|
-| `linewidth` | 线宽(默认0.5) |
-| `linetype` | 线型(solid/dashed/dotted) |
-| `color` | 分组变量映射颜色 |
+| `linewidth` | Line width (default 0.5) |
+| `linetype` | Line type (solid/dashed/dotted) |
+| `color` | Grouping variable mapping color |
 
-## 解读
+## Interpretation
 
-- 上升趋势→随时间增加
-- 转折点→干预/事件影响
-- 多条线间距变化→组间差异变化
+- Uptrend → increasing over time
+- turning point → intervention/event impact
+- Multiple line spacing changes→Difference changes between groups
 
-## 注意事项
+## Notes
 
-X轴需排序。多条线时颜色不超过6种(否则难区分)。
+The X axis needs to be sorted. When there are multiple lines, there should be no more than 6 colors (otherwise it will be difficult to distinguish).

@@ -6,7 +6,7 @@
 
 ## When to Use
 
-User mentions: Multisensory nature, nature exposure, audiovisual wellbeing, restorative environments, 多感官自然体验. Measures the interactive effects of visual and auditory nature exposure on self-reported affect (positive and negative) in response to natural vs. urban audiovisual scenes.
+User mentions: Multisensory nature, nature exposure, audiovisual wellbeing, restorative environments, multisensory nature experience. Measures the interactive effects of visual and auditory nature exposure on self-reported affect (positive and negative) in response to natural vs. urban audiovisual scenes.
 
 ## Core Logic
 
@@ -58,117 +58,117 @@ Aldoh, A., Ungureanu, R., Popescu, S., Eldridge, A., Sandom, C. J., & Rae, C. (2
 
 ## Do Not Assume
 
-- Do not assume all 15 videos are available without verification — 确认视频文件是否齐全，原始 N/T/R 视频集还是自定义素材？文件格式（MP4）和分辨率是否匹配呈现需求？
-- Do not assume audio and video tracks are inherently synchronized — MovieStim 的音画同步依赖硬件解码性能，需在目标设备上实测确认延迟
-- Do not assume the rating scale is self-explanatory to participants — 确认滑块锚定标签（如 1=非常轻微, 9=非常强烈）、量表范围以及 PA 和 NA 是否使用相同量尺
-- Do not assume clip presentation order should be fully randomized — 确认是否允许同一视觉等级或声音类型连续出现，是否需要拉丁方平衡
-- Do not assume I-PANAS-SF is the only pre-task measure needed — 确认是否还需自然关联度量表（NR-6/NRS）、状态焦虑量表（STAI）或其他个体差异测量
-- Do not assume the 60-second clip duration is fixed for all trials — 部分变体可能使用更短（30s）或更长（120s）的片段，需明确确认
+- Do not assume all 15 videos are available without verification — Are the video files complete, original N/T/R video set or custom footage? Do the file format (MP4) and resolution match presentation needs?
+- Do not assume audio and video tracks are inherently synchronized — MovieStim’s audio and video synchronization relies on hardware decoding performance, and the delay needs to be confirmed by actual measurement on the target device
+- Do not assume the rating scale is self-explanatory to participants — Confirm slider anchor labels (e.g. 1=very slightly, 9=very strongly), scale ranges, and whether the same scale is used for PA and NA
+- Do not assume clip presentation order should be fully randomized — Confirm whether the same visual level or sound type is allowed to appear continuously and whether Latin square balance is required
+- Do not assume I-PANAS-SF is the only pre-task measure needed — Confirm whether the Nature Related Scale (NR-6/NRS), State Anxiety Inventory (STAI), or other individual difference measures are also needed
+- Do not assume the 60-second clip duration is fixed for all trials — some variants may use shorter (30s) or longer (120s) clips, need to be explicitly confirmed
 
 ## Condition File Columns
 
 | Column | Type | Description |
 |--------|------|-------------|
-| video_file | str | 视频文件名，含扩展名（如 `N01.mp4`） |
-| visual_level | str | 视觉自然度等级：`high`（高）、`medium`（中）、`low`（低） |
-| sound_type | str | 声音类型：`natural`（自然声）、`anthropogenic`（人造噪声）、`mixed`（混合） |
+| video_file | str | Video file name, including extension (such as `N01.mp4`) |
+| visual_level | str | Visual naturalness level: `high` (high), `medium` (medium), `low` (low) |
+| sound_type | str | Sound type: `natural` (natural sound), `anthropogenic` (artificial noise), `mixed` (mixed) |
 
 ## Variants
 
-**气候变体 (Climate Variant)** — `multisensory_nature_climate`：使用相同的 2x3 因子实验结构和视频资源，但以气候变化研究为框架，包含气候相关指导语、气候焦虑问卷或环保行为意向测量。适用于研究多感官自然体验如何影响气候参与度。详见本文件 [Climate Variant](#climate-variant) 小节。
+**Climate Variant** — `multisensory_nature_climate`: Uses the same 2x3 factor experimental structure and video resources, but uses climate change research as a framework and includes climate-related instructions, a climate anxiety questionnaire, or a pro-environmental behavioral intention measure. Suitable for studying how multisensory nature experiences influence climate engagement. See the [Climate Variant](#climate-variant) section of this document for details.
 
-**单感官对照变体 (Unimodal Control Variant)**：分离视觉与听觉通道，仅呈现视觉（无声视频）或仅呈现听觉（黑屏 + 自然声音），用于量化各感官通道对情绪影响的独立贡献。需额外准备静音视频或纯音频刺激文件。可交叉引用 `audiovisual-stimuli.md`。
+**Unimodal Control Variant**: Separate the visual and auditory channels, presenting only the visual (silent video) or only the auditory (black screen + natural sound), used to quantify the independent contribution of each sensory channel to the emotional impact. Additional silent video or audio-only stimulation files are required. Can be cross-referenced to `audiovisual-stimuli.md`.
 
-**长时暴露变体 (Extended Exposure Variant)**：将每个片段延长至 3-5 分钟，试次减少至 5-6 个，适用于考察长时间自然暴露的累积恢复效应。需准备更长时长的视频素材，并考虑疲劳效应和注意力检查。
+**Extended Exposure Variant**: Extend each segment to 3-5 minutes and reduce the number of trials to 5-6, which is suitable for examining the cumulative recovery effect of long-term natural exposure. Longer video footage needs to be prepared and fatigue effects and attention checks need to be taken into account.
 
 ## Example
 
-### 用户请求
+### User request
 
-> "我要做一个多感官自然体验实验。用15个视频片段，每个60秒。视频有高自然度（全是森林、海滩）、中自然度（乡村田野）、低自然度（城市街景）三种，声音有自然声（鸟叫、水声）、人造噪声（交通、施工）、混合声三种。每个视频放完后让被试评价当前积极情绪和消极情绪，用1到9的滑块打分。实验开始前先做I-PANAS-SF基线情绪问卷。试次随机呈现。视频文件在 stimuli/videos/ 文件夹里。用PsychoPy 2024。"
+> "I am going to do a multi-sensory natural experience experiment. Use 15 video clips, each of 60 seconds. There are three types of videos: high naturalness (all forests and beaches), medium naturalness (country fields), and low naturalness (city street scenes). The sounds include natural sounds (birds, water sounds), human sounds There are three types of noise (traffic, construction) and mixed sounds. After each video, the subjects were asked to rate their current positive emotions and negative emotions using a slider from 1 to 9. Before the experiment started, the video files were randomly presented. stimuli/videos/ folder using PsychoPy 2024.
 
-### 试次窗口时间线
+### Trial window timeline
 
 ```text
 ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐
-│ 窗口 1                    │ →  │ 窗口 2                    │ →  │ 窗口 3                    │
-│ 注视点                    │    │ 视频播放                  │    │ 情绪评分                  │
-│ 内容: +                   │    │ 内容: 自然/城市场景视频    │    │ 内容: PA + NA 滑块        │
-│ 持续时间: 500 ms          │    │ 持续时间: 60000 ms        │    │ 持续时间: 直至反应         │
-│ 反应: 无                  │    │ 反应: 无                  │    │ 反应: 鼠标拖动滑块         │
-│ 条件: 无                  │    │ 条件: {video_file}        │    │ 条件: {visual_level},     │
-│ 数据: 无                  │    │ 数据: video_filename      │    │       {sound_type}        │
-└──────────────────────────┘    └──────────────────────────┘    │ 数据: PA_rating, NA_rating│
+│ Window 1 │ → │ Window 2 │ → │ Window 3 │
+│ Gaze │ │ Video playback │ │ Emotion score │
+│ Content: + │ │ Content: Nature/Urban Scene Video │ │ Content: PA + NA Slider │
+│ Duration: 500 ms │ │ Duration: 60000 ms │ │ Duration: Until reaction │
+│ Response: None │ │ Response: None │ │ Response: Drag the slider with the mouse │
+│ Conditions: None │ │ Conditions: {video_file} │ │ Conditions: {visual_level}, │
+│ Data: None │ │ Data: video_filename │ │ {sound_type} │
+└─────────────────────────┘ └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ │ Data: PA_rating, NA_rating│
                                                                 └──────────────────────────┘
 ```
 
-| 窗口 | 内容 | 持续时间 | 反应 | 文件 | 条件 | 数据 |
+| Window | Content | Duration | Response | File | Condition | Data |
 |------|------|----------|------|------|------|------|
-| 注视点 | + | 500 ms | 无 | 无 | 无 | 无 |
-| 视频播放 | 自然/城市场景视频 | 60000 ms | 无 | stimuli/videos/{video_file} | {video_file} | video_filename |
-| 情绪评分 | PA + NA 滑块 | 直至反应 | 鼠标拖动 | 无 | {visual_level}, {sound_type} | PA_rating, NA_rating |
+| fixation point | + | 500 ms | none | none | none | none |
+| Video playback | Natural/urban scene video | 60000 ms | None | stimuli/videos/{video_file} | {video_file} | video_filename |
+| Sentiment Rating | PA + NA Slider | Until Reaction | Mouse Drag | None | {visual_level}, {sound_type} | PA_rating, NA_rating |
 
-### 解析后的实验规格
+### Analyzed experimental specifications
 
-| 字段 | 值 |
+| Field | Value |
 |------|-----|
-| 实验名称 | 多感官自然体验任务 |
-| 平台 | PsychoPy 2024 |
-| 任务类型 | 多感官情绪评定（被试内设计） |
-| 视觉因素 | 3 水平：高自然度 / 中自然度 / 低自然度 |
-| 听觉因素 | 3 水平：自然声 / 人造噪声 / 混合声 |
-| 试次数量 | 15（3x3 因子设计，部分组合可能重复或空缺） |
-| 每试次时长 | 60 秒视频 + 评分（不限时） |
-| 预实验问卷 | I-PANAS-SF（积极消极情绪量表简版） |
-| 评分方式 | 滑块 1-9（积极情绪 + 消极情绪分别评定） |
-| 试次顺序 | 完全随机 |
-| 视频来源 | stimuli/videos/ 文件夹 |
+| Experiment name | Multi-sensory nature experience task |
+| Platform | PsychoPy 2024 |
+| Task type | Multisensory emotion assessment (within-subjects design) |
+| Visual factors | 3 levels: high naturalness / medium naturalness / low naturalness |
+| Hearing factors | 3 levels: natural sounds / artificial noises / mixed sounds |
+| Number of trials | 15 (3x3 factorial design, some combinations may be repeated or blank) |
+| Duration per trial | 60 seconds video + rating (no time limit) |
+| Pre-experiment questionnaire | I-PANAS-SF (positive and negative emotion scale short version) |
+| Scoring method | Slider 1-9 (positive emotions + negative emotions are rated separately) |
+| Trial order | Completely random |
+| Video source | stimuli/videos/ folder |
 
-### 待确认信息
+### Information to be confirmed
 
-1. **量表锚定标签**：滑块 1 和 9 分别对应什么文字描述？（如 "几乎没有" 到 "非常强烈"）PA 和 NA 量表是否使用相同的锚定标签？
-2. **练习试次**：是否需要练习试次（如 2-3 个示例视频）让被试熟悉评分流程？练习数据是否保存？
-3. **指导语语言**：指导语使用中文/英文/双语？实验结束后是否需要事后说明（debriefing）？
+1. **Scale anchor tag**: What text descriptions do sliders 1 and 9 correspond to? (e.g. "hardly" to "very strongly") Do the PA and NA scales use the same anchor labels?
+2. **Practice trials**: Are practice trials (such as 2-3 sample videos) needed to familiarize subjects with the scoring process? Is the practice data saved?
+3. **Guidance Language**: Is the instruction language in Chinese/English/bilingual? Is debriefing required after the experiment?
 
-### 关键假设
+### Key assumptions
 
-- 视频文件命名遵循 N/T/R 约定（如 N01.mp4 为高自然度），条件文件中已包含 visual_level 和 sound_type 标签
-- 积极情绪和消极情绪评分分别显示在两个独立界面（先 PA 后 NA），而非同一屏幕
-- I-PANAS-SF 问卷使用标准 10 题版本，以 Excel 文件加载，5 点 Likert 量表
-- 试次间无 ITI，视频结束后直接进入评分界面
+-Video file naming follows the N/T/R convention (for example, N01.mp4 is high naturalness), and the visual_level and sound_type tags are already included in the condition file
+- Positive and negative sentiment scores are displayed in two separate interfaces (first PA and then NA) instead of the same screen
+- The I-PANAS-SF questionnaire uses the standard 10-question version, loaded as an Excel file, 5-point Likert scale
+- There is no ITI between trials, and you will enter the scoring interface directly after the video ends.
 
-### 代码架构
+### Code structure
 
 ```
 multisensory_nature.py
-├── 参数配置（视频时长、评分范围、文件路径）
-├── 窗口设置（全屏/窗口、分辨率）
-├── I-PANAS-SF 预实验问卷加载（xlsx）
-├── 条件文件加载（vids.xlsx → 试次列表）
-├── 视频刺激预加载检查（MovieStim3）
-├── 指导语界面
-├── 试次循环：
-│   ├── 注视点（500 ms）
-│   ├── 视频播放（60000 ms，MovieStim3 + 音频同步）
-│   ├── 积极情绪评分（滑块 1-9）
-│   ├── 消极情绪评分（滑块 1-9）
-│   └── 数据记录
-├── 数据保存：try/finally CSV 增量写入
-└── 事后说明
+├── Parameter configuration (video duration, rating range, file path)
+├── Window settings (full screen/window, resolution)
+├── I-PANAS-SF pre-experiment questionnaire loading (xlsx)
+├── Conditional file loading (vids.xlsx → trial list)
+├── Video Stim Preload Check (MovieStim3)
+├── Guidance interface
+├── Trial cycle:
+│ ├── Fixation point (500 ms)
+│ ├── Video playback (60000 ms, MovieStim3 + audio sync)
+│ ├── Positive sentiment score (slider 1-9)
+│ ├── Negative sentiment score (slider 1-9)
+│ └── Data record
+├── Data saving: try/finally CSV incremental writing
+└── Later explanation
 ```
 
-### 预期数据列
+### Expected data column
 
-| 列名 | 类型 | 描述 |
+| column name | type | description |
 |------|------|------|
-| participant | str | 被试编号 |
-| trial_index | int | 试次序号（0-14） |
-| video_file | str | 视频文件名 |
-| visual_level | str | 视觉自然度等级 |
-| sound_type | str | 声音类型 |
-| PA_rating | int | 积极情绪评分（1-9） |
-| NA_rating | int | 消极情绪评分（1-9） |
-| PA_RT | float | 积极情绪评分反应时（秒） |
-| NA_RT | float | 消极情绪评分反应时（秒） |
-| ipanas_PA_baseline | float | I-PANAS-SF 积极情绪基线得分 |
-| ipanas_NA_baseline | float | I-PANAS-SF 消极情绪基线得分 |
+| participant | str | participant number |
+| trial_index | int | trial number (0-14) |
+| video_file | str | video file name |
+| visual_level | str | Visual naturalness level |
+| sound_type | str | sound type |
+| PA_rating | int | Positive sentiment rating (1-9) |
+| NA_rating | int | Negative sentiment rating (1-9) |
+| PA_RT | float | Positive emotion score reaction time (seconds) |
+| NA_RT | float | Negative emotion score reaction time (seconds) |
+| ipanas_PA_baseline | float | I-PANAS-SF Positive emotion baseline score |
+| ipanas_NA_baseline | float | I-PANAS-SF negative emotion baseline score |

@@ -1,64 +1,64 @@
-# 独立 t 检验 (Independent Samples t-test)
+# Independent Samples t-test
 
-## 概述
+## Overview
 
-独立 t 检验用于比较两组独立样本的均值差异。在心理学中用于被试间设计。
+The independent t-test is used to compare the differences in means of two independent groups of samples. Used in between-subjects designs in psychology.
 
-**典型场景**：实验组 vs 控制组、A组 vs B组（不同被试）、不同人群比较。
+**Typical scenarios**: Experimental group vs control group, Group A vs Group B (different subjects), comparison of different groups of people.
 
-## 何时使用
+## When to use
 
-| 条件 | 要求 |
+| Conditions | Requirements |
 |------|------|
-| 设计 | 被试间 (between-subjects) |
-| 条件数 | 恰好 2 个 |
-| DV | 连续变量 |
-| 数据要求 | 每组数据近似正态，方差齐或不齐 |
+| Design | Between-subjects (between-subjects) |
+| Condition number | Exactly 2 |
+| DV | Continuous variable |
+| Data requirements | Each set of data is approximately normal, with homogeneous or uneven variances |
 
-## 假设与检验
+## Hypothesis and test
 
-1. **独立性**：两组被试互相独立
-2. **抽样分布/异常值**：结合设计、样本量、图形和影响诊断评估均值差推断是否稳健；分组 Shapiro p 值不是自动换方法的开关
-3. **方差模型**：在分析计划中预先声明 Student 或 Welch；不要先用 Levene p 值再数据驱动选择检验
+1. **Independence**: The two groups of subjects are independent of each other
+2. **Sampling Distribution/Outliers**: Assess whether mean difference inference is robust using a combination of design, sample size, graphics, and impact diagnostics; grouped Shapiro p-values are not an automatic switch for changing methods
+3. **Variance Model**: Pre-declare Student or Welch in the analysis plan; do not use Levene p-values first and then data-driven selection of tests
 
-**Welch t-test 是默认推荐**：不假设方差齐性，自由度校正。大多数情况下 Welch 比 Student's t 更安全。
+**Welch t-test is the default recommendation**: homogeneity of variances is not assumed, degrees of freedom correction is performed. In most cases the Welch is safer than the Student's t.
 
-## 效应估计
+## Effect estimate
 
-优先报告原始均值差和置信区间；需要跨量表比较时再报告与方差模型一致的标准化均值差及区间。`d=.2/.5/.8` 不是跨构念通用的实质大小界线。
+Prioritize reporting of the original mean difference and confidence interval; when comparison across scales is required, report the standardized mean difference and interval consistent with the variance model. `d=.2/.5/.8` is not a substantive size boundary that is common across constructs.
 
-## R 代码
+## R code
 
 ```r
-# 独立 t 检验 - 完整分析流程
+# Independent t-test - Complete analysis flow
 
-# 示例数据：实验组 vs 控制组
+# Example data: experimental group vs control group
 exp_group  <- c(88, 92, 85, 90, 87, 93, 89, 91, 86, 94, 90, 88)
 ctrl_group <- c(78, 80, 82, 79, 81, 77, 83, 80, 78, 82, 79, 81)
 n_exp  <- length(exp_group)
 n_ctrl <- length(ctrl_group)
 
-# 描述统计
-cat(sprintf("实验组: M = %.2f, SD = %.2f, n = %d\n",
+# Descriptive statistics
+cat(sprintf("Experimental group: M = %.2f, SD = %.2f, n = %d\\n",
   mean(exp_group), sd(exp_group), n_exp))
-cat(sprintf("控制组: M = %.2f, SD = %.2f, n = %d\n",
+cat(sprintf("Control group: M = %.2f, SD = %.2f, n = %d\\n",
   mean(ctrl_group), sd(ctrl_group), n_ctrl))
 
-# 1. 按预先声明的方差模型执行 Welch t 检验
+# 1. Perform Welch's t-test according to the pre-stated variance model
 t_result <- t.test(exp_group, ctrl_group, var.equal = FALSE)
 cat(sprintf("\nWelch t-test:\n  t(%.2f) = %.3f, p = %.4f\n",
   t_result$parameter, t_result$statistic, t_result$p.value))
-cat(sprintf("  均值差 = %.3f, 95%% CI [%.3f, %.3f]\n",
+cat(sprintf("  Mean difference = %.3f, 95%% CI [%.3f, %.3f]\\n",
   t_result$estimate[1] - t_result$estimate[2],
   t_result$conf.int[1], t_result$conf.int[2]))
 
-# 如 config 声明标准化估计，另用与目标总体和方差模型一致的标准化量及 CI。
+# If config declares standardized estimates, use standardized quantities and CIs that are consistent with the target population and variance model.
 ```
 
-## APA 7th 报告格式
+## APA 7th Report Format
 
 > A Welch independent-samples t-test estimated a 70-ms mean difference between the experimental group (M=520, SD=95) and control group (M=450, SD=80), 95% CI [26, 114], t(approximately 57 df)=3.15, p=.003. Any standardized estimate should name its denominator and interval separately.
 
-## 备选方法
-- **Mann-Whitney U**: 当目标是分布/秩概率且其假设与设计相符；它不是“Shapiro 显著后的均值检验替代品”
-- **Welch's ANOVA**: 三组+
+## Alternative method
+- **Mann-Whitney U**: When the target is a distribution/rank probability and its assumptions are consistent with the design; it is not a "substitute for the mean test after Shapiro's significance"
+- **Welch's ANOVA**: Three groups+

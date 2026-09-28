@@ -1,26 +1,26 @@
-# 个体连线图 (Spaghetti Plot)
+# Individual connection diagram (Spaghetti Plot)
 
-## 概述
+## Overview
 
-个体连线图用一条线连接每个被试在两种条件下的数据点，同时叠加红色粗线表示组均值。是展示被试内变化的最直观方式。
+The individual connection diagram uses a line to connect the data points of each subject under the two conditions, and a thick red line is superimposed to represent the group mean. It is the most intuitive way to show changes within subjects.
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| 设计 | 被试内两组比较 |
-| DV | 连续变量 |
-| 关键 | 展示个体层面的变化方向和幅度 |
+| Design | Comparison between two groups within subjects |
+| DV | Continuous variable |
+| Key | Demonstrate the direction and magnitude of change at the individual level |
 
-## 图表元素
+## Chart elements
 
-| 元素 | 作用 |
+| Element | Function |
 |------|------|
-| 灰色细线（每人一条） | 个体变化轨迹 |
-| 红色粗线 | 组均值变化 |
-| 红色大点 | 每组均值 |
+| Gray thin lines (one for each person) | Individual change trajectory |
+| Thick red line | Group mean change |
+| Big red dot | Mean value of each group |
 
-## R 代码
+## R code
 
 ```r
 data_agg %>% 
@@ -33,16 +33,16 @@ data_agg %>%
   theme_minimal(12)
 ```
 
-## 解读
+## Interpretation
 
-- 大部分线斜率方向一致 → 条件效应稳健
-- 线与组均值反向 → 该被试模式异常
-- 线密集/稀疏 → 个体差异大小
+- Most of the line slopes have the same direction → the conditional effect is robust
+- The line is opposite to the group mean → the subject's pattern is abnormal
+- Line dense/sparse → individual difference size
 
-## 关键参数
+## Key parameters
 
-| 参数 | 作用 |
+| Parameters | Function |
 |------|------|
-| `group=subject_id` | 按被试分组连线 |
-| `alpha` | 个体线透明度(0.2-0.4) |
-| `stat_summary(fun=mean)` | 叠加组均值线 |
+| `group=subject_id` | Group connections by subject |
+| `alpha` | Individual line transparency (0.2-0.4) |
+| `stat_summary(fun=mean)` | Overlay group mean line |

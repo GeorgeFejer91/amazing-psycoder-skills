@@ -1,120 +1,120 @@
 # Psychtoolbox (MATLAB)
 
-> **状态**: 生成流程与 PsychoPy 一致（统一 Generation Pipeline）。L1 spec + L2 mapping + 5 范式 + 100 demo。
+> **Status**: The generation process is consistent with PsychoPy (unified Generation Pipeline). L1 spec + L2 mapping + 5 paradigms + 100 demo.
 
-## 生成代码流程（与 PsychoPy 统一，平台特化映射见 mapping/）
+## Code generation process (unified with PsychoPy, see mapping/ for platform-specific mapping)
 
 ```
 config.yaml
     │
     ▼
-1. 复制 [Canonical Code Skeleton](spec/README.md#11-canonical-code-skeleton)
+1. Copy [Canonical Code Skeleton](spec/README.md#11-canonical-code-skeleton)
     │
     ▼
-2. 参数区：填入 config 的 display / timing / font / audio
+2. Parameter area: fill in the display / timing / font / audio of config
     │
     ▼
-3. 刺激预加载：从 config.windows[].content → Screen('MakeTexture') 循环前预创建
+3. Stimulus preloading: pre-create from config.windows[].content → Screen('MakeTexture') before loop
     │
     ▼
-4. Trial 循环：按 config.windows[] 选择帧循环模式
-    → 模式 1: 单帧 Flip（固定时长静态刺激）
-    → 模式 2: for 循环 Flip（帧精确控制）
-    → 模式 3: KbQueue 响应循环（生产推荐）
-    → 详情见 [mapping/README.md §三种帧循环模式](mapping/README.md#窗口事件的-ptb-帧循环模式)
+4. Trial loop: Press config.windows[] to select frame loop mode
+    → Mode 1: Single frame Flip (fixed duration static stimulation)
+    → Mode 2: for loop Flip (frame accurate control)
+    → Mode 3: KbQueue response loop (recommended for production)
+    → For details, see [mapping/README.md §Three frame loop modes] (mapping/README.md#Window event-ptb-frame loop mode)
     │
     ▼
-5. 响应收集：config.windows[].response → KbQueueCheck + VBLTimestamp RT
+5. Response collection: config.windows[].response → KbQueueCheck + VBLTimestamp RT
     │
     ▼
-6. 正确性判断：config.response_rules.correct → strcmp(response, corrAns)
+6. Correctness judgment: config.response_rules.correct → strcmp(response, corrAns)
     │
     ▼
-7. 数据保存：config.output → fopen/fprintf/fclose 增量写入
+7. Data saving: config.output → fopen/fprintf/fclose incremental writing
     │
     ▼
-8. 运行 Quality Gate（10 项）→ 修复 → 交付
+8. Run Quality Gate (10 items) → Repair → Deliver
 ```
 
-关键：每个步骤对应的 config 字段映射见 [mapping/README.md](mapping/README.md)。
+Key: For the config field mapping corresponding to each step, see [mapping/README.md](mapping/README.md).
 
-## 文件结构
+## File structure
 
 ```
 psychtoolbox/
-├── README.md                  ← 本文件
-├── spec/                      ← L1: API 规范 + Canonical Skeleton
-│   └── README.md              ← KbQueue lifecycle, Flip timing, PsychPortAudio, 18 反模式
-├── mapping/                   ← L2: Config → MATLAB 代码映射
-│   └── README.md              ← 12步模板 + 3种帧循环 + 音频/条件映射
-├── paradigms/                  ← L3: 范式参考（实验逻辑，非 API 参考）
-│   ├── README.md              ← 范式索引 + API 醒示
-│   └── *.md                   ← 5 个范式文件
-└── demo/                      ← L4: 原始代码示例（100 个 .md，按功能分类）
-    └── _raw/                  ← 仅参考实验逻辑，API 以 L1 spec 为准
-        ├── getting-started/   ← 11 — 安装配置 + 最小窗口 + 精确计时 + 键盘队列
+├── README.md ← this file
+├── spec/ ← L1: API specification + Canonical Skeleton
+│ └── README.md ← KbQueue lifecycle, Flip timing, PsychPortAudio, 18 anti-patterns
+├── mapping/ ← L2: Config → MATLAB code mapping
+│ └── README.md ← 12-step template + 3 types of frame loops + audio/conditional mapping
+├── paradigms/ ← L3: Paradigm reference (experimental logic, non-API reference)
+│ ├── README.md ← Paradigm Index + API Alert
+│ └── *.md ← 5 paradigm files
+└── demo/ ← L4: Original code example (100 .md, classified by function)
+    └── _raw/ ← Only refer to the experimental logic, the API is subject to L1 spec
+        ├── getting-started/ ← 11 — Installation configuration + minimum window + precise timing + keyboard queue
         ├── drawing-shapes/    ← 15 — dots, rectangles, fixation
         ├── animated-shapes/   ← 17 — motion, keyboard/mouse
         ├── textures/          ← 23 — images, Gabors, gratings
         ├── text/              ←  6 — text rendering
         ├── 3d-vr/             ← 19 — OpenGL, stereoscopic
-        └── other/             ←  9 — 完整实验 + 伽马校正 + 多屏幕 + 音频等
+        └── other/ ← 9 — Full experiment + gamma correction + multi-screen + audio, etc.
 ```
 
-## 层级填充状态
+## Level filling status
 
-| 层级 | 内容 |
+| Level | Content |
 |------|------|
-| L1 `spec/` | Canonical Skeleton + API 规范（KbQueue lifecycle, Screen Flip half-IFI rule, PsychPortAudio, try/catch/sca）+ 18 反模式 |
-| L2 `mapping/` | 12步模板 PTB 实现 + 3 种帧循环模式 + Config→Code 完整映射 + 音频映射 |
-| L3 `paradigms/` | 5 个范式（Stroop, Posner Cuing, Orientation Threshold, Likert Scale, Slider）。**API 模式以 spec 为准，不沿用范式代码中的 KbCheck** |
-| L4 `demo/_raw/` | 100 个原始示例（`_raw/` = 仅参考实验逻辑，API 以 L1 spec 为准） — 按功能分类，代码生成时按需查阅 |
+| L1 `spec/` | Canonical Skeleton + API specification (KbQueue lifecycle, Screen Flip half-IFI rule, PsychPortAudio, try/catch/sca) + 18 anti-patterns |
+| L2 `mapping/` | 12-step template PTB implementation + 3 frame loop modes + Config→Code complete mapping + audio mapping |
+| L3 `paradigms/` | 5 paradigms (Stroop, Posner Cuing, Orientation Threshold, Likert Scale, Slider). **API mode is based on spec and does not follow KbCheck in the paradigm code** |
+| L4 `demo/_raw/` | 100 original examples (`_raw/` = only refer to experimental logic, API is subject to L1 spec) — classified by function, consult on demand during code generation |
 
-## 强制 API 规则
+## Mandatory API rules
 
-所有生成的 PTB 代码遵守（完整规范见 [spec/README.md](spec/README.md)）：
+All generated PTB code conforms to (full specification in [spec/README.md](spec/README.md)):
 
-| 类别 | 必须使用 | 禁止使用 |
+| Category | Required | Use prohibited |
 |------|---------|---------|
-| 键盘输入 | `KbQueueCreate` + `KbQueueStart` + `KbQueueCheck` | `KbCheck` / `KbWait`（用于 RT） |
-| RT 起点 | `VBLTimestamp`（`Screen('Flip')` 返回值） | `GetSecs` |
-| RT 计算 | `(min(firstPress) - stimOnset) * 1000` | `secs - tStimFlip` |
-| 帧 Timing | `vbl + (waitframes - 0.5) * ifi` | 在仍需 flip/input/trigger/abort 的阶段用 `WaitSecs()` 阻塞 |
-| 每 trial 清队列 | `KbQueueFlush([], 2)` | 不清队列导致前 trial 按键残留 |
-| 错误处理 | `try/catch/sca/Priority(0)/ShowCursor` | 裸 `sca` |
-| 刺激预加载 | `Screen('MakeTexture')` 在循环前 | `imread` 在 trial 内 |
-| 注视点 | 按 config 选择并在目标显示器验证；`Screen('DrawLines')` 可避免字体依赖 | 未验证尺寸、位置、颜色或字体渲染 |
-| 数据保存 | 每 trial 可恢复的 append/flush/close、`writetable`/`matfile` 或等价原子策略 | 仅保留 workspace 内矩阵（崩溃=全丢） |
-| 同步测试 | `SkipSyncTests, 0` | 跳过 SyncTests |
+| Keyboard input | `KbQueueCreate` + `KbQueueStart` + `KbQueueCheck` | `KbCheck` / `KbWait` (for RT) |
+| RT starting point | `VBLTimestamp` (`Screen('Flip')` return value) | `GetSecs` |
+| RT calculation | `(min(firstPress) - stimOnset) * 1000` | `secs - tStimFlip` |
+| Frame Timing | `vbl + (waitframes - 0.5) * ifi` | Block with `WaitSecs()` in stages where flip/input/trigger/abort is still required |
+| Clear the queue every trial | `KbQueueFlush([], 2)` | Clear the queue resulting in the remaining keystrokes in the previous trial |
+| Error handling | `try/catch/sca/Priority(0)/ShowCursor` | naked `sca` |
+| Stimulus preloading | `Screen('MakeTexture')` before loop | `imread` inside trial |
+| Foveation point | Select by config and verify on target monitor; `Screen('DrawLines')` avoids font dependency | No validation of size, position, color or font rendering |
+| Data saving | Recoverable append/flush/close, `writetable`/`matfile` or equivalent atomic strategies for each trial | Only keep the matrix in the workspace (crash = all lost) |
+| SyncTests | `SkipSyncTests, 0` | Skip SyncTests |
 
-## PTB vs PsychoPy（概念对应）
+## PTB vs PsychoPy (concept correspondence)
 
-用于从 PsychoPy 切换过来的用户快速定位 PTB 等价 API：
+Used for users switching from PsychoPy to quickly locate the PTB equivalent API:
 
-| 概念 | Psychtoolbox | PsychoPy |
+| Concepts | Psychtoolbox | PsychoPy |
 |------|-------------|----------|
-| 窗口创建 | `PsychImaging('OpenWindow', ...)` | `visual.Window(...)` |
-| 翻页 | `Screen('Flip', window, when)` | `win.flip()` |
-| 帧间隔 | `Screen('GetFlipInterval')` → `ifi` | `win.getFutureFlipTime()` |
-| RT 键盘 | `KbQueueCreate`/`KbQueueCheck` | `keyboard.Keyboard(backend='ptb')` |
-| RT 获取 | `firstPress - VBLTimestamp` | `key.rt` |
-| 文本渲染 | `DrawFormattedText` / `Screen('DrawText')` | `TextBox2` / `TextStim` |
-| 图片 | `imread` + `Screen('MakeTexture')` | `visual.ImageStim()` |
-| 音频 | `PsychPortAudio`（支持低延迟调度/时间戳；目标硬件实测） | PsychoPy sound backend（同样需要实测） |
-| 数据保存 | `fopen`/`fprintf`/`fclose` | `csv.DictWriter` + `flush` |
-| 错误处理 | `try/catch/sca` | `try/finally/win.close()` |
+| Window creation | `PsychImaging('OpenWindow', ...)` | `visual.Window(...)` |
+| Page flip | `Screen('Flip', window, when)` | `win.flip()` |
+| Frame interval | `Screen('GetFlipInterval')` → `ifi` | `win.getFutureFlipTime()` |
+| RT Keyboard | `KbQueueCreate`/`KbQueueCheck` | `keyboard.Keyboard(backend='ptb')` |
+| RT Get | `firstPress - VBLTimestamp` | `key.rt` |
+| Text rendering | `DrawFormattedText` / `Screen('DrawText')` | `TextBox2` / `TextStim` |
+| Image | `imread` + `Screen('MakeTexture')` | `visual.ImageStim()` |
+| Audio | `PsychPortAudio` (supports low-latency scheduling/timestamps; tested on target hardware) | PsychoPy sound backend (also required tested) |
+| Data saving | `fopen`/`fprintf`/`fclose` | `csv.DictWriter` + `flush` |
+| Error handling | `try/catch/sca` | `try/finally/win.close()` |
 | Gabor | `CreateProceduralGabor`（GPU shader） | `visual.GratingStim` |
 
-## 范式差异速查
+## Quick check on paradigm differences
 
-不同范式在 PTB 上的实现要点：
+Key points for implementing different paradigms on PTB:
 
-| 范式 | 帧循环模式 | 响应方式 | 特殊逻辑 |
+| Paradigm | Frame cycle mode | Response mode | Special logic |
 |------|----------|---------|---------|
-| Stroop | 模式 3（KbQueue） | 方向键 → 颜色映射 | `DrawFormattedText` 动态颜色 |
-| Posner Cuing | 模式 2（for Flip） | KbQueue 轮询 | `CreateProceduralGabor` + cue validity |
-| Orientation Threshold | 模式 2 | 2AFC 左/右键 | 恒定刺激法 + psychometric function |
-| Likert Scale | 模式 2 | 鼠标交互 | 悬停放大 + 点击选中 |
-| Slider | 模式 2 | 鼠标 drag | 连续拖动 + 实时百分比 |
+| Stroop | Mode 3 (KbQueue) | Arrow keys → Color mapping | `DrawFormattedText` dynamic color |
+| Posner Cuing | Mode 2 (for Flip) | KbQueue polling | `CreateProceduralGabor` + cue validity |
+| Orientation Threshold | Mode 2 | 2AFC left/right button | Constant stimulation method + psychometric function |
+| Likert Scale | Mode 2 | Mouse interaction | Hover to zoom + click to select |
+| Slider | Mode 2 | Mouse drag | Continuous drag + real-time percentage |
 
-详细代码模板见 [mapping/README.md §窗口事件帧循环模式](mapping/README.md#窗口事件的-ptb-帧循环模式)。
+For detailed code template, see [mapping/README.md §Window event frame loop mode] (mapping/README.md#Window event-ptb-frame loop mode).

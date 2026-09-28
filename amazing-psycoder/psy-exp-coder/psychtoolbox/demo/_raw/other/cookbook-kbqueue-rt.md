@@ -1,14 +1,14 @@
-# KbQueue 按键反应时 + 超时处理示例
+# KbQueue key response + timeout processing example
 
-> 来源: [PTB Cookbook: Response Example 2](https://github.com/Psychtoolbox-3/Psychtoolbox-3/wiki/Cookbook%3A-response-example-2)  
-> 作者: Aaron Seitz (2012)  
-> 参考层级: L4 demo（仅参考 KbQueueCheck + firstPress RT 模式）
+> Source: [PTB Cookbook: Response Example 2](https://github.com/Psychtoolbox-3/Psychtoolbox-3/wiki/Cookbook%3A-response-example-2)
+> Author: Aaron Seitz (2012)
+> Reference level: L4 demo (only refer to KbQueueCheck + firstPress RT mode)
 
-## 实验逻辑
+## Experimental logic
 
-5 试次演示：随机颜色纹理 → 按键反应（0.5s 超时）→ 反馈 RT + 按键名
+5 trial demonstration: random color texture → key response (0.5s timeout) → feedback RT + key name
 
-## 原始代码
+## Original code
 
 ```matlab
 % Example 2 - Shows which key was pressed and timeouts after .5 seconds
@@ -52,24 +52,24 @@ ShowCursor(); %shows the cursor
 Screen('CloseAll'); %Closes Screen
 ```
 
-## 反模式标注
+## Anti-pattern annotation
 
-| 问题 | 位置 | 规范替代 |
+| Issues | Locations | Canonical Overrides |
 |------|------|---------|
-| `Waitsecs(.5)` 等待反应 | 反应窗口 | 应使用帧循环 + `GetSecs` 超时检测 |
-| `Screen('CloseAll')` | 清理 | `sca` |
-| 无 `try-catch` | 全局 | 必须包裹 |
-| 无 `Priority(0)` + `KbQueueRelease` | 清理 | 恢复优先级 + 释放键盘队列 |
-| `MakeTexture` 在循环内创建 | 试次循环 | 应预加载到循环外 |
+| `Waitsecs(.5)` Wait for response | Response window | Frame loop + `GetSecs` timeout detection should be used |
+| `Screen('CloseAll')` | Cleanup | `sca` |
+| None `try-catch` | Global | Must wrap |
+| None `Priority(0)` + `KbQueueRelease` | Cleanup | Restore priority + Release keyboard queue |
+| `MakeTexture` is created inside the loop | trial loop | should be preloaded outside the loop |
 
-## 关键 API 模式（符合 spec 规范的部分）
+## Key API mode (part that conforms to the spec specification)
 
 ```matlab
-% RT = 按键首次按下时间 - 刺激呈现时间
-KbQueueFlush;                         % 清空刺激呈现前的按键缓冲
-starttime = Screen('Flip', window);   % 刺激呈现 onset
-[ pressed, firstPress] = KbQueueCheck; % 获取按键事件
+% RT = time of first key press - stimulus presentation time
+KbQueueFlush;                         % Clear the key buffer before stimulus presentation
+starttime = Screen('Flip', window);   % stimulus presentation onset
+[ pressed, firstPress] = KbQueueCheck; % Get key events
 firstPress(find(firstPress==0)) = NaN;
-[RT, keyIndex] = min(firstPress);     % RT = 首个按键时间
-RT = RT - starttime;                  % 减去刺激 onset
+[RT, keyIndex] = min(firstPress);     % RT = First key press time
+RT = RT - starttime;                  % minus stimulus onset
 ```

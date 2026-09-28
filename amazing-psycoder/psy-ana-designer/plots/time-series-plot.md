@@ -1,17 +1,17 @@
-# 时间序列图 (Time Series Plot)
+# Time Series Plot
 
-## 概述
+## Overview
 
-时间序列图展示变量随时间的变化，适合纵向数据、密集追踪数据。
+Time series diagram shows the changes of variables over time, which is suitable for longitudinal data and intensive tracking data.
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| 场景 | 纵向追踪、EMA生态瞬时评估 |
-| 关键 | 展示趋势、周期、干预断点 |
+| Scenario | Longitudinal tracking, EMA ecological instantaneous assessment |
+| Key | Display trends, cycles, intervention breakpoints |
 
-## R 代码
+## R code
 
 ```r
 ggplot(data, aes(x=time, y=score, group=subject_id)) +
@@ -22,16 +22,16 @@ ggplot(data, aes(x=time, y=score, group=subject_id)) +
   theme_minimal()
 ```
 
-## 解读
+## Interpretation
 
-- 均值线趋势 → 群体变化方向
-- 灰色个体线 → 个体差异
-- 虚线后的变化 → 干预效果
+- Mean line trend → direction of group change
+- Gray individual line → Individual differences
+- Change after the dotted line → Intervention effect
 
-## 关键参数
+## Key parameters
 
-| 参数 | 作用 |
+| Parameters | Function |
 |------|------|
-| `geom_line(aes(group=id))` | 个体轨迹 |
-| `stat_summary(fun=mean)` | 群体均值 |
-| `geom_vline(xintercept)` | 干预断点线 |
+| `geom_line(aes(group=id))` | Individual trajectory |
+| `stat_summary(fun=mean)` | Group mean |
+| `geom_vline(xintercept)` | Intervention breakpoint line |

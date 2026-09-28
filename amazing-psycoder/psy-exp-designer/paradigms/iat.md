@@ -5,7 +5,7 @@
 
 ## When to Use
 
-User mentions: IAT, 内隐联想测验, implicit association, 内隐态度, implicit bias, implicit association test.
+User mentions: IAT, implicit association test, implicit association, implicit attitude, implicit bias, implicit association test.
 
 ## Core Logic
 
@@ -37,10 +37,10 @@ Before generating IAT code, confirm ALL of these:
 6. **Response deadline**: Fixed? Built-in error penalty? (typically 3000 ms or none)
 7. **Trials per block**: Standard (20/20/20/40/20/20/40) or custom?
 8. **D-score calculation**: Built-in or offline? Using improved algorithm (Greenwald et al., 2003)?
-9. **ITI duration**: 试次间隔时间和变化范围？
-10. **OS & font**: 在什么操作系统运行？如使用中文，确认字体
-11. **Display**: 全屏还是窗口？类别标签是否始终显示在屏幕上？
-12. **Instruction text**: 各block的指导语内容？如何说明按键映射变化？
+9. **ITI duration**: Trial interval and variation range?
+10. **OS & font**: What operating system is it running on? If using Chinese, confirm the font
+11. **Display**: Full screen or window? Are category labels always displayed on the screen?
+12. **Instruction text**: What is the instruction content of each block? How to account for key mapping changes?
 
 ## Do Not Assume
 
@@ -119,7 +119,7 @@ Peirce, J., Gray, J. R., Simpson, S., MacAskill, M., Hochenberger, R., Sogo, H.,
 
 ### User Request
 
-> "我想做一个花-昆虫IAT实验。目标类别：花（玫瑰、郁金香、菊花、向日葵、百合）和昆虫（蜜蜂、苍蝇、蚂蚁、蜘蛛、蚊子），属性类别：积极词（快乐、爱、和平、美丽、自由）和消极词（死亡、战争、疾病、痛苦、仇恨）。相容条件：花+积极/昆虫+消极，不相容条件：花+消极/昆虫+积极。标准7个block结构，相容和不相容顺序在被试间平衡。错误时强制修正（必须按正确键才能继续）。所有刺激为文字。用PsychoPy。"
+> "I want to do a flower-insect IAT experiment. Target categories: flowers (roses, tulips, chrysanthemums, sunflowers, lilies) and insects (bees, flies, ants, spiders, mosquitoes). Attribute categories: positive words (happiness, love, peace, beauty, freedom) and negative words (death, war, disease, pain, hatred) Hate). Compatible conditions: Flowers + Negatives/Insects + Positives. Standard 7 block structure, forced correction on errors (must press the correct key to continue). "
 
 ### Trial Window Timeline
 
@@ -127,7 +127,7 @@ Peirce, J., Gray, J. R., Simpson, S., MacAskill, M., Hochenberger, R., Sogo, H.,
 ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐
 │ Window 1                 │ →  │ Window 2                 │ →  │ Window 3                 │ →  │ Window 4                 │
 │ Category Labels          │    │ Stimulus                 │    │ Error Feedback           │    │ ITI                      │
-│ Content: 类别标签         │    │ Content: {stimulus}      │    │ Content: 红色X           │    │ Content: empty           │
+│ Content: category tag │ │ Content: {stimulus} │ │ Content: red X │ │ Content: empty │
 │ Duration: until key      │    │ Duration: until key      │    │ Duration: 200 ms         │    │ Duration: 250 ms         │
 │ Response: e/i            │    │ Response: e/i            │    │ Response: none           │    │ Response: none           │
 │ File: none               │    │ File: none (text)        │    │ File: none               │    │ File: none               │
@@ -138,9 +138,9 @@ Peirce, J., Gray, J. R., Simpson, S., MacAskill, M., Hochenberger, R., Sogo, H.,
 
 | Window | Content | Duration | Response | File/Folder | Condition | Data |
 |--------|---------|----------|----------|-------------|-----------|------|
-| Category Labels | 类别标签（如"花/积极"） | persistent | e/i | none | {category_labels} | none |
-| Stimulus | 刺激词 | until key (deadline 3000 ms) | e/i | none (text) | {stimulus} | rt, key, acc |
-| Error Feedback | 红色X（仅在错误时） | 200 ms | none (forced correction) | none | none | none |
+| Category Labels | Category labels (such as "flower/positive") | persistent | e/i | none | {category_labels} | none |
+| Stimulus | stimulus word | until key (deadline 3000 ms) | e/i | none (text) | {stimulus} | rt, key, acc |
+| Error Feedback | Red X (only on error) | 200 ms | none (forced correction) | none | none | none |
 | ITI | empty | 250 ms | none | none | none | none |
 
 ### Parsed Experiment Specification
@@ -168,7 +168,7 @@ Peirce, J., Gray, J. R., Simpson, S., MacAskill, M., Hochenberger, R., Sogo, H.,
 
 ### Missing Information
 
-1. Stimulus type: text or image files? → "所有刺激为文字" — confirmed text-based
+1. Stimulus type: text or image files? → "All stimuli are text" — confirmed text-based
 2. Key mapping: which side = which category? → will ask (E=left, I=right standard)
 3. Response deadline not stated → assumed 3000 ms
 4. Block-end feedback? → will ask

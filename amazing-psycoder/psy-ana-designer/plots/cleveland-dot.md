@@ -1,17 +1,17 @@
-# Cleveland 点图 (Cleveland Dot Plot)
+# Cleveland Dot Plot (Cleveland Dot Plot)
 
-## 概述
+## Overview
 
-Cleveland点图用排序后的点展示多组数值,是条形图的最佳替代。心理学论文中应优先考虑。
+Cleveland dot plot uses sorted points to display multiple sets of values, which is the best alternative to bar charts. Priority should be given to psychology thesis.
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| 场景 | 多组排序比较(≥5组) |
-| 优势 | 精准读取数值,易比较排序 |
+| Scenario | Multiple group sorting comparison (≥5 groups) |
+| Advantages | Accurately read values, easy to compare and sort |
 
-## R 代码
+## R code
 
 ```r
 ggplot(data, aes(x=mean_rt, y=reorder(condition, mean_rt))) +
@@ -21,16 +21,16 @@ ggplot(data, aes(x=mean_rt, y=reorder(condition, mean_rt))) +
   theme_minimal()
 ```
 
-## 解读
+## Interpretation
 
-- 点水平位置=均值
-- 误差线=SE/CI
-- 从上到下排序=从高到低
-- 点间距=条件间差异
+- Point horizontal position = mean
+- Error bars=SE/CI
+- Sort from top to bottom = from high to low
+- Point spacing = difference between conditions
 
-## 关键参数
+## Key parameters
 
-| 参数 | 作用 |
+| Parameters | Function |
 |------|------|
-| `reorder(var, val)` | 按值排序Y轴 |
-| `geom_errorbarh` | 水平误差线 |
+| `reorder(var, val)` | Sort Y axis by value |
+| `geom_errorbarh` | Horizontal error bar |

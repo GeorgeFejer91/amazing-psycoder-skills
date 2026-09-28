@@ -1,17 +1,17 @@
-# 蜜蜂群图 (Beeswarm Plot)
+# Beeswarm Plot
 
-## 概述
+## Overview
 
-蜜蜂群图将每个数据点排列在分类轴两侧,点不重叠,比jitter散点更清晰。适合展示每个被试的数据且有中等数量的观测。
+The bee swarm chart arranges each data point on both sides of the classification axis, and the points do not overlap, making it clearer than jitter scatter points. Suitable for displaying data per subject and with a moderate number of observations.
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| 场景 | 展示所有个体数据,避免重叠 |
-| 观测数 | 10-200每条件(太多会溢出) |
+| Scenario | Display all individual data to avoid overlap |
+| Number of observations | 10-200 per condition (too many will overflow) |
 
-## R 代码
+## R code
 
 ```r
 library(ggbeeswarm)
@@ -22,14 +22,14 @@ ggplot(data, aes(x=condition, y=rt, color=condition)) +
   theme_minimal() + theme(legend.position="none")
 ```
 
-## 关键参数
+## Key parameters
 
-| 参数 | 作用 |
+| Parameters | Function |
 |------|------|
-| `cex` | 点间距(越大越分散) |
-| `size` | 点大小 |
-| `priority` | 排列优先级("ascending"/"descending"/"random") |
+| `cex` | Point spacing (the larger, the more dispersed) |
+| `size` | Point size |
+| `priority` | Prioritize ("ascending"/"descending"/"random") |
 
-## vs 雨云图
+## vs Rain Cloud Picture
 
-雨云图有密度层展示分布形状,蜜蜂群图只展示个体点。点<50时蜜蜂群图更清晰,>100时雨云图更好。
+The rain cloud diagram has a density layer to show the distribution shape, and the bee swarm diagram only shows individual points. When the point is <50, the bee swarm picture will be clearer, and when the point is >100, the rain cloud picture will be better.

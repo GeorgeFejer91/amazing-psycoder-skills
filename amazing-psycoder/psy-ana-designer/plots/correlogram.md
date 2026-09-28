@@ -1,17 +1,17 @@
-# 相关图 (Correlogram)
+# Correlogram
 
-## 概述
+## Overview
 
-相关图将相关矩阵可视化,下半三角=散点图+拟合线,对角=变量名+分布,上半三角=相关系数。一张图展示所有两两关系的完整信息。
+The correlation diagram visualizes the correlation matrix. The lower half triangle = scatter plot + fitting line, the diagonal = variable name + distribution, and the upper half triangle = correlation coefficient. A picture shows complete information of all pairwise relationships.
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| 场景 | 探索性多变量分析(3-8个连续变量) |
-| 优势 | 一张图=所有两两散点+相关+分布 |
+| Scenario | Exploratory multivariate analysis (3-8 continuous variables) |
+| Advantages | One picture = all pairs of scattered points + correlation + distribution |
 
-## R 代码
+## R code
 
 ```r
 library(GGally)
@@ -21,18 +21,18 @@ ggpairs(data, columns=c("rt","acc","anxiety","age"),
         diag=list(continuous=wrap("densityDiag", alpha=0.5)))
 ```
 
-## 解读
+## Interpretation
 
-- 对角: 各变量密度分布
-- 下三角: 散点图+loess平滑线
-- 上三角: Pearson r + 显著性星号
-- 离群点→标记检查
+- Diagonal: Density distribution of each variable
+- Lower triangle: scatter plot + loess smooth line
+-Upper Triangle: Pearson r + Significance Star
+- Outlier → Mark Check
 
-## 关键参数
+## Key parameters
 
-| 参数 | 作用 |
+| Parameters | Function |
 |------|------|
-| `columns` | 选择的变量列号 |
-| `upper` | 上三角(推荐cor) |
-| `lower` | 下三角(推荐smooth) |
-| `diag` | 对角(推荐densityDiag) |
+| `columns` | Selected variable column number |
+| `upper` | Upper triangle (cor is recommended) |
+| `lower` | Lower triangle (smooth recommended) |
+| `diag` | Diagonal (densityDiag recommended) |

@@ -150,7 +150,7 @@ def text(value: Any) -> str:
 
 def absolute_local_path(value: Any) -> bool:
     raw = text(value)
-    return Path(raw).is_absolute() or bool(WINDOWS_ABSOLUTE.match(raw))
+    return raw.startswith("/") or Path(raw).is_absolute() or bool(WINDOWS_ABSOLUTE.match(raw))
 
 
 def escapes_project(value: Any) -> bool:

@@ -1,60 +1,60 @@
-# 交叉随机效应 (Crossed Random Effects)
+# Crossed Random Effects
 
-## 概述
+## Overview
 
-当实验同时抽样**被试**和**刺激**时,两者都是随机效应,需在模型中同时建模。这是心理语言学的**标准做法**,也适用于任何以刺激为随机样本的设计。
+When the experiment samples **subject** and **stimulus** at the same time, both are random effects and need to be modeled simultaneously in the model. This is **standard practice** in psycholinguistics and applies to any design in which the stimuli are random samples.
 
-**典型场景**: 30个被试对50个面孔图片做情绪判断。被试和图片都是随机样本→需交叉随机效应。
+**Typical scenario**: 30 subjects make emotional judgments on 50 face pictures. Both subjects and pictures are random samples → random effects need to be crossed.
 
-## 何时使用
+## When to use
 
-| 条件 | 要求 |
+| Conditions | Requirements |
 |------|------|
-| 实验设计 | 被试内设计（within-subjects），同时包含被试和刺激两个随机抽样维度 |
-| 因变量类型 | 连续变量（如反应时、评分、注视时间等） |
-| 自变量类型 | 分类变量（如实验条件），可包含被试内和被试间因素 |
-| 样本信息 | 被试数与刺激数分别决定不同推广维度；按效应、方差成分、随机斜率和目标区间精度做交叉设计模拟 |
-| 被试与刺激关系 | 交叉（crossed），非嵌套（non-nested）：每个被试接触多个刺激，每个刺激被多个被试评定 |
-| 关键假设 | 被试和刺激均为来自对应总体的随机样本；随机效应的正态性和方差齐性 |
-| 不适用情况 | 刺激为固定效应（如仅使用2张图片）或刺激嵌套于被试（如每个被试使用不同的刺激集） |
+| Experimental design | Within-subjects design (within-subjects), including two random sampling dimensions of subjects and stimuli |
+| Dependent variable type | Continuous variable (such as reaction time, rating, fixation time, etc.) |
+| Independent variable type | Categorical variables (such as experimental conditions), which can include within-subjects and between-subjects factors |
+| Sample information | The number of subjects and the number of stimuli determine different promotion dimensions respectively; conduct crossover design simulation based on effect, variance component, random slope and target interval accuracy |
+| Subject-stimulus relationship | Crossed, non-nested: Each subject is exposed to multiple stimuli, and each stimulus is rated by multiple subjects |
+| Key assumptions | Subjects and stimuli are random samples from the corresponding population; normality and homogeneity of variances of random effects |
+| Not applicable | Stimuli are fixed effects (such as using only 2 pictures) or stimuli are nested within subjects (such as using different stimulus sets for each subject) |
 
-## 为什么必须做
+## Why it must be done
 
-如果只建模被试随机效应而忽略刺激:
-- 刺激间的系统差异被当作误差→假阳性膨胀
-- 统计推断只能推广到"这些被试"而不能同时推广到"这些刺激+其他类似刺激"
+If you only model the subject random effect and ignore the stimulus:
+- Systematic differences between stimuli are treated as errors → false positive inflation
+- Statistical inference can only be generalized to "these subjects" and cannot be generalized to "these stimuli + other similar stimuli" at the same time
 
-## 模型
+## Model
 
 ```r
 lmer(rt ~ condition + (1|subject) + (1+condition|item), data=data)
 ```
 
-**关键**: 这是交叉效应,非嵌套。被试和刺激之间没有层级关系。
+**Key**: This is a cross-effect, not nested. There is no hierarchical relationship between subjects and stimuli.
 
-## 何时需要
+## When needed
 
-- 语言研究: 被试×词汇/句子
-- 面孔/图片研究: 被试×刺激图片
-- 社会认知: 被试×社交场景
+- Language study: Subject × Vocabulary/Sentence
+- Face/Picture Study: Subject × Stimulus Picture
+- Social cognition: Subject × Social scene
 
-## 报告
+## Report
 
 > A linear mixed model with crossed random effects of subjects and items examined the condition effect on RT. The effect was significant, b=35.2, SE=12.1, t=2.91, with random intercepts by subject (SD=85) and by-item random slopes (SD=15).
 
-## 报告格式 (APA 7th)
+## Report Format (APA 7th)
 
-**方法部分示例：**
+**Method part example:**
 
 > We analyzed the data using linear mixed-effects models with crossed random effects, as both participants and stimuli were treated as random samples from their respective populations. The model included condition as a fixed effect, with random intercepts for participants and random intercepts and slopes for condition by stimuli. Model parameters were estimated using restricted maximum likelihood (REML) with the `lme4` package (Version 1.1-35.1; Bates et al., 2015) in R (Version 4.4.0; R Core Team, 2024). Significance of fixed effects was assessed via Satterthwaite-approximated degrees of freedom using the `lmerTest` package (Version 3.1-3; Kuznetsova et al., 2017).
 >
 > The maximal random-effects structure justified by the design (Barr et al., 2013) was specified as: `dv ~ condition + (1 | participant) + (1 + condition | stimulus)`. When the maximal model failed to converge, we simplified the random-effects structure by removing the correlation term first, then the slope term if non-convergence persisted (Bates et al., 2015).
 
-**结果部分示例：**
+**Example of result section:**
 
 > A linear mixed-effects model with crossed random effects of participants and stimuli revealed a significant effect of condition on response times, *b* = 35.2, *SE* = 12.1, *t*(52.7) = 2.91, *p* = .005. The random-effects structure included a random intercept for participants (variance = 7225, *SD* = 85.0) and random intercepts and slopes for condition by stimuli (intercept variance = 1024, *SD* = 32.0; slope variance = 225, *SD* = 15.0; correlation between intercept and slope = -.12). The model explained 34% of the total variance in response times (conditional *R*² = .34; marginal *R*² = .12; Nakagawa & Schielzeth, 2013).
 
-**参考文献格式（APA 7th）：**
+**Reference format (APA 7th):**
 
 > Barr, D. J., Levy, R., Scheepers, C., & Tily, H. J. (2013). Random effects structure for confirmatory hypothesis testing: Keep it maximal. *Journal of Memory and Language*, *68*(3), 255–278. https://doi.org/10.1016/j.jml.2012.11.001
 >

@@ -1,50 +1,50 @@
-# Python 分析平台 — Config → 代码映射
+# Python Analysis Platform — Config → Code Mapping
 
-## 字段映射
+## Field mapping
 
-| Config 路径 | Python 代码位置 | 映射规则 |
+| Config path | Python code location | Mapping rules |
 |------------|---------------|---------|
-| `experiment.data_path` + `file_format` + `loader_options` + `multi_file` | format-dispatch loader | 用项目内路径；单/多文件按契约加载并保留 source file/row provenance，不固定为 CSV |
-| `runtime.language_version` + `dependency_file` | 启动门禁 + environment manifest | 精确核对 Python patch 版本；依赖文件必须存在且与实际 imports 对应 |
-| `design.ivs[].name` | `groupby("{name}")` | 作为分组列 |
-| `design.dvs[].name` | `agg({name}=('dv','mean'))` | DV列名 |
-| `design.dvs[].type` | 结果分布核验 | continuous/binary/ordinal/count 必须与所选模型 family 一致 |
-| `design.observation_level` + `design.clustering` | 依赖结构 | 按 subject/item/session/site 层级实现，不机械映射 design_type |
-| `questions[].selected_method` | 估计器 | 直接实现；缺失或 Python 无可靠实现时阻断并返回 Designer |
-| `cleaning.rt_lower` / `rt_upper` | reason-coded mask + exclusion log | 按 config 的含义/边界运算符执行，保留 raw row；不静默删除 |
-| `cleaning.accuracy_min` | subject-level QC table + reason-coded exclusion | 仅在确认的层级/分母/规则下计算 |
-| `cleaning.trial_exclusion` | config-specific rule function | 不把任意值机械解释为 SD trimming |
-| `cleaning.missing_policy` | policy-specific implementation + diagnostics/sensitivity | 删除、插补、似然或权重方法需与缺失机制、层级和 estimand 相容；`IterativeImputer` 不是 MICE 的通用替代 |
-| `model.stochastic` + `model.seed` | 环境设置 | 仅随机步骤设置 seed，并记录采样/并行配置 |
+| `experiment.data_path` + `file_format` + `loader_options` + `multi_file` | format-dispatch loader | Use the path within the project; single/multiple files are loaded by contract and retained source file/row provenance, not fixed to CSV |
+| `runtime.language_version` + `dependency_file` | Start access control + environment manifest | Accurately check the Python patch version; the dependency file must exist and correspond to the actual imports |
+| `design.ivs[].name` | `groupby("{name}")` | as grouping column |
+| `design.dvs[].name` | `agg({name}=('dv','mean'))` | DV column name |
+| `design.dvs[].type` | Result distribution verification | continuous/binary/ordinal/count must be consistent with the selected model family |
+| `design.observation_level` + `design.clustering` | Dependency structure | Implemented by subject/item/session/site level, no mechanical mapping design_type |
+| `questions[].selected_method` | Estimator | Direct implementation; blocks and returns Designer if missing or no reliable implementation in Python |
+| `cleaning.rt_lower` / `rt_upper` | reason-coded mask + exclusion log | Execute according to the meaning/boundary operator of config, retain raw row; do not delete silently |
+| `cleaning.accuracy_min` | subject-level QC table + reason-coded exclusion | Calculated only under confirmed levels/denominators/rules |
+| `cleaning.trial_exclusion` | config-specific rule function | Do not mechanically interpret arbitrary values as SD trimming |
+| `cleaning.missing_policy` | policy-specific implementation + diagnostics/sensitivity | Deletion, imputation, likelihood or weighting methods need to be compatible with missing mechanisms, hierarchies and estimands; `IterativeImputer` is not a general replacement for MICE |
+| `model.stochastic` + `model.seed` | Environment settings | Set seed only in random steps, and record sampling/parallel configuration |
 | `model.contrast` | `"contrast_coding": "{value}"` → patsy | treatment/sum/helmert |
-| `model.correction` | claim-family-aware contrast/inference layer | planned/hierarchical/Tukey/Holm/Bonferroni/FDR/none 等按 config 和 estimator 支持实现 |
-| `output.save_path` | project-bound output directory | 校验不越出项目根目录后创建；所有结果写入该目录 |
-| `output.report_format` | Jupyter notebook 或 Quarto | ipynb/qmd |
-| `output.figures` | 条件分支 | raincloud/boxplot/interaction/scatter |
-| `output.effect_sizes` | 估计与不确定性分支 | 输出 config 声明的 raw/standardized/probability/OR 等 claim-compatible 估计；不统一映射成 d/η²/R² |
+| `model.correction` | claim-family-aware contrast/inference layer | planned/hierarchical/Tukey/Holm/Bonferroni/FDR/none etc. supported by config and estimator |
+| `output.save_path` | project-bound output directory | Created after verifying that it does not exceed the project root directory; all results are written to this directory |
+| `output.report_format` | Jupyter notebook or Quarto | ipynb/qmd |
+| `output.figures` | Conditional branch | raincloud/boxplot/interaction/scatter |
+| `output.effect_sizes` | Estimation and uncertainty branch | Output the raw/standardized/probability/OR and other claim-compatible estimates of the config statement; not uniformly mapped to d/η²/R² |
 
-## 公式核验示例（不是自动默认）
+## Formula verification example (not automatic default)
 
-| 设计 | 固定效应 | 随机效应 |
+| Design | Fixed Effects | Random Effects |
 |------|---------|---------|
-| 单因素被试内 | `dv ~ condition` | `groups="subject_id", re_formula="~condition"` |
-| 单因素被试间 | `dv ~ condition` | — |
-| 两因素被试内 | `dv ~ A * B` | `groups="subject_id", re_formula="~A*B"` |
-| 混合设计 | `dv ~ A * B` | `groups="subject_id"` (A被试内, B被试间) |
-| 含协变量 | `dv ~ condition + covariate` | `groups="subject_id", re_formula="~condition"` |
+| Single factor within subject | `dv ~ condition` | `groups="subject_id", re_formula="~condition"` |
+| Single factor between subjects | `dv ~ condition` | — |
+| Two factors within subjects | `dv ~ A * B` | `groups="subject_id", re_formula="~A*B"` |
+| Mixed design | `dv ~ A * B` | `groups="subject_id"` (within subjects A, between subjects B) |
+| With covariates | `dv ~ condition + covariate` | `groups="subject_id", re_formula="~condition"` |
 
-## 图表映射
+## Chart mapping
 
-| Config `output.figures` 值 | Python 代码 |
+| Config `output.figures` value | Python code |
 |---------------------------|-----------|
-| `raincloud` | `ptitprince.RainCloud()` 或 violin+stripplot组合 |
-| `individual` | `sns.lineplot()` + 个体线 |
+| `raincloud` | `ptitprince.RainCloud()` or violin+stripplot combination |
+| `individual` | `sns.lineplot()` + individual line |
 | `boxplot` | `sns.boxplot()` + `sns.stripplot()` |
-| `interaction` | `sns.pointplot()` + 误差棒 |
+| `interaction` | `sns.pointplot()` + error bars |
 
-## R ↔ Python 对照
+## R ↔ Python comparison
 
-| R 函数 | Python 等效 |
+| R function | Python equivalent |
 |--------|-----------|
 | format-dispatch loader | pandas matching reader (`read_csv`/`read_excel`/`read_parquet`/`read_json`) |
 | `filter()` | `df[df['col'] > x]` |
@@ -52,18 +52,18 @@
 | `mutate()` | `df['new'] = ...` |
 | `t.test(paired=TRUE)` | `scipy.stats.ttest_rel()` |
 | `t.test(var.equal=FALSE)` | `scipy.stats.ttest_ind(..., equal_var=False)` |
-| `aov_ez()` | 无通用等价；仅在设计/缺失/协方差/校正契约相容时考虑 `pingouin.rm_anova()` |
-| `lmer()` | `statsmodels.MixedLM()` 仅在其 grouping/variance-component 能表达已确认结构时；否则使用已验证实现或阻断 |
-| `glmer(binomial)` | Bambi Bernoulli multilevel model；或在限制明确时用 `BinomialBayesMixedGLM`。普通 `Logit()` 没有随机效应 |
-| 模型诊断 | estimator-specific residual/convergence/dispersion/posterior-predictive checks |
+| `aov_ez()` | No universal equivalent; only considered for design/missing/covariance/correction contract compatibility `pingouin.rm_anova()` |
+| `lmer()` | `statsmodels.MixedLM()` only if its grouping/variance-component can express the confirmed structure; otherwise use the verified implementation or block |
+| `glmer(binomial)` | Bambi Bernoulli multilevel model; or use `BinomialBayesMixedGLM` when the restrictions are clear. Normal `Logit()` has no random effects |
+| Model diagnosis | estimator-specific residual/convergence/dispersion/posterior-predictive checks |
 | `leveneTest()` | `scipy.stats.levene()` |
 | `cohens_d()` | `pingouin.compute_effsize(eftype='cohen')` |
 | `eta_squared()` | `pingouin.anova(detailed=True)` |
-| `emmeans()` | 无通用等价；使用所选模型的预测/设计矩阵与协方差构造声明的 marginal contrast。`pairwise_tukeyhsd()` 只适用于其简单独立组场景 |
+| `emmeans()` | No universal equivalent; constructs the declared marginal contrast using the selected model's prediction/design matrix and covariance. `pairwise_tukeyhsd()` only applies to its simple independent group scenario |
 | `ggplot2` | `seaborn` + `matplotlib` |
 | `ggsave()` | `plt.savefig()` |
 | `sessionInfo()` | exact `platform.python_version()` check + platform + actual imported-distribution snapshot + declared dependency artifact |
 
-## 模型实现门禁
+## Model implements access control
 
-与 R 平台使用同一 estimand/层级契约，但不假设 API 等价。若 Python 生态没有经过验证的实现，报告依赖限制并返回 Designer 选择经确认的替代方案；禁止用普通 `Logit()` 冒充 GLMM。
+Uses the same estimand/hierarchy contract as the R platform, but does not assume API equivalence. If there is no verified implementation in the Python ecosystem, report dependency restrictions and return to Designer to choose a confirmed alternative; it is forbidden to use ordinary `Logit()` to pretend to be GLMM.

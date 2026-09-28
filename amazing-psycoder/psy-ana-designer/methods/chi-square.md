@@ -1,121 +1,121 @@
-# 卡方检验 (Chi-square Test)
+# Chi-square Test (Chi-square Test)
 
-## 概述
+## Overview
 
-卡方检验用于分析分类变量之间的关系。
+Chi-square test is used to analyze the relationship between categorical variables.
 
-**典型场景**: 两种条件下Go/No-go错误类型(漏报/虚报)的分布是否有差异; 不同实验条件的被试性别分布是否均衡。
+**Typical scenario**: Whether there is a difference in the distribution of Go/No-go error types (false negatives/false positives) under the two conditions; whether the gender distribution of subjects in different experimental conditions is balanced.
 
-## 何时使用
+## When to use
 
-| 条件 | 要求 |
+| Conditions | Requirements |
 |------|------|
-| 变量类型 | 两个分类变量（名义或顺序） |
-| 观测独立性 | 每个观测值相互独立（非配对/非重复测量） |
-| 稀疏单元格 | 检查期望频数分布和表维度；按设计选择渐近、精确、置换/Monte Carlo 或模型化方法，不用“任一格 <5”自动切换 |
-| 样本/设计 | 由单元格概率、表维度和目标功效决定；Yates/Fisher 不是按总样本量机械触发 |
-| 配对设计 | 若为配对/重复测量二分类数据，使用 McNemar 检验 |
+| Variable type | Two categorical variables (nominal or ordinal) |
+| Observation independence | Each observation is independent of each other (non-paired/non-repeated measurements) |
+| Sparse cells | Check expected frequency distribution and table dimensions; choose asymptotic, exact, permutation/Monte Carlo or modeled methods by design without automatic switching of "any cell <5" |
+| Sample/Design | Determined by cell probabilities, table dimensions, and target power; Yates/Fisher is not mechanically triggered by total sample size |
+| Paired design | If it is paired/repeated measures dichotomous data, use McNemar test |
 
-## 变体
+## Variations
 
-| 检验 | 何时用 |
+| Test | When to use |
 |------|--------|
-| 拟合优度 | 单分类变量,检验分布是否符合预期 |
-| 独立性 | 两个分类变量是否独立 |
-| McNemar | 配对二分类(同一被试前后测) |
+| Goodness of fit | Single categorical variable, test whether the distribution is in line with expectations |
+| Independence | Whether two categorical variables are independent |
+| McNemar | Paired two-category (same subject pre- and post-test) |
 
-## 效应量
+## Effect size
 
-| 指标 | 适用 |
+| Indicator | Applicable |
 |------|------|
-| Cramér's V | 卡方独立性检验；结合表维度、领域和不确定性解释，不套通用小/中/大阈值 |
-| Phi (φ) | 2×2表 |
+| Cramér's V | Chi-square independence test; combines table dimensions, fields and uncertainty interpretation, does not apply universal small/medium/large thresholds |
+| Phi (φ) | 2×2 table |
 
-## R 代码
+## R code
 
 ```r
-# 加载必要的包
-library(effectsize)   # 用于计算 Cramér's V 等效应量
-library(tidyverse)    # 数据处理
+# Load necessary packages
+library(effectsize)   # is used to calculate Cramér's V equivalent effect size
+library(tidyverse)    # Data processing
 
 # ============================================
-# 示例：卡方独立性检验
-# 研究问题：不同实验条件（A/B）下，被试的回答类型（正确/错误）是否有差异？
+# Example: Chi-square test of independence
+# Research question: Are there differences in subjects' answer types (correct/wrong) under different experimental conditions (A/B)?
 # ============================================
 
-# 创建列联表
+# Create contingency table
 observed <- matrix(c(45, 15, 30, 28), nrow = 2, byrow = TRUE)
-rownames(observed) <- c("条件A", "条件B")
-colnames(observed) <- c("正确", "错误")
-print("列联表:")
+rownames(observed) <- c("Condition A", "Condition B")
+colnames(observed) <- c("Correct", "Error")
+print("Contingency table:")
 print(observed)
 
-# 执行卡方独立性检验
+# Perform Chi-Square Independence Test
 chisq_result <- chisq.test(observed)
 print(chisq_result)
 
-# 检查期望频数（验证是否需要 Fisher 精确检验）
-print("期望频数:")
+# Check expected frequencies (verify whether Fisher's exact test is required)
+print("Expected frequency:")
 print(chisq_result$expected)
 
-# 计算效应量 Cramér's V
+# Calculate effect size Cramér's V
 v_result <- cramers_v(observed)
 print(paste("Cramér's V =", round(v_result$Cramers_v, 3)))
 
-# 计算标准化残差（探查差异来源）
-print("标准化残差:")
+# Calculate standardized residuals (explore sources of differences)
+print("Standardized residuals:")
 print(chisq_result$stdres)
 
 # ============================================
-# 备选：若期望频数 < 5，使用 Fisher 精确检验
+# Alternative: If expected frequency < 5, use Fisher's exact test
 # ============================================
 fisher_result <- fisher.test(observed)
-print("Fisher 精确检验结果:")
+print("Fisher's exact test results:")
 print(fisher_result)
 
 # ============================================
-# 拟合优度检验示例
-# 研究问题：被试在四种选择上的分布是否符合均匀分布？
+# Goodness of fit test example
+# Research question: Does the distribution of subjects among the four choices conform to a uniform distribution?
 # ============================================
 choices <- c(A = 35, B = 28, C = 42, D = 20)
 chisq_gof <- chisq.test(choices, p = rep(1/4, 4))
-print("拟合优度检验:")
+print("Goodness of fit test:")
 print(chisq_gof)
 
-# 拟合优度效应量 Cohen's w
+# Goodness of fit effect size Cohen's w
 w_result <- cohens_w(choices, p = rep(1/4, 4))
 print(paste("Cohen's w =", round(w_result$Cohens_w, 3)))
 ```
 
-## 报告
+## Report
 
-### APA 7th 报告格式
+### APA 7th Report Format
 
-> 卡方独立性检验显示，实验条件与回答类型之间存在显著关联，χ²(1, N = 118) = 4.16, p = .041, Cramér's V = .19。条件 A 的正确率（75.0%）高于条件 B（51.7%）。
+> A chi-square test of independence showed a significant association between experimental condition and response type, χ²(1, N = 118) = 4.16, p = .041, Cramér's V = .19. Condition A had a higher accuracy rate (75.0%) than condition B (51.7%).
 
-**中文示例：**
+**Chinese example:**
 
-> 对不同实验条件下被试的回答正确率进行卡方独立性检验，结果显示条件与回答类型之间存在显著关联（χ²(1, N = 118) = 4.16, p = .041, Cramér's V = 0.19），表明条件 A 的正确率（75.0%）显著高于条件 B（51.7%）。
+> A chi-square independence test was conducted on the correct answer rates of subjects under different experimental conditions. The results showed that there was a significant correlation between conditions and answer types (χ²(1, N = 118) = 4.16, p = .041, Cramér's V = 0.19), indicating that the correct rate of condition A (75.0%) was significantly higher than that of condition B (51.7%).
 
-### 报告要素清单
+### List of report elements
 
-- 检验名称（卡方独立性检验 / 拟合优度检验 / McNemar 检验）
-- 自由度 (df) 与样本量 (N)
-- χ² 值、p 值（精确到小数点后 2-3 位）
-- 效应量及其置信区间（Cramér's V 或 φ，或拟合优度的 Cohen's w）
-- 描述性统计（各单元格频数 / 百分比，或标准化残差）
-- 若显著，通过残差方向解释差异来源
+- Test name (Chi-square test of independence/Goodness of fit test/McNemar test)
+- Degrees of freedom (df) vs. sample size (N)
+- χ² value, p value (accurate to 2-3 decimal places)
+- Effect size and its confidence interval (Cramér's V or φ, or Cohen's w for goodness of fit)
+- Descriptive statistics (frequency/percentage of each cell, or standardized residuals)
+- If significant, explain the source of the difference through the direction of the residual
 
-## 注意事项
+## Notes
 
-- 根据期望频数的整体分布、表维度和设计选择有效推断；Fisher、Monte Carlo/置换或模型法各有适用范围
-- 大样本时卡方几乎总是显著——更应关注效应量
-- 卡方只检验"是否独立",不检验"差异方向"
+- Efficient inference based on overall distribution of expected frequencies, table dimensions and design choices; Fisher, Monte Carlo/permutation or model methods each have their own scope of application
+- Chi-square is almost always significant with large samples - more attention should be paid to effect size
+- Chi-square only tests "whether it is independent" and does not test "direction of difference"
 
-## 备选方法
+## Alternative method
 
-- Fisher 精确检验 — 期望频数 < 5 或小样本时使用
-- McNemar 检验 — 配对二分类数据的比较
-- Cochran's Q 检验 — 多个相关样本的二分类比较
-- 对数线性模型 — 多分类变量的复杂关联分析
-- 逻辑回归 — 预测二分类因变量的模型
+- Fisher's exact test - used when expected frequency < 5 or small samples
+- McNemar's test - comparison of paired binary data
+- Cochran's Q test — binary comparison of multiple related samples
+- Log-linear model – complex correlation analysis of multiple categorical variables
+- Logistic Regression — a model that predicts a binary dependent variable

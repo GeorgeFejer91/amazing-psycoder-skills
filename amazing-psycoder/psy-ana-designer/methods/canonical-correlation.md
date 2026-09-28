@@ -1,42 +1,42 @@
-# 典型相关分析 (Canonical Correlation Analysis / CCA)
+# Canonical Correlation Analysis (CCA)
 
-## 概述
+## Overview
 
-CCA分析两组多变量之间的整体关联,是Pearson相关的多元扩展。
+CCA analyzes the overall association between two groups of multiple variables and is a multivariate extension of Pearson correlation.
 
-**典型场景**: 3个认知任务(RT、准确率、变异性)与4个问卷分数(焦虑、抑郁、压力、疲劳)的整体关联。
+**Typical scenario**: Overall correlation between 3 cognitive tasks (RT, accuracy, variability) and 4 questionnaire scores (anxiety, depression, stress, fatigue).
 
-## 何时使用
+## When to use
 
-有多个X和多个Y,想知道"这两组变量整体上有多相关",而非逐对检验。
+There are multiple Xs and multiple Ys, and I want to know "how correlated are these two sets of variables as a whole" instead of pairwise testing.
 
-| 条件 | 要求 |
+| Conditions | Requirements |
 |------|------|
-| 设计类型 | 相关设计/观测设计，两组变量均为连续型 |
-| 变量集X | 2+连续变量，变量间允许适度相关但避免严重多重共线性 |
-| 变量集Y | 2+连续变量，变量间允许适度相关但避免严重多重共线性 |
-| 样本信息 | 由两组维度、协方差稳定性、正则化和目标典型相关决定；使用重采样/外部验证，不套变量数×10 规则 |
-| 变量数比例 | 每组变量数建议 ≤ 5-6，总变量数不宜超过样本量的1/10 |
-| 线性假设 | X集与Y集之间关系为线性，各典型变量对之间关系为线性 |
-| 多元正态性 | 两组变量联合服从多元正态分布（大样本下可放宽） |
-| 组内共线性 | 同一变量集内部无完美共线性（VIF < 10） |
+| Design type | Dependent design/observation design, both sets of variables are continuous |
+| Variable set X | 2+ continuous variables, allowing moderate correlation between variables but avoiding serious multicollinearity |
+| Variable set Y | 2+ continuous variables, allowing moderate correlation between variables but avoiding serious multicollinearity |
+| Sample information | Determined by two sets of dimensions, covariance stability, regularization and target canonical correlation; use resampling/external validation, do not apply the variable number × 10 rule |
+| Proportion of number of variables | The number of variables in each group is recommended to be ≤ 5-6, and the total number of variables should not exceed 1/10 of the sample size |
+| Linear hypothesis | The relationship between the X set and the Y set is linear, and the relationship between each typical variable pair is linear |
+| Multivariate normality | The two sets of variables jointly obey the multivariate normal distribution (can be relaxed in large samples) |
+| Intra-group collinearity | There is no perfect collinearity within the same variable set (VIF < 10) |
 
-## R代码
+## R code
 
 ```r
 library(CCA)
 X <- data[,c("rt","accuracy","variability")]
 Y <- data[,c("anxiety","depression","stress","fatigue")]
 cc <- cc(X, Y)
-# 典型相关系数
+# Canonical correlation coefficient
 cc$cor
-# 典型载荷
+# Typical loads
 cc$xcoef; cc$ycoef
 ```
 
-## 报告
+## Report
 
-### APA 7th 报告格式
+### APA 7th Report Format
 
 > A canonical correlation analysis (CCA) was conducted to examine the overall multivariate relationship between cognitive performance measures (RT, accuracy, RT variability) and mood symptoms (anxiety, depression, stress, fatigue). The overall model was significant, Wilks' Λ = .68, *F*(12, 508.32) = 5.21, *p* < .001.
 >

@@ -1,6 +1,6 @@
 # Psychtoolbox Implementation Guide
 
-> **Status**: Layer 1 — API 规范、反模式表、强制模式。生成时必须与 config 固定的 MATLAB/Octave、Psychtoolbox 和目标 OS/hardware 版本核对。
+> **Status**: Layer 1 — API specification, anti-pattern table, enforcement patterns. Builds must be checked against config-fixed MATLAB/Octave, Psychtoolbox, and target OS/hardware versions.
 > **Last updated**: 2026-07-25 — 17-rule quality template applied (8-section PTB adaptation)
 
 ## Critical Rules (Read First — errors here invalidate data)
@@ -29,17 +29,17 @@ Every generated PTB experiment must follow these rules. The template is identica
 ```matlab
 % {filename}.m
 % ---------------------------------------------------------------
-% 一体化流程：
+% Integrated process:
 %   {stage_1} → {stage_2} → {stage_3}
 %
-% 数据输出：
+% Data output:
 %   {stage} -> sub-{id}_{stage}_{date}.csv
 %
-% 设计概要：
-%   每个 block：{trial_count} trial
-%   正式阶段：{block_count} block × {trials_per_block} = {total} trial
+% Design summary:
+%   Each block: {trial_count} trial
+%   Formal stage: {block_count} block × {trials_per_block} = {total} trial
 %
-% 当前版本关键修改：
+% Key modifications of the current version:
 %   1) {change_1}
 %   2) {change_2}
 % ---------------------------------------------------------------
@@ -48,45 +48,45 @@ Every generated PTB experiment must follow these rules. The template is identica
 ### 0.2 Section Order (Rules 1, 3, 5 — PTB: 8 sections)
 
 ```
-Section 1:  参数配置区（路径 / 屏幕 / 字体 / 时序 / 按键 / 条件 / 随机种子）
-            包含文本常量 — 所有指导语/反馈文字在此定义为字符串变量        ← Rule 3+5
-Section 2:  屏幕初始化（PsychImaging + BlendFunction + ifi + Priority）
-Section 3:  刺激预加载（MakeTexture / CreateProceduralGabor — 循环外）    ← Rule 13
-Section 4:  KbQueue 初始化（Create + Start — 循环前一次）                ← [PTB]
-Section 5:  数据文件初始化（fopen + fprintf header + fclose）             ← [PTB]
-Section 6:  工具函数（cleanup / saveTrial / checkEscape / safeWait / 伪随机引擎）
-Section 7:  主循环（try → trial loop → cleanup → catch → cleanup）       ← Rule 8 [PTB]
-Section 8:  本地函数（cleanup / saveTrial — 必须在 script 文件末尾）     ← [PTB]
+Section 1: Parameter configuration area (path/screen/font/timing/key/condition/random seed)
+            contains text constants — all instruction/feedback text is defined here as string variables ← Rule 3+5
+Section 2: Screen initialization (PsychImaging + BlendFunction + ifi + Priority)
+Section 3: Stimulus preloading (MakeTexture / CreateProceduralGabor — outside the loop) ← Rule 13
+Section 4: KbQueue initialization (Create + Start — previous loop) ← [PTB]
+Section 5: Data file initialization (fopen + fprintf header + fclose) ← [PTB]
+Section 6: Tool functions (cleanup / saveTrial / checkEscape / safeWait / pseudo-random engine)
+Section 7: Main loop (try → trial loop → cleanup → catch → cleanup) ← Rule 8 [PTB]
+Section 8: Local functions (cleanup / saveTrial — must be at the end of the script file) ← [PTB]
 ```
 
-**[PTB]** MATLAB script 文件要求所有本地函数定义在文件末尾。不允许在 script 中间插入 function 定义。
+**[PTB]** MATLAB script files require that all local functions be defined at the end of the file. It is not allowed to insert function definitions in the middle of script.
 
 ### 0.3 Variable Naming (Rule 4 — PTB: camelCase)
 
 ```
 <stagePrefix><Category><Meaning>
 
-stagePrefix = kp | nv | prac | main | (按实验阶段自定义)
-Category    = Txt (指导语文本) | Key (按键) | Sec (秒级时序)
-            | Dir (文件夹路径) | Fb (反馈) | Xlsx (条件表文件名)
-            | MaxConsec (伪随机约束) | n (计数)
+stagePrefix = kp | nv | prac | main | (customized by experimental stage)
+Category = Txt (instruction text) | Key (key) | Sec (second-level timing)
+            | Dir (folder path) | Fb (feedback) | Xlsx (condition table file name)
+            | MaxConsec (pseudo-random constraint) | n (count)
 
-正例: kpItiSec, nvFeedTimeout, nvMaxConsecEllipse
-反例: iti, feedback_timeout, max_ellipse
+Positive example: kpItiSec, nvFeedTimeout, nvMaxConsecEllipse
+Counterexample: iti, feedback_timeout, max_ellipse
 ```
 
-**[PTB]** PTB 惯例用 camelCase。Python 的 UPPER_SNAKE 在此不适用。跨平台常量（`KEY_QUIT`、`BASE_DIR`）保留 UPPER_SNAKE 因为它们是运行环境常量而非实验参数。
+**[PTB]** PTB convention uses camelCase. Python's UPPER_SNAKE does not apply here. Cross-platform constants (`KEY_QUIT`, `BASE_DIR`) retain UPPER_SNAKE because they are runtime environment constants rather than experimental parameters.
 
 ### 0.4 Pseudorandom Constraints (Rule 6 — PTB: Shuffle + while)
 
 ```matlab
-% ---------- 伪随机约束 ----------
-nvMaxConsecEllipse    = 2;      % 每个约束一个常量
+% ---------- Pseudo-random constraint ----------
+nvMaxConsecEllipse    = 2;      % One constant per constraint
 nvMaxConsecPrimeWidth = 3;
-nvMaxPseudorandTries  = 5000;   % 硬性上限，防止死循环
+nvMaxPseudorandTries  = 5000;   % Hard upper limit to prevent infinite loops
 
 function ok = canAppendTrial(seq, candidate)
-    % 检查 candidate 加在 seq 末尾是否违反任何约束
+    % Check whether candidate added to the end of seq violates any constraints
 end
 
 function ordered = pseudorandomize(rawTrials)
@@ -109,11 +109,11 @@ function ordered = pseudorandomize(rawTrials)
             ordered = seq; return;
         end
     end
-    error('无法生成满足约束的 trial 顺序。');  % 失败必须退出
+    error('Unable to generate a trial sequence that satisfies the constraints.');  % Failure must exit
 end
 ```
 
-**[PTB]** MATLAB 用 `Shuffle()` (Psychtoolbox) 或 `randperm()` 替代 Python 的 `random.shuffle()`。`error()` 替代 Python 的 `exit_without_saving()`。
+**[PTB]** MATLAB replaces Python's `random.shuffle()` with `Shuffle()` (Psychtoolbox) or `randperm()`. `error()` replaces Python's `exit_without_saving()`.
 
 ### 0.5 Exit Safety (Rule 7 — PTB: cleanup + error)
 
@@ -124,12 +124,12 @@ function cleanup()
     sca; Priority(0); ShowCursor;
 end
 
-% 退出点：用户按 Escape → cleanup(); error('用户手动退出');
-%         文件缺失    → cleanup(); error('Missing: %s', path);
-%         校验失败    → cleanup(); error('条件表校验失败');
+% Exit point: The user presses Escape → cleanup(); error('User manually exits');s manually');
+%         File missing → cleanup(); error('Missing: %s', path);
+%         Verification failed → cleanup(); error('Condition table verification failed');table verification failed');
 ```
 
-**[PTB]** MATLAB 无 `core.quit()` — `error()` 会跳转到 `catch` 块。`sca` (= `Screen('CloseAll')`) 恢复显示。`cleanup()` 必须在 `try` 和 `catch` 两个分支都调用。
+**[PTB]** MATLAB None `core.quit()` — `error()` will jump to the `catch` block. `sca` (= `Screen('CloseAll')`) Restore display. `cleanup()` must be called in both `try` and `catch` branches.
 
 ### 0.6 Condition Validation (Rule 9)
 
@@ -137,17 +137,17 @@ end
 validPrimeNames  = {'narrow', 'broad'};
 validShapes      = {'circle', 'ellipse'};
 
-% 逐行校验
+% Verify line by line
 for i = 1:length(primeRows)
     if ~ismember(lower(primeRows{i}.prime), validPrimeNames)
-        error('prime 表第 %d 行 prime 非法：%s', i, primeRows{i}.prime);
+        error('prime table row %d illegal prime: %s', i, primeRows{i}.prime);
     end
 end
 
-% 素材文件预检查
+% Material file pre-check
 for i = 1:length(neededFiles)
     if ~isfile(neededFiles{i})
-        error('素材缺失: %s', neededFiles{i});
+        error('Material missing: %s', neededFiles{i});
     end
 end
 ```
@@ -156,15 +156,15 @@ end
 
 ```matlab
 function [respKey, rtMs, correct, timeout] = runOneTrial(row, trialIdx, blockIdx, phase)
-    % ① 刺激呈现（VBLTimestamp = RT 起点）
-    % ② 反应收集（KbQueueCheck loop + deadline + escape）
-    % ③ 反馈呈现（根据 phase 分支）
-    % ④ ITI（帧循环 + escape 检查）
-    % ⑤ 数据写出（saveTrial 立即写盘）
+    % ① Stimulus presentation (VBLTimestamp = RT starting point)
+    % ② Response collection (KbQueueCheck loop + deadline + escape)
+    % ③ Feedback presentation (according to phase branch)
+    % ④ ITI (frame loop + escape check)
+    % ⑤ Data writing (saveTrial writes to disk immediately)
 end
 ```
 
-**[PTB]** RT 起点必须是 `Screen('Flip')` 返回的 `VBLTimestamp`，不是 `GetSecs`。RT 公式: `rtMs = (firstPress - stimOnset) * 1000`。
+**[PTB]** RT starting point must be the `VBLTimestamp` returned by `Screen('Flip')`, not `GetSecs`. RT formula: `rtMs = (firstPress - stimOnset) * 1000`.
 
 ### 0.8 Per-Trial Data Write (Rules 10, 14–16 — PTB: saveTrial)
 
@@ -172,37 +172,37 @@ end
 function saveTrial(path, subjectID, block, trial, condition, stimulus, ...
         correctResp, response, rtMs, accuracy, onsetTs, seed)
     fid = fopen(path, 'a');  % 'a' = append mode — crash-safe
-    if fid < 0, error('无法打开数据文件: %s', path); end
-    if isnan(rtMs), rtText = ''; else, rtText = sprintf('%.0f', rtMs); end  % Rule 14: 整数 ms
+    if fid < 0, error('Unable to open data file: %s', path); end
+    if isnan(rtMs), rtText = ''; else, rtText = sprintf('%.0f', rtMs); end  % Rule 14: integer ms
     fprintf(fid, '%s,%d,%d,%s,%s,%s,%s,%s,%d,%s,%d\n', ...
         subjectID, block, trial, condition, stimulus, correctResp, ...
-        response, rtText, accuracy, onsetTs, seed);                         % Rule 15: accuracy 为 0/1 int
-    fclose(fid);  % fclose 每 trial — 耐久 checkpoint                            Rule 10
+        response, rtText, accuracy, onsetTs, seed);                         % Rule 15: accuracy is 0/1 int
+    fclose(fid);  % fclose every trial — Durable checkpoint Rule 10
 end
 ```
 
-**[PTB]** PTB 无 ExperimentHandler。用 `fopen(..., 'a')` + `fprintf` + `fclose` 实现等价增量保存。`fclose` 必须在每次 trial 后调用以确保崩溃可恢复。
+**[PTB]** PTB has no ExperimentHandler. Use `fopen(..., 'a')` + `fprintf` + `fclose` to achieve equivalent incremental saving. `fclose` must be called after each trial to ensure crashes are recoverable.
 
 ### 0.9 Main Flow (Rule 8 — PTB: try/catch)
 
 ```matlab
 try
-    % --- 指导语 ---
+    % --- Instructions ---
     showText(txtStart);
 
-    % --- 条件加载 + 校验 ---
+    % --- Conditional loading + verification ---
     rows = loadConditions(conditionXlsx);
 
-    % --- 正式实验 ---
+    % --- Formal experiment ---
     for trial = 1:nTrials
         KbQueueFlush([], 2);
         runOneTrial(rows{trialOrder(trial)}, trial, 1, 'main');
     end
 
-    % --- 结束 ---
+    % --- End ---
     showText(txtEnd);
     cleanup();
-    fprintf('数据已保存至: %s\n', dataFile);
+    fprintf('Data saved to: %s\\n', dataFile);
 
 catch ME
     cleanup();
@@ -210,35 +210,35 @@ catch ME
 end
 ```
 
-**[PTB]** MATLAB 无 `finally`。`cleanup()` 在两个分支都显式调用。效果等价于 Python 的 `try/except/finally`。`rethrow(ME)` 保留原始错误信息。
+**[PTB]** MATLAB None `finally`. `cleanup()` is called explicitly in both branches. The effect is equivalent to Python's `try/except/finally`. `rethrow(ME)` retains the original error message.
 
 ### 0.10 Comment Rules (Rule 17)
 
 ```matlab
-% 正例 — 解释意图
-stimOnset = VBLTimestamp;                    % RT 起点：GPU 翻页时刻
-% 已删除 pre-blank，仅保留 ITI                  ← 解释设计决策
-itiSec = itiMinSec + rand * (itiMaxSec - itiMinSec);  ← 不写 "% 生成随机数"（废话）
+% Positive example — explaining intent
+stimOnset = VBLTimestamp;                    % RT starting point: GPU page turning time
+% Pre-blank removed, only ITI retained ← Explain design decisions
+itiSec = itiMinSec + rand * (itiMaxSec - itiMinSec);  ← Avoid an obvious comment such as "% Generate random numbers".
 
-% 反例 — 不做
-vbl = Screen('Flip', window);  % 执行翻屏         ← 代码已自明
-ifi = Screen('GetFlipInterval', window); % 获取帧间隔 ← 废话
+% Counterexample - Don't do it
+vbl = Screen('Flip', window);  % Perform screen flip ← The code is self-explanatory
+ifi = Screen('GetFlipInterval', window); % Get frame interval ← Nonsense
 ```
 
-## 1. Canonical Safety/Timing Baseline（契约概览 — 完整可运行代码见 §1.1）
+## 1. Canonical Safety/Timing Baseline (contract overview - see §1.1 for complete runnable code)
 
-新 PTB 项目应保留该基线中的同步测试、显式 seed、受保护清理、实际 flip/response 时间戳和增量保存契约；组件与循环结构由 config 决定。本节展示 API 契约要点；完整的可复制粘贴骨架在 [§1.1](#11-canonical-code-skeleton新项目的契约基线)。
+New PTB projects should retain the sync tests, explicit seed, protected cleanup, actual flip/response timestamps, and delta save contracts from this baseline; component and loop structure is determined by config. This section presents API contract points; the complete copy-and-paste skeleton is in [§1.1] (#11-canonical-code-skeleton contract baseline for the new project).
 
 ```matlab
-% 1. 设置
-PsychDefaultSetup(2);                                  % 默认设置 + 统一键名
-Screen('Preference', 'SkipSyncTests', 0);              % 生产环境必须跑同步测试
-KbName('UnifyKeyNames');                               % 跨平台键名统一
-randomSeed = resolvedSeed;                             % 部署层按 config.seed_scope 解析并记录
-rng(randomSeed, 'twister');                            % 可复现随机化
+% 1. Settings
+PsychDefaultSetup(2);                                  % Default settings + unified key name
+Screen('Preference', 'SkipSyncTests', 0);              % The production environment must run synchronous tests
+KbName('UnifyKeyNames');                               % Unify key names across platforms
+randomSeed = resolvedSeed;                             % The deployment layer parses and records according to config.seed_scope
+rng(randomSeed, 'twister');                            % Reproducible randomization
 
 try
-    % 2. 打开窗口
+    % 2. Open the window
     screens = Screen('Screens');
     screenNumber = max(screens);
     white = WhiteIndex(screenNumber);
@@ -253,32 +253,32 @@ try
     topPriorityLevel = MaxPriority(window);
     Priority(topPriorityLevel);
 
-    % 3. 预加载刺激（循环前）
+    % 3. Preload stimulus (before loop)
     % ... Screen('MakeTexture') / CreateProceduralGabor / PsychPortAudio('CreateBuffer') ...
 
-    % 4. 键盘队列初始化
-    KbQueueCreate();         % 创建队列（可在参数中指定 keyList）
-    KbQueueStart();          % 开始记录
+    % 4. Keyboard queue initialization
+    KbQueueCreate();         % Create a queue (keyList can be specified in the parameter)
+    KbQueueStart();          % Start recording
 
-    % 5. 实验循环
+    % 5. Experimental cycle
     for trial = 1:nTrials
-        KbQueueFlush();      % 每 trial 开始时清除旧事件
+        KbQueueFlush();      % Clear old events at the beginning of each trial
 
-        % 绘制 + Flip + RT 收集
+        % Draw + Flip + RT Collect
         % ...
 
-        % 数据保存：trial 结束后 append + fclose，确保崩溃可恢复
+        % Data saving: append + fclose after trial ends to ensure crash recovery
         % saveTrial(dataPath, trialData, randomSeed);
     end
 
-    % 6. 键盘队列释放
+    % 6. Keyboard queue release
     KbQueueStop();
     KbQueueRelease();
 
-    % 7. 数据文件关闭
+    % 7. Data file close
     fclose(dataFile);
 
-    % 8. 清理
+    % 8. Cleanup
     sca;
     Priority(0);
     ShowCursor;
@@ -291,35 +291,35 @@ catch ME
 end
 ```
 
-### 1.1 Canonical Code Skeleton（新项目的契约基线）
+### 1.1 Canonical Code Skeleton (contract baseline for new projects)
 
-以下骨架展示支持的 API 契约。按任务设备/事件模型调整结构；偏离必须保持等价同步、数据和清理保障并接受目标机测试，`modify`/`debug` 不需重写无关架构：
+The following skeleton shows the supported API contracts. Adjust the structure according to the task device/event model; deviations must maintain equivalent synchronization, data and cleanup guarantees and accept target machine testing, `modify`/`debug` does not need to rewrite irrelevant architecture:
 
 ```matlab
 % {filename}.m
 % ---------------------------------------------------------------
-% 一体化流程：
+% Integrated process:
 %   {stage_1} → {stage_2} → {stage_3}
 %
-% 数据输出：
+% Data output:
 %   {stage} -> sub-{id}_{stage}_{date}.csv
 %
-% 设计概要：
-%   每个 block：{n} trial
-%   正式阶段：{m} block × {t} = {total} trial
+% Design summary:
+%   Each block: {n} trial
+%   Formal stage: {m} block × {t} = {total} trial
 %
-% 当前版本关键修改：
+% Key modifications of the current version:
 %   1) {change_1}
 %   2) {change_2}
 % ---------------------------------------------------------------
 close all; clear; sca;
 
 % ============================================================
-% 一、参数配置区（所有可调参数 + 文本常量集中在此）
+% 1. Parameter configuration area (all adjustable parameters + text constants are concentrated here)
 % ============================================================
-% MATLAB script 中的变量不会自动对本地函数可见。
-% 需要在脚本和函数中都声明 global。
-% 不要去掉这些 global 声明 —— 否则 showText/checkEscape/cleanup 会读到空变量。
+% Variables in MATLAB script are not automatically visible to local functions.
+% Global needs to be declared in both scripts and functions.
+% Do not remove these global declarations - otherwise showText/checkEscape/cleanup will read empty variables.
 global window textColor fontSize escapeKey;
 
 taskName    = '{experiment_name}';
@@ -328,14 +328,14 @@ subjectID   = 'test';
 baseDataColumns = {'subject_id', 'block', 'trial', 'condition', 'stimulus', ...
     'correct_response', 'response', 'rt', 'accuracy', 'timestamp'};
 
-% ---------- 屏幕 ----------
+% ---------- Screen ----------
 screenNumber    = max(Screen('Screens'));
 backgroundColor = [128 128 128] / 255;  % grey
 textColor       = [0 0 0];
 fontName        = 'PingFang SC';
 fontSize        = 60;
 
-% ---------- 时序 (秒) ----------
+% ---------- Timing (seconds) ----------
 fixationSec    = 0.5;
 stimulusSec    = 1.0;
 feedbackSec    = 0.5;
@@ -343,43 +343,43 @@ respDeadlineSec = 2.0;
 itiMinSec      = 0.6;
 itiMaxSec      = 0.9;
 
-% ---------- 按键 ----------
+% ---------- Key ----------
 KbName('UnifyKeyNames');
 keyLeft   = KbName('LeftArrow');
 keyRight  = KbName('RightArrow');
 escapeKey = KbName('ESCAPE');
 responseKeys = [keyLeft, keyRight];
 
-% ---------- 文本常量 ----------
-txtStart = '欢迎参加实验。\n\n按任意键开始。';
-txtEnd   = '实验结束，感谢参与！\n\n按任意键退出。';
+% ---------- Text constant ----------
+txtStart = 'Welcome to participate in the experiment. \\n\\nPress any key to start.';
+txtEnd   = 'The experiment is over, thank you for participating! \\n\\nPress any key to exit.';
 
-% ---------- 条件 ----------
+% ---------- Conditions ----------
 conditionXlsx = 'conditions.xlsx';
 nReps = 10;
 
-% ---------- 伪随机约束 ----------
+% ---------- Pseudo-random constraint ----------
 maxConsecSameCondition = 3;
 maxPseudorandTries     = 5000;
 
-% ---------- 数据 ----------
+% ---------- Data ----------
 dataDir = fullfile(pwd, 'data');
 if ~exist(dataDir, 'dir')
     [ok, msg] = mkdir(dataDir);
     if ~ok
-        error('无法创建数据文件夹 %s: %s。请检查磁盘空间和权限。', dataDir, msg);
+        error('Unable to create data folder %s: %s. Please check disk space and permissions.', dataDir, msg);
     end
 end
 runTs = datestr(now, 'yyyymmdd_HHMMSSFFF');
 dataFile = fullfile(dataDir, sprintf('sub-%s_%s_%s.csv', subjectID, taskName, runTs));
 
 % ============================================================
-% 二、屏幕初始化
+% 2. Screen initialization
 % ============================================================
 PsychDefaultSetup(2);
 Screen('Preference', 'SkipSyncTests', 0);
 
-% 种子（FNV-1a — 可复现随机化）
+% Seed (FNV-1a - Reproducible Randomization)
 seedMat = unicode2native(sprintf('%s|%s', taskVersion, subjectID), 'UTF-8');
 seedHash = uint32(2166136261);
 for b = seedMat
@@ -402,18 +402,18 @@ Priority(MaxPriority(window));
 HideCursor;
 
 % ============================================================
-% 三、刺激预加载（循环外）
+% 3. Stimulus preloading (outside the loop)
 % ============================================================
-fixCross = [-20 20 0 0; 0 0 -20 20];  % 注视点十字
+fixCross = [-20 20 0 0; 0 0 -20 20];  % Fixation cross
 
 % ============================================================
-% 四、KbQueue 初始化（循环前一次 Create + Start）
+% 4. KbQueue initialization (Create + Start before loop)
 % ============================================================
 KbQueueCreate([], responseKeys);
 KbQueueStart;
 
 % ============================================================
-% 五、数据文件初始化
+% 5. Data file initialization
 % ============================================================
 fid = fopen(dataFile, 'w');
 fprintf(fid, ['subject_id,block,trial,condition,stimulus,correct_response,' ...
@@ -421,36 +421,36 @@ fprintf(fid, ['subject_id,block,trial,condition,stimulus,correct_response,' ...
 fclose(fid);
 
 % ============================================================
-% 六、工具函数（声明在 Section 8，此处为调用点注释）
-%    cleanup()   — KbQueue 释放 + sca + Priority 恢复
-%    saveTrial() — fopen('a') + fprintf + fclose 增量写入
-%    showText()  — 指导语/反馈文本展示
-%    checkEscape() — 每帧 escape 检测
+% 6. Tool function (declared in Section 8, here is the call point comment)
+%    cleanup() — KbQueue release + sca + Priority recovery
+%    saveTrial() — fopen('a') + fprintf + fclose incremental write
+%    showText() — Instruction/feedback text display
+%    checkEscape() — escape detection per frame
 % ============================================================
 
 % ============================================================
-% 七、主循环
+% 7. Main loop
 % ============================================================
-% ⚠️ MATLAB 无 finally。cleanup() 必须在 try 和 catch 两个分支都调用。
-% OpenWindow 放在 try 内部 — 如果窗口创建失败，catch 仍执行 cleanup。
+% ⚠️ MATLAB None finally. cleanup() must be called in both try and catch branches.
+% OpenWindow is placed inside try - if window creation fails, catch still performs cleanup.
 try
-    % --- 指导语 ---
+    % --- Instructions ---
     showText(txtStart);
 
-    % --- 条件加载 + 校验 ---
+    % --- Conditional loading + verification ---
     rows = loadConditions(conditionXlsx);
     nTrials = size(rows, 1) * nReps;
     trialOrder = Shuffle(repelem(1:size(rows, 1), nReps));
 
-    % --- 正式实验 ---
+    % --- Formal experiment ---
     vbl = Screen('Flip', window);
 
     for trial = 1:nTrials
-        KbQueueFlush([], 2);  % 清除旧事件
+        KbQueueFlush([], 2);  % Clear old events
 
         row = rows{trialOrder(trial)};
 
-        % === 注视点 ===
+        % === Gaze ===
         fixationFrames = round(fixationSec / ifi);
         for f = 1:fixationFrames
             Screen('DrawLines', window, fixCross, 3, textColor, [xCenter yCenter], 2);
@@ -458,10 +458,10 @@ try
             checkEscape();
         end
 
-        % === 刺激 + 响应窗口 ===
+        % === Stimulus + Response Window ===
         DrawFormattedText(window, row.stimulus, 'center', 'center', textColor);
         [vbl, ~, ~, ~] = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
-        stimOnset = vbl;  % Rule 14: VBLTimestamp = RT 起点
+        stimOnset = vbl;  % Rule 14: VBLTimestamp = RT starting point
         onsetTs = char(datetime('now', 'TimeZone', 'UTC', ...
             'Format', "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"));
 
@@ -484,7 +484,7 @@ try
             vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
         end
 
-        % --- 正确率 ---
+        % --- Accuracy rate ---
         if ~gotResp
             accuracy = double(strcmp(row.correct_key, 'none'));  % Rule 15: 0/1 int
             status = 'timeout'; resp = '';
@@ -493,11 +493,11 @@ try
             status = 'responded';
         end
 
-        % --- 增量保存 (Rule 10: 立即写盘) ---
+        % --- Incremental save (Rule 10: Write to disk immediately) ---
         saveTrial(dataFile, subjectID, 1, trial, row.condition, row.stimulus, ...
             row.correct_key, resp, status, rtMs, accuracy, onsetTs, randomSeed);
 
-        % === ITI (随机) ===
+        % === ITI (random) ===
         itiSec = itiMinSec + rand * (itiMaxSec - itiMinSec);
         itiFrames = round(itiSec / ifi);
         for f = 1:itiFrames
@@ -506,10 +506,10 @@ try
         end
     end
 
-    % --- 结束 ---
+    % --- End ---
     showText(txtEnd);
     cleanup();
-    fprintf('数据已保存至: %s\n', dataFile);
+    fprintf('Data saved to: %s\\n', dataFile);
 
 catch ME
     cleanup();
@@ -517,7 +517,7 @@ catch ME
 end
 
 % ============================================================
-% 八、本地函数（MATLAB script 要求函数定义在文件末尾）
+% 8. Local function (MATLAB script requires the function to be defined at the end of the file)
 % ============================================================
 
 function showText(text)
@@ -529,26 +529,26 @@ end
 
 function rows = loadConditions(xlsxPath)
     rows = table2struct(readtable(xlsxPath));
-    if isempty(rows), error('条件表为空: %s', xlsxPath); end
+    if isempty(rows), error('Condition table is empty: %s', xlsxPath); end
 end
 
 function checkEscape()
     global escapeKey;
     [keyDown, ~, keyCode] = KbCheck;
     if keyDown && keyCode(escapeKey)
-        cleanup(); error('用户手动退出');
+        cleanup(); error('User exits manually');
     end
 end
 
 function saveTrial(path, subjectID, block, trial, condition, stimulus, ...
         correctResp, response, status, rtMs, accuracy, onsetTs, seed)
     fid = fopen(path, 'a');
-    if fid < 0, error('无法打开数据文件: %s', path); end
-    if isnan(rtMs), rtText = ''; else, rtText = sprintf('%.0f', rtMs); end  % Rule 14: 整数 ms
+    if fid < 0, error('Unable to open data file: %s', path); end
+    if isnan(rtMs), rtText = ''; else, rtText = sprintf('%.0f', rtMs); end  % Rule 14: integer ms
     fprintf(fid, '%s,%d,%d,%s,%s,%s,%s,%s,%s,%d,%s,%d\n', ...
         subjectID, block, trial, condition, stimulus, correctResp, ...
         response, status, rtText, accuracy, onsetTs, seed);                   % Rule 15: accuracy 0/1 int
-    fclose(fid);  % Rule 10: 每 trial 耐久 checkpoint
+    fclose(fid);  % Rule 10: durability checkpoint every trial
 end
 
 function cleanup()
@@ -558,154 +558,154 @@ function cleanup()
 end
 ```
 
-**使用方式**：复制此骨架 → 修改 Section 1 中的参数 + 文本常量 → 替换 Section 7 中的刺激/响应/反馈逻辑 → 添加多阶段/多 block 循环。不要改变 API 模式（KbQueue、VBLTimestamp RT、帧精确 Flip、try/catch、`saveTrial` 增量写入）。
+**How to use**: Copy this skeleton → Modify the parameters + text constants in Section 1 → Replace the stimulus/response/feedback logic in Section 7 → Add a multi-stage/multi-block loop. Do not change API modes (KbQueue, VBLTimestamp RT, frame-accurate Flip, try/catch, `saveTrial` incremental write).
 
-## 2. 屏幕与窗口设置
+## 2. Screen and window settings
 
-> **完整示例**: [demo/_raw/getting-started/totally-minimal.md](../demo/_raw/getting-started/totally-minimal.md) — 最小窗口设置，[demo/_raw/getting-started/screen-coordinates.md](../demo/_raw/getting-started/screen-coordinates.md) — 坐标系统。
+> **Full example**: [demo/_raw/getting-started/totally-minimal.md](../demo/_raw/getting-started/totally-minimal.md) — Minimum window settings, [demo/_raw/getting-started/screen-coordinates.md](../demo/_raw/getting-started/screen-coordinates.md) — Coordinate system.
 
-### 2.1 窗口打开
+### 2.1 Window opens
 
 ```matlab
 PsychDefaultSetup(2);
-Screen('Preference', 'SkipSyncTests', 0);                  % 生产环境必须为 0
-[window, windowRect] = PsychImaging('OpenWindow', ...       % 使用 PsychImaging 打开
+Screen('Preference', 'SkipSyncTests', 0);                  % Production environment must be 0
+[window, windowRect] = PsychImaging('OpenWindow', ...       % Open with PsychImaging
     screenNumber, backgroundColor);
 Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
-ifi = Screen('GetFlipInterval', window);                    % 获取帧间隔
+ifi = Screen('GetFlipInterval', window);                    % Get frame interval
 ```
 
-### 2.2 `Screen('Flip')` — 帧精确计时核心
+### 2.2 `Screen('Flip')` — Frame accurate timing core
 
-**完整签名**:
+**Full signature**:
 ```matlab
 [VBLTimestamp, StimulusOnsetTime, FlipTimestamp, Missed, Beampos] = ...
     Screen('Flip', windowPtr [, when] [, dontclear] [, dontsync] [, multiflip]);
 ```
 
-**`when` 参数 — 最关键的 timing 参数**:
-| 值 | 行为 |
+**`when` parameter — the most critical timing parameter**:
+| value | behavior |
 |----|------|
-| `0`（默认） | 在下一个可能的垂直回描时 Flip |
-| `> 0` | 在系统时间到达 `when` 后的第一个回描时 Flip |
+| `0` (default) | Flip on next possible vertical retrace |
+| `> 0` | At the first retrace after system time reaches `when` Flip |
 
-**Half-IFI 规则** — PTB 帧精确计时的核心：
+**Half-IFI Rule** — The core of PTB frame-accurate timing:
 
 ```matlab
-vbl = Screen('Flip', window);                            % 初始 flip，获取 vbl 时间戳
+vbl = Screen('Flip', window);                            % Initial flip, get vbl timestamp
 for frame = 1:nFrames
-    % ... 绘制命令 ...
-    vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);  % 帧精确
+    % ... draw command ...
+    vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);  % Frame accurate
 end
 ```
 
-**为什么减 0.5 * ifi**: 提前半帧提交目标时刻可降低因调度/舍入而错过预期回描截止点的风险。这是 PTB 常用调度模式，不是守时保证；仍必须检查 `Missed`、记录实际 flip 时间戳，并在目标机器运行同步与负载测试。
+**Why subtract 0.5 * ifi**: Submitting the target moment half a frame early reduces the risk of missing the expected retrace cutoff due to scheduling/rounding. This is a common scheduling mode for PTB and is not a punctuality guarantee; you must still check for `Missed`, record the actual flip timestamp, and run synchronization and load tests on the target machine.
 
-**返回值详解**:
-| 返回值 | 说明 |
+**Detailed explanation of return value**:
+| Return value | Description |
 |--------|------|
-| `VBLTimestamp` | Flip 实际发生时间的高精度估计 — **所有计时以此为准** |
-| `StimulusOnsetTime` | 刺激起始时间估计，部分后端与 VBLTimestamp 相同 |
-| `FlipTimestamp` | Flip 执行结束时的时间戳 |
-| `Missed` | 负 = 守时；正 = 丢帧。不可完全依赖（Vulkan/VR 后端下不准确） |
-| `Beampos` | 测量时光束位置，-1 或 0 = 不支持 |
+| `VBLTimestamp` | Flip Highly accurate estimate of actual time of occurrence — **All timings are subject to this** |
+| `StimulusOnsetTime` | Stimulus onset time estimation, part of the backend is the same as VBLTimestamp |
+| `FlipTimestamp` | The timestamp at the end of Flip execution |
+| `Missed` | Negative = punctuality; positive = dropped frames. Not completely reliable (not accurate under Vulkan/VR backend) |
+| `Beampos` | Beam position during measurement, -1 or 0 = not supported |
 
-### 2.3 固定时长呈现
+### 2.3 Fixed duration presentation
 
 ```matlab
-% 呈现 N ms（转换为帧数）
+% renders N ms (converted to frames)
 durationSecs = N / 1000;
 nFrames = round(durationSecs / ifi);
 
 vbl = Screen('Flip', window);
 for f = 1:nFrames
-    % 重绘刺激
+    % Redraw stimulus
     Screen('DrawTexture', window, texture);
     vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
 end
 ```
 
-### 2.4 PTB 关键概念速查
+### 2.4 PTB Key Concepts Quick Check
 
-| 概念 | 说明 |
+| Concept | Description |
 |------|------|
-| `PsychImaging` | 窗口打开入口，支持 HDR/立体/Retina/浮点帧缓冲 |
-| `Screen('Flip')` 返回值 `vbl` | PTB 报告的 VBL/flip 软件时间参考；物理显示 onset 仍需目标硬件测量 |
-| `ifi` | 单帧时长（秒），从 `Screen('GetFlipInterval')` 获取 |
-| `waitframes` | 必须为整数，`waitframes = round(seconds / ifi)` |
-| `sca` | `Screen('CloseAll')` 的快捷方式 — 紧急清理 |
-| `Priority(MaxPriority(window))` | 提升 MATLAB 进程优先级，减少帧丢失 |
-| `Screen('DrawingFinished')` | 提示 PTB 当前帧绘制完成，可提前开始渲染 |
+| `PsychImaging` | Window opening portal, supports HDR/Stereo/Retina/Floating Point Frame Buffer |
+| `Screen('Flip')` return value `vbl` | VBL/flip software time reference reported by PTB; physical display onset still requires target hardware measurement |
+| `ifi` | Single frame duration (seconds), obtained from `Screen('GetFlipInterval')` |
+| `waitframes` | Must be an integer, `waitframes = round(seconds / ifi)` |
+| `sca` | Shortcut for `Screen('CloseAll')` - Emergency Cleanup |
+| `Priority(MaxPriority(window))` | Increase the MATLAB process priority and reduce frame loss |
+| `Screen('DrawingFinished')` | Prompt PTB The current frame drawing is completed and rendering can be started in advance |
 
-## 3. 键盘响应收集
+## 3. Keyboard response collection
 
-> **完整示例**: [../demo/_raw/getting-started/keyboard-q.md](../demo/_raw/getting-started/keyboard-q.md) — KbQueue 创建、轮询、释放的完整 demo。
+> **Complete example**: [../demo/_raw/getting-started/keyboard-q.md](../demo/_raw/getting-started/keyboard-q.md) — A complete demo of KbQueue creation, polling, and release.
 
-### 3.1 KbQueue 生命周期（时序关键键盘任务的 canonical pattern）
+### 3.1 KbQueue life cycle (canonical pattern for timing-critical keyboard tasks)
 
 For time-critical keyboard tasks, this skill's supported canonical path is `KbQueue`. That choice does not prove end-to-end accuracy: device polling, OS, display synchronization, code, and hardware still require target-machine verification. Other input devices/procedures must use their own documented contract rather than being forced into KbQueue.
 
 ```matlab
-% === 实验开始前（一次） ===
-KbQueueCreate();                            % 创建队列
-% 可选指定 keyList:
+% === Before the experiment starts (once) ===
+KbQueueCreate();                            % Create queue
+% Optional specified keyList:
 % keyList = zeros(1, 256);
 % keyList(KbName({'LeftArrow', 'RightArrow', 'ESCAPE'})) = 1;
 % KbQueueCreate([], keyList);
-KbQueueStart();                             % 开始记录
+KbQueueStart();                             % Start recording
 
-% === 每个 trial 开始时 ===
-KbQueueFlush();                             % 清除之前的所有事件
+% === At the beginning of each trial ===
+KbQueueFlush();                             % Clear all previous events
 
-% === 响应收集（帧循环内） ===
-[pressed, firstPress] = KbQueueCheck();     % 获取自上次 Check/Flush 以来的按键
+% === Response collection (within frame loop) ===
+[pressed, firstPress] = KbQueueCheck();     % Get the keys since the last Check/Flush
 if pressed
     keyCodes = find(firstPress > 0);
-    rt = min(firstPress(keyCodes)) - stimOnset;  % 秒
+    rt = min(firstPress(keyCodes)) - stimOnset;  % seconds
     responseKey = KbName(find(firstPress == min(firstPress(keyCodes))));
 end
 
-% === 实验结束后 ===
+% === After the experiment ===
 KbQueueStop();
 KbQueueRelease();
 ```
 
-**关键规则:**
-- `Create`/`Start` 在 trial 循环**之前**，`Stop`/`Release` 在循环**之后**
-- **不要**在 trial 循环内调用 Start/Stop — 队列应持续运行
-- **每个 trial 开始前必须 `KbQueueFlush()`** — 防止前 trial 残留按键污染当前 RT
-- `KbQueueCheck` 隐含清除效果 — 不能对同一数据调用两次
-- **不要**用 `KbCheck` 做 RT（不提供精确时间戳）
+**Key rules:**
+- `Create`/`Start` is before the trial loop**, `Stop`/`Release` is after the loop**
+- **Don't** call Start/Stop inside a trial loop — the queue should run continuously
+- **Every trial must be preceded by `KbQueueFlush()`** - to prevent the remaining keys from the previous trial from contaminating the current RT
+- `KbQueueCheck` implicit clearing effect - cannot be called twice on the same data
+- **Don't** use `KbCheck` for RT (does not provide precise timestamps)
 
-### 3.2 KbQueueCheck 返回值详解
+### 3.2 Detailed explanation of KbQueueCheck return value
 
 ```matlab
 [pressed, firstPress, firstRelease, lastPress, lastRelease] = KbQueueCheck();
 ```
 
-| 输出 | 说明 |
+| Output | Description |
 |------|------|
-| `pressed` | 是否有任何键被按下 |
-| `firstPress` | 1×256 数组 — 每个键的**首次按下**时间戳（秒），0 = 未按下 |
-| `firstRelease` | 每个键的首次释放时间戳 |
-| `lastPress` | 每个键的**最后一次**按下时间戳 |
-| `lastRelease` | 每个键的最后一次释放时间戳 |
+| `pressed` | Whether any keys were pressed |
+| `firstPress` | 1×256 array — First press timestamp (seconds) for each key, 0 = not pressed |
+| `firstRelease` | The first release timestamp of each key |
+| `lastPress` | The **last** pressed timestamp of each key |
+| `lastRelease` | The last release timestamp of each key |
 
-**RT 计算**:
+**RT calculation**:
 ```matlab
 if pressed
-    keyIdx = find(firstPress > 0);        % 哪些键被按下
-    rtTime = min(firstPress(keyIdx));      % 最早按键的时间
-    responseName = KbName(find(firstPress == rtTime, 1));  % 键名
-    rt = (rtTime - stimOnset) * 1000;     % 转换为 ms
+    keyIdx = find(firstPress > 0);        % Which keys were pressed
+    rtTime = min(firstPress(keyIdx));      % The earliest key press time
+    responseName = KbName(find(firstPress == rtTime, 1));  % key name
+    rt = (rtTime - stimOnset) * 1000;     % Convert to ms
 end
 ```
 
-### 3.3 多按键处理
+### 3.3 Multi-key processing
 
-由于每键只保留首次/末次时间戳，记录同一键的多次按下需频繁调用 `KbQueueCheck`：
+Since each key only retains the first/last timestamp, recording multiple presses of the same key requires frequent calls to `KbQueueCheck`:
 ```matlab
-% 连续响应场景 — 每次按键后立即 Check 并累积
+% Continuous response scenario - Check and accumulate immediately after each key press
 allKeys = {};
 allRTs = [];
 while GetSecs < stimOnset + deadline
@@ -720,150 +720,150 @@ while GetSecs < stimOnset + deadline
 end
 ```
 
-### 3.4 替代键盘 API
+### 3.4 Alternative keyboard API
 
-| API | 适用场景 | 限制 |
+| API | Applicable scenarios | Restrictions |
 |-----|---------|------|
-| `KbQueueCheck` | This skill's primary pattern for time-critical keyboard events | 需完整生命周期管理和目标机验证 |
-| `KbStrokeWait` | 指令屏"按任意键继续" | 阻塞，不返回时间戳 |
+| `KbQueueCheck` | This skill's primary pattern for time-critical keyboard events | Requires complete lifecycle management and target machine verification |
+| `KbStrokeWait` | Command screen "Press any key to continue" | Blocking, does not return timestamp |
 | `KbCheck` | Escape/status polling | Polling semantics differ from queued event timestamps; do not substitute it silently for the confirmed RT event definition |
 | `KbWait` | Justified static, non-critical wait screens | Blocking; unsuitable when concurrent drawing, triggers, deadlines, or cleanup handling must continue |
 
-## 4. RT 计时规范
+## 4. RT timing specifications
 
-> **完整示例**: [../demo/_raw/getting-started/accurate-timing.md](../demo/_raw/getting-started/accurate-timing.md) — 帧精确 timing demo，[../demo/_raw/getting-started/wait-frames.md](../demo/_raw/getting-started/wait-frames.md) — waitframes 用法。
+> **Full example**: [../demo/_raw/getting-started/accurate-timing.md](../demo/_raw/getting-started/accurate-timing.md) — Frame accurate timing demo, [../demo/_raw/getting-started/wait-frames.md](../demo/_raw/getting-started/wait-frames.md) — waitframes usage.
 
 ```matlab
-% RT 起点必须从 Screen('Flip') 的返回值 VBLTimestamp 获取
-% VBLTimestamp 是 GPU 实际完成翻页的时间
+% The RT starting point must be obtained from the return value VBLTimestamp of Screen('Flip')
+% VBLTimestamp is the time when the GPU actually completes page turning
 
 Screen('DrawText', window, stimulusText, x, y, textColor);
 [VBLTimestamp, ~, ~, ~] = Screen('Flip', window);
-stimOnset = VBLTimestamp;                    % 用于 RT 计算
+stimOnset = VBLTimestamp;                    % for RT calculations
 
-% ... KbQueue 轮询 ...
+% ... KbQueue polling ...
 
 rt = (keypressTime - stimOnset) * 1000;     % ms
 ```
 
-**反模式 — 禁止**:
-- `stimOnset = GetSecs` 在 Flip 之前或之后 → 不精确
-- `rt = GetSecs - stimOnset` 使用 `KbCheck` → 双倍不精确
+**Anti-Pattern — Forbidden**:
+- `stimOnset = GetSecs` before or after Flip → imprecise
+- `rt = GetSecs - stimOnset` using `KbCheck` → doubly inexact
 
-## 5. 刺激预加载
+## 5. Stimulus preloading
 
 ```matlab
-% 循环前预创建所有纹理
+% Pre-create all textures before looping
 trialTextures = cell(1, nStimuli);
 for i = 1:nStimuli
     img = imread(stimulusFiles{i});
     trialTextures{i} = Screen('MakeTexture', window, img);
 end
 
-% 循环内直接使用
+% used directly within the loop
 Screen('DrawTexture', window, trialTextures{condition(trial)});
 ```
 
-| 刺激类型 | 循环前操作 | 循环内操作 |
+| Stimulus type | Pre-loop operation | In-loop operation |
 |---------|----------|----------|
-| 图像 | `imread` + `Screen('MakeTexture')` | `Screen('DrawTexture')` |
+| Image | `imread` + `Screen('MakeTexture')` | `Screen('DrawTexture')` |
 | Gabor | `CreateProceduralGabor()` | `Screen('DrawTexture', ..., gabortex)` |
-| 文本 | `Screen('TextFont')`, `Screen('TextSize')` | `DrawFormattedText` / `Screen('DrawText')` |
-| 形状 | 预计算坐标矩阵 | `Screen('FillRect')` / `Screen('DrawLines')` |
+| Text | `Screen('TextFont')`, `Screen('TextSize')` | `DrawFormattedText` / `Screen('DrawText')` |
+| Shape | Precomputed coordinate matrix | `Screen('FillRect')` / `Screen('DrawLines')` |
 
-**反模式 — 禁止**: 在 trial 循环内调用 `imread` 或 `Screen('MakeTexture')` — 磁盘 I/O 导致帧丢失。
+**Anti-Pattern - Forbidden**: Calling `imread` or `Screen('MakeTexture')` inside a trial loop - Disk I/O causing frame loss.
 
 ## 6. Audio / PsychPortAudio
 
-PTB 的音频系统以 **PortAudio** 为基础，支持面向低延迟实验的调度与时间戳。实际启动延迟、抖动和同步取决于设备、驱动、缓冲与系统负载，必须在目标机器测量。
+PTB's audio system is based on **PortAudio** and supports scheduling and timestamping for low-latency experiments. Actual startup latency, jitter and synchronization depend on device, driver, buffering and system load and must be measured on the target machine.
 
-### 6.1 基本生命周期
+### 6.1 Basic life cycle
 
 ```matlab
-InitializePsychSound(1);                                 % 1 = 低延迟 aggressive 模式
+InitializePsychSound(1);                                 % 1 = low latency aggressive mode
 pahandle = PsychPortAudio('Open', [], [], 2, freq, nChannels);
-% 参数: deviceID(默认=[]), mode(2=standard playback), latencyClass, sampleRate, channels
+% Parameters: deviceID(default=[]), mode(2=standard playback), latencyClass, sampleRate, channels
 
-% 加载音频数据
+% Load audio data
 [audioData, sampleRate] = audioread('stimulus.wav');
-audioData = audioData';                                 % 转置为 行=通道 列=采样点
-PsychPortAudio('FillBuffer', pahandle, audioData);      % 填充缓冲区
+audioData = audioData';                                 % Transposed to row=channel column=sampling point
+PsychPortAudio('FillBuffer', pahandle, audioData);      % Fill buffer
 
-% 播放
+% Play
 PsychPortAudio('Start', pahandle, 1);                    % repetitions=1
 
-% 等待播放完成
+% Wait for playback to complete
 PsychPortAudio('Stop', pahandle, 1);                     % waitForStop=1
 
-% 清理
+% Cleanup
 PsychPortAudio('Close', pahandle);
 ```
 
-### 6.2 Schedule-Based 精确同步
+### 6.2 Schedule-Based precise synchronization
 
 ```matlab
-% 使用 schedule 实现精确的音频-视觉同步
-PsychPortAudio('UseSchedule', pahandle, 1);              % 启用 schedule 模式
+% Use schedule for precise audio-visual synchronization
+PsychPortAudio('UseSchedule', pahandle, 1);              % Enable schedule mode
 
-% 添加缓冲到 schedule
+% Add buffering to schedule
 bufferHandle = PsychPortAudio('CreateBuffer', [], audioData);
-PsychPortAudio('AddToSchedule', pahandle, bufferHandle, 1);  % 播放 1 次
+PsychPortAudio('AddToSchedule', pahandle, bufferHandle, 1);  % Played 1 time
 
-% 目标时间来自已确认的 SOA/offset，并在 deadline 之前预调度
+% The target time comes from the confirmed SOA/offset and is pre-scheduled before the deadline
 targetOnset = priorVbl + confirmedAudioVisualSOA;
 PsychPortAudio('Start', pahandle, 1, targetOnset, 0);
 visualVbl = Screen('Flip', window, targetOnset - 0.5 * ifi);
-% 保存 targetOnset、visualVbl 和设备测量结果；调度请求本身不证明物理同步
+% Save targetOnset, visualVbl, and device measurements; scheduling request itself does not prove physical synchronization
 ```
 
-### 6.3 预加载与低延迟
+### 6.3 Preloading and low latency
 
 ```matlab
-% 方式 1: FillBuffer（简单播放）
+% Method 1: FillBuffer (simple playback)
 PsychPortAudio('FillBuffer', pahandle, audioData);
 
-% 方式 2: CreateBuffer + AddToSchedule（预加载多个音频、精确时序）
+% Method 2: CreateBuffer + AddToSchedule (preload multiple audios, precise timing)
 buf1 = PsychPortAudio('CreateBuffer', pahandle, audio1);
 buf2 = PsychPortAudio('CreateBuffer', pahandle, audio2);
-PsychPortAudio('UseSchedule', pahandle, 1, 128);         % 最多 128 slots
+PsychPortAudio('UseSchedule', pahandle, 1, 128);         % Up to 128 slots
 PsychPortAudio('AddToSchedule', pahandle, buf1, 1);
 PsychPortAudio('AddToSchedule', pahandle, buf2, 1);
 
-% 触发播放（与视觉同步）
+% Trigger playback (synchronized with visual)
 PsychPortAudio('Start', pahandle, 0, nextFlipTime, 0);   % repetitions=0, when=nextFlipTime
 ```
 
-### 6.4 FillBuffer 参数详解
+### 6.4 Detailed explanation of FillBuffer parameters
 
 ```matlab
 [underflow, nextSampleStartIndex, nextSampleETASecs] = ...
     PsychPortAudio('FillBuffer', pahandle, bufferdata [, streamingrefill=0][, startIndex=Append]);
 ```
 
-| 参数 | 说明 |
+| Parameters | Description |
 |------|------|
-| `streamingrefill=0` | 播放停止时一次性填充 |
-| `streamingrefill=1` | 播放期间立即重填（替换已播放数据），用于流式 |
-| `underflow` 返回 | 1 = 缓冲区欠载（可听出问题） |
+| `streamingrefill=0` | One-time filling when playback stops |
+| `streamingrefill=1` | Immediate refill during playback (replaces played data), for streaming |
+| `underflow` returns | 1 = Buffer underrun (audible problem) |
 
-**关键**: `bufferdata` 必须是浮点 `[-1.0, +1.0]`，每行一个通道、每列一个采样点。
+**Key**: `bufferdata` must be floating point `[-1.0, +1.0]`, with one channel per row and one sample point per column.
 
-## 7. 绘图命令速查
+## 7. Drawing command quick check
 
-| 需求 | 命令 | 关键参数 |
+| Requirements | Commands | Key parameters |
 |------|------|---------|
-| 矩形填充 | `Screen('FillRect', w, color, rect)` | `rect = [left top right bottom]` |
-| 矩形边框 | `Screen('FrameRect', w, color, rect, penWidth)` | |
-| 椭圆填充 | `Screen('FillOval', w, color, rect)` | |
-| 线条连接 | `Screen('DrawLines', w, xy, width, colors)` | `xy` 为 2×n 矩阵 |
-| 单像素点 | `Screen('DrawDots', w, xy, size, color)` | `xy` 为 2×n 矩阵 |
-| 简单文本 | `Screen('DrawText', w, text, x, y, color)` | 需先设置 `TextFont`, `TextSize` |
-| 格式化文本 | `DrawFormattedText(w, text, 'center', 'center', color, wrapat)` | 支持 `\n` 换行 |
-| 纹理绘制 | `Screen('DrawTexture', w, tex, srcRect, dstRect, angle)` | |
-| 创建纹理 | `tex = Screen('MakeTexture', w, imageMatrix)` | 需在循环前调用 |
-| 注视十字（推荐） | `Screen('DrawLines', w, crossCoords, 3, color)` | 不用 `DrawText('+')` |
+| Rectangle fill | `Screen('FillRect', w, color, rect)` | `rect = [left top right bottom]` |
+| Rectangular border | `Screen('FrameRect', w, color, rect, penWidth)` | |
+| Ellipse fill | `Screen('FillOval', w, color, rect)` | |
+| Line connection | `Screen('DrawLines', w, xy, width, colors)` | `xy` is a 2×n matrix |
+| Single pixel | `Screen('DrawDots', w, xy, size, color)` | `xy` is a 2×n matrix |
+| Simple text | `Screen('DrawText', w, text, x, y, color)` | Need to set `TextFont`, `TextSize` first |
+| Formatted text | `DrawFormattedText(w, text, 'center', 'center', color, wrapat)` | Supports `\n` line wrapping |
+| Texture drawing | `Screen('DrawTexture', w, tex, srcRect, dstRect, angle)` | |
+| Create texture | `tex = Screen('MakeTexture', w, imageMatrix)` | Need to be called before looping |
+| Focus on the cross (recommended) | `Screen('DrawLines', w, crossCoords, 3, color)` | Do not use `DrawText('+')` |
 
-## 8. CJK 字体配置
+## 8. CJK font configuration
 
 ```matlab
 % macOS
@@ -872,18 +872,18 @@ Screen('TextFont', window, 'PingFang SC');
 Screen('TextFont', window, 'Microsoft YaHei');
 % Linux
 Screen('TextFont', window, 'Noto Sans CJK SC');
-% 备选（跨平台）
+% Alternative (cross-platform)
 Screen('TextFont', window, '-:Arial Unicode MS');
 
-% 中文文本
+% Chinese text
 Screen('TextSize', window, 60);
-DrawFormattedText(window, double('你好世界'), 'center', 'center', textColor);
-% double() 确保字符编码正确
+DrawFormattedText(window, double('Hello world'), 'center', 'center', textColor);
+% double() ensures correct character encoding
 ```
 
-## 9. 数据保存
+## 9. Data saving
 
-### 9.1 增量写入（强制模式）
+### 9.1 Incremental writing (forced mode)
 
 ```matlab
 dataDir = fullfile(pwd, 'data');
@@ -895,7 +895,7 @@ dataFile = fopen(fullfile(dataDir, ['sub-' subjectID '_' task '.csv']), 'w');
 fprintf(dataFile, 'trial,block,condition,rt,response,correct\n');
 
 for trial = 1:nTrials
-    % ... 实验逻辑 ...
+    % ... Experimental logic ...
     fprintf(dataFile, '%d,%d,%d,%.4f,%s,%d\n', ...
         trial, block, condition, rt, response, correct);
 end
@@ -903,19 +903,19 @@ end
 fclose(dataFile);
 ```
 
-### 9.2 崩溃安全版本
+### 9.2 crash safe version
 
 ```matlab
-% 每 trial 写入后立即 fclose + 追加模式重开（最安全）
+% Immediately after each trial is written, fclose + reopen in append mode (safest)
 for trial = 1:nTrials
-    % ... 实验逻辑 ...
+    % ... Experimental logic ...
     fprintf(dataFile, '%d,%d,%d,%.4f,%s,%d\n', trial, block, condition, rt, response, correct);
     fclose(dataFile);
     dataFile = fopen(dataPath, 'a');
 end
 ```
 
-## 10. Escape 处理
+## 10. Escape processing
 
 ```matlab
 function checkEscape()
@@ -929,58 +929,58 @@ function checkEscape()
 end
 ```
 
-- 在定时循环的每一帧调用 `checkEscape()`
-- 响应收集循环内 Escape 需在 `keyList` 中包含
-- `sca` 是紧急清理 — 恢复显示、释放纹理、显示光标
+- Call `checkEscape()` on every frame of the timed loop
+- Escape within the response collection loop needs to be included in the `keyList`
+- `sca` is emergency cleanup - restore display, release textures, show cursor
 
-## 11. 反模式速查表
+## 11. Anti-Pattern Cheat Sheet
 
-| 禁止的 API / 模式 | 原因 | 替代方案 |
+| Forbidden API/Mode | Reason | Alternatives |
 |-------------------|------|---------|
-| `WaitSecs(N)` 用于实验计时 | 阻塞、无法 Escape、不精确 | `Screen('Flip', ..., vbl + (wf-0.5)*ifi)` 帧循环 |
-| `KbWait` | 阻塞、无法计时 RT、无法 Escape | `KbQueueCreate` + `KbQueueCheck` |
-| `KbCheck` 用于 RT | 不提供精确时间戳 | `KbQueueCheck` 的 `firstPress` 时间戳 |
-| `input()` | 在 PTB 全屏不可见 | PTB 文本 + `KbQueue` |
-| `imread` 在 trial 循环内 | 磁盘 I/O 导致帧丢失 | 循环前 `Screen('MakeTexture')` 预加载 |
-| `Screen('MakeTexture')` 在 trial 循环内 | 纹理创建开销不确定 | 循环前创建，循环内只 `DrawTexture` |
-| 不带 Escape 检查的 `while` 循环 | 用户无法退出全屏 | 每帧 `KbCheck(KbName('ESCAPE'))` |
-| `Screen('DrawText', ..., '+')` 用于注视点 | 字体依赖、不居中 | `Screen('DrawLines')` 绘制注视十字 |
-| 不带 `sca` 的异常退出 | 屏幕锁死、光标隐藏 | `try/catch` + `sca` + `Priority(0)` + `ShowCursor` |
-| `GetSecs` 记录 `stimOnset`（Flip 前后） | 不是 GPU 实际翻页时间 | `VBLTimestamp` = `Screen('Flip')` 返回值 |
-| `rt = GetSecs - stimOnset` | 双倍不精确（起点不准+KbCheck 不准）| `firstPress - VBLTimestamp` |
-| KbQueue `Create`/`Start` 在 trial 循环内 | 性能开销、可能丢失事件 | `Create`/`Start` 放在循环前，只 `Flush` 每 trial |
-| 不在每 trial 前 `KbQueueFlush()` | 前一 trial 残留按键污染当前 RT | 每 trial 开始前 `KbQueueFlush()` |
-| `KbQueueCheck` 同一数据两次 | 第一次调用已清除数据 | 保存输出变量 |
-| `Sound()` / `audioplayer()` 用于实验音频 | 高延迟、无精确时序 | `PsychPortAudio` |
-| `PsychPortAudio('FillBuffer')` 在 trial 循环内 | 非流式场景下无关/可能欠载 | `CreateBuffer` + 循环前预加载 |
-| `Screen('Flip')` 无 `when` 参数 | 帧率不固定 | `vbl + (waitframes-0.5)*ifi` |
-| 跳过 SyncTests (`SkipSyncTests, 1`) | 帧计时不可靠 | 生产环境设为 0，过不了换机器 |
+| `WaitSecs(N)` for experimental timing | blocking, unable to Escape, imprecise | `Screen('Flip', ..., vbl + (wf-0.5)*ifi)` frame loop |
+| `KbWait` | Blocked, unable to time RT, unable to Escape | `KbQueueCreate` + `KbQueueCheck` |
+| `KbCheck` for RT | Does not provide precise timestamp | `firstPress` timestamp of `KbQueueCheck` |
+| `input()` | Not visible in PTB full screen | PTB text + `KbQueue` |
+| `imread` inside trial loop | Disk I/O causes frame loss | `Screen('MakeTexture')` preloading before loop |
+| `Screen('MakeTexture')` in the trial loop | The texture creation cost is uncertain | Created before the loop, only `DrawTexture` inside the loop |
+| `while` loop without Escape check | User cannot exit full screen | `KbCheck(KbName('ESCAPE'))` per frame |
+| `Screen('DrawText', ..., '+')` is used for fixation point | font dependency, not centered | `Screen('DrawLines')` draws fixation cross |
+| Abnormal exit without `sca` | Screen lock, cursor hidden | `try/catch` + `sca` + `Priority(0)` + `ShowCursor` |
+| `GetSecs` records `stimOnset` (before and after Flip) | not the actual GPU page turning time | `VBLTimestamp` = `Screen('Flip')` return value |
+| `rt = GetSecs - stimOnset` | Double inaccuracy (inaccurate starting point + inaccurate KbCheck) | `firstPress - VBLTimestamp` |
+| KbQueue `Create`/`Start` in the trial loop | Performance overhead, possible loss of events | `Create`/`Start` placed before the loop, only `Flush` every trial |
+| Not before each trial `KbQueueFlush()` | Residual keys from the previous trial contaminate the current RT | Before each trial starts `KbQueueFlush()` |
+| `KbQueueCheck` The same data twice | The first call has cleared the data | Save the output variable |
+| `Sound()` / `audioplayer()` for experimental audio | High latency, no precise timing | `PsychPortAudio` |
+| `PsychPortAudio('FillBuffer')` in trial loop | Not relevant/possibly underloaded in non-streaming scenarios | `CreateBuffer` + preload before loop |
+| `Screen('Flip')` without `when` parameter | The frame rate is not fixed | `vbl + (waitframes-0.5)*ifi` |
+| Skip SyncTests (`SkipSyncTests, 1`) | Frame timing is unreliable | The production environment is set to 0, if it fails, change the machine |
 
-## 12. 跨平台注意事项
+## 12. Cross-platform considerations
 
-| 平台 | 特点 |
+| Platform | Features |
 |------|------|
-| **macOS ARM** | PTB 3.0.20+ 原生支持 M1/M2/M3/M4；帧顺序立体不工作；`AsyncFlipBegin` 不工作 |
-| **macOS Intel** | 需 macOS 10.13+；PTB 3.0.19 免费，3.0.20+ 付费 |
-| **Windows** | `Priority` 效果显著；PTB 3.0.20+ 付费 |
-| **Linux** | 永久免费；`PsychPortAudio` 暂停 PulseAudio 独占硬件 |
-| **Raspberry Pi** | 32-bit 永久免费 |
+| **macOS ARM** | PTB 3.0.20+ natively supports M1/M2/M3/M4; frame sequential stereo does not work; `AsyncFlipBegin` does not work |
+| **macOS Intel** | Requires macOS 10.13+; PTB 3.0.19 free, 3.0.20+ paid |
+| **Windows** | `Priority` has a remarkable effect; PTB 3.0.20+ paid |
+| **Linux** | Free forever; `PsychPortAudio` pauses PulseAudio exclusive hardware |
+| **Raspberry Pi** | 32-bit permanently free |
 
-## 13. API 参考索引
+## 13. API reference index
 
-| 需要实现的功能 | 核心 API | 参考 |
+| Functions to be implemented | Core API | Reference |
 |---------------|---------|------|
-| 最小窗口骨架 | `PsychDefaultSetup(2)` + `PsychImaging('OpenWindow')` | `../demo/_raw/getting-started/totally-minimal.md` |
-| 帧精确计时 | `Screen('Flip', w, vbl+(wf-0.5)*ifi)` | `../demo/_raw/getting-started/accurate-timing.md` |
-| 键盘队列 | `KbQueueCreate`/`Start`/`Flush`/`Check`/`Stop`/`Release` | `../demo/_raw/getting-started/keyboard-q.md` |
-| 音频播放 | `PsychPortAudio('Open'/'FillBuffer'/'Start')` | 本文件 §6 |
-| 音频精确同步 | `PsychPortAudio('UseSchedule'/'AddToSchedule')` | 本文件 §6.2 |
-| 文本呈现 | `DrawFormattedText` / `Screen('DrawText')` | `../demo/_raw/text/basic-text.md` |
-| 图像呈现 | `imread` + `Screen('MakeTexture')` + `DrawTexture` | `../demo/_raw/textures/draw-image.md` |
-| 注视十字 | `Screen('DrawLines', w, coords, width, color)` | `../demo/_raw/drawing-shapes/fixation-cross.md` |
-| Gabor 刺激 | `CreateProceduralGabor()` | `../demo/_raw/textures/gabor.md` |
-| 矩形/椭圆 | `Screen('FillRect'/'FillOval')` | `../demo/_raw/drawing-shapes/rectangle.md` |
-| 数据保存 | `fopen`/`fprintf`/`fclose` | 本文件 §9 |
-| Escape 检测 | `KbCheck` + `KbName('ESCAPE')` | 本文件 §10 |
-| 条件加载 | `readtable('conditions.xlsx')` | `mapping/README.md` §blocks |
-| 窗口查询 | `Screen('Screens')`, `RectCenter`, `GetFlipInterval` | `../demo/_raw/getting-started/totally-minimal-with-info.md` |
+| Minimal window skeleton | `PsychDefaultSetup(2)` + `PsychImaging('OpenWindow')` | `../demo/_raw/getting-started/totally-minimal.md` |
+| Frame accurate timing | `Screen('Flip', w, vbl+(wf-0.5)*ifi)` | `../demo/_raw/getting-started/accurate-timing.md` |
+| Keyboard queue | `KbQueueCreate`/`Start`/`Flush`/`Check`/`Stop`/`Release` | `../demo/_raw/getting-started/keyboard-q.md` |
+| Audio playback | `PsychPortAudio('Open'/'FillBuffer'/'Start')` | This document §6 |
+| Accurate audio synchronization | `PsychPortAudio('UseSchedule'/'AddToSchedule')` | This document §6.2 |
+| Text rendering | `DrawFormattedText` / `Screen('DrawText')` | `../demo/_raw/text/basic-text.md` |
+| Image rendering | `imread` + `Screen('MakeTexture')` + `DrawTexture` | `../demo/_raw/textures/draw-image.md` |
+| Fixation cross | `Screen('DrawLines', w, coords, width, color)` | `../demo/_raw/drawing-shapes/fixation-cross.md` |
+| Gabor stimulus | `CreateProceduralGabor()` | `../demo/_raw/textures/gabor.md` |
+| Rectangle/Ellipse | `Screen('FillRect'/'FillOval')` | `../demo/_raw/drawing-shapes/rectangle.md` |
+| Data saving | `fopen`/`fprintf`/`fclose` | This document §9 |
+| Escape detection | `KbCheck` + `KbName('ESCAPE')` | This document §10 |
+| Conditional loading | `readtable('conditions.xlsx')` | `mapping/README.md` §blocks |
+| Window query | `Screen('Screens')`, `RectCenter`, `GetFlipInterval` | `../demo/_raw/getting-started/totally-minimal-with-info.md` |

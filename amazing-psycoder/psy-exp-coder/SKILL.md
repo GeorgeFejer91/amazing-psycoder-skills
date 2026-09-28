@@ -32,18 +32,18 @@ State the selected mode. Never reject a targeted bug fix merely because the orig
 
 ## Design Philosophy
 
-**输出即交付候选。** Generated code must be runnable as-is — not pseudocode — but it is not collection-ready until Reviewer audit and target-machine smoke tests pass. In standalone mode, keep confirmed user-editable values in one named config/parameter section and require revalidation after edits. In Studio mode, the frozen `ExperimentModel@4`, `modelHash`, and `assetSetHash` are the only experiment-parameter inputs; all three adapters compile the Model directly and generated runtime code must not create a second editable copy of its semantics.
+**The output is the delivery candidate. ** Generated code must be runnable as-is — not pseudocode — but it is not collection-ready until Reviewer audit and target-machine smoke tests pass. In standalone mode, keep confirmed user-editable values in one named config/parameter section and require revalidation after edits. In Studio mode, the frozen `ExperimentModel@4`, `modelHash`, and `assetSetHash` are the only experiment-parameter inputs; all three adapters compile the Model directly and generated runtime code must not create a second editable copy of its semantics.
 
 Core principles:
-- **用户的实验，系统的规范** — the user owns the design; the system enforces explicit code-quality checks and reports remaining uncertainty
-- **骨架先行** — new generated scripts use the platform Canonical Code Skeleton as the validated API baseline. A structural deviation is allowed only when the config requires it, the reason is documented, equivalent safety/timing/data contracts are preserved, and the deviation is specifically tested; `modify`/`debug` need not rewrite unrelated existing architecture.
-- **规格提供逻辑，适配器提供 API** — only the confirmed config/ExperimentSpec defines window sequence, stimuli, conditions, correctness, timing, randomization, and data behavior. Paradigm files are optional references, never executable templates. If a reference conflicts with the config, the config wins; if the config is incomplete, stop and return to Designer.
-- **反模式零容忍** — block `time.sleep()`, `event.getKeys(maxWait=)`, `KbCheck` for RT, and stimulus/media I/O inside timed windows. Persist trial data immediately after each trial, outside timing-critical windows.
-- **代码生成优先级** — confirmed standalone config or frozen Studio ExperimentModel@4 > current platform spec and anti-patterns > config/Model→code mapping > optional exact-design reference. A family reference never supplies executable semantics.
-- **生成后必经审计** — code generation is not the final step. After delivery, the user MUST run the code through `psy-exp-reviewer` before collecting data. The reviewer is the mandatory quality gate between code generation and data collection.
-- **语言与实验内容一致** — user-facing instructions, feedback, UI prose, comments, and README follow the user's language unless the confirmed config says otherwise. Stimuli preserve the confirmed experimental language/content. API tokens, response keys, identifiers, filenames, and data schema are never translated merely to match the conversation language.
+- **User’s experiment, system’s specification** — the user owns the design; the system enforces explicit code-quality checks and reports remaining uncertainty
+- **Skeleton first** — new generated scripts use the platform Canonical Code Skeleton as the validated API baseline. A structural deviation is allowed only when the config requires it, the reason is documented, equivalent safety/timing/data contracts are preserved, and the deviation is specifically tested; `modify`/`debug` need not rewrite unrelated existing architecture.
+- **Spec provides logic, adapter provides API** — only the confirmed config/ExperimentSpec defines window sequence, stimuli, conditions, correctness, timing, randomization, and data behavior. Paradigm files are optional references, never executable templates. If a reference conflicts with the config, the config wins; if the config is incomplete, stop and return to Designer.
+- **Anti-Pattern Zero Tolerance** — block `time.sleep()`, `event.getKeys(maxWait=)`, `KbCheck` for RT, and stimulus/media I/O inside timed windows. Persist trial data immediately after each trial, outside timing-critical windows.
+- **Code generation priority** — confirmed standalone config or frozen Studio ExperimentModel@4 > current platform spec and anti-patterns > config/Model→code mapping > optional exact-design reference. A family reference never supplies executable semantics.
+- **Must be audited after generation** — code generation is not the final step. After delivery, the user MUST run the code through `psy-exp-reviewer` before collecting data. The reviewer is the mandatory quality gate between code generation and data collection.
+- **Language consistent with experimental content** — user-facing instructions, feedback, UI prose, comments, and README follow the user's language unless the confirmed config says otherwise. Stimuli preserve the confirmed experimental language/content. API tokens, response keys, identifiers, filenames, and data schema are never translated merely to match the conversation language.
 
-> **下一步**: 代码候选生成完成。由 `psy-exp-reviewer` 做静态审计，再在目标机器执行 smoke test；两类证据都通过后才可能标记 `ready_for_collection`。
+> **Next step**: Code candidate generation is completed. Perform a static audit by `psy-exp-reviewer`, and then execute the smoke test on the target machine; only after both types of evidence have passed can the `ready_for_collection` be marked.
 
 ## Routing
 
@@ -65,9 +65,9 @@ User-facing prose must use the language confirmed during the design workflow. Pa
 
 Language determination is automatic from the design workflow conversation:
 
-- **中文用户** → 中文指导语/反馈/注释/README；刺激按 confirmed config
+- **Chinese users** → Chinese instructions/feedback/notes/README; stimulus press confirmed config
 - **English user** → English instructions/feedback/comments/README; stimuli follow the confirmed config
-- 其他语言同理；如果参与者语言与开发者会话语言不同，以确认后的参与者语言和刺激材料为准
+- The same applies to other languages; if the participant's language is different from the developer's conversational language, the confirmed participant's language and stimulus materials shall prevail.
 
 **Critical:** Never copy instructions or feedback from a paradigm reference without adapting them to the confirmed participant language. Never translate scientific stimuli, key tokens, condition codes, or data fields unless that transformation is an explicit design decision.
 
@@ -88,26 +88,26 @@ All three platforms use the same artifact flow, but evidence levels differ. Desc
 Platform-specific implementation details live in subdirectories. Open the relevant platform README when generating or debugging code:
 
 ```
-psychopy/          ← 统一生成流水线，4层全满
-  README.md        → 平台入口（生成流程 + 强制 API + 范式差异速查）
-  spec/            → L1: Canonical Skeleton + API 规范 + 反模式
-  mapping/         → L2: Config→代码映射 + 三种窗口模式 + 三版本对照
-  paradigms/        → L3: 28 个范式（索引见 paradigms/README.md）
-  demo/_raw/       → L4: 45 个 .py
+psychopy/ ← Unified generation pipeline, all 4 layers are full
+  README.md → Platform entrance (generation process + mandatory API + paradigm difference quick check)
+  spec/ → L1: Canonical Skeleton + API specification + anti-pattern
+  mapping/ → L2: Config→Code mapping + three window modes + three versions comparison
+  paradigms/ → L3: 28 paradigms (see paradigms/README.md for index)
+  demo/_raw/ → L4: 45 .py
 
-jspsych/           ← 统一生成流水线，4层全满
-  README.md        → 平台入口（生成流程 + 强制 API + 平台特性）
-  spec/            → L1: Canonical Skeleton + API 规范 + 反模式
-  mapping/         → L2: Config→timeline 映射 + legacy→8.x 迁移表
-  paradigms/        → L3: 26 个 reference-only legacy 来源（代码块隔离）
-  demo/_raw/       → L4: 23 个 .js
+jspsych/ ← Unified generation pipeline, all 4 layers are full
+  README.md → Platform entrance (generation process + mandatory API + platform features)
+  spec/ → L1: Canonical Skeleton + API specification + anti-pattern
+  mapping/ → L2: Config→timeline mapping + legacy→8.x migration table
+  paradigms/ → L3: 26 reference-only legacy sources (code block isolation)
+  demo/_raw/ → L4: 23 .js
 
-psychtoolbox/      ← 统一生成流水线，4层全满
-  README.md        → 平台入口（生成流程 + 强制 API + 范式差异速查）
-  spec/            → L1: Canonical Skeleton + API 规范 + 反模式 + 入门示例
-  mapping/         → L2: Config→MATLAB 映射 + 三种帧循环模式
-  paradigms/        → L3: 5 个范式（索引见 paradigms/README.md）
-  demo/_raw/       → L4: 100 个 .md（按功能分类）
+psychtoolbox/ ← Unified generation pipeline, all 4 layers are full
+  README.md → Platform entrance (generation process + mandatory API + paradigm difference quick check)
+  spec/ → L1: Canonical Skeleton + API specification + anti-pattern + getting started example
+  mapping/ → L2: Config→MATLAB mapping + three frame loop modes
+  paradigms/ → L3: 5 paradigms (see index in/README.md)
+  demo/_raw/ → L4: 100 .md (categorized by function)
 ```
 
 Platform paradigm files may contain candidate design patterns and historical **Code Examples**. Use them only to raise questions and identify risks; the confirmed config supplies all executable semantics. Legacy/mismatched code is neither a runnable template nor correctness evidence.
@@ -117,10 +117,10 @@ Platform paradigm files may contain candidate design patterns and historical **C
 The confirmed config and Decision Registry are the design source of truth. Beneath them, every platform uses the same implementation-reference stack:
 
 ```
-Layer 1: spec/README.md     ← 当前平台 API/安全/数据契约基线
-Layer 2: Config → Code Mapping       ← 结构映射：config YAML 字段 → 平台代码
-Layer 3: Paradigm reference files    ← 可选领域提示；不提供或继承可执行语义
-Layer 4: Raw demo code               ← 隔离来源：不进入正常生成上下文
+Layer 1: spec/README.md ← Current platform API/security/data contract baseline
+Layer 2: Config → Code Mapping ← Structure mapping: config YAML field → Platform code
+Layer 3: Paradigm reference files ← Optional domain hints; does not provide or inherit executable semantics
+Layer 4: Raw demo code ← Isolated source: does not enter the normal generation context
 ```
 
 The confirmed standalone config or frozen Studio Model controls experiment semantics.
@@ -137,8 +137,8 @@ Treat `demo/_raw/` and every L3 code block for a mismatched/legacy runtime as qu
 |-------|----------|---------|-------------|
 | L1 `spec/` | ✅ [psychopy/spec/README.md](psychopy/spec/README.md) | ✅ [jspsych/spec/README.md](jspsych/spec/README.md) | ✅ [psychtoolbox/spec/README.md](psychtoolbox/spec/README.md) |
 | L2 `mapping/` | ✅ [psychopy/mapping/README.md](psychopy/mapping/README.md) | ✅ [jspsych/mapping/README.md](jspsych/mapping/README.md) | ✅ [psychtoolbox/mapping/README.md](psychtoolbox/mapping/README.md) |
-| L3 `paradigms/` | ✅ 28个 (`psychopy/paradigms/`) | ✅ 26个 (`jspsych/paradigms/`) | ✅ 5个 (`psychtoolbox/paradigms/`) |
-| L4 `demo/_raw/` | ✅ 45个 `.py` (`psychopy/demo/_raw/`) | ✅ 23个 `.js` (`jspsych/demo/_raw/`) | ✅ 100个 `.md` (`psychtoolbox/demo/_raw/` by category) |
+| L3 `paradigms/` | ✅ 28 (`psychopy/paradigms/`) | ✅ 26 (`jspsych/paradigms/`) | ✅ 5 (`psychtoolbox/paradigms/`) |
+| L4 `demo/_raw/` | ✅ 45 `.py` (`psychopy/demo/_raw/`) | ✅ 23 `.js` (`jspsych/demo/_raw/`) | ✅ 100 `.md` (`psychtoolbox/demo/_raw/` by category) |
 
 **All three platforms have reference material for all 4 layers.** The generation flow is identical across platforms. Apply the same priority rule regardless of platform: confirmed semantics > platform adapter contract > optional exact-design evidence > demos.
 
@@ -285,7 +285,7 @@ When generating code, output:
 1. **Trial Window Timeline** — box diagram showing the window sequence with response rules (user-facing)
 2. **Condition tables** — xlsx file summary (rows, columns, condition ratios)
 3. **Platform experiment file** — runnable code saved with the correct extension (`.py` / `.js` / `.m`); standalone parameters are centralized, while Studio code compiles the frozen `ExperimentModel@4` without a second semantic copy; use a platform-appropriate explicit font strategy when participant-visible CJK text is used, with code comments in the user's language
-4. **README file** — companion document describing exact pinned prerequisites, tested target environment, experiment logic, data contract, how to run, parameter locations, and known limitations. Language matches the user's language (中文 or English)
+4. **README file** — companion document describing exact pinned prerequisites, tested target environment, experiment logic, data contract, how to run, parameter locations, and known limitations. Language matches the user's language (Chinese or English)
 5. **Data output columns** — column names and descriptions per trial
 6. **How to Run & Test** — actionable steps embedded in the README:
    - **Install**: platform-specific installation instructions

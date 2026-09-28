@@ -5,7 +5,7 @@
 
 ## When to Use
 
-User mentions: Dot-probe, 点探测, attentional bias, 注意偏向, visual probe, dot probe task, emotional dot-probe.
+User mentions: Dot-probe, dot probe, attentional bias, attention bias, visual probe, dot probe task, emotional dot-probe.
 
 ## Core Logic
 
@@ -32,11 +32,11 @@ Before generating dot-probe code, confirm ALL of these:
 6. **Response**: which keys for which probe location/type?
 7. **Catch trials**: include neutral-neutral pairs? What proportion?
 8. **Trial count**: how many per condition? (typically 32-64 per condition)
-9. **Image format**: 刺激图片格式和文件命名规则？图片尺寸和视觉角度？
-10. **ITI duration**: 试次间隔时间和变化范围？
-11. **OS & font**: 在什么操作系统运行？如使用中文，确认字体
-12. **Display**: 全屏还是窗口？屏幕分辨率？
-13. **Instruction text**: 指导语内容？
+9. **Image format**: Stimulus image format and file naming rules? Image size and visual angle?
+10. **ITI duration**: Trial interval time and variation range?
+11. **OS & font**: What operating system is it running on? If using Chinese, confirm the font
+12. **Display**: Full screen or window? Screen resolution?
+13. **Instruction text**: Instruction content?
 
 ## Do Not Assume
 
@@ -112,7 +112,7 @@ Posner, M. I., Snyder, C. R., & Davidson, B. J. (1980). Attention and the detect
 
 ### User Request
 
-> "我想做一个情绪点探测实验。刺激为愤怒面孔和中性面孔配对（左右呈现），呈现500 ms后消失，一个探针点出现在左侧或右侧。被试判断点的位置，左按F，右按J。60对面孔图片，每个pair出现2次（左右平衡），共120个trial。其中80个愤怒-中性对，40个中性-中性对。先20个练习，然后2个正式block各60个trial。探针呈现到按键，截止2000 ms。ITI随机500-1000 ms。用PsychoPy。"
+> "I want to do an emotional point detection experiment. The stimuli are pairs of angry faces and neutral faces (presented left and right), and 500 After ms, a probe point appears on the left or right side. The subject presses F on the left and J on the right. There are 60 pairs of face pictures (left and right balance), a total of 120 trials, including 80 angry-neutral pairs and 2 formal blocks of 60 trials each. The probe is presented to the key, and the end time is 2000 ms. ms. using PsychoPy.
 
 ### Trial Window Timeline
 
@@ -120,7 +120,7 @@ Posner, M. I., Snyder, C. R., & Davidson, B. J. (1980). Attention and the detect
 ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐
 │ Window 1                 │ →  │ Window 2                 │ →  │ Window 3                 │ →  │ Window 4                 │
 │ Fixation                 │    │ Face Pair                │    │ Probe Dot                │    │ ITI                      │
-│ Content: +               │    │ Content: 左右面孔         │    │ Content: ●               │    │ Content: empty           │
+│ Content: + │ │ Content: left and right faces │ │ Content: ● │ │ Content: empty │
 │ Duration: 500 ms         │    │ Duration: 500 ms         │    │ Duration: until key      │    │ Duration: 500-1000 ms     │
 │ Response: none           │    │ Response: none           │    │ Response: f/j            │    │ Response: none           │
 │ File: none               │    │ File: stimuli/faces/     │    │ File: none               │    │ File: none               │
@@ -132,8 +132,8 @@ Posner, M. I., Snyder, C. R., & Davidson, B. J. (1980). Attention and the detect
 | Window | Content | Duration | Response | File/Folder | Condition | Data |
 |--------|---------|----------|----------|-------------|-----------|------|
 | Fixation | + | 500 ms | none | none | none | none |
-| Face Pair | 左右面孔 | 500 ms | none | stimuli/faces/ | {emotional}, {neutral} | none |
-| Probe Dot | ● (左或右) | until key (deadline 2000 ms) | f=左, j=右 | none | {probe_position} | rt, key, acc |
+| Face Pair | Left and right faces | 500 ms | none | stimuli/faces/ | {emotional}, {neutral} | none |
+| Probe Dot | ● (left or right) | until key (deadline 2000 ms) | f=left, j=right | none | {probe_position} | rt, key, acc |
 | ITI | empty | 500-1000 ms random | none | none | none | none |
 
 ### Parsed Experiment Specification
@@ -147,7 +147,7 @@ Posner, M. I., Snyder, C. R., & Davidson, B. J. (1980). Attention and the detect
 | SOA | 500 ms |
 | Trial count | 120 total (80 angry-neutral + 40 neutral-neutral) |
 | Probe type | Dot, left/right discrimination |
-| Response mapping | F=左, J=右 |
+| Response mapping | F=left, J=right |
 | Phases | Instruction → Practice(20) → Block1-2(60 each) |
 
 ### Missing Information

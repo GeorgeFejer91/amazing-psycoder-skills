@@ -1,29 +1,29 @@
-# Reviewer — Python 审计清单
+# Reviewer — Python audit checklist
 
-先读取已确认的 `analysis_config.yaml`。静态关键词只能辅助定位，不能替代对 estimand、层级和模型语义的审查。
+First read the confirmed `analysis_config.yaml`. Static keywords can only assist positioning and cannot replace the review of estimand, hierarchy and model semantics.
 
-## 证据门
+## Evidence door
 
-| 检查 | 通过标准 |
+| Inspection | Pass Standard |
 |------|----------|
-| Config/schema | 脚本读取 config；验证输入列、类型、ID、层级和单位 |
-| 数据流转 | 排除/缺失/变换有来源、理由、前后计数和可保存日志 |
-| Estimand/model | 公式、family/link 与结局类型、目标 estimand、聚类结构一致 |
-| 随机步骤 | 仅 stochastic 步骤要求显式 RNG/seed，并记录采样/并行设置 |
-| 诊断 | 检查实际模型需要的收敛、残差、过度离散、影响点或后验诊断 |
-| 推断 | 主要结论保存目标估计和不确定性；multiplicity 与 config 一致 |
-| 输出/环境 | 表图、样本流转、执行日志和包/解释器版本被保存 |
+| Config/schema | Script reads config; validates input columns, types, IDs, levels and units |
+| Data flow | Exclusion/missing/transformation has sources, reasons, before and after counts and saveable logs |
+| Estimand/model | The formula, family/link are consistent with the ending type, target estimand, and clustering structure |
+| stochastic steps | only stochastic steps require explicit RNG/seed, and record sampling/parallel settings |
+| Diagnostics | Check the actual model for convergence, residuals, overdispersion, impact points, or posterior diagnostics |
+| Inference | Main conclusions preserve target estimates and uncertainties; multiplicity is consistent with config |
+| Output/Environment | Tables, sample flows, execution logs and package/interpreter versions are saved |
 
-## 高风险模式（结合上下文判定）
+## High risk mode (determined based on context)
 
-- 用户专属绝对路径、隐式 notebook 状态或未记录的手工数据编辑。
-- 重复二元数据使用普通 `statsmodels.Logit/GLM` 却声称实现随机效应；应选支持目标层级的 GLMM、GEE、贝叶斯层级模型或有依据的聚合分析。
-- 把独立观测 `ttest_ind`/OLS 用于配对、重复或聚类数据。
-- 对所有模型机械做 Shapiro/Levene，或忽略更相关的模型诊断。
-- 只报告 p 值/R²，缺少 config 指定的目标估计与区间。
-- stochastic 函数没有 RNG 控制；反之，确定性 `scipy.stats` 检验不需要 `random_state`。
-- `iterrows()`/`apply()` 仅在其确实造成性能或语义错误时分级，不作为自动失败。
+- User-specific absolute paths, implicit notebook state, or undocumented manual data editing.
+- Duplicate binary data using plain `statsmodels.Logit/GLM` but claiming to implement random effects; should support target-level GLMM, GEE, Bayesian hierarchical models, or informed aggregate analysis.
+- Use independent observations `ttest_ind`/OLS for paired, repeated or clustered data.
+- Do Shapiro/Levene on all model machinery, or ignore more relevant model diagnostics.
+- Only p-value/R² is reported, missing the target estimate and interval specified by config.
+- There is no RNG control for stochastic functions; conversely, deterministic `scipy.stats` tests do not require `random_state`.
+- `iterrows()`/`apply()` is only graded if it actually causes a performance or semantic error, and does not automatically fail.
 
-## 结果审查附加项
+## Result Review Additional Items
 
-`result-audit` 必须看到 clean execution log、生成的表图、环境信息和警告/收敛状态，并核对样本流转、估计方向、单位和报告结论。否则最高标签为 `ready_for_execution`。
+`result-audit` must see the clean execution log, generated tables, environment information, and warning/convergence status, and check sample flow, estimated direction, units, and report conclusions. Otherwise the highest label is `ready_for_execution`.

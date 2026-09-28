@@ -5,7 +5,7 @@
 
 ## When to Use
 
-User mentions: Go/No-go, 反应抑制, response inhibition, go/nogo task.
+User mentions: Go/No-go, response inhibition, response inhibition, go/nogo task.
 
 ## Core Logic
 
@@ -27,10 +27,10 @@ Before generating Go/No-go code, confirm ALL of these:
 8. Is feedback shown in practice only, formal only, both, or neither?
 9. **Stimulus duration**: How long is the go/no-go stimulus displayed before timeout?
 10. **Fixation duration**: How long is the fixation cross shown before each trial?
-11. **ITI duration**: 试次间隔时间和变化范围？
-12. **OS & font**: 在什么操作系统运行？如使用中文，确认字体路径
-13. **Display**: 全屏还是窗口？刺激大小和屏幕位置？
-14. **Instruction text**: 指导语内容？练习和正式阶段的过渡提示？
+11. **ITI duration**: Trial interval time and variation range?
+12. **OS & font**: What operating system is it running on? If using Chinese, confirm the font path
+13. **Display**: Full screen or window? Stimulus size and screen location?
+14. **Instruction text**: Instruction content? Transition tips between practice and formal phases?
 
 ## Do Not Assume
 
@@ -95,7 +95,7 @@ Verbruggen, F., & Logan, G. D. (2008). Response inhibition in the stop-signal pa
 
 ### User Request
 
-> "我要做一个Go/No-go实验。屏幕中央呈现字母X或O，看到X尽快按空格键反应（go试次），看到O不反应（no-go试次）。80% go试次，20% no-go试次。字母呈现500 ms，反应窗口1500 ms。先20个练习trial，再4个正式block各50个trial。ITI随机500-800 ms。用PsychoPy。"
+> "I want to do a Go/No-go experiment. The letter X or O is presented in the center of the screen. Press the space bar as soon as possible to respond when you see ms. First 20 practice trials, and then 4 formal blocks of 50 trials each with PsychoPy."
 
 ### Trial Window Timeline
 

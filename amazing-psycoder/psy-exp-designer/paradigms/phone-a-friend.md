@@ -6,7 +6,7 @@
 
 ## When to Use
 
-User mentions: Phone a friend, hint task, cue validity, general knowledge task, ECSoP, 朋友求助任务. A general knowledge task where participants can optionally request hints ("phone a friend"), with half of the hints being correct and half incorrect. Measures trust in external information and the influence of cue validity on belief updating.
+User mentions: Phone a friend, hint task, cue validity, general knowledge task, ECSoP, friend help task. A general knowledge task where participants can optionally request hints ("phone a friend"), with half of the hints being correct and half incorrect. Measures trust in external information and the influence of cue validity on belief updating.
 
 ## Core Logic
 
@@ -78,17 +78,17 @@ Developed based on discussions with Paulina Pietrak at ESCOP 2025. Images by Rud
 
 | Column | Type | Description |
 |--------|------|-------------|
-| question_id | str | 问题编号，如 `Q01`、`Q02` |
-| question_text | str | 问题内容（常识问题文本） |
-| valid_answer | str | 正确答案（用于字符串匹配评分） |
-| valid_hint | str | 有效提示文本（朋友给出的正确答案） |
-| invalid_hint | str | 无效提示文本（朋友给出的错误答案） |
+| question_id | str | Question number, such as `Q01`, `Q02` |
+| question_text | str | Question content (common sense question text) |
+| valid_answer | str | Correct answer (used for string matching scoring) |
+| valid_hint | str | Valid hint text (correct answer given by friend) |
+| invalid_hint | str | Invalid hint text (wrong answer given by a friend) |
 
 ## Variants
 
-- **线索有效性告知版（Informed Validity）**：实验开始前明确告知参与者只有一半提示是正确的，与不告知版本对比，考察外显信念对提示信任度的影响。参考 trust-game.md。
-- **多来源求助版（Multi-Source Hints）**：将单一"朋友"扩展为多个信息来源（如专家、AI助手、同伴），参与者可选择向不同来源求助。用于考察信息来源可信度对求助行为的差异化影响。
-- **确定性反馈版（Deterministic Feedback）**：每次提交答案后立即显示正确答案并给出准确与否的反馈，使参与者能追踪提示有效性的累积证据。考察反馈对线索信任更新的促进作用。
+- **Informed Validity**: Participants were clearly told before the experiment that only half of the cues were correct. Compared with the uninformed version, the impact of explicit beliefs on cue trust was examined. Refer to trust-game.md.
+- **Multi-Source Hints**: Expand a single "friend" to multiple information sources (such as experts, AI assistants, peers), and participants can choose to ask for help from different sources. Used to examine the differential impact of information source credibility on help-seeking behavior.
+- **Deterministic Feedback**: The correct answer is displayed immediately after each answer is submitted and feedback is given on whether it is accurate or not, allowing participants to track cumulative evidence of the effectiveness of the prompt. Examine the promoting effect of feedback on cue trust renewal.
 
 ---
 
@@ -96,20 +96,20 @@ Developed based on discussions with Paulina Pietrak at ESCOP 2025. Images by Rud
 
 ### User Request
 
-> "我要做一个'向朋友求助'实验。屏幕上每次呈现一个常识问题，被试在文本框中输入答案。每个问题旁有一个'向朋友求助'按钮，被试可随时点击获取提示。总共10次求助机会，其中5次提示正确、5次提示错误，随机打乱。收到提示后可修改答案。求助用完则按钮变灰不可用。一共30道题，先5道练习题。使用PsychoPy实现。"
+> "I'm going to do a 'Ask a Friend for Help' experiment. Each time a common sense question appears on the screen, and the subject enters the answer in the text box. There is a 'Ask a Friend for Help' button next to each question, and the subject can click on it to get tips at any time. There are a total of 10 opportunities for help, of which 5 prompts are correct and 5 prompts are incorrect, randomly shuffled. After receiving the prompts, you can modify the answer. When the help is used up, the button will become gray and unavailable. There are 30 questions in total, 5 practice questions first. Implemented using PsychoPy."
 
 ### Trial Window Timeline
 
 ```text
 ┌─────────────────────────────────┐    ┌──────────────────────────────────┐    ┌──────────────────────────────────┐
-│ Window 1: 问题 + 作答            │    │ Window 2: 提示 + 修订答案          │    │ Window 3: 求助次数用尽提示         │
+│ Window 1: Questions + answers │ │ Window 2: Tips + revised answers │ │ Window 3: Tips for running out of requests for help │
 │                                 │    │                                  │    │                                  │
-│ Content: question_text +        │    │ Content: question_text +         │    │ Content: "您的求助次数已用完"      │
-│ Textbox 答题框 +                │    │ hint_text + 新 Textbox 答题框 +  │    │                                  │
-│ "向朋友求助" 按钮 +             │ →  │ 剩余求助次数显示                  │ →  │ Duration: 1 s                     │
-│ 剩余求助次数显示                 │    │ Duration: 直到按 Enter            │    │ Response: none                    │
-│ Duration: 直到按 Enter 或        │    │ Response: free-text entry        │    │ Data: none                        │
-│ 点击求助按钮                     │    │ Data: answer_2.text, hint_shown, │    └──────────────────────────────────┘
+│ Content: question_text + │ │ Content: question_text + │ │ Content: "Your number of requests for help has been exhausted" │
+│ Textbox answer box + │ │ hint_text + New Textbox answer box + │ │ │
+│ "Ask friends for help" button + │ → │ Display of remaining number of help requests │ → │ Duration: 1 s │
+│ The remaining number of calls for help is displayed │ │ Duration: until Enter is pressed │ │ Response: none │
+│ Duration: Until Enter or │ │ Response: free-text entry │ │ Data: none │
+│ Click the help button │ │ Data: answer_2.text, hint_shown, │ └───────────────────────────────────┘
 │ Response: free-text entry       │    │ cue_type, this_hint, n_calls     │
 │ Data: answer_1.text, rt_1       │    └──────────────────────────────────┘
 └─────────────────────────────────┘
@@ -117,85 +117,85 @@ Developed based on discussions with Paulina Pietrak at ESCOP 2025. Images by Rud
 
 | Window | Content | Duration | Response | Condition | Data |
 |--------|---------|----------|----------|-----------|------|
-| 问题+作答 | question_text, Textbox, 求助按钮, 剩余次数 | 直到 Enter 或点击求助 | free-text Entry | {question_id} | answer_1.text, rt_1, hint_requested |
-| 提示+修订答案 | question_text, hint_text, Textbox, 剩余次数 | 直到 Enter | free-text Entry | {cue_type, hint_text} | answer_2.text, rt_2, hint_shown, cue_type, this_hint |
-| 求助次数用尽 | "您的求助次数已用完" | 1 s | none | none | none |
+| Question+Answer | question_text, Textbox, help button, remaining times | Until Enter or click for help | free-text Entry | {question_id} | answer_1.text, rt_1, hint_requested |
+| Hint + revised answer | question_text, hint_text, Textbox, number of remaining times | Until Enter | free-text Entry | {cue_type, hint_text} | answer_2.text, rt_2, hint_shown, cue_type, this_hint |
+| The number of requests for help has been exhausted | "The number of requests for help has been exhausted" | 1 s | none | none | none |
 
 ### Parsed Experiment Specification
 
 | Field | Value |
 |-------|-------|
-| 实验名称 | 向朋友求助任务（Phone a Friend Task） |
-| 平台 | PsychoPy |
-| 任务类型 | 常识问答 + 可选线索求助 |
-| 问题数量 | 30题（正式） + 5题（练习） |
-| 求助总次数 | 10次 |
-| 有效提示数 | 5次 |
-| 无效提示数 | 5次 |
-| 提示效度比例 | 50% |
-| 答案格式 | 自由文本输入 |
-| 阶段 | 指导语 → 练习(5) → 正式(30) |
+| Experiment name | Phone a Friend Task |
+| Platform | PsychoPy |
+| Task type | General knowledge Q&A + optional clues for help |
+| Number of questions | 30 questions (formal) + 5 questions (practice) |
+| Total number of requests for help | 10 times |
+| Number of valid prompts | 5 times |
+| Number of invalid prompts | 5 times |
+| Prompt validity ratio | 50% |
+| Answer format | Free text input |
+| Stage | Instructions → Practice(5) → Formal(30) |
 
 ### Missing Information
 
-1. 问题内容来源未说明 → 将询问（是否提供自定义题库CSV/Excel文件？还是使用内置默认常识题？）
-2. 答案评分方式未说明 → 将询问（字符串精确匹配？模糊匹配？还是需要人工事后评分？）
-3. 求助按钮的视觉样式和位置未说明 → 将询问（按钮在问题下方还是右侧？按钮大小和颜色？）
+1. The source of the question content is not specified → You will be asked (Do you provide a custom question bank CSV/Excel file? Or use the built-in default general knowledge questions?)
+2. The answer scoring method is not specified → Will ask (Exact string matching? Fuzzy matching? Or does manual post-grading required?)
+3. The visual style and location of the help button is not specified → Will ask (is the button below the question or to the right? Button size and color?)
 
 ### Critical Assumptions
 
-- 求助按钮在每次答题前均可用（除非10次已用完），参与者可自主决定是否求助
-- 提示效度列表在实验启动时预洗牌（5有效+5无效随机排列，不放回抽样），确保每个参与者遇到的有效/无效提示顺序不同
-- 自由文本答案使用字符串精确匹配评分（忽略大小写和首尾空格），中文答案使用全角/半角统一后再匹配
-- 练习阶段不提供求助功能（仅用于熟悉界面和答题流程）
+- The help button is available before each answer (unless 10 times have been used up). Participants can decide whether to ask for help.
+- The cue validity list is pre-shuffled at the start of the experiment (5 valid + 5 invalid randomly arranged, without replacement sampling) to ensure that each participant encounters valid/invalid cues in a different order
+- Free text answers use string exact matching for scoring (ignoring case and leading and trailing spaces), and Chinese answers use full-width/half-width unification before matching.
+- The help function is not provided during the practice phase (only used to familiarize yourself with the interface and answer process)
 
 ### Code Architecture
 
 ```
 phone_a_friend.py
-├── 参数配置（总求助次数、有效/无效比例、问题数量、文本匹配容差）
-├── 窗口设置（全屏/窗口，背景色，中文字体加载）
-├── 条件文件加载（CSV: question_id, question_text, valid_answer, valid_hint, invalid_hint）
-├── 提示效度列表生成（5 valid + 5 invalid → shuffle → pop on each request）
-├── 刺激组件预创建
-│   ├── 问题文本（TextStim）
-│   ├── 提示文本（TextStim）
-│   ├── 答题框（TextBox）
-│   ├── 求助按钮（Rect + TextStim 组合）
-│   ├── 剩余次数显示（TextStim: "剩余求助：X 次"）
-│   └── 求助用完警告（TextStim: "您的求助次数已用完"）
-├── 实验阶段
-│   ├── 指导语（解释任务、求助机制、按键操作）
-│   ├── 练习阶段（5题，无求助功能）
-│   └── 正式阶段（30题）
-├── 试次循环:
-│   ├── Window 1: 问题呈现 + 答题框 + 求助按钮
-│   │   ├── 检测 Enter 键 → 收集 answer_1，跳转 ITI
-│   │   └── 检测求助按钮点击 → 弹出下一个提示（valid/invalid），进入 Window 2
-│   ├── Window 2: 提示呈现 + 新答题框（仅当求助时触发）
-│   │   ├── 显示 hint_text
-│   │   ├── 收集 answer_2（Enter 提交）
-│   │   └── 更新 n_calls
-│   ├── Window 3: 求助用完警告（当 n_calls >= 10 时，显示 1 秒）
-│   └── ITI（500-1000 ms 随机）
-├── 数据保存：try/finally + CSV 逐行写入
-│   ├── 试次级：question_id, answer_1, answer_2, hint_requested, hint_shown, cue_type, n_calls, acc_1, acc_2
-│   └── 汇总级：total_hints_used, validity_detection_score
-└── 退出控制：Escape 键全程检测
+├── Parameter configuration (total number of requests for help, valid/invalid ratio, number of questions, text matching tolerance)
+├── Window settings (full screen/window, background color, Chinese font loading)
+├── Conditional file loading (CSV: question_id, question_text, valid_answer, valid_hint, invalid_hint)
+├── Prompt validity list generation (5 valid + 5 invalid → shuffle → pop on each request)
+├── Stimulus component pre-creation
+│ ├── Question text (TextStim)
+│ ├── Prompt text (TextStim)
+│ ├── Answer box (TextBox)
+│ ├── Help button (Rect + TextStim combination)
+│ ├── Remaining times display (TextStim: "Remaining help: X times")
+│ └── Warning for help exhausted (TextStim: "Your number of requests for help has been exhausted")
+├── Experimental stage
+│ ├── Instructions (explanation of tasks, help-seeking mechanism, button operations)
+│ ├── Practice stage (5 questions, no help function)
+│ └── Formal stage (30 questions)
+├── Trial cycle:
+│ ├── Window 1: Question presentation + answer box + help button
+│ │ ├── Detect Enter key → Collect answer_1, jump to ITI
+│ │ └── Detect help button click → Pop up the next prompt (valid/invalid) and enter Window 2
+│ ├── Window 2: prompt presentation + new answer box (only triggered when asking for help)
+│ │ ├── show hint_text
+│ │ ├── Collect answer_2 (Enter to submit)
+│ │ └── Update n_calls
+│ ├── Window 3: Warning of running out of help (displayed for 1 second when n_calls >= 10)
+│ └── ITI (500-1000 ms random)
+├── Data saving: try/finally + CSV write line by line
+│ ├── Try sublevel: question_id, answer_1, answer_2, hint_requested, hint_shown, cue_type, n_calls, acc_1, acc_2
+│ └── Summary level: total_hints_used, validity_detection_score
+└── Exit control: Escape key full detection
 ```
 
 ### Expected Data Columns
 
 | Column | Type | Description |
 |--------|------|-------------|
-| question_id | str | 问题编号 |
-| answer_1 | str | 求助前答案（若未求助则为最终答案） |
-| answer_2 | str | 求助后答案（若未求助则为空字符串） |
-| hint_requested | int | 是否点击了求助按钮（0/1） |
-| hint_shown | str | 实际展示的提示文本（未求助则为空字符串） |
-| cue_type | str | 提示类型：`valid` / `invalid` / `none` |
-| n_calls | int | 累计已用求助次数（含当前试次） |
-| acc_1 | int | 求助前准确率（1 = 正确, 0 = 错误） |
-| acc_2 | int | 求助后准确率（1 = 正确, 0 = 错误, NaN = 未求助） |
-| rt_1 | float | 求助前反应时（ms） |
-| rt_2 | float | 求助后反应时（ms，未求助则为 NaN） |
+| question_id | str | question number |
+| answer_1 | str | Answer before asking for help (final answer if no help is given) |
+| answer_2 | str | The answer after asking for help (an empty string if no help is provided) |
+| hint_requested | int | Whether the help button was clicked (0/1) |
+| hint_shown | str | The actual displayed prompt text (empty string if no help is required) |
+| cue_type | str | Cue type: `valid` / `invalid` / `none` |
+| n_calls | int | Cumulative number of calls for help (including current attempts) |
+| acc_1 | int | Accuracy before asking for help (1 = correct, 0 = incorrect) |
+| acc_2 | int | Accuracy rate after asking for help (1 = correct, 0 = wrong, NaN = no request for help) |
+| rt_1 | float | Response time before asking for help (ms) |
+| rt_2 | float | Response time after asking for help (ms, NaN if not asking for help) |

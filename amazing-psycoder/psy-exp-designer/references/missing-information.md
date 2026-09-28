@@ -32,7 +32,7 @@ Present a structured summary, never skip ahead to code:
 
 ## Example
 
-**User says:** "我想做一个情绪Stroop实验，用情绪面孔图片和中性面孔，判断面孔的情绪效价"
+**User says:** "I want to do an emotional Stroop experiment, using pictures of emotional faces and neutral faces to determine the emotional valence of faces"
 
 **Response:**
 
@@ -43,8 +43,8 @@ Present a structured summary, never skip ahead to code:
    - Are images pre-selected or do you need help finding them?
 3. **Design assumptions (flagged)**: Fixation 500ms, stimulus until response (deadline 3000ms), 48 trials per condition — these are placeholders; confirm or replace before collecting data
 4. **Questions:**
-   - "面孔情绪有几类？分别对应哪个按键？"
-   - "每类面孔有多少张图片？是否有标准化图片集？"
+   - "How many types of facial emotions are there? Which buttons correspond to them?"
+   - "How many images are there for each type of face? Is there a standardized set of images?"
 
 ## What IS Safe to Default
 

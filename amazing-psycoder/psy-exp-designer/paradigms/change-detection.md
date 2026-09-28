@@ -6,7 +6,7 @@
 
 ## When to Use
 
-User mentions: Change detection, visual working memory, VWM, change blindness, 变化检测, 视觉工作记忆. Measures the capacity and precision of visual working memory by testing whether observers can detect changes between a study array and a test probe.
+User mentions: Change detection, visual working memory, VWM, change blindness, change detection, visual working memory. Measures the capacity and precision of visual working memory by testing whether observers can detect changes between a study array and a test probe.
 
 ## Core Logic
 
@@ -74,16 +74,16 @@ Columns in the xlsx/csv file that drives each trial:
 
 | Column | Type | Description |
 |--------|------|-------------|
-| set_size | int | 记忆阵列中圆点/项目的数量 (如 2, 4, 6, 8) |
-| change_present | int | 1 = 变化试次，0 = 无变化试次 |
-| change_position | int | 发生变化的目标位置 (1-indexed)，无变化试次为 -1 或 NA |
-| target_color | str | 变化后的目标颜色 (RGB 或颜色名)，无变化试次为 NA |
+| set_size | int | The number of dots/items in the memory array (such as 2, 4, 6, 8) |
+| change_present | int | 1 = change trial, 0 = no change trial |
+| change_position | int | Changed target position (1-indexed), -1 or NA for no-change trials |
+| target_color | str | The changed target color (RGB or color name), no change trials are NA |
 
 ## Variants
 
-- **单探针变化检测 (Single-probe)**: 记忆阵列消失后呈现单个探测刺激（通常用圆圈标记位置），被试判断该位置项目的颜色/特征是否与记忆阵列一致。这是测量视觉工作记忆容量最常用的变式。参见 [visual-search.md](visual-search.md)（视觉搜索，共享注意负荷操作）。
-- **整体显示变化检测 (Whole-display)**: 测试阶段重新呈现完整阵列，被试判断是否有任何项目发生变化。常与变化盲视（change blindness）范式结合，通过闪烁或空白间隔操纵检测难度。
-- **线索化变化检测 (Cued)**: 记忆阵列消失后呈现空间线索（如箭头或方框），指向可能发生变化的位置。线索减少了记忆负荷，用于测量注意分配和视觉工作记忆精度。参见 [posner-cuing.md](posner-cuing.md)（空间线索范式）。
+- **Single-probe change detection (Single-probe)**: After the memory array disappears, a single probe stimulus is presented (usually a circle marks the location), and the subject judges whether the color/feature of the item at that location is consistent with the memory array. This is the most commonly used variation of measuring visual working memory capacity. See [visual-search.md](visual-search.md) (visual search, shared attention load operation).
+- **Whole-display change detection (Whole-display)**: In the test phase, the complete array is re-presented, and the subject judges whether any items have changed. Often combined with the change blindness paradigm, the difficulty of detection is manipulated by flashing or blank intervals.
+- **Cueded Change Detection (Cued)**: After the memory array disappears, spatial cues (such as arrows or boxes) are presented, pointing to the location of possible changes. Cues reduce memory load and are used to measure attention allocation and visual working memory accuracy. See [posner-cuing.md](posner-cuing.md) (Spatial Cuing Paradigm).
 
 ---
 
@@ -91,18 +91,18 @@ Columns in the xlsx/csv file that drives each trial:
 
 ### User Request
 
-> "我想做一个变化检测实验。屏幕中央先呈现注视点500 ms，然后呈现记忆阵列（4个或6个彩色圆点，均匀分布在以中央注视点为中心的虚拟圆上）250 ms，接着空白屏保持900 ms，最后呈现测试阵列直到被试按键反应（最长2000 ms，超时记为错误）。一半试次有一个圆点的颜色改变，一半试次不变。被试按F键表示检测到变化，按J键表示无变化。总共240个正式试次（每种set_size各120个试次），先进行24个练习试次。用PsychoPy。"
+> "I want to do a change detection experiment. The fixation point is first presented in the center of the screen for 500 ms, then the memory array (4 or 6 colored dots, evenly distributed on a virtual circle centered on the central fixation point) is presented for 250 ms, then the blank screen is maintained for 900 ms, and finally the test array is presented until the subject's key press response (up to 2000 ms, timeout is recorded as an error). Half of the trials have a dot color change, and half of the trials have no change. The subject presses the F key to indicate that a change is detected. A total of 240 formal trials (120 trials for each set_size) are performed with PsychoPy.
 
 ### Trial Window Timeline
 
 ```text
 ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐
 │ Window 1                 │ →  │ Window 2                 │ →  │ Window 3                 │ →  │ Window 4                 │
-│ 注视点                    │    │ 记忆阵列                  │    │ 保持间隔                  │    │ 测试阵列 / 反应           │
-│ Content: + at center     │    │ Content: N 个彩色圆点     │    │ Content: blank           │    │ Content: N 个彩色圆点     │
+│ Fixation Point │ │ Memory Array │ │ Hold Interval │ │ Test Array/Response │
+│ Content: + at center │ │ Content: N colored dots │ │ Content: blank │ │ Content: N colored dots │
 │ Duration: 500 ms         │    │ Duration: 250 ms         │    │ Duration: 900 ms         │    │ Duration: until key      │
 │ Response: none           │    │ Response: none           │    │ Response: none           │    │ (deadline 2000 ms)       │
-│ Condition: none          │    │ Condition: {set_size}    │    │ Condition: none          │    │ Response: f=变化, j=无变化 │
+│ Condition: none │ │ Condition: {set_size} │ │ Condition: none │ │ Response: f=change, j=no change │
 │ Data: none               │    │ Data: none               │    │ Data: none               │    │ Condition: {change_present}│
 └──────────────────────────┘    └──────────────────────────┘    └──────────────────────────┘    │ Data: rt, key, acc       │
                                                                                                 └──────────────────────────┘
@@ -110,40 +110,40 @@ Columns in the xlsx/csv file that drives each trial:
 
 | Window | Content | Duration | Response | Condition | Data |
 |--------|---------|----------|----------|-----------|------|
-| 注视点 | + | 500 ms | none | none | none |
-| 记忆阵列 | N 个彩色圆点 (N=4或6) | 250 ms | none | {set_size} | none |
-| 保持间隔 | blank | 900 ms | none | none | none |
-| 测试阵列 | N 个彩色圆点 | until key (deadline 2000 ms) | f=变化, j=无变化 | {change_present} | rt, key, acc |
+| fixation point | + | 500 ms | none | none | none |
+| Memory array | N colored dots (N=4 or 6) | 250 ms | none | {set_size} | none |
+| keep interval | blank | 900 ms | none | none | none |
+| Test array | N colored dots | until key (deadline 2000 ms) | f=change, j=no change | {change_present} | rt, key, acc |
 
 ### Parsed Experiment Specification
 
 | Field | Value |
 |-------|-------|
-| 实验名称 | 视觉变化检测任务 |
-| 平台 | PsychoPy |
-| 任务类型 | Change Detection (视觉工作记忆) |
+| Experiment name | Visual change detection task |
+| Platform | PsychoPy |
+| Task Type | Change Detection (Visual Working Memory) |
 | Set sizes | 4, 6 |
-| 刺激类型 | 彩色圆点（均匀分布于虚拟圆） |
-| 变化类型 | 颜色变化（单个圆点） |
-| 变化/无变化比例 | 50:50 |
-| 记忆阵列呈现时间 | 250 ms |
-| 保持间隔 | 900 ms |
-| 反应窗口 | 最长 2000 ms |
-| 阶段 | 指导语 → 练习(24试次) → 正式实验(240试次，含中场休息) |
+| Stimulus type | Colored dots (evenly distributed in the virtual circle) |
+| Change type | Color change (single dot) |
+| Change/no change ratio | 50:50 |
+| Memory array presentation time | 250 ms |
+| Hold interval | 900 ms |
+| Response window | Maximum 2000 ms |
+| Stage | Instructions → Practice (24 trials) → Formal experiment (240 trials, including intermission) |
 
 ### Missing Information
 
-1. 颜色集合未指定（使用哪些颜色？颜色之间的可区分性如何控制？）→ 需确认标准颜色集或自定义 RGB 值
-2. 是否包含位置判断阶段未说明 → 需确认是否仅做变化检测，还是也需要位置判断
-3. 正式实验是否需要中场休息、休息间隔和次数未说明 → 需确认 block 划分
+1. The color set is not specified (which colors are used? How to control the distinguishability between colors?) → Need to confirm the standard color set or custom RGB values
+2. Whether the position judgment stage is included is not specified → Need to confirm whether it is only change detection, or whether position judgment is also required
+3. Whether the formal experiment requires intermissions, the interval and number of breaks are not specified → the block division needs to be confirmed
 
 ### Assumptions
 
-- 仅包含变化检测阶段（不包含位置判断/定位阶段）
-- 颜色从预定义的标准颜色集中随机选取（如红、蓝、绿、黄、紫、橙、青等 7–9 种易区分颜色），试次间不重复使用同一颜色组合
-- 圆点位置均匀分布（set_size=4 时角度间隔 90°，set_size=6 时角度间隔 60°），起始角度随机
-- 无试次间反馈（仅练习阶段可能提供反馈）
-- 无 ITI（保持间隔结束后下一个试次的注视点即作为试次间隔）
+- Only includes the change detection phase (excluding the position judgment/positioning phase)
+- Colors are randomly selected from a predefined standard color set (e.g. 7–9 easily distinguishable colors such as red, blue, green, yellow, purple, orange, cyan, etc.), and the same color combination is not reused between trials
+- The dot positions are evenly distributed (the angle interval is 90° when set_size=4, the angle interval is 60° when set_size=6), and the starting angle is random.
+- No inter-trial feedback (feedback may be provided only during the practice phase)
+- No ITI (the fixation point of the next trial after the end of the hold interval is used as the trial interval)
 
 ### Expected Code Architecture
 
@@ -159,10 +159,10 @@ change_detection.py
 │   ├── Columns: set_size, change_present, change_position, target_color
 │   └── Shuffle with constraint (no more than 3 consecutive same type)
 ├── Trial loop:
-│   ├── 注视点 (500 ms)
-│   ├── 记忆阵列 (250 ms — N circles at computed positions)
-│   ├── 保持间隔 (900 ms blank)
-│   ├── 测试阵列 (until response, deadline 2000 ms)
+│ ├── fixation point (500 ms)
+│ ├── memory array (250 ms — N circles at computed positions)
+│ ├── Hold interval (900 ms blank)
+│ ├── Test array (until response, deadline 2000 ms)
 │   │   ├── If change_present=1: one circle color replaced with target_color
 │   │   └── If change_present=0: identical to memory array
 │   ├── Response recording (f/j keys, rt, acc)

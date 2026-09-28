@@ -1,17 +1,17 @@
-# 甘特图 (Gantt Chart)
+# Gantt Chart
 
-## 概述
+## Overview
 
-甘特图用横向条形图展示实验流程时间线,每个任务/阶段用条形长度表示持续时间。
+The Gantt chart uses a horizontal bar chart to display the experimental process timeline, and each task/stage uses the bar length to indicate the duration.
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| 场景 | 展示实验设计的时间结构 |
-| 用途 | 方法部分的视觉辅助 |
+| Scenario | Show the temporal structure of the experimental design |
+| Purpose | Visual aid for Methods section |
 
-## R 代码
+## R code
 
 ```r
 library(ggplot2)
@@ -21,21 +21,21 @@ ggplot(data, aes(x=start_time, xend=end_time, y=task, color=phase)) +
   theme_minimal()
 ```
 
-## 关键参数
+## Key parameters
 
-| 参数 | 作用 |
+| Parameters | Function |
 |------|------|
-| `x`/`xend` | 任务起止时间 |
-| `y` | 任务名称 |
-| `color` | 阶段颜色分组 |
-| `linewidth` | 条形宽度(6-10合适) |
+| `x`/`xend` | Task start and end time |
+| `y` | Task name |
+| `color` | Stage color grouping |
+| `linewidth` | Bar width (6-10 is suitable) |
 
-## 解读
+## Interpretation
 
-- 条形长度=任务持续时间
-- 条形重叠=并行任务
-- 颜色分组=实验阶段
+- Bar length = task duration
+- Bar overlap = parallel tasks
+-Color Grouping=Experimental Phase
 
-## 注意事项
+## Notes
 
-适合方法论部分的实验流程图。精确时间需标注数值。
+Experimental flow chart suitable for the methodology section. The precise time needs to be marked with a numerical value.

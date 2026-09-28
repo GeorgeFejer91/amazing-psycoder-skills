@@ -5,7 +5,7 @@
 
 ## When to Use
 
-User mentions: N-back, 工作记忆, working memory, n-back task, 1-back, 2-back, 3-back, letter n-back, spatial n-back.
+User mentions: N-back, working memory, working memory, n-back task, 1-back, 2-back, 3-back, letter n-back, spatial n-back.
 
 ## Core Logic
 
@@ -31,11 +31,11 @@ Before generating N-back code, confirm ALL of these:
 6. **Stimulus duration**: fixed or until response? Typical: 500 ms presentation + 1500-2500 ms response window
 7. **Total trial count**: how many trials total and per n-level?
 8. **Lure trials**: include near-lures (e.g., match at n±1 position)? These increase difficulty and diagnostic value.
-9. **First N trials**: 前N个trial无法形成匹配判断，如何处理？（标记为excluded）
-10. **ITI / fixation**: 试次间是否显示注视点？时间和变化范围？
-11. **OS & font**: 在什么操作系统运行？如使用中文，确认字体
-12. **Display**: 全屏还是窗口？刺激大小和屏幕位置？
-13. **Instruction text**: 指导语内容？如何向被试解释N-back任务？
+9. **First N trials**: The first N trials cannot form a matching judgment, how to deal with it? (marked as excluded)
+10. **ITI/fixation**: Is the fixation point displayed between trials? Time and scope of change?
+11. **OS & font**: What operating system is it running on? If using Chinese, confirm the font
+12. **Display**: Full screen or window? Stimulus size and screen location?
+13. **Instruction text**: Instruction content? How to explain the N-back task to subjects?
 
 ## Do Not Assume
 
@@ -109,7 +109,7 @@ Owen, A. M., McMillan, K. M., Laird, A. R., & Bullmore, E. (2005). N-back workin
 
 ### User Request
 
-> "我想做一个字母N-back实验，包含1-back和2-back两个水平。刺激为大写辅音字母（B, C, D, F, G, H, J, K, L, M, N, P, Q, R, S, T, V, W, X, Z），匹配试次占33%。每个N-back水平先有20个练习trial，然后2个正式block各30个trial。刺激呈现500 ms，反应窗口2500 ms。匹配按F键，不匹配按J键。N-back水平的顺序在被试间平衡。用PsychoPy。"
+> "I want to do a letter N-back experiment, including two levels of 1-back and 2-back. The stimuli are uppercase consonant letters (B, C, D, F, G, H, J, K, L, M, N, P, Q, R, S, T, V, W, X, Z), matching trials accounted for 33%. Each N-back level was followed by 2 formal blocks of 30 trials each, with a response window of 2500 ms. The order of N-back levels was balanced across subjects.
 
 ### Trial Window Timeline
 
@@ -117,7 +117,7 @@ Owen, A. M., McMillan, K. M., Laird, A. R., & Bullmore, E. (2005). N-back workin
 ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐
 │ Window 1                 │ →  │ Window 2                 │ →  │ Window 3                 │ →  │ Window 4                 │
 │ Fixation                 │    │ Letter Stimulus          │    │ Feedback                 │    │ ITI                      │
-│ Content: +               │    │ Content: {stimulus}      │    │ Content: 正确/错误        │    │ Content: empty           │
+│ Content: + │ │ Content: {stimulus} │ │ Content: True/Wrong │ │ Content: empty │
 │ Duration: 500 ms         │    │ Duration: 500 ms         │    │ Duration: 500 ms         │    │ Duration: 1000 ms        │
 │ Response: none           │    │ Response: none           │    │ Response: none           │    │ Response: none           │
 │ File: none               │    │ File: none (text)        │    │ File: none               │    │ File: none               │
@@ -140,9 +140,9 @@ Owen, A. M., McMillan, K. M., Laird, A. R., & Bullmore, E. (2005). N-back workin
 | Window | Content | Duration | Response | File/Folder | Condition | Data |
 |--------|---------|----------|----------|-------------|-----------|------|
 | Fixation | + | 500 ms | none | none | none | none |
-| Stimulus | 字母 {stimulus} | 500 ms | none | none (text) | {stimulus} | none |
-| Response | 字母 {stimulus} | 2500 ms (deadline) | f=match, j=nonmatch | none | {trial_type} | rt, key, acc |
-| Feedback | 正确/错误/太慢 | 500 ms | none | none | {correct_response} | none |
+| Stimulus | Letter {stimulus} | 500 ms | none | none (text) | {stimulus} | none |
+| Response | Letter {stimulus} | 2500 ms (deadline) | f=match, j=nonmatch | none | {trial_type} | rt, key, acc |
+| Feedback | Correct/Wrong/Too Slow | 500 ms | none | none | {correct_response} | none |
 | ITI | empty | 1000 ms | none | none | none | none |
 
 ### Parsed Experiment Specification

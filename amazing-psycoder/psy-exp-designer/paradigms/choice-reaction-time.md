@@ -6,7 +6,7 @@
 
 ## When to Use
 
-User mentions: Choice reaction time, CRT, choice RT, Hick's law, 选择反应时. Measures the speed of decision-making when participants must discriminate among multiple stimuli and select the corresponding response — unlike simple RT (one stimulus, one response), choice RT requires both stimulus discrimination and response selection.
+User mentions: Choice reaction time, CRT, choice RT, Hick's law, Choice reaction time. Measures the speed of decision-making when participants must discriminate among multiple stimuli and select the corresponding response — unlike simple RT (one stimulus, one response), choice RT requires both stimulus discrimination and response selection.
 
 ## Core Logic
 
@@ -60,27 +60,27 @@ Hick, W. E. (1952). On the rate of gain of information. *Quarterly Journal of Ex
 
 ## Do Not Assume
 
-- Do not assume 3 shapes with 4 positions — 形状数量和位置数量可任意配置，经典的 Hick 定律实验中常使用 2-8 个选择项
-- Do not assume keyboard-only response — 鼠标点击位置也可作为有效反应，双模态设计（键盘+鼠标）是本实现的特色
-- Do not assume fixed stimulus onset — onsetTime 按条件文件逐试次变化，引入时间不确定性，需询问变时距范围
-- Do not assume response-terminated stimulus display — 本实现中目标仅呈现 200 ms 的短暂闪烁，被试必须在目标消失后继续反应
-- Do not assume position cues are always present — 500 ms 的位置预提示（outline tiles）是本实现的默认设置，但部分实验设计可能省略此阶段
-- Do not assume RT 从 stimulus onset 计算 — RT 基于条件文件中的 onsetTime 字段计算（`RT = keyResp.rt - onsetTime`），而非简单使用 stimulus 绘制时刻
+- Do not assume 3 shapes with 4 positions — The number of shapes and positions can be configured arbitrarily, 2-8 options are often used in classic Hick's law experiments
+- Do not assume keyboard-only response — The mouse click position can also be used as a valid response. The dual-modal design (keyboard + mouse) is a feature of this implementation.
+- Do not assume fixed onset stimulus — onsetTime changes from trial to trial according to the condition file, introducing time uncertainty, and you need to ask about the variable time interval range
+- Do not assume response-terminated stimulus display — In this implementation, the target only flashes briefly for 200 ms, and the subject must continue to respond after the target disappears
+- Do not assume position cues are always present — 500 ms position cues (outline tiles) are the default setting for this implementation, but some experimental designs may omit this stage
+- Do not assume RT is calculated from stimulus onset — RT is calculated based on the onsetTime field in the conditions file (`RT = keyResp.rt - onsetTime`), rather than simply using the stimulus plot moment
 
 ## Condition File Columns
 
 | Column | Type | Description |
 |--------|------|-------------|
-| shape | str | 目标形状：`"cross"`, `"square"`, `"plus"` |
-| position | str | 目标位置：如 `"left"`, `"right"`, `"top"`, `"bottom"` 或坐标值 |
-| correct_key | str | 该形状对应的正确按键：`"c"`, `"v"`, `"b"` |
-| onsetTime | float/number | 目标出现时刻（相对于试次开始的秒数），用于变时距控制 |
+| shape | str | Target shape: `"cross"`, `"square"`, `"plus"` |
+| position | str | Target position: such as `"left"`, `"right"`, `"top"`, `"bottom"` or coordinate value |
+| correct_key | str | Correct keys corresponding to this shape: `"c"`, `"v"`, `"b"` |
+| onsetTime | float/number | target onset time (seconds relative to the start of the trial), used for variable interval control |
 
 ## Variants
 
-- **简单反应时 (Simple RT)**：仅一个刺激类型、一个反应键，主要减少刺激辨别和反应选择要求。两类任务的 RT 差异取决于刺激、设备、样本和程序，不预设固定毫秒差。参见 simple-reaction-time.md
-- **Go/No-go CRT（包含抑制的 CRT）**：在标准 CRT 基础上加入 No-go 试次，要求对特定刺激或特定位置的目标抑制反应。同时测量反应速度和抑制控制能力。参见 [go-nogo.md](go-nogo.md)
-- **多维 CRT（Multi-dimensional CRT）**：刺激在多个维度上变化（如形状 + 颜色 + 位置），被试需根据其中一个维度（任务相关维度）做出选择反应，同时忽略其他维度（任务无关维度）。可用于研究选择性注意、冲突加工（如 Stroop 或 Flanker 类似的跨维度干扰）
+- **Simple RT)**: Only one stimulus type, one response key, mainly reducing stimulus discrimination and response selection requirements. The difference in RT between the two types of tasks depends on the stimulus, device, sample, and procedure and does not preset a fixed millisecond difference. See simple-reaction-time.md
+- **Go/No-go CRT (CRT with Inhibition)**: A standard CRT that adds No-go trials that require an inhibitory response to a specific stimulus or target at a specific location. Reaction speed and inhibitory control were measured simultaneously. See [go-nogo.md](go-nogo.md)
+- **Multi-dimensional CRT**: The stimulus changes in multiple dimensions (such as shape + color + location), and the subject needs to make a choice response based on one of the dimensions (task-related dimensions) while ignoring other dimensions (task-irrelevant dimensions). Can be used to study selective attention, conflict processing (such as Stroop or Flanker-like cross-dimensional interference)
 
 ---
 
@@ -88,9 +88,9 @@ Hick, W. E. (1952). On the rate of gain of information. *Quarterly Journal of Ex
 
 ### User Request
 
-> "我想做一个选择反应时实验。屏幕上有3个位置（左、右、下），会随机出现3种图形（圆形、方形、三角形）。看到圆形按 F 键，方形按 G 键，三角形按 H 键。每个试次先呈现500 ms注视点，然后图形出现。图形一直显示直到被试按键反应，超时3000 ms视为漏报。按键后如果正确直接进入ITI，如果错误屏幕中央显示红色叉号800 ms。练习20个试次，正式实验3个block每个40试次。ITI随机500-1000 ms。用PsychoPy，指导语用中文。"
+> "I want to do a choice reaction time experiment. There are 3 positions on the screen (left, right, bottom), and 3 types of graphics (circle, square, triangle) will appear randomly. Press the F key when you see the circle, the G key for the square, and the H key for the triangle. Each trial first presents the fixation point for 500 ms, and then the graphics appear. The graphics are displayed until the subject responds by pressing the key, with a timeout of 3000 ms is regarded as a false negative. If the key is pressed correctly, a red cross will be displayed in the center for 800 ms. The formal experiment will take 3 blocks of 40 trials each and use PsychoPy. The instructions are in Chinese.
 > 
-> （此请求可通过 psy-exp-coder 技能直接生成代码）
+> (This request can directly generate code through the psy-exp-coder skill)
 
 ### Trial Window Timeline
 
@@ -98,10 +98,10 @@ Hick, W. E. (1952). On the rate of gain of information. *Quarterly Journal of Ex
 ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐
 │ Window 1                 │ →  │ Window 2                 │ →  │ Window 3                 │ →  │ Window 4                 │
 │ Fixation                 │    │ Stimulus                 │    │ Feedback                 │    │ ITI                      │
-│ Content: +               │    │ Content: 圆形/方形/三角形 │    │ Content: 红色 X（仅错误）│    │ Content: empty           │
-│ Duration: 500 ms         │    │ at 左/右/下 position      │    │ Duration: 800 ms         │    │ Duration: 500-1000 ms     │
+│ Content: + │ │ Content: Circle/Square/Triangle │ │ Content: Red X (error only) │ │ Content: empty │
+│ Duration: 500 ms │ │ at left/right/down position │ │ Duration: 800 ms │ │ Duration: 500-1000 ms │
 │ Response: none           │    │ Duration: until key       │    │ Response: none           │    │ Response: none           │
-│ Data: none               │    │ Response: F/G/H 键       │    │ Data: none               │    │ Data: none               │
+│ Data: none │ │ Response: F/G/H keys │ │ Data: none │ │ Data: none │
 │                          │    │ Timeout: 3000 ms          │    │                          │    │                           │
 │                          │    │ Data: rt, key, acc        │    │                          │    │                           │
 └──────────────────────────┘    └──────────────────────────┘    └──────────────────────────┘    └──────────────────────────┘
@@ -110,65 +110,65 @@ Hick, W. E. (1952). On the rate of gain of information. *Quarterly Journal of Ex
 | Window | Content | Duration | Response | Condition | Data |
 |--------|---------|----------|----------|-----------|------|
 | Fixation | + | 500 ms | none | none | none |
-| Stimulus | 圆形/方形/三角形 at 左/右/下 | until key (deadline 3000 ms) | F/G/H | {shape}, {position}, {correct_key} | rt, key, acc |
-| Feedback | 红色X（仅错误试次） | 800 ms | none | none | none |
+| Stimulus | circle/square/triangle at left/right/bottom | until key (deadline 3000 ms) | F/G/H | {shape}, {position}, {correct_key} | rt, key, acc |
+| Feedback | Red X (error trials only) | 800 ms | none | none | none |
 | ITI | empty | 500-1000 ms random | none | none | none |
 
 ### Parsed Experiment Specification
 
 | Field | Value |
 |-------|-------|
-| 实验名称 | 三图形选择反应时实验 |
-| 平台 | PsychoPy |
-| 任务类型 | Choice RT（选择反应时） |
-| 刺激形状 | 圆形、方形、三角形 |
-| 刺激位置 | 左、右、下（3个） |
-| 反应方式 | 键盘按键：F（圆形）、G（方形）、H（三角形） |
-| 注视点持续时间 | 500 ms |
-| 反应超时 | 3000 ms |
-| 错误反馈 | 红色叉号，800 ms |
-| 实验阶段 | 指导语 → 练习(20试次) → Block1-3(各40试次) |
-| ITI | 500-1000 ms 随机 |
+| Experiment name | Three-figure selection reaction time experiment |
+| Platform | PsychoPy |
+| Task type | Choice RT (choice reaction time) |
+| Stimulus shape | Circle, square, triangle |
+| Stimulation position | Left, right, bottom (3) |
+| Response mode | Keyboard keys: F (circle), G (square), H (triangle) |
+| Fixation duration | 500 ms |
+| Response timeout | 3000 ms |
+| Error feedback | Red cross, 800 ms |
+| Experimental phase | Instructions → Practice (20 trials) → Block1-3 (40 trials each) |
+| ITI | 500-1000 ms random |
 
 ### Missing Information
 
-1. 指导语具体文案未提供 → 将使用标准中文指导语模板，说明每个图形对应的按键
-2. 操作系统和字体路径未提供 → 假设中文 Windows/macOS，使用系统默认中文字体（需确认 `Songti SC` 或 `SimHei` 路径）
-3. 练习阶段是否给予反馈未明确 → 假设练习有逐试次反馈（含 RT 和正确性），正式 block 仅错误时显示红色叉号
+1. The specific copy of the instruction is not provided → A standard Chinese instruction template will be used to explain the buttons corresponding to each graphic.
+2. The operating system and font path are not provided → Assuming Chinese Windows/macOS, use the system default Chinese font (need to confirm the `Songti SC` or `SimHei` path)
+3. It is not clear whether feedback will be given during the practice phase → Assuming that the practice has trial-by-trial feedback (including RT and correctness), the official block will only display a red cross when there is an error
 
 ### Critical Assumptions
 
-- 注视点持续时间 500 ms（用户在请求中明确提及）
-- 刺激在被试按键后立即消失（response-terminated display），超时 3000 ms 后自动进入 ITI
-- 每个 block 内各条件（shape × position）均等呈现，试次顺序随机化
-- 正确试次不显示反馈，直接进入 ITI；错误试次显示红色叉号 800 ms 后进入 ITI
-- 无位置预提示（position cuing），与 Pavlovia 标准实现不同
+- fixation duration 500 ms (explicitly mentioned by user in request)
+- The stimulus disappears immediately after the subject presses the button (response-terminated display), and automatically enters the ITI after a timeout of 3000 ms.
+- Each condition (shape × position) in each block is presented equally, and the order of trials is randomized.
+- Correct trials do not display feedback and enter ITI directly; incorrect trials display a red cross for 800 ms and then enter ITI
+- No position cuing, different from Pavlovia standard implementation
 
 ### Code Architecture
 
 ```
 crt.py
-├── 参数定义（形状列表、位置列表、按键映射、时间参数）
-├── 窗口创建（Window）
-├── 刺激预加载（TextStim 注视点、ShapeStim 图形、TextStim 反馈）
-├── 条件表生成（shape × position 全因子组合 × 重复次数）
-├── 指导语呈现
-├── 试次循环：
-│   ├── 注视点（500 ms）
-│   ├── 目标刺激（按键终止，deadline 3000 ms）
-│   ├── 错误反馈（红色叉号 800 ms，仅错误试次）
-│   └── ITI（500-1000 ms 随机）
-└── 数据保存（try/finally，增量写入 CSV）
+├── Parameter definition (shape list, position list, key mapping, time parameter)
+├── Window creation (Window)
+├── Stimulus preloading (TextStim fixation points, ShapeStim graphics, TextStim feedback)
+├── Condition table generation (shape × position full factor combination × number of repetitions)
+├── Instructions presented
+├── Trial cycle:
+│ ├── Fixation point (500 ms)
+│ ├── Target stimulus (key press to terminate, deadline 3000 ms)
+│ ├── Error feedback (red cross 800 ms, error trials only)
+│ └── ITI (500-1000 ms random)
+└── Data saving (try/finally, incremental writing to CSV)
 ```
 
 ### Expected Data Columns
 
 | Column | Type | Description |
 |--------|------|-------------|
-| shape | str | 刺激形状（"圆形"/"方形"/"三角形"） |
-| position | str | 刺激位置（"左"/"右"/"下"） |
-| correct_key | str | 正确按键（"f"/"g"/"h"） |
-| rt | float | 反应时（ms），相对刺激出现时刻 |
-| key_resp | str | 被试实际按键 |
-| acc | int | 正确性（1=正确，0=错误，-1=超时漏报） |
-| timeout | int | 是否超时（1=超时，0=正常反应） |
+| shape | str | stimulus shape ("circle"/"square"/"triangle") |
+| position | str | Stimulation position ("left"/"right"/"bottom") |
+| correct_key | str | Correct key ("f"/"g"/"h") |
+| rt | float | Reaction time (ms), relative stimulus appearance moment |
+| key_resp | str | The actual keys pressed by the subject |
+| acc | int | Correctness (1=correct, 0=error, -1=timeout false negative) |
+| timeout | int | Whether to time out (1=timeout, 0=normal response) |

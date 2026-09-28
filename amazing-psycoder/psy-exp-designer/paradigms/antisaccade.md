@@ -6,7 +6,7 @@
 
 ## When to Use
 
-User mentions: Antisaccade, anti-saccade, inhibitory control, oculomotor inhibition, 反眼跳任务. Measures the ability to inhibit a reflexive prosaccade toward a peripheral cue and instead generate a voluntary saccade to the opposite location.
+User mentions: Antisaccade, anti-saccade, inhibitory control, oculomotor inhibition, antisaccade task. Measures the ability to inhibit a reflexive prosaccade toward a peripheral cue and instead generate a voluntary saccade to the opposite location.
 
 ## Core Logic
 
@@ -55,28 +55,28 @@ Munoz, D. P., & Everling, S. (2004). Look away: The anti-saccade task and the vo
 
 ## Do Not Assume
 
-- Do not assume the target always appears on the opposite side. 在标准反眼跳任务中，朝向眼跳试次（目标与线索同侧）通常与反眼跳试次随机混合呈现。必须明确确认试次混合比例，以及两种试次类型在条件文件中如何编码（如 `trial_type` 列标记为 `"pro"` 或 `"anti"`）。
-- Do not assume keyboard response is the only input mode. 反眼跳任务支持键盘、鼠标点击和悬停（hover）三种输入方式。需在实验开始前让被试选择输入模式，并确认对应的按键映射或响应区域定义。若不确认，生成的代码可能只实现键盘模式，导致无法在触摸屏或无键盘设备上运行。
-- Do not assume the target is always a letter requiring identification. 目标刺激可能是字母（需字母识别，如判断字母是 A 还是 E）、箭头（方向判断，如左箭头按左键）、或简单探测点（检测是否出现）。目标身份影响正确反应的定义方式和条件文件中 `corr_ans` 列的取值。
-- Do not assume there is no response deadline. 目标呈现时间可短于反应窗口；具体时长必须由协议确认。需明确最大反应时间和遗漏反应语义：RT 保持缺失，记录 `response_status: timeout`；若该试次按任务规则属于错误遗漏，可令 `accuracy = 0`，但不得用 `-1` 等数值哨兵伪装缺失值。
-- Do not assume eye-tracking data is always required. 许多反眼跳实验仅使用手动反应（按键或点击）来测量行为抑制指标（错误率、反应时），而无需眼动仪。需明确是否需要集成眼动追踪硬件，若不需要，则无需在代码中包含 EyeLink 或 Tobii 的通信逻辑。
-- Do not assume the cue-target interval is always zero. 线索消失到目标出现之间的间隔（cue-target asynchrony, CTA）可能为 0 ms（无间隔）、200 ms（gap条件），或在实验中系统变化。CTA 影响反眼跳潜伏期和错误率，需在生成代码前确认具体参数。
+- Do not assume the target always appears on the opposite side. In a standard antisaccade task, toward saccade trials (target on the same side as the cue) are typically presented randomly intermixed with antisaccade trials. The trial mix ratio must be explicitly confirmed, and how the two trial types are coded in the conditions file (e.g. the `trial_type` column is labeled `"pro"` or `"anti"`).
+- Do not assume keyboard response is the only input mode. The anti-saccade task supports three input modes: keyboard, mouse click, and hover. Before starting the experiment, subjects need to be allowed to select the input mode and confirm the corresponding key mapping or response area definition. If not confirmed, the generated code may only implement keyboard mode, causing it to fail to run on touch screens or devices without keyboards.
+- Do not assume the target is always a letter requiring identification. The target stimulus may be a letter (requiring letter identification, such as determining whether the letter is A or E), an arrow (direction judgment, such as pressing the left arrow key), or a simple detection point (detecting whether it appears). Target identity affects how correct responses are defined and the value of the `corr_ans` column in the criteria file.
+- Do not assume there is no response deadline. The target rendering time can be shorter than the response window; the exact length must be confirmed by the agreement. It is necessary to clarify the maximum reaction time and omitted response semantics: RT remains missing and records `response_status: timeout`; if the trial is an error or omission according to the task rules, `accuracy = 0` can be set, but numerical sentinels such as `-1` cannot be used to disguise missing values.
+- Do not assume eye-tracking data is always required. Many antisaccade experiments use only manual responses (key presses or clicks) to measure measures of behavioral inhibition (error rates, reaction times) without the need for an eye tracker. It is necessary to clarify whether eye tracking hardware needs to be integrated. If not, there is no need to include EyeLink or Tobii communication logic in the code.
+- Do not assume the cue-target interval is always zero. The interval between cue disappearance and target appearance (cue-target asynchrony, CTA) may be 0 ms (no interval), 200 ms (gap condition), or vary systematically during the experiment. CTA affects antisaccade latency and error rate, and specific parameters need to be confirmed before generating code.
 
 ## Condition File Columns
 
 | Column | Type | Description |
 |--------|------|-------------|
-| cue_pos | str | 外周线索出现的位置，`"left"` 或 `"right"` |
-| target_id | str | 目标刺激的标识（如字母 `"A"`/`"E"`、箭头方向 `"left"`/`"right"`、或点探测 `"dot"`） |
-| trial_type | str | 试次类型，`"pro"`（朝向眼跳，目标与线索同侧）或 `"anti"`（反眼跳，目标与线索对侧） |
-| corr_ans | str | 正确反应按键，如 `"left"`、`"right"`、`"a"`、`"e"`，由目标身份决定 |
-| target_pos | str | 目标出现的位置，`"left"` 或 `"right"`。在反眼跳试次中与 `cue_pos` 相反，可用于推导 `trial_type` |
+| cue_pos | str | The position where the peripheral cue appears, `"left"` or `"right"` |
+| target_id | str | Identification of the target stimulus (e.g. letter `"A"`/`"E"`, arrow direction `"left"`/`"right"`, or dot detection `"dot"`) |
+| trial_type | str | Trial type, `"pro"` (proward saccade, the target is on the same side as the cue) or `"anti"` (anti-saccade, the target is on the opposite side of the cue) |
+| corr_ans | str | Correct response keys, such as `"left"`, `"right"`, `"a"`, `"e"`, determined by the target identity |
+| target_pos | str | The position where the target appears, `"left"` or `"right"`. Opposite of `cue_pos` in antisaccade trials, can be used to derive `trial_type` |
 
 ## Variants
 
-- **Gap/Overlap Antisaccade Task（间隙/重叠反眼跳任务）**：在固定点消失（gap条件，固定点在线索出现前消失200 ms）或不消失（overlap条件，固定点持续显示）后呈现外周线索。Gap条件降低了反眼跳潜伏期，用于研究注意脱离（attentional disengagement）和眼动准备机制。相关范式：gap-overlap
-- **Memory-Guided Antisaccade Task（记忆引导反眼跳任务）**：目标仅在极短时间内闪现（如 50–100 ms），被试需在延迟期（数秒）后向目标镜像位置执行眼跳。增加了工作记忆负荷，用于分离抑制控制与空间工作记忆成分，常见于精神分裂症和额叶损伤研究。
-- **Mixed Pro/Anti Blocked Design（混合/分块设计反眼跳任务）**：将朝向眼跳和反眼跳试次按 block 分离（而非随机混合），每个 block 内试次类型相同。Block 起始有明确的线索提示当前 block 类型。用于研究任务切换成本（switch cost）和自上而下的抑制准备效应。
+- **Gap/Overlap Antisaccade Task**: Peripheral cues are presented after the fixation point disappears (gap condition, the fixation point disappears 200 ms before the cue appears) or does not disappear (overlap condition, the fixation point continues to appear). Gap conditions reduce antisaccade latency and are used to study attentional disengagement and eye movement preparation mechanisms. Related paradigm: gap-overlap
+- **Memory-Guided Antisaccade Task**: The target only flashes for a very short time (such as 50–100 ms), and the subject needs to perform a saccade to the mirror position of the target after a delay period (a few seconds). Increased working memory load serves to dissociate inhibitory control from spatial working memory components, commonly seen in studies of schizophrenia and frontal lobe damage.
+- **Mixed Pro/Anti Blocked Design (Mixed/Blocked Design Antisaccade Task)**: Separate the directional saccade and antisaccade trials by blocks (rather than randomly mixing them), and the trial types within each block are the same. There is a clear clue at the beginning of the block indicating the current block type. Used to study task switching costs (switch costs) and top-down inhibitory preparation effects.
 
 ---
 
@@ -84,19 +84,19 @@ Munoz, D. P., & Everling, S. (2004). Look away: The anti-saccade task and the vo
 
 ### User Request
 
-> "我想做一个反眼跳实验。屏幕中央先呈现注视点1000到2000 ms随机，然后在左侧或右侧快速闪现一个白色方块作为线索，持续200 ms。线索消失后，在相反方向呈现一个箭头（←或→），持续150 ms。被试需要用左右箭头键尽快判断箭头方向。线索位置和目标方向是独立随机的。总共200个试次，反眼跳和朝向眼跳各占一半。先做20个练习试次。用PsychoPy实现。"
+> "I want to do an antisaccade experiment. The fixation point is first presented in the center of the screen for 1000 to 2000 ms randomly, and then a white square is quickly flashed as a cue on the left or right side for 200 ms. After the cue disappears, an arrow (← or →) is presented in the opposite direction for 150 ms. ms. The subjects need to use the left and right arrow keys to determine the direction of the arrow. The cue position and the target direction are independently randomized. There are 200 trials in total, and 20 practice trials are performed first. "
 
 ### Trial Window Timeline
 
 ```text
 ┌──────────────────────────────┐    ┌──────────────────────────────┐    ┌──────────────────────────────┐    ┌──────────────────────────────┐
 │ Window 1                     │ →  │ Window 2                     │ →  │ Window 3                     │ →  │ Window 4                     │
-│ 注视点                       │    │ 外周线索                     │    │ 目标箭头                     │    │ ITI                          │
-│ Content: + 在屏幕中央        │    │ Content: 白色方块            │    │ Content: ← 或 →              │    │ Content: 空白               │
-│ Duration: 1000-2000 ms 随机  │    │ Duration: 200 ms             │    │ Duration: 150 ms             │    │ Duration: 500-1000 ms       │
-│ Response: 无                 │    │ Response: 无                 │    │ Response: left/right 箭头键  │    │ Response: 无               │
-│ Condition: 无                │    │ Condition: {cue_pos}         │    │ Condition: {target_id}       │    │ Condition: 无               │
-│ Data: 无                     │    │ Data: 无                     │    │ Data: rt, key, acc           │    │ Data: 无                     │
+│ Fixation point │ │ Peripheral cues │ │ Target arrow │ │ ITI │
+│ Content: + in the center of the screen │ │ Content: white square │ │ Content: ← or → │ │ Content: blank │
+│ Duration: 1000-2000 ms Random │ │ Duration: 200 ms │ │ Duration: 150 ms │ │ Duration: 500-1000 ms │
+│ Response: None │ │ Response: None │ │ Response: left/right arrow keys │ │ Response: None │
+│ Condition: None │ │ Condition: {cue_pos} │ │ Condition: {target_id} │ │ Condition: None │
+│ Data: None │ │ Data: None │ │ Data: rt, key, acc │ │ Data: None │
 └──────────────────────────────┘    └──────────────────────────────┘    └──────────────────────────────┘    └──────────────────────────────┘
 ```
 
@@ -104,73 +104,73 @@ Munoz, D. P., & Everling, S. (2004). Look away: The anti-saccade task and the vo
 
 | Field | Value |
 |-------|-------|
-| 实验名称 | 箭头反眼跳任务 |
-| 平台 | PsychoPy |
-| 任务类型 | 反眼跳任务（Antisaccade） |
-| 线索刺激 | 白色方块（外周闪现） |
-| 目标刺激 | 箭头（← 或 →） |
-| 反应方式 | 左右箭头键判断目标箭头方向 |
-| 注视点持续时间 | 1000–2000 ms 随机（均匀分布） |
-| 线索持续时间 | 200 ms |
-| 目标持续时间 | 150 ms |
-| 试次混合比例 | 50% 朝向眼跳 / 50% 反眼跳 |
-| 总试次数 | 200 正式试次 + 20 练习试次 |
-| 反应模式 | 键盘（左右箭头键） |
+| Experiment name | Arrow antisaccade task |
+| Platform | PsychoPy |
+| Task type | Antisaccade task (Antisaccade) |
+| Cue stimulus | White square (peripheral flash) |
+| Target stimulus | Arrow (← or →) |
+| Reaction mode | Left and right arrow keys determine the direction of the target arrow |
+| Fixation duration | 1000–2000 ms Random (uniformly distributed) |
+| Lead duration | 200 ms |
+| target duration | 150 ms |
+| Trial mix ratio | 50% toward saccades / 50% against saccades |
+| Total number of trials | 200 formal trials + 20 practice trials |
+| Reaction Mode | Keyboard (left and right arrow keys) |
 
 ### Missing Information
 
-1. ITI 持续时间未明确说明 → 假设 500–1000 ms 随机，需向用户确认具体范围和分布方式
-2. 练习阶段是否需要反馈提示 → 需确认（通常练习阶段提供正确/错误试次级反馈，正式阶段不提供）
-3. 目标消失后是否有掩蔽刺激 → 用户未提及掩蔽，假设目标直接消失无掩蔽。需确认是否需要视觉掩蔽以防止后像线索
+1. The ITI duration is not clearly stated → Assuming 500–1000 ms random, the specific range and distribution method need to be confirmed with the user
+2. Whether feedback prompts are needed during the practice phase → Confirmation is required (usually correct/wrong trial secondary feedback is provided during the practice phase, but not during the formal phase)
+3. Is there a masking stimulus after the target disappears → The user did not mention masking, assuming that the target disappears directly without masking. Need to confirm whether visual masking is needed to prevent afterimage cues
 
 ### Critical Assumptions
 
-- 注视点持续时间在每个试次中独立随机选取（1000–2000 ms 均匀分布），不使用阶梯变化或自适应调整
-- 线索位置（左/右）与目标箭头方向（←/→）完全交叉平衡（各 50 试次），确保每个条件组合的试次数均匀
-- 反应窗口从目标开始呈现时启动，截止时间为 2000 ms（从目标 onset 算起）。超时标记为错误（`acc = 0`，`timeout = 1`），RT 记录为截止时间值
-- 练习阶段提供试次级反馈（正确/错误），正式阶段不提供反馈，block 间显示休息提示
+- Fixation durations were randomly selected independently in each trial (1000–2000 ms uniformly distributed) without using step changes or adaptive adjustments
+- Cue position (left/right) and target arrow direction (←/→) fully cross-balanced (50 trials each) to ensure an even number of trials per condition combination
+- The response window starts when the target is presented and ends at 2000 ms from target onset. Timeouts are marked as errors (`acc=0`, `timeout=1`) and RTs are logged as deadline values
+- Trial-level feedback (correct/wrong) is provided in the practice phase, no feedback is provided in the formal phase, and rest prompts are displayed between blocks.
 
 ### Code Architecture
 
 ```
 antisaccade.py
-├── 参数设置（注视点持续范围、线索持续、目标持续、ITI范围、反应截止时间）
-├── 窗口初始化（全屏或窗口，背景色设置）
-├── 刺激预加载
-│   ├── TextStim：注视点 "+"
-│   ├── Rect：白色线索方块（出现在左/右侧）
-│   ├── TextStim：箭头 "←" / "→"（出现在左/右侧）
-│   └── TextStim：反馈文字 "正确"/"错误"（仅练习阶段）
-├── 条件表生成
-│   ├── cue_pos × target_id 完全交叉（左/右 × ←/→ = 4 种组合）
-│   ├── trial_type 推导：cue_pos == target_pos → "pro"，否则 → "anti"
-│   ├── corr_ans 推导：target_id "left" → corr_ans "left"，target_id "right" → corr_ans "right"
-│   └── 按 50:50 比例分配 pro/anti，共 200 试次，随机打乱
-├── 试次循环（逐试次执行）：
-│   ├── 注视点窗口（1000–2000 ms 随机，从条件表读取固定随机值确保可复现）
-│   ├── 线索窗口（200 ms，白色方块在左侧或右侧，位置由 cue_pos 决定）
-│   ├── 目标窗口（150 ms，箭头在 target_pos 指定位置呈现）
-│   ├── 反应窗口（deadline 2000 ms，监听 left/right 键，记录 rt 和 key）
-│   ├── 反馈显示（仅练习阶段，500 ms 正确/错误提示）
-│   └── ITI（500–1000 ms 随机，空白屏幕）
-├── 数据保存：try/finally 结构，CSV 逐行写入确保数据安全
-└── 退出提示（实验结束感谢语）
+├── Parameter settings (fixation point duration range, cue duration, target duration, ITI range, response deadline)
+├── Window initialization (full screen or window, background color setting)
+├── Stimulus preloading
+│ ├── TextStim: fixation point "+"
+│ ├── Rect: white clue square (appears on the left/right side)
+│ ├── TextStim: Arrow "←" / "→" (appears on the left/right side)
+│ └── TextStim: Feedback text "correct"/"wrong" (only in the practice phase)
+├── Condition table generation
+│ ├── cue_pos × target_id complete crossover (left/right × ←/→ = 4 combinations)
+│ ├── trial_type derivation: cue_pos == target_pos → "pro", otherwise → "anti"
+│ ├── corr_ans derivation: target_id "left" → corr_ans "left", target_id "right" → corr_ans "right"
+│ └── Distribute pro/anti in a 50:50 ratio, 200 trials in total, randomly shuffled
+├── Trial loop (executed trial by trial):
+│ ├── Fixation point window (1000–2000 ms random, fixed random value is read from the condition table to ensure reproducibility)
+│ ├── Cue window (200 ms, the white square is on the left or right, the position is determined by cue_pos)
+│ ├── Target window (150 ms, the arrow is rendered at the position specified by target_pos)
+│ ├── Response window (deadline 2000 ms, monitor left/right keys, record rt and key)
+│ ├── Feedback display (only practice phase, 500 ms correct/error prompt)
+│ └── ITI (500–1000 ms random, blank screen)
+├── Data saving: try/finally structure, CSV written line by line to ensure data security
+└── Exit prompt (thank you at the end of the experiment)
 ```
 
 ### Expected Data Columns
 
 | Column | Type | Description |
 |--------|------|-------------|
-| trial_index | int | 试次序号（0–199） |
-| cue_pos | str | 线索出现位置（`"left"` 或 `"right"`） |
-| target_id | str | 目标箭头方向（`"left"` 或 `"right"`） |
-| target_pos | str | 目标出现位置（`"left"` 或 `"right"`） |
-| trial_type | str | 试次类型（`"pro"` 或 `"anti"`） |
-| corr_ans | str | 正确反应按键（`"left"` 或 `"right"`） |
-| fix_dur | float | 注视点实际持续时间（ms） |
-| cue_onset | float | 线索开始呈现时间（相对于试次开始，s） |
-| target_onset | float | 目标开始呈现时间（相对于试次开始，s） |
-| rt | float | 反应时间（ms，从目标 onset 算起） |
-| key_resp | str | 被试实际按键（`"left"`、`"right"` 或 `None`） |
-| acc | int | 正确率（1 = 正确，0 = 错误或超时） |
-| timeout | int | 是否超时（1 = 超时未反应，0 = 在截止时间内做出反应） |
+| trial_index | int | Trial number (0–199) |
+| cue_pos | str | The position where the clue appears (`"left"` or `"right"`) |
+| target_id | str | Target arrow direction (`"left"` or `"right"`) |
+| target_pos | str | The position where the target appears (`"left"` or `"right"`) |
+| trial_type | str | Trial type (`"pro"` or `"anti"`) |
+| corr_ans | str | Correct response key (`"left"` or `"right"`) |
+| fix_dur | float | Actual duration of fixation point (ms) |
+| cue_onset | float | cue start presentation time (relative to trial start, s) |
+| target_onset | float | Target start presentation time (relative to trial start, s) |
+| rt | float | Reaction time (ms, from target onset) |
+| key_resp | str | The actual key pressed by the subject (`"left"`, `"right"` or `None`) |
+| acc | int | Accuracy rate (1 = correct, 0 = error or timeout) |
+| timeout | int | Whether to timeout (1 = no response within timeout, 0 = response within deadline) |

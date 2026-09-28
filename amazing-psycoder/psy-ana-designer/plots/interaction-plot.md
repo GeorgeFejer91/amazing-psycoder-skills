@@ -1,25 +1,25 @@
-# 交互作用图 (Interaction Plot)
+# Interaction Plot
 
-## 概述
+## Overview
 
-交互图用分组折线展示两因素的交互效应，是理解交互作用最直观的方式。
+The interaction diagram uses grouped polylines to show the interaction effect of two factors, which is the most intuitive way to understand the interaction.
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| 设计 | 两因素设计（被试内/间/混合） |
-| 关键 | 折线不平行→交互存在 |
+| Design | Two-factor design (within/between/mixed) |
+| Key | Polylines are not parallel → Interaction exists |
 
-## 图表元素
+## Chart elements
 
-| 元素 | 作用 |
+| Element | Function |
 |------|------|
-| 分组折线 | 每个水平的一条均值折线 |
-| 误差棒 | SE或CI |
-| 颜色/线型 | 区分不同水平 |
+| Grouped polyline | One mean polyline for each level |
+| Error bars | SE or CI |
+| Color/line style | Differentiate between different levels |
 
-## R 代码
+## R code
 
 ```r
 ggplot(data_agg, aes(x=factorA, y=mean_rt, color=factorB, group=factorB)) +
@@ -30,17 +30,17 @@ ggplot(data_agg, aes(x=factorA, y=mean_rt, color=factorB, group=factorB)) +
   theme_minimal(12)
 ```
 
-## 解读
+## Interpretation
 
-- **平行线** → 无交互
-- **交叉线** → 强交互（交叉交互）
-- **不平行但不交叉** → 弱交互（ ordinal交互）
-- 交互显著时，主效应的解释需谨慎
+- **Parallel lines** → No interaction
+- **cross lines** → strong interaction (cross interaction)
+- **not parallel but not crossing** → weak interaction (ordinal interaction)
+- When the interaction is significant, the main effect needs to be interpreted with caution
 
-## 关键参数
+## Key parameters
 
-| 参数 | 作用 |
+| Parameters | Function |
 |------|------|
-| `group=factorB` | 按第二个因素分组 |
-| `fun.data=mean_se` | 误差棒用SE |
-| `width` | 误差棒宽度(0.1) |
+| `group=factorB` | Group by second factor |
+| `fun.data=mean_se` | Error bars use SE |
+| `width` | Error bar width (0.1) |

@@ -1,6 +1,6 @@
 # jsPsych — Platform Index
 
-> **状态**: Reference-complete, config-driven generation | **范式**: 26 | **Demo**: 23 `.js`
+> **Status**: Reference-complete, config-driven generation | **Paradigm**: 26 | **Demo**: 23 `.js`
 
 ## Quick links
 

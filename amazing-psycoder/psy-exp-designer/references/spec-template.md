@@ -34,33 +34,33 @@ Use this template to formalize an experiment before coding. Fill in what is know
 Represent each Sequence as an independent row with windows displayed as compact cards connected by arrows (→). Sequence order is top-to-bottom; window order is left-to-right.
 
 ```text
-序列: Trial
-  execution: loop (每个试次一次，重复 N 次)
+Sequence: Trial
+  execution: loop (once per trial, repeated N times)
 
   ┌─ Fixation ─┐  ┌─ Stimulus ───┐  ┌─ Response ────┐  ┌─ ITI ──────┐
   │ "+"        │  │ "{stimulus}" │  │ "{stimulus}"  │  │ ""         │
   │ 500ms      │→ │ 500ms        │→ │ until_key     │→ │ 500-800ms  │
-  │ 无响应     │  │ 无响应       │  │ [f, j, k]     │  │ 无响应     │
+  │ No response │ │ No response │ │ [f, j, k] │ │ No response │
   └────────────┘  └──────────────┘  └───────────────┘  └────────────┘
                                             RT: self
-                                            数据: rt, key, acc
+                                            data: rt, key, acc
 
-序列: Start       → execution: once     → [MISSING]
-序列: Practice    → execution: loop×20  → 同上 + Feedback 窗口
-序列: Main        → execution: loop×80  → 同上 (无 Feedback)
-序列: Rest        → execution: once     → [MISSING]
-序列: End         → execution: once     → [MISSING]
+Sequence: Start → execution: once → [MISSING]
+Sequence: Practice → execution: loop×20 → Same as above + Feedback window
+Sequence: Main → execution: loop×80 → Same as above (no Feedback)
+Sequence: Rest → execution: once → [MISSING]
+Sequence: End → execution: once → [MISSING]
 ```
 
 Then fill the supporting table for each window in the trial sequence:
 
-| 窗口 | 内容 | 持续时间 | 响应 | 条件绑定 | 数据 |
+| Window | Content | Duration | Response | Condition Binding | Data |
 |--------|---------|----------|----------|-----------------|------|
-| Fixation | "+" | 500ms | 无 | 无 | onset |
-| Stimulus | {stimulus} | 500ms | 无 | {stimulus} | onset |
+| Fixation | "+" | 500ms | None | None | onset |
+| Stimulus | {stimulus} | 500ms | None | {stimulus} | onset |
 | Response | {stimulus} | until_key | [f, j, k] | {stimulus}, {correct_response} | onset, rt, key, acc |
-| Feedback | correct/incorrect | 500ms | 无 | 无 | 无 |
-| ITI | "" | [500, 800] | 无 | 无 | 无 |
+| Feedback | correct/incorrect | 500ms | None | None | None |
+| ITI | "" | [500, 800] | None | None | None |
 
 Mark unclear items as `[MISSING]` directly in the card and table. Do not invent values silently.
 

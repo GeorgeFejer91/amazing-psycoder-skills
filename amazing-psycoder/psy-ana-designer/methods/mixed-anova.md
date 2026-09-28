@@ -1,37 +1,37 @@
-# 混合 ANOVA (Split-plot)
+# Mixed ANOVA (Split-plot)
 
-## 概述
+## Overview
 
-混合 ANOVA 同时包含被试内因素和被试间因素。
+Mixed ANOVA includes both within-subjects factors and between-subjects factors.
 
-**典型场景**: 2(组别: ADHD/对照组, 被试间) × 2(条件: 一致/不一致, 被试内) 的交互效应。
+**Typical scenario**: 2 (group: ADHD/control group, between subjects) × 2 (condition: consistent/incongruent, within subjects) interaction effect.
 
-## 何时使用
+## When to use
 
-| 条件 | 要求 |
+| Conditions | Requirements |
 |------|------|
-| 设计 | 至少1个被试内IV + 1个被试间IV |
-| DV | 连续 |
-| 关键 | 组×条件的交互效应 |
+| Design | At least 1 within-subject IV + 1 between-subject IV |
+| DV | Continuous |
+| Key | Interaction effect of Group × Condition |
 
-## 关键输出
+## Key output
 
-- **组间主效应**: 被试间因素的整体差异
-- **被试内主效应**: 条件的主效应
-- **交互作用**: 组×条件——这是混合设计的核心。组间差异是否在不同条件下有所不同?
+- **Main effect between groups**: The overall difference in factors between subjects
+- **Within-subjects main effect**: Main effect of condition
+- **Interaction**: Group × Condition - This is the core of a mixed design. Do group differences differ across conditions?
 
-## 效应量
+## Effect size
 
-η²p。交互效应的η²p通常比主效应更受关注。
+η²p. The η²p of the interaction effect is usually more interesting than the main effect.
 
-## R 代码
+## R code
 
 ```r
-# 加载所需包
+# Load required packages
 library(afex)
 library(emmeans)
 
-# 模拟数据
+# Simulation data
 set.seed(123)
 n_per_group <- 30
 data <- data.frame(
@@ -41,7 +41,7 @@ data <- data.frame(
   incongruent = c(rnorm(n_per_group, 600, 90), rnorm(n_per_group, 500, 75))
 )
 
-# 转换为长格式
+# Convert to long format
 data_long <- reshape(
   data,
   direction = "long",
@@ -53,7 +53,7 @@ data_long <- reshape(
 )
 data_long$condition <- factor(data_long$condition)
 
-# 混合 ANOVA（afex，默认 GG 校正 + 偏 η²）
+# Mixed ANOVA (afex, default GG corrected + partial η²)
 model <- aov_ez(
   id          = "subject",
   dv          = "rt",
@@ -63,18 +63,18 @@ model <- aov_ez(
   anova_table = list(correction = "GG", es = "pes")
 )
 
-# 输出 ANOVA 表
+# Output ANOVA table
 print(model)
 
-# 交互效应显著时的简单效应分析
+# Simple effect analysis when the interaction effect is significant
 em <- emmeans(model, ~ condition | group)
 print(pairs(em))
 ```
 
-## 报告格式
+## Report format
 
 > A 2(Group)×2(Condition) mixed ANOVA revealed a significant Group×Condition interaction, F(1,58)=6.45, p=.014, η²p=.10. The ADHD group showed a larger congruency effect (M_diff=85ms) than controls (M_diff=45ms).
 
-## 备选方法
+## Alternative method
 
 - **lmer**: `dv ~ group*condition + (1+condition|subject)`

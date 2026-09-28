@@ -1,79 +1,79 @@
-# 调节分析 (Moderation Analysis)
+# Moderation Analysis
 
-## 概述
+## Overview
 
-调节分析检验第三个变量(W)是否改变X和Y之间关系的**强度或方向**。相当于"交互效应"。
+Moderation analysis tests whether a third variable (W) changes the **strength or direction** of the relationship between X and Y. Equivalent to "interaction effect".
 
-**典型场景**: 压力(X)对任务表现(Y)的影响是否被社会支持(W)缓冲。社会支持是调节变量。
+**Typical scenario**: Whether the impact of stress (X) on task performance (Y) is buffered by social support (W). Social support is the moderating variable.
 
-## 何时使用
+## When to use
 
-| 条件 | 要求 |
+| Conditions | Requirements |
 |------|------|
-| 研究问题 | 检验第三个变量是否改变X→Y关系的**强度**或**方向** |
-| 自变量 (X) | 连续变量（也可以是分类变量） |
-| 因变量 (Y) | 连续变量 |
-| 调节变量 (W) | 连续变量或分类变量（如性别、实验条件） |
-| 样本信息 | 由交互效应、预测变量分布/可靠性、组不平衡和目标区间精度决定；用设计模拟/功效分析，不设通用 N 门槛 |
-| 核心假设 | 线性关系、残差独立性与正态性、方差齐性、无多重共线性 |
-| 数据预处理 | 连续自变量和调节变量建议**中心化**后再计算乘积项 |
-| 交互项显著性 | X×W 交互项显著是调节效应成立的前提 |
+| Research question | Test whether the third variable changes the **strength** or **direction** of the X→Y relationship |
+| Independent variable (X) | Continuous variable (can also be a categorical variable) |
+| Dependent variable (Y) | Continuous variable |
+| Moderator variable (W) | Continuous variable or categorical variable (such as gender, experimental condition) |
+| Sample information | Determined by interaction effects, predictor distribution/reliability, group imbalance, and target interval accuracy; using design simulation/power analysis, no universal N threshold |
+| Core assumptions | Linear relationship, independence and normality of residuals, homogeneity of variances, no multicollinearity |
+| Data preprocessing | It is recommended that continuous independent variables and adjustment variables be centered before calculating the product term |
+| Significance of the interaction term | X×W The significance of the interaction term is the prerequisite for the establishment of the moderating effect |
 
-## 模型
+## Model
 
 ```
-        W (调节变量)
+        W (manipulated variable)
         │
 X ──────→ Y
         
-X×W ────→ Y  (交互项是关键)
+X×W ────→ Y (the interaction term is the key)
 ```
 
-- **交互项显著** → W调节X→Y的关系
-- 交互项不显著 → W不调节
+- **Interaction term is significant** → W moderates the relationship of X→Y
+- The interaction term is not significant → W is not adjusted
 
-## 简单斜率分析 (Simple Slopes)
+## Simple Slopes
 
-交互显著后必须做简单斜率:
-- 在W的高值(+1SD)上: X对Y的效应?
-- 在W的均值上: X对Y的效应?
-- 在W的低值(-1SD)上: X对Y的效应?
+After the interaction is significant, a simple slope must be done:
+- At high values of W (+1SD): Effect of X on Y?
+- On the mean of W: What is the effect of X on Y?
+- At low values of W (-1SD): Effect of X on Y?
 
-## R代码
+## R code
 
 ```r
 library(interactions)
 model <- lm(Y ~ X * W, data=data)  # X*W = X + W + X:W
 summary(model)
 
-# 简单斜率
+# Simple slope
 sim_slopes(model, pred=X, modx=W)
 interact_plot(model, pred=X, modx=W)
 ```
 
-## 连续调节变量的可视化
+## Visualization of continuous adjustment variables
 
-Johnson-Neyman图: 显示X的效应在W的哪个区间显著。比±1SD的传统方法更精确。
+Johnson-Neyman plot: Shows which interval of W the effect of X is significant. More accurate than the traditional method of ±1SD.
 
-## 报告格式
+## Report format
 
 > A moderation analysis examined whether social support (W) moderated the effect of stress (X) on performance (Y). The interaction was significant, b=-0.25, t(96)=-3.12, p=.002. Simple slopes revealed that stress reduced performance under low support (b=-0.45, p<.001) but not under high support (b=-0.05, p=.42).
 
-## 报告格式 (APA 7th)
+## Report Format (APA 7th)
 
-调节分析采用层次回归（hierarchical multiple regression）检验 [W] 是否调节 [X] 与 [Y] 之间的关系。所有连续预测变量均已中心化处理以降低多重共线性。整体模型显著，*F*([df1], [df2]) = [F], *p* = [p], *R*² = [R²]。
+Moderation analysis uses hierarchical multiple regression to test whether [W] moderates the relationship between [X] and [Y]. All continuous predictor variables were centered to reduce multicollinearity. The overall model is significant, *F*([df1], [df2]) = [F], *p* = [p], *R*² = [R²].
 
-[X] 与 [W] 的交互项显著，*b* = [b], *SE* = [SE], 95% CI [[LL], [UL]], *t*([df]) = [t], *p* = [p], Δ*R*² = [ΔR²]，表明 [W] 显著调节了 [X] 对 [Y] 的效应。
+The interaction term between [X] and [W] is significant, *b* = [b], *SE* = [SE], 95% CI [[LL], [UL]], *t*([df]) = [t], *p* = [p], Δ*R*² = [ΔR²], indicating that [W] significantly moderates the effect of [X] on [Y].
 
-简单斜率分析（Aiken & West, 1991）显示：
-- 低 [W] (-1 *SD*) 条件下，[X] 对 [Y] 的效应 [显著/不显著]，*b* = [b], *t*([df]) = [t], *p* = [p]；
-- 均值 [W] 条件下，[X] 对 [Y] 的效应 [显著/不显著]，*b* = [b], *t*([df]) = [t], *p* = [p]；
-- 高 [W] (+1 *SD*) 条件下，[X] 对 [Y] 的效应 [显著/不显著]，*b* = [b], *t*([df]) = [t], *p* = [p]。
+Simple slope analysis (Aiken & West, 1991) shows:
+- Under low [W] (-1 *SD*) conditions, the effect of [X] on [Y] [significant/not significant], *b* = [b], *t*([df]) = [t], *p* = [p];
+- Under the condition of mean [W], the effect of [X] on [Y] [significant/not significant], *b* = [b], *t*([df]) = [t], *p* = [p];
+- Under the condition of high [W] (+1 *SD*), the effect of [X] on [Y] is [significant/not significant], *b* = [b], *t*([df]) = [t], *p* = [p].
 
-上述结果表明，随着 [W] 的升高，[X] 对 [Y] 的效应 [增强/减弱/方向反转]。图 [X] 展示了调节效应的交互图与简单斜率。
+The above results show that as [W] increases, the effect of [X] on [Y] [increases/decreases/reverses direction]. Figure [X] shows an interaction plot of the moderation effect versus a simple slope.
 
-## 常见错误
+## Common errors
 
-- ❌ 不做简单斜率直接报告"调节显著"——无法说明效应方向
-- ❌ 连续变量未中心化就做乘积——导致多重共线性
-- ❌ 交互不显著还强行做简单斜率
+- ❌ Directly report "significant adjustment" without doing a simple slope - unable to explain the direction of the effect
+- ❌ Continuous variables are multiplied without centering - leading to multicollinearity
+- ❌ The interaction is not significant and a simple slope is forced

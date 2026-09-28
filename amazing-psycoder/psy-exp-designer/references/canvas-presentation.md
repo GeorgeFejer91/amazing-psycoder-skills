@@ -8,7 +8,7 @@ saved config remains authoritative; these views make its meaning inspectable.
 
 - Show each sequence as an independent row separated by blank lines.
 - Show sequences top-to-bottom and windows left-to-right.
-- Start with `序列: <name>` plus condition table, cycles, and order policy.
+- Start with `sequence: <name>` plus condition table, cycles, and order policy.
 - One cycle traverses every table row once; without a table it executes the window chain once.
 - Each window card shows label, content, duration, and response mode.
 - Annotate the response window with its RT anchor and recorded data.
@@ -17,52 +17,52 @@ saved config remains authoritative; these views make its meaning inspectable.
 - Show every sequence, including instructions, practice, rest, and end rows.
 
 ```text
-序列: Trial
-  条件表: formal_table · cycles: 1 · order: fixed_random(seed=sub-01)
+Sequence: Trial
+  Condition table: formal_table · cycles: 1 · order: fixed_random(seed=sub-01)
 
   ┌─ Fixation ─┐  ┌─ Stimulus ───┐  ┌─ Response ────┐  ┌─ ITI ──────┐
   │ "+"        │  │ "{stimulus}" │  │ "{stimulus}"  │  │ ""         │
   │ 500ms      │→ │ 500ms        │→ │ until_key     │→ │ 500-800ms  │
-  │ 无响应     │  │ 无响应       │  │ [f, j, k]     │  │ 无响应     │
+  │ No response │ │ No response │ │ [f, j, k] │ │ No response │
   └────────────┘  └──────────────┘  └───────────────┘  └────────────┘
                                             RT: Response onset
-                                            数据: rt, key, acc
+                                            data: rt, key, acc
 
-序列: Start       → 无条件表 · cycles: 1 → 欢迎文字
-序列: End         → 无条件表 · cycles: 1 → 感谢文字
+Sequence: Start → Unconditional table · cycles: 1 → Welcome text
+Sequence: End → Unconditional table · cycles: 1 → Thank you text
 ```
 
 ## Phase decision checklist
 
 ```text
-## Phase N 设计决策确认清单
+## Phase N Design Decision Checklist
 
-| # | 决策项 | 确认值 | 来源 |
+| # | Decision item | Confirmation value | Source |
 |---|--------|--------|------|
-| 1 | 注视点持续时间 | 500ms | 用户确认 |
-| 2 | 反应按键 | f/j/k | 用户确认 |
-| 3 | 反应截止时间 | 2000ms | 通用建议（待确认）⚠️ |
+| 1 | Fixation duration | 500ms | User confirmation |
+| 2 | Response button | f/j/k | User confirmation |
+| 3 | Response deadline | 2000ms | General recommendations (to be confirmed) ⚠️ |
 ```
 
-Only `用户确认` is confirmed. Values from a template, general suggestion, or
+Only `User confirmation` is confirmed. Values from a template, general suggestion, or
 automatic inference remain proposed and visibly marked until accepted.
 
 ## Cumulative Decision Registry
 
 ```text
-## 实验设计决策注册表
+## Experimental design decision registration form
 
 ### Phase 1: Assess
-| # | 决策项 | 值 | 来源 |
+| # | Decision item | Value | Source |
 |---|--------|-----|------|
-| 1 | 实验范式 | Stroop | 用户描述 |
-| 2 | 平台 | PsychoPy | 用户确认 |
+| 1 | Experimental Paradigm | Stroop | User Description |
+| 2 | Platform | PsychoPy | User Confirmation |
 
 ### Phase 2: Windows & Rules
-| # | 决策项 | 值 | 来源 |
+| # | Decision item | Value | Source |
 |---|--------|-----|------|
-| 3 | 反应时定义 | 刺激实际呈现至按键按下 | 用户确认 |
-| 4 | 注视点持续时间 | 500ms | 默认（通用）⚠️ |
+| 3 | Response time definition | Actual presentation of stimulus to button press | User confirmation |
+| 4 | Fixation duration | 500ms | Default (universal) ⚠️ |
 ```
 
 Every non-trivial design decision must appear exactly once with its source.
@@ -78,7 +78,7 @@ The final review contains:
    bindings, RT anchor, and recorded data.
 3. The complete cumulative Decision Registry.
 4. An explicit list of every proposed/defaulted/inferred value marked ⚠️.
-5. The question: `以上所有设计决策确认无误，可以生成代码？如需修改请指定编号和新值。`
+5. The question: `Are all the above design decisions confirmed and can code be generated? If you need to modify it, please specify the number and new value. `
 
 Do not route to the Coder until the user explicitly confirms the complete
 review. If an item changes, update the config and registry, repeat technical

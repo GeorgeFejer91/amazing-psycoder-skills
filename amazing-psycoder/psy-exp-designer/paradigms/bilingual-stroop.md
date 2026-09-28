@@ -6,7 +6,7 @@
 
 ## When to Use
 
-User mentions: Bilingual Stroop, blocked Stroop, cross-language Stroop, 双语斯特鲁普. A variant of the classic Stroop task using blocked language conditions to compare the magnitude of Stroop interference across a participant's native and non-native languages.
+User mentions: Bilingual Stroop, blocked Stroop, cross-language Stroop, bilingual Stroop. A variant of the classic Stroop task using blocked language conditions to compare the magnitude of Stroop interference across a participant's native and non-native languages.
 
 ## Core Logic
 
@@ -54,7 +54,7 @@ Stroop, J. R. (1935). Studies of interference in serial verbal reactions. *Journ
 
 ## Do Not Assume
 
-- Do not assume the two languages use the same color words — verify the exact word set for each language (e.g., English: RED/GREEN/BLUE; Chinese: 红/绿/蓝). Different languages may use different numbers of words or different translation conventions.
+- Do not assume the two languages use the same color words — verify the exact word set for each language (e.g., English: RED/GREEN/BLUE; Mandarin: the corresponding Mandarin color words). Different languages may use different numbers of words or different translation conventions.
 - Do not assume a single condition file drives both language blocks — the bilingual blocked design typically uses two separate condition files (one per language). Confirm whether the user has prepared both files before generating code.
 - Do not assume counterbalancing is done via random assignment — the Pavlovia demo uses explicit Group A/B assignment at runtime. Confirm whether between-subjects counterbalancing (group assignment) or within-subjects (all participants see both orders) is preferred.
 - Do not assume the response key mapping is identical across languages — while the standard design uses the same three-key mapping for both blocks, some designs may use different key mappings per language (e.g., first-letter mapping in each language). Confirm explicitly.
@@ -67,115 +67,115 @@ Columns in the xlsx/csv file that drives each trial (one file per language):
 
 | Column | Type | Description |
 |--------|------|-------------|
-| word | str | 颜色词文本（如 `RED`、`红`） |
-| ink_color | str | 墨水颜色名称（如 `red`、`red`） |
-| congruency | str | `"congruent"` 或 `"incongruent"` |
+| word | str | color word text in the language being tested (for example, `RED`) |
+| ink_color | str | Ink color name (such as `red`, `red`) |
+| congruency | str | `"congruent"` or `"incongruent"` |
 
 ## Variants
 
-- **经典双语组块 Stroop（Classic Bilingual Blocked Stroop）**：两个语言各为一个独立 block，block 内包含一致和不一致试次。参与者按固定或被试间平衡的顺序完成两个语言 block。详见本文件。
-- **混合双语 Stroop（Mixed Bilingual Stroop）**：两种语言的试次在同一个 block 内随机混合呈现。相比组块设计，混合设计可以考察语言切换成本对 Stroop 效应的调节作用。代码生成时需在条件文件中增加 `language` 列以标记每个试次的语言。
-- **情绪双语 Stroop（Emotional Bilingual Stroop）**：将 Stroop 刺激替换为情绪词（正面/负面/中性），考察双语者对情绪词的注意偏向及其跨语言差异。需额外确认情绪词词库和效价评分。可参考情绪 Stroop 相关范式文件。
+- **Classic Bilingual Blocked Stroop**: Each of the two languages is an independent block, and the block contains consistent and inconsistent trials. Participants completed two language blocks in a fixed or inter-subjects counterbalanced order. See this document for details.
+- **Mixed Bilingual Stroop**: Trials of two languages ​​are randomly mixed and presented within the same block. Compared with the block design, the mixed design can examine the moderating effect of language switching costs on the Stroop effect. When generating code, a `language` column needs to be added to the condition file to mark the language of each trial.
+- **Emotional Bilingual Stroop (Emotional Bilingual Stroop)**: Replace Stroop stimuli with emotional words (positive/negative/neutral) to examine bilinguals' attention bias toward emotional words and their cross-language differences. Additional confirmation of the emotion word vocabulary and valence scores is required. Please refer to the emotional Stroop related paradigm documents.
 
 ## Example
 
 ### User Request
 
-> "我要做一个双语Stroop实验。两种语言是中文和英文，中文作为母语，英文作为第二语言。颜色有红、绿、蓝三种，按键用r/g/b对应颜色。每个语言block 60个试次，一致和不一致各30个。采用被试间平衡，一半先做中文后做英文，一半反过来。实验前有一个统一的练习block（12个试次）。用PsychoPy实现。"
+> "I want to do a bilingual Stroop experiment. The two languages are Chinese and English, Chinese as the mother tongue and English as the second language. There are three colors: red, green and blue, and the buttons use r/g/b to correspond to the color. Each language block There are 60 trials, 30 trials each for consistency and inconsistency. The subjects are balanced, with half doing Chinese first and half the other way around. There is a unified practice block (12 trials) before the experiment.
 
 ### Trial Window Timeline
 
 ```text
 ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐
 │ Window 1                 │ →  │ Window 2                 │ →  │ Window 3                 │ →  │ Window 4                 │
-│ 注视点                   │    │ Stroop 刺激              │    │ 反馈（仅练习阶段）       │    │ 试次间隔                 │
-│ Content: +               │    │ Content: 颜色词           │    │ Content: 正确/错误       │    │ Content: 空白            │
-│ Duration: 500 ms         │    │ Duration: 直到按键       │    │ Duration: 500 ms         │    │ Duration: 500-800 ms     │
-│ Response: 无             │    │ Response: r/g/b 键       │    │ Response: 无             │    │ Response: 无             │
-│ Condition: 无            │    │ Condition: {word,        │    │ Condition: 无            │    │ Condition: 无            │
-│ Data: 无                 │    │  ink_color, congruency,  │    │ Data: 无                 │    │ Data: 无                 │
+│ Fixation point │ │ Stroop stimulus │ │ Feedback (only practice phase) │ │ Trial interval │
+│ Content: + │ │ Content: color word │ │ Content: correct/wrong │ │ Content: blank │
+│ Duration: 500 ms │ │ Duration: until the key is pressed │ │ Duration: 500 ms │ │ Duration: 500-800 ms │
+│ Response: None │ │ Response: r/g/b key │ │ Response: None │ │ Response: None │
+│ Condition: None │ │ Condition: {word, │ │ Condition: None │ │ Condition: None │
+│ Data: None │ │ ink_color, congruency, │ │ Data: None │ │ Data: None │
 │                          │    │  language}               │    │                          │    │                          │
 │                          │    │ Data: rt, key, acc       │    │                          │    │                          │
 └──────────────────────────┘    └──────────────────────────┘    └──────────────────────────┘    └──────────────────────────┘
 ```
 
-| Window | 内容 | 持续时间 | 反应 | 条件 | 数据 |
+| Window | Content | Duration | Response | Condition | Data |
 |--------|------|----------|------|------|------|
-| 注视点 | + | 500 ms | 无 | 无 | 无 |
-| Stroop 刺激 | 颜色词（红/绿/蓝 或 RED/GREEN/BLUE） | 直到按键（无截止时间） | r/g/b 键 | {word, ink_color, congruency, language} | rt, key, acc |
-| 反馈 | 正确/错误（仅练习） | 500 ms | 无 | 无 | 无 |
-| ITI | 空白 | 500-800 ms 随机 | 无 | 无 | 无 |
+| fixation point | + | 500 ms | none | none | none |
+| Stroop stimulus | color word (RED/GREEN/BLUE or RED/GREEN/BLUE) | until key pressed (no deadline) | r/g/b key | {word, ink_color, congruency, language} | rt, key, acc |
+| Feedback | True/False (Practice only) | 500 ms | None | None | None |
+| ITI | Blank | 500-800 ms Random | None | None | None |
 
 ### Parsed Experiment Specification
 
 | Field | Value |
 |-------|-------|
-| 实验名称 | 中英双语 Stroop 任务 |
-| 平台 | PsychoPy |
-| 任务类型 | 双语组块 Stroop（Bilingual Blocked Stroop） |
-| 语言1（母语） | 中文（红、绿、蓝） |
-| 语言2（第二语言） | 英文（RED、GREEN、BLUE） |
-| 颜色集 | 红、绿、蓝（red、green、blue） |
-| 反应按键 | r→红/red, g→绿/green, b→蓝/blue |
-| 每语言试次数 | 60（30 congruent + 30 incongruent） |
-| 平衡方式 | 被试间：Group A 先中后英，Group B 先英后中 |
-| 练习试次 | 12 个（统一练习） |
-| 阶段 | 指导语 → 练习(12) → Block1(60) → Block2(60) → 结束 |
+| Experiment name | Chinese-English bilingual Stroop task |
+| Platform | PsychoPy |
+| Task Type | Bilingual Blocked Stroop (Bilingual Blocked Stroop) |
+| Language 1 (Native) | Chinese (Red, Green, Blue) |
+| Language 2 (Second Language) | English (RED, GREEN, BLUE) |
+| Color set | red, green, blue (red, green, blue) |
+| Response button | r→red/red, g→green/green, b→blue/blue |
+|Number of trials per language | 60 (30 congruent + 30 incongruent) |
+| Balanced method | Between subjects: Group A speaks Chinese first and then English, Group B speaks English first and then Chinese |
+| Practice trials | 12 (unified practice) |
+| Stage | Instructions → Exercise(12) → Block1(60) → Block2(60) → End |
 
 ### Missing Information
 
-1. 指导语内容未说明 → 需确认中文和英文 block 前的指导语具体内容（是否用对应语言呈现指导语？）
-2. 反馈阶段未提及 → 已假设仅练习阶段有反馈，正式阶段无反馈（标准 Stroop 做法）
-3. 练习阶段的试次构成未说明 → 需确认练习是双语混合还是仅用一种语言？一致/不一致比例？
+1. The content of the instruction is not specified → It is necessary to confirm the specific content of the instruction before the Chinese and English blocks (is the instruction presented in the corresponding language?)
+2. The feedback stage is not mentioned → It is assumed that there is feedback only in the practice stage and no feedback in the formal stage (standard Stroop practice)
+3. The trial composition of the practice phase is not specified → Need to confirm whether the practice is bilingual or only in one language? Consistent/incongruent ratio?
 
 ### Critical Assumptions
 
-- 练习 block 使用双语混合试次（中文和英文各半），帮助参与者熟悉两种语言的按键映射
-- 正式 block 无试次级反馈，仅 block 间有短暂休息提示
-- 按键映射在两种语言 block 中保持一致（r/g/b 对应三种颜色），不随语言变化
-- 刺激以随机顺序呈现，无连续 3 个以上相同一致性的试次
-- 无反应截止时间（response-terminated），参与者按键后立即进入下一窗口
+- Practice block uses bilingual mixed trials (half Chinese and half English) to help participants familiarize themselves with the key mappings in both languages
+- Official block has no trial secondary feedback, only short rest prompts between blocks.
+-The key mapping is consistent in the two language blocks (r/g/b corresponds to three colors) and does not change with the language
+- Stimuli are presented in random order, with no more than 3 consecutive trials of the same consistency
+- No response deadline (response-terminated), the participant will immediately enter the next window after pressing the button
 
 ### Code Architecture
 
 ```
 bilingual_stroop.py
-├── 参数定义（语言顺序、颜色映射、按键、试次数、时间参数）
-├── 窗口设置（全屏/窗口、背景色、单位）
-├── 刺激预加载（TextStim × 2：中文和英文颜色词；Polygon 注视点）
-├── 条件文件加载（chinese.xlsx, english.xlsx）
-├── 被试分组（奇偶编号 → Group A/B）
-├── 实验阶段：
-│   ├── 指导语（通用 + 语言特定）
-│   ├── 练习 block（12 试次，有反馈）
-│   │   ├── 注视点（500 ms）
-│   │   ├── Stroop 刺激（直到按键）
-│   │   ├── 反馈（500 ms）
-│   │   └── ITI（500-800 ms 随机）
-│   ├── Block 1（按分组顺序的第一个语言，60 试次）
-│   │   ├── Block 指导语
-│   │   └── 试次循环（注视点 → 刺激 → ITI）
-│   └── Block 2（按分组顺序的第二个语言，60 试次）
-│       ├── Block 指导语
-│       └── 试次循环（注视点 → 刺激 → ITI）
-├── 数据保存：try/finally + 逐行写入 CSV
-└── 结束画面
+├── Parameter definition (language sequence, color mapping, keys, number of trials, time parameters)
+├── Window settings (full screen/window, background color, unit)
+├── Stimulus preloading (TextStim × 2: Chinese and English color words; Polygon fixation point)
+├── Conditional file loading (chinese.xlsx, english.xlsx)
+├── Subject grouping (odd and even number → Group A/B)
+├── Experimental phase:
+│ ├── Instructions (general + language specific)
+│ ├── Practice block (12 trials, with feedback)
+│ │ ├── Fixation point (500 ms)
+│ │ ├── Stroop stimulation (until the key is pressed)
+│ │ ├── Feedback (500 ms)
+│ │ └── ITI (500-800 ms random)
+│ ├── Block 1 (first language in grouping order, 60 trials)
+│ │ ├── Block instructions
+│ │ └── Trial cycle (fixation point → stimulus → ITI)
+│ └── Block 2 (second language in grouping order, 60 trials)
+│ ├── Block instructions
+│ └── Trial cycle (fixation point → stimulus → ITI)
+├── Data saving: try/finally + write to CSV line by line
+└── End screen
 ```
 
 ### Expected Data Columns
 
 | Column | Type | Description |
 |--------|------|-------------|
-| participant | str | 被试编号 |
-| group | str | 分组（A 或 B） |
-| language | str | 试次语言（`"chinese"` 或 `"english"`） |
-| block_type | str | 阶段类型（`"practice"` 或 `"formal"`） |
-| block_num | int | Block 编号（1 或 2，练习为 0） |
-| trial_num | int | Block 内试次编号 |
-| word | str | 呈现的颜色词文本 |
-| ink_color | str | 墨水颜色名称 |
-| congruency | str | 一致性（`"congruent"` 或 `"incongruent"`） |
-| correct_key | str | 正确按键（`"r"` / `"g"` / `"b"`） |
-| key_pressed | str | 参与者实际按键 |
-| rt | float | 反应时（ms） |
-| acc | int | 正确率（1 = 正确，0 = 错误） |
+| participant | str | participant number |
+| group | str | group (A or B) |
+| language | str | Trial language (`"chinese"` or `"english"`) |
+| block_type | str | stage type (`"practice"` or `"formal"`) |
+| block_num | int | Block number (1 or 2, 0 for practice) |
+| trial_num | int | Block trial number |
+| word | str | rendered color word text |
+| ink_color | str | ink color name |
+| congruency | str | consistency (`"congruent"` or `"incongruent"`) |
+| correct_key | str | Correct key (`"r"` / `"g"` / `"b"`) |
+| key_pressed | str | Actual key pressed by the participant |
+| rt | float | reaction time (ms) |
+| acc | int | Accuracy rate (1 = correct, 0 = incorrect) |

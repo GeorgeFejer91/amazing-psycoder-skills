@@ -6,7 +6,7 @@
 
 ## When to Use
 
-User mentions: Staircase, psychophysics, adaptive threshold, orientation discrimination, just noticeable difference, 心理物理阶梯法, 自适应阈值. An adaptive psychophysical procedure that efficiently estimates sensory thresholds by adjusting stimulus intensity based on the participant's recent performance.
+User mentions: Staircase, psychophysics, adaptive threshold, orientation discrimination, just noticeable difference, psychophysical staircase method, adaptive threshold. An adaptive psychophysical procedure that efficiently estimates sensory thresholds by adjusting stimulus intensity based on the participant's recent performance.
 
 ## Core Logic
 
@@ -72,26 +72,26 @@ Levitt, H. (1971). Transformed up-down methods in psychoacoustics. *The Journal 
 
 ## Do Not Assume
 
-- Do not assume 阶梯法使用 1-up 1-down 规则。虽然这是自定义阶梯法的默认实现，但不同的上下规则收敛于不同的阈限水平。1-up 1-down 收敛于 50% 正确率阈限，2-up 1-down 收敛于约 70.7%，3-up 1-down 收敛于约 79.4%。生成代码前必须确认具体规则，否则阈限估计的系统偏差将无法控制。
-- Do not assume 起始值总是很大（容易辨别）。本实现从 70 度起始（方向辨别差异很大），但起始值应根据具体知觉维度和被试群体调整。起始值过大导致阶梯收敛缓慢（需要更多试次才能接近阈限），起始值过小导致早期试次全是错误反应、被试受挫。需确认起始值对应的任务难度。
-- Do not assume 步长序列固定不变。本实现使用 [10, 5, 2, 1, 0.5] 度的递减步长序列，但步长的选择取决于刺激维度（对比度、空间频率、运动一致性等）和阈限期望精度。固定步长（如始终 2 dB）和递减序列各有优劣，需确认步长策略。
-- Do not assume 阈限计算使用所有 reversal 的平均值。有些阶梯实现会排除前 1-3 个 reversal（允许阶梯先收敛到阈限附近再开始正式记录），仅用后几个 reversal 计算阈限。需确认是否排除初始 reversal，以及阈限的计算方式（均值还是中位数）。
-- Do not assume 阶梯法不需要条件文件。虽然传统阶梯法的刺激水平完全由被试前几个试次的表现决定（自适应），但许多现代实现仍需要条件文件来指定：多个交叉阶梯的起始值、每种条件下的 staircase ID、或 block 级别的参数设置。尤其在交错阶梯设计中，条件文件是必需的。
-- Do not assume 知觉维度总是朝向辨别（grating tilt）。本参考实现使用光栅倾斜辨别（orientation discrimination），但阶梯法广泛应用于对比度检测（contrast detection）、运动一致性辨别（motion coherence）、听觉频率辨别（auditory frequency discrimination）、触觉阈值等各类心理物理任务。刺激创建和 staircase 更新逻辑随知觉维度不同而有本质差异。
+- Do not assume the ladder method uses the 1-up 1-down rule. Although this is the default implementation of the custom ladder method, different upper and lower rules converge to different threshold levels. 1-up 1-down converges to the 50% accuracy threshold, 2-up 1-down converges to about 70.7%, and 3-up 1-down converges to about 79.4%. Specific rules must be confirmed before generating code, otherwise systematic biases in threshold estimates will be uncontrollable.
+- Do not assume that the starting value is always large (easily identifiable). This implementation starts at 70 degrees (directional discrimination varies widely), but the starting value should be adjusted according to the specific perceptual dimension and subject population. A starting value that is too large will result in slow convergence of the ladder (more trials are needed to approach the threshold), and a starting value that is too small will result in incorrect responses in early trials and subject frustration. You need to confirm the task difficulty corresponding to the starting value.
+- Do not assume that the step sequence is fixed. This implementation uses a sequence of decreasing steps of [10, 5, 2, 1, 0.5] degrees, but the choice of steps depends on the stimulus dimensions (contrast, spatial frequency, motion consistency, etc.) and the threshold desired accuracy. Fixed step sizes (e.g. 2 dB always) and decreasing sequences each have advantages and disadvantages, and the step size strategy needs to be confirmed.
+- Do not assume that the threshold calculation uses the average of all reversals. Some ladder implementations will exclude the first 1-3 reversals (allowing the ladder to converge near the threshold before starting formal recording), and only use the last few reversals to calculate the threshold. You need to confirm whether to exclude the initial reversal and how the threshold is calculated (mean or median).
+- Do not assume that the ladder method does not require a condition file. While the stimulation level of the traditional staircase method is completely determined by the subject's performance on the first few trials (adaptive), many modern implementations still require condition files to specify: starting values ​​for multiple cross-stairs, staircase IDs for each condition, or block-level parameter settings. Especially in staggered ladder designs, condition documentation is required.
+- Do not assume that the perceptual dimension is always toward the grating tilt. This reference implementation uses orientation discrimination, but the ladder method is widely used in various psychophysical tasks such as contrast detection, motion coherence, auditory frequency discrimination, and tactile thresholds. Stimulus creation and staircase update logic differ substantially across perceptual dimensions.
 
 ## Condition File Columns
 
 | Column | Type | Description |
 |--------|------|-------------|
-| staircase_id | int | 阶梯编号，用于交错阶梯设计中区分不同的 staircase（如不同起始值或不同刺激条件）。单阶梯设计可省略 |
-| start_level | float | 该 staircase 的起始刺激水平值（如起始方向差异度数、起始对比度值等），用于初始化 staircase 的当前水平 |
-| condition_label | str | 该 staircase 对应的实验条件标签（如 `"high_contrast_adapt"` 或 `"low_contrast_adapt"`），用于分组分析和数据筛选 |
+| staircase_id | int | Staircase number, used to distinguish different staircases in staggered staircase design (such as different starting values ​​or different stimulation conditions). Single step design can be omitted |
+| start_level | float | The starting stimulus level value of the staircase (such as the starting direction difference degree, starting contrast value, etc.), used to initialize the current level of the staircase |
+| condition_label | str | The experimental condition label corresponding to this staircase (such as `"high_contrast_adapt"` or `"low_contrast_adapt"`), used for group analysis and data filtering |
 
 ## Variants
 
-- **变换上下法（Transformed Up-Down Staircase）**：改变上下规则以收敛于不同的心理测量函数点。常见变体包括 2-up 1-down（收敛于 ~70.7% 阈限）、3-up 1-down（收敛于 ~79.4% 阈限）以及加权上下法（如 1-up 2-down 收敛于 ~29.3%）。适用于需要估计特定正确率阈限（而非 50% 点）的检测和辨别任务。参考：Levitt (1971)。
-- **交错阶梯法（Interleaved Staircase）**：同时运行 2-4 个独立的 staircase，每个 staircase 的试次随机交错呈现。不同 staircase 可以对应不同的刺激条件（如不同空间频率、不同适应状态）或不同的起始值。交错设计使被试无法预测当前试次属于哪个 staircase，从而减少期望偏差和反应策略的干扰。适用于需要同时测量多个阈限的条件对比实验。相关范式：dual-task（共享交错试次设计的逻辑）。
-- **贝叶斯自适应阶梯法（Bayesian Adaptive Staircase, e.g., QUEST / Psi）**：使用贝叶斯推断逐试次更新心理测量函数后验，并按声明的效用/信息规则选择下一个刺激水平。它可能提高特定参数的采样效率，但所需试次数取决于先验、刺激网格、猜测/失误率、真实参数和目标精度；必须用参数恢复或模拟确定，不能套用固定的“20–40 vs. 60–100”承诺。
+- **Transformed Up-Down Staircase**: Change the up-down rules to converge on different psychometric function points. Common variations include 2-up 1-down (converging to ~70.7% threshold), 3-up 1-down (converging to ~79.4% threshold), and weighted up-down methods (such as 1-up 2-down converging to ~29.3%). Suitable for detection and discrimination tasks that require estimating a specific threshold of accuracy (rather than the 50% point). Reference: Levitt (1971).
+- **Interleaved Staircase**: Run 2-4 independent staircases at the same time, and the trials of each staircase are randomly interleaved. Different staircases can correspond to different stimulation conditions (such as different spatial frequencies, different adaptation states) or different starting values. The staggered design makes it impossible for subjects to predict which staircase the current trial belongs to, thereby reducing the interference of expectation bias and response strategies. Suitable for condition comparison experiments that require simultaneous measurement of multiple thresholds. Related paradigm: dual-task (shared logic of interleaved trials design).
+- **Bayesian Adaptive Staircase (e.g., QUEST/Psi)**: Uses Bayesian inference to update the psychometric function posterior on a trial-by-trial basis and select the next stimulus level according to stated utility/information rules. It may increase the sampling efficiency of specific parameters, but the number of trials required depends on the prior, stimulus grid, guess/miss rate, true parameters, and target accuracy; it must be determined with parameter recovery or simulation, and cannot apply a fixed "20–40 vs. 60–100" commitment.
 
 ---
 
@@ -99,19 +99,19 @@ Levitt, H. (1971). Transformed up-down methods in psychoacoustics. *The Journal 
 
 ### User Request
 
-> "我想做一个对比度检测的心理物理阶梯实验。屏幕中央先呈现注视点 500 ms，然后在屏幕中央呈现一个 Gabor 光栅（正弦光栅，空间频率 2 cpd，高斯包络 sigma=2°），持续 200 ms。被试的任务是判断是否看到了光栅——看到按 'z' 键（是），没看到按 '/' 键（否）。采用 2-up 1-down 阶梯法，起始对比度 50%（Michelson 对比度），初始步长 0.1 log 单位，第二个 reversal 后步长缩小为 0.05 log 单位。总共 8 个 reversal 后停止，最多 120 个试次。阈限取最后 6 个 reversal 的平均值。用 PsychoPy 实现。"
+> "I want to do a psychophysical ladder experiment with contrast detection. A fixation point is first presented in the center of the screen for 500 ms, and then a Gabor grating (sinusoidal grating, spatial frequency 2 cpd, Gaussian envelope sigma=2°) is presented in the center of the screen for 200 ms. The subject's task is to judge whether the grating is seen - press the 'z' key if they see it (yes), press '/' if they do not see it Key (No). Use 2-up 1-down ladder method, starting with 50% contrast (Michelson contrast), with an initial step size of 0.05 log units after the second reversal. Stop after a total of 8 reversals, with a maximum of 120 trials. Implemented with PsychoPy.
 
 ### Trial Window Timeline
 
 ```text
 ┌──────────────────────────────┐    ┌──────────────────────────────┐    ┌──────────────────────────────┐    ┌──────────────────────────────┐
 │ Window 1                     │ →  │ Window 2                     │ →  │ Window 3                     │ →  │ Window 4                     │
-│ 注视点                       │    │ 刺激呈现                     │    │ 反应窗口                     │    │ ITI                          │
-│ Content: + 在屏幕中央        │    │ Content: Gabor 光栅          │    │ Content: 空白屏幕            │    │ Content: 空白               │
-│ Duration: 500 ms             │    │   (target contrast, 2 cpd)  │    │ Duration: 直到按键或3000ms  │    │ Duration: 400-800 ms       │
-│ Response: 无                 │    │ Duration: 200 ms             │    │ Response: z（看到）/        │    │ Response: 无               │
-│ Condition: 无                │    │ Response: 无                 │    │   /（没看到）               │    │ Condition: 无               │
-│ Data: 无                     │    │ Condition: {contrast_level}  │    │ Condition: {correct_resp}   │    │ Data: 无                     │
+│ Fixation point │ │ Stimulus presentation │ │ Response window │ │ ITI │
+│ Content: + in the center of the screen │ │ Content: Gabor raster │ │ Content: blank screen │ │ Content: blank │
+│ Duration: 500 ms │ │ (target contrast, 2 cpd) │ │ Duration: until key press or 3000ms │ │ Duration: 400-800 ms │
+│ Response: None │ │ Duration: 200 ms │ │ Response: z(see)/ │ │ Response: None │
+│ Condition: None │ │ Response: None │ │ /(not seen) │ │ Condition: None │
+│ Data: None │ │ Condition: {contrast_level} │ │ Condition: {correct_resp} │ │ Data: None │
 │                               │    │ Data: stimulus_onset_time   │    │ Data: rt, key, acc,         │    │                               │
 │                               │    │                              │    │   contrast_level,           │    │                               │
 │                               │    │                              │    │   reversal_count            │    │                               │
@@ -122,98 +122,98 @@ Levitt, H. (1971). Transformed up-down methods in psychoacoustics. *The Journal 
 
 | Field | Value |
 |-------|-------|
-| 实验名称 | 对比度检测阶梯实验 |
-| 平台 | PsychoPy |
-| 任务类型 | 心理物理阶梯法（Contrast Detection, 2AFC Yes/No） |
-| 知觉维度 | 对比度检测（Contrast Detection） |
-| 刺激类型 | Gabor 光栅（正弦光栅，空间频率 2 cpd，高斯包络 sigma=2°） |
-| 上下规则 | 2-up 1-down（收敛于 ~70.7% 阈限） |
-| 起始对比度 | 50% Michelson 对比度 |
-| 步长序列 | 初始 0.1 log 单位，第 2 个 reversal 后缩小为 0.05 log 单位 |
-| 停止条件 | 8 个 reversal / 最多 120 试次（安全上限） |
-| 阈限计算 | 最后 6 个 reversal 的平均值（排除前 2 个 reversal） |
-| 刺激持续时间 | 200 ms |
-| 注视点持续时间 | 500 ms |
-| 反应截止时间 | 3000 ms |
-| 反应按键 | z（看到/是）, /（没看到/否） |
+| Experiment name | Contrast detection ladder experiment |
+| Platform | PsychoPy |
+| Task Type | Psychophysical Ladder Method (Contrast Detection, 2AFC Yes/No) |
+| Perceptual dimension | Contrast Detection |
+| Stimulus type | Gabor grating (sinusoidal grating, spatial frequency 2 cpd, Gaussian envelope sigma=2°) |
+| Up and down rules | 2-up 1-down (converging to ~70.7% threshold) |
+| Starting Contrast | 50% Michelson Contrast |
+| Step sequence | Initial 0.1 log unit, reduced to 0.05 log unit after the second reversal |
+| Stop condition | 8 reversals / maximum 120 trials (safety limit) |
+| Threshold calculation | Average of the last 6 reversals (excluding the first 2 reversals) |
+| Stimulation duration | 200 ms |
+| Fixation duration | 500 ms |
+| Response deadline | 3000 ms |
+| Response button | z (seen/yes), / (not seen/no) |
 
 ### Missing Information
 
-1. ITI 持续时间未明确说明 → 假设 400–800 ms 随机均匀分布，需向用户确认具体范围
-2. 是否需要在实验开始时呈现空白试次（catch trial，对比度=0）以估计虚报率 → 用户未提及，需确认。若包含 catch trial，其比例和 staircase 如何响应虚报反应需要定义
-3. 是否需要试次级反馈 → 心理物理实验中通常不提供反馈以避免反应偏差，但有些设计在练习阶段或整个实验中使用反馈。需确认反馈策略
+1. The ITI duration is not clearly stated → Assuming 400–800 ms randomly distributed, the specific range needs to be confirmed with the user
+2. Is it necessary to present a blank trial (catch trial, contrast = 0) at the beginning of the experiment to estimate the false alarm rate → The user has not mentioned it and needs to be confirmed. If a catch trial is included, its proportion and how the staircase responds to false alarms need to be defined.
+3. Is it necessary to try secondary feedback → Feedback is usually not provided in psychophysical experiments to avoid response bias, but some designs use feedback during the practice phase or throughout the experiment. Need to confirm feedback strategy
 
 ### Critical Assumptions
 
-- 对比度以 log10 单位进行步长变化，阶梯在当前对比度水平上加减步长。对比度下界为 0.001（0.1%），上界为 1.0（100%）。当计算出的对比度超出边界时，钳制在边界值
-- 注视点持续时间固定为 500 ms（非随机），ITI 随机范围为 400–800 ms，在条件生成时预先采样以确保可复现性
-- 2-up 1-down 规则的实现逻辑：连续 2 个正确反应后对比度降低（难度增加），1 个错误反应后对比度升高（难度降低）。Reversal 定义为阶梯方向改变的点（从下降到上升或反之）。阈限计算排除前 2 个 reversal
+- Contrast changes in steps of log10 units, with the ladder adding or subtracting steps to the current contrast level. The lower bound for contrast is 0.001 (0.1%) and the upper bound is 1.0 (100%). When the calculated contrast exceeds the boundary, it is clamped to the boundary value
+- Fixation duration fixed at 500 ms (non-random), ITI random range 400–800 ms, pre-sampled at condition generation to ensure reproducibility
+- The implementation logic of the 2-up 1-down rule: the contrast decreases (the difficulty increases) after 2 consecutive correct responses, and the contrast increases (the difficulty decreases) after 1 incorrect response. Reversal is defined as the point at which the direction of the ladder changes (from descending to ascending or vice versa). Threshold calculation excludes first 2 reversals
 
 ### Code Architecture
 
 ```
 staircase_contrast.py
-├── 参数设置
-│   ├── 阶梯参数：起始对比度（0.5）、步长序列（[0.1, 0.05]）、
-│   │   上下规则（2-up 1-down）、最大 reversal（8）、最大试次（120）
-│   ├── 时间参数：注视点（500 ms）、刺激（200 ms）、反应截止（3000 ms）、ITI（400-800 ms）
-│   └── 刺激参数：空间频率（2 cpd）、高斯 sigma（2°）、Gabor 尺寸和相位
-├── 窗口初始化（全屏或窗口，背景设为灰色以匹配平均亮度）
-├── 刺激预加载
-│   ├── TextStim：注视点 "+"
-│   ├── GratingStim：Gabor 光栅（正弦光栅 + 高斯包络，对比度在试次中动态更新）
-│   └── TextStim：指导语（"看到按z，没看到按/"）
-├── 阶梯状态初始化
+├── Parameter settings
+│ ├── Ladder parameters: starting contrast (0.5), step sequence ([0.1, 0.05]),
+│ │ Up and down rules (2-up 1-down), maximum reversal (8), maximum trials (120)
+│ ├── Time parameters: fixation point (500 ms), stimulus (200 ms), response cutoff (3000 ms), ITI (400-800 ms)
+│ └── Stimulation parameters: spatial frequency (2 cpd), Gaussian sigma (2°), Gabor size and phase
+├── Window initialization (full screen or window, background set to gray to match average brightness)
+├── Stimulus preloading
+│ ├── TextStim: fixation point "+"
+│ ├── GratingStim: Gabor grating (sinusoidal grating + Gaussian envelope, contrast is dynamically updated in trials)
+│ └── TextStim: Instruction ("Press z if you see it, press / if you don't see it")
+├── Ladder state initialization
 │   ├── current_level ← start_level（0.5）
-│   ├── step_index ← 0（使用第一个步长 0.1）
+│ ├── step_index ← 0 (use the first step size of 0.1)
 │   ├── reversal_count ← 0
-│   ├── direction ← "down"（初始方向为下降，连续正确后降低对比度）
-│   ├── consecutive_correct ← 0（跟踪连续正确次数，用于 2-up 规则）
-│   └── reversal_values ← []（记录每个 reversal 点的对比度值）
-├── 试次循环：
-│   ├── 注视点窗口（500 ms）
-│   ├── 刺激窗口（200 ms，Gabor 光栅以 current_level 对比度呈现）
+│ ├── direction ← "down" (the initial direction is downward, and the contrast is reduced after continuous correctness)
+│ ├── consecutive_correct ← 0 (tracks the number of consecutive corrects, used for 2-up rules)
+│ └── reversal_values ← [] (record the contrast value of each reversal point)
+├── Trial cycle:
+│ ├── Fixation window (500 ms)
+│ ├── Stimulus window (200 ms, Gabor grating presented at current_level contrast)
 │   │   └── GratingStim.contrast ← current_level
-│   ├── 反应窗口（deadline 3000 ms，监听 z 和 / 键）
-│   │   ├── 记录 rt、key_resp
-│   │   ├── 正确判断：刺激对比度 > 0 且按键 z → acc = 1
-│   │   │   或刺激对比度 == 0（catch trial）且按键 / → acc = 1
-│   │   └── 更新 staircase 状态（见下方 staircase 更新逻辑）
-│   ├── ITI（400–800 ms 随机）
-│   └── 检查停止条件（reversal_count >= 8 或 trial_count >= 120）
-├── 阶梯更新逻辑（每个试次后）：
-│   ├── 如果 acc == 1：
+│ ├── Response window (deadline 3000 ms, monitor z and / keys)
+│ │ ├── record rt, key_resp
+│ │ ├── Correct judgment: stimulus contrast > 0 and button z → acc = 1
+│ │ │ or stimulus contrast == 0 (catch trial) and key / → acc = 1
+│ │ └── Update staircase status (see staircase update logic below)
+│ ├── ITI (400–800 ms random)
+│ └── Check stop condition (reversal_count >= 8 or trial_count >= 120)
+├── Ladder update logic (after each trial):
+│ ├── If acc == 1:
 │   │   ├── consecutive_correct += 1
-│   │   └── 如果 consecutive_correct >= 2（2-up 条件满足）：
-│   │       ├── 如果 direction == "up" → reversal 发生，记录 reversal_values
+│ │ └── If consecutive_correct >= 2 (2-up condition is met):
+│ │ ├── If direction == "up" → reversal occurs, record reversal_values
 │   │       ├── direction ← "down"
-│   │       ├── current_level -= step_sizes[step_index]（降低对比度，变难）
+│ │ ├── current_level -= step_sizes[step_index] (reduce contrast, become more difficult)
 │   │       └── consecutive_correct ← 0
-│   ├── 如果 acc == 0：
-│   │   ├── 如果 direction == "down" → reversal 发生，记录 reversal_values
+│ ├── If acc == 0:
+│ │ ├── If direction == "down" → reversal occurs, record reversal_values
 │   │   ├── direction ← "up"
-│   │   ├── current_level += step_sizes[step_index]（升高对比度，变容易）
+│ │ ├── current_level += step_sizes[step_index] (increase the contrast, make it easier)
 │   │   ├── consecutive_correct ← 0
-│   │   └── 如果 reversal_count >= 2 → step_index ← 1（切换到更小步长 0.05）
-│   └── 钳制 current_level 到 [0.001, 1.0] 范围内
-├── 阈限计算：取 reversal_values 中最后 6 个值的均值
-├── 数据保存：CSV 格式，每条试次一行，包含 staircase 状态快照
-└── 结果摘要：显示估计阈限值、总试次数、staircase 轨迹图
+│ │ └── if reversal_count >= 2 → step_index ← 1 (switch to smaller step size 0.05)
+│ └── Clamp current_level to the range [0.001, 1.0]
+├── Threshold calculation: take the mean of the last 6 values in reversal_values
+├── Data saving: CSV format, one line for each trial, including staircase status snapshot
+└── Result summary: display estimated threshold limit value, total number of trials, staircase trajectory graph
 ```
 
 ### Expected Data Columns
 
 | Column | Type | Description |
 |--------|------|-------------|
-| trial_index | int | 试次序号（从 0 开始） |
-| contrast_level | float | 当前试次的对比度水平（线性单位，0.001–1.0） |
-| log10_contrast | float | 当前试次的对比度（log10 单位），便于与步长对接 |
-| stimulus_onset | float | 刺激开始呈现时间（相对于试次开始，s） |
-| rt | float | 反应时间（ms，从刺激 onset 算起） |
-| key_resp | str | 被试实际按键（`"z"`、`"/"` 或 `None` 表示超时） |
-| acc | int | 正确率（1 = 正确，0 = 错误或超时） |
-| reversal_count | int | 截止当前试次已发生的 reversal 次数 |
-| direction | str | 当前阶梯方向（`"up"` 或 `"down"`） |
-| consecutive_correct | int | 当前连续正确反应次数（用于 2-up 规则判断） |
-| step_size | float | 当前使用的步长（log 单位） |
-| timeout | int | 是否超时（1 = 超时，0 = 在截止时间内做出反应） |
+| trial_index | int | Trial number (starting from 0) |
+| contrast_level | float | Contrast level for the current trial (linear units, 0.001–1.0) |
+| log10_contrast | float | The contrast of the current trial (log10 units), easy to connect with the step size |
+| stimulus_onset | float | stimulus start presentation time (relative to trial start, s) |
+| rt | float | reaction time (ms, from stimulus onset) |
+| key_resp | str | The actual key pressed by the subject (`"z"`, `"/"` or `None` means timeout) |
+| acc | int | Accuracy rate (1 = correct, 0 = error or timeout) |
+| reversal_count | int | The number of reversals that have occurred as of the current trial |
+| direction | str | Current ladder direction (`"up"` or `"down"`) |
+| consecutive_correct | int | Current number of consecutive correct responses (used for 2-up rule judgment) |
+| step_size | float | The currently used step size (log units) |
+| timeout | int | Whether to time out (1 = timeout, 0 = react within the deadline) |

@@ -1,17 +1,17 @@
-# 环形图 (Donut Chart)
+# Donut Chart
 
-## 概述
+## Overview
 
-环形图是饼图的变体,中心为空,用环的弧长表示比例。
+A donut chart is a variation of a pie chart, with an empty center and the arc length of the ring representing the proportion.
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| 场景 | 2-5个类别的比例展示 |
-| ⚠️ | 不推荐用于精确比较(条形图更准确) |
+| Scenario | Proportional display of 2-5 categories |
+| ⚠️ | Not recommended for exact comparisons (bar charts are more accurate) |
 
-## R 代码
+## R code
 
 ```r
 library(ggplot2)
@@ -28,13 +28,13 @@ ggplot(data, aes(ymax=ymax, ymin=ymin, xmax=4, xmin=3, fill=category)) +
   theme_void() + theme(legend.position="right")
 ```
 
-## 争议
+## Dispute
 
-人眼不擅长比较角度和弧长。条形图更适合精确比较。环形图仅推荐用于展示2-3个类别的粗略比例。
+The human eye is not good at comparing angles and arc lengths. Bar charts are better for precise comparisons. Donut charts are only recommended for showing rough proportions of 2-3 categories.
 
-## 关键参数
+## Key parameters
 
-| 参数 | 作用 |
+| Parameters | Function |
 |------|------|
-| `xlim(c(2,4))` | 环的内外半径 |
-| `coord_polar(theta='y')` | 转为极坐标 |
+| `xlim(c(2,4))` | The inner and outer radii of the ring |
+| `coord_polar(theta='y')` | Convert to polar coordinates |

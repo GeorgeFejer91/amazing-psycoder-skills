@@ -1,33 +1,33 @@
-# Bland-Altman 图
+# Bland-Altman diagram
 
-## 概述
+## Overview
 
-Bland-Altman图用于评估两种测量方法的一致性。X轴=两方法均值，Y轴=两方法差值。
+Bland-Altman plots were used to evaluate the agreement between the two measurement methods. X-axis = mean of the two methods, Y-axis = difference of the two methods.
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| 场景 | 比较两种测量方法的一致性 |
-| 关键 | 不是检验相关性，是检验可互换性 |
+| Scenario | Comparing the consistency of two measurement methods |
+| Key | Not to test correlation, but to test interchangeability |
 
-## R 代码
+## R code
 
 ```r
 library(blandr)
 blandr.draw(data$method1, data$method2)
 ```
 
-## 解读
+## Interpretation
 
-- 中间虚线=偏倚(Bias)→0=无系统偏差
-- 上下虚线=95%一致限(LoA)
-- 95%的点在LoA内且LoA在临床/实用上可接受 → 两个方法可互换
-- 漏斗形→偏倚随测量值变化
+-Middle dotted line = Bias → 0 = No systematic bias
+- Upper and lower dashed lines = 95% limit of agreement (LoA)
+- 95% of points are within LoA and LoA is clinically/practically acceptable → both methods are interchangeable
+- funnel shape → bias changes with measured value
 
-## 关键参数
+## Key parameters
 
-| 参数 | 作用 |
+| Parameters | Function |
 |------|------|
-| `method1`,`method2` | 两种测量方法的数值向量 |
-| `loa` | 一致限宽度(默认1.96) |
+| `method1`,`method2` | Numeric vectors of two measurement methods |
+| `loa` | Uniform limit width (default 1.96) |

@@ -6,7 +6,7 @@
 
 ## When to Use
 
-User mentions: Drag and drop, puzzle task, pattern matching, spatial arrangement, 拖放任务, 拼图任务. A pattern-matching puzzle task using drag-and-drop interaction, demonstrating mouse-based stimulus manipulation for spatial reasoning, problem-solving, or visuospatial ability assessment.
+User mentions: Drag and drop, puzzle task, pattern matching, spatial arrangement, drag-and-drop task, puzzle task. A pattern-matching puzzle task using drag-and-drop interaction, demonstrating mouse-based stimulus manipulation for spatial reasoning, problem-solving, or visuospatial ability assessment.
 
 ## Core Logic
 
@@ -70,16 +70,16 @@ This paradigm demonstrates drag-and-drop interaction capabilities in PsychoJS/Ps
 
 | Column | Type | Description |
 |--------|------|-------------|
-| design_id | str | 目标图案的标识符，对应图片文件名或程序化生成参数 |
-| grid_rows | int | 网格行数 |
-| grid_cols | int | 网格列数 |
-| solution | str | 正确答案编码，如 `"B,W,B;W,B,W;B,W,B"` 表示每个格子的颜色（B=黑色, W=白色），按行排列 |
+| design_id | str | The identifier of the target pattern, corresponding to the image file name or programmatic generation parameters |
+| grid_rows | int | Number of grid rows |
+| grid_cols | int | Number of grid columns |
+| solution | str | Correct answer encoding, such as `"B,W,B;W,B,W;B,W,B"` represents the color of each grid (B=black, W=white), arranged in rows |
 
 ## Variants
 
-- **标准拖拽拼图 (Standard Drag-and-Drop Puzzle)**: 参与者从备选区拖拽图形块到网格中，完成目标图案的复现。多见于空间认知和问题解决研究。详见本文件主体描述。
-- **自由排序拖拽 (Free-Sorting Drag-and-Drop)**: 参与者将屏幕上散落的项目拖拽到任意分组区域中，无固定的正确位置。常用于分类任务和概念形成研究。可参考 free-sorting.md。
-- **时间限制拖拽 (Timed Drag-and-Drop)**: 在标准拖拽拼图基础上增加了时间压力，参与者必须在限定时间内完成拖拽操作，超时则自动提交当前状态。适合研究决策速度和压力下的空间推理。
+- **Standard Drag-and-Drop Puzzle**: Participants drag graphics blocks from the alternative area to the grid to complete the reproduction of the target pattern. Commonly seen in spatial cognition and problem solving research. See the main body description of this document for details.
+- **Free-Sorting Drag-and-Drop**: Participants drag items scattered on the screen into any grouping area, with no fixed correct position. Commonly used in classification tasks and concept formation studies. Please refer to free-sorting.md.
+- **Timed Drag-and-Drop**: Adds time pressure to the standard drag-and-drop puzzle. Participants must complete the drag-and-drop operation within a limited time, and the current state will be automatically submitted when it times out. Ideal for studying decision-making speed and spatial reasoning under stress.
 
 ---
 
@@ -87,7 +87,7 @@ This paradigm demonstrates drag-and-drop interaction capabilities in PsychoJS/Ps
 
 ### User Request
 
-> "我想做一个拖拽拼图实验。屏幕上显示一个3x3的黑白目标图案，图案下方是一个3x3的空白网格。旁边有5个黑色方块和4个白色方块可以拖拽。参与者把方块拖到正确的位置后点击'提交'按钮。一共10个试次，每次的目标图案不同。用PsychoPy。"
+> "I want to do a drag puzzle experiment. A 3x3 black and white target pattern is displayed on the screen, and below the pattern is a 3x3 blank grid. There are 5 black squares and 4 white squares next to it that can be dragged. Participants drag the squares to the correct position and click the 'Submit' button. There are 10 trials in total, and the target pattern is different each time. Use PsychoPy."
 
 ### Trial Window Timeline
 
@@ -95,15 +95,15 @@ This paradigm demonstrates drag-and-drop interaction capabilities in PsychoJS/Ps
 ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐
 │ Window 1                 │ →  │ Window 2                 │ →  │ Window 3                 │
 │ Puzzle Assembly          │    │ Feedback                 │    │ ITI                      │
-│ Content: 目标图案(上)    │    │ Content: 正确/错误       │    │ Content: 空白            │
-│   + 3×3空白网格(中)      │    │   + 完成时间             │    │ Duration: 800 ms         │
-│   + 5黑4白可拖拽方块(侧) │    │ Duration: 2000 ms        │    │ Response: none           │
-│ Duration: 自定步调        │    │ Response: none           │    │ Condition: none          │
-│   (点击提交按钮结束)      │    │ Condition: none          │    │ Data: none               │
-│ Response: 鼠标拖拽        │    │ Data: none               │    └──────────────────────────┘
+│ Content: Target pattern (top) │ │ Content: Correct/wrong │ │ Content: Blank │
+│ + 3×3 blank grid (middle) │ │ + completion time │ │ Duration: 800 ms │
+│ + 5 black and 4 white draggable blocks (side) │ │ Duration: 2000 ms │ │ Response: none │
+│ Duration: Customized pace │ │ Response: none │ │ Condition: none │
+│ (Click the submit button to end) │ │ Condition: none │ │ Data: none │
+│ Response: Mouse drag │ │ Data: none │ └───────────────────────────┘
 │ Condition: {design_id}   │    └──────────────────────────┘
-│ Data: 每格最终状态,      │
-│   完成时间, 提交前移动次数│
+│ Data: The final status of each grid, │
+│Completion time, number of moves before submission│
 └──────────────────────────┘
 ```
 
@@ -111,55 +111,55 @@ This paradigm demonstrates drag-and-drop interaction capabilities in PsychoJS/Ps
 
 | Field | Value |
 |-------|-------|
-| 实验名称 | 3×3 黑白拖拽拼图任务 |
-| 平台 | PsychoPy |
-| 任务类型 | Drag-and-Drop Puzzle（空间拼图） |
-| 网格尺寸 | 3×3（9个格子） |
-| 方块类型 | 黑色方块 × 5，白色方块 × 4 |
-| 交互方式 | 鼠标拖拽到网格指定位置 |
-| 提交方式 | 点击"提交"按钮 |
-| 试次数量 | 10 个试次 |
-| 目标图案 | 每个试次不同（需提供 10 张目标图案图片或程序化定义） |
+| Experiment name | 3×3 black and white drag puzzle task |
+| Platform | PsychoPy |
+| Mission Type | Drag-and-Drop Puzzle (Space Puzzle) |
+| Grid size | 3×3 (9 grids) |
+| Block type | Black block × 5, white block × 4 |
+| Interaction mode | Drag the mouse to the specified position in the grid |
+| Submission method | Click the "Submit" button |
+| Number of trials | 10 trials |
+| Target pattern | Different for each trial (need to provide 10 target pattern pictures or programmatic definition) |
 
 ### Missing Information
 
-1. 目标图案来源未说明 — 需要用户提供 10 张目标图案图片，或确认是否由程序随机生成黑白排列
-2. 练习试次未提及 — 是否需要练习阶段？练习试次数量？
-3. 指导语内容未说明 — 需要用户提供中文字幕或确认使用默认指导语（"请将方块拖到正确位置"）
+1. The source of the target pattern is not specified - the user is required to provide 10 pictures of the target pattern, or confirm whether the black and white arrangement is randomly generated by the program
+2. Practice trials not mentioned - is a practice phase required? Number of practice trials?
+3. The content of the instruction is not specified - the user is required to provide Chinese subtitles or confirm the use of the default instruction ("Please drag the box to the correct position")
 
 ### Critical Assumptions
 
-- 方块拖放到大致正确的网格位置即视为有效放置（允许一定的位置容差，如 ±20 像素），不需要像素级精确对齐
-- 反馈仅显示正确/错误和完成时间，不显示部分得分（全对或全错评判）
-- 目标图案以图片文件形式提供（存放在 `stimuli/` 目录下），而非程序化生成
+- Blocks are considered valid placement if they are dragged and dropped into approximately the correct grid position (a certain positional tolerance is allowed, e.g. ±20 pixels), no pixel-precise alignment is required
+- Feedback only shows correct/wrong and completion time, not partial score (all right or all wrong)
+- The target pattern is provided as an image file (stored in the `stimuli/` directory) rather than generated programmatically
 
 ### Code Architecture
 
 ```
 drag_puzzle.py
-├── 实验参数（网格尺寸、方块颜色、试次数量、计时设置）
-├── 窗口初始化（单位设为像素以精确定位）
-├── 预加载刺激材料（目标图案图片、网格线条、可拖拽方块）
-├── 条件文件读取（design_id → 目标图片 + 正确答案编码）
-├── 试次循环:
-│   ├── 绘制网格线条（3×3 参考线）
-│   ├── 显示目标图案（网格上方居中）
-│   ├── 创建可拖拽方块（初始位置在网格周围随机排列）
-│   ├── 等待拖拽交互（自定步调，监听拖拽事件和提交按钮）
-│   ├── 记录每格最终状态和完成时间
-│   ├── 比对答案（与 condition 中的 solution 编码比对）
-│   ├── 显示反馈（正确/错误 + 用时，持续 2000 ms）
-│   └── ITI（800 ms 空白）
-├── 数据保存：try/finally 结构，增量写入 CSV
-└── 结束界面
+├── Experimental parameters (grid size, square color, number of trials, timing settings)
+├── Window initialization (units set to pixels for precise positioning)
+├── Preload stimulus materials (target pattern pictures, grid lines, draggable squares)
+├── Conditional file reading (design_id → target image + correct answer code)
+├── Trial cycle:
+│ ├── Draw grid lines (3×3 guide lines)
+│ ├── Display the target pattern (centered above the grid)
+│ ├── Create draggable blocks (initial positions are randomly arranged around the grid)
+│ ├── Wait for drag and drop interaction (custom pace, listen for drag events and submit buttons)
+│ ├── Record the final status and completion time of each grid
+│ ├── Compare the answer (compare with the solution code in condition)
+│ ├── Display feedback (correct/wrong + time, lasts 2000 ms)
+│ └── ITI (800 ms blank)
+├── Data saving: try/finally structure, incremental writing to CSV
+└── End interface
 ```
 
 ### Expected Data Columns
 
 | Column | Type | Description |
 |--------|------|-------------|
-| design_id | str | 当前试次的目标图案标识 |
-| grid_state | str | 提交时各格子的实际状态编码（如 `"B,W,B;W,B,W;B,W,B"`） |
-| acc | int | 是否完全正确（1 = 全对，0 = 有错误） |
-| completion_time | float | 从试次开始到点击提交的耗时（秒） |
-| n_moves | int | 拖拽操作的总次数（方块被移动的次数） |
+| design_id | str | The target pattern ID of the current trial |
+| grid_state | str | The actual status code of each grid at the time of submission (such as `"B,W,B;W,B,W;B,W,B"`) |
+| acc | int | Whether it is completely correct (1 = all correct, 0 = there is an error) |
+| completion_time | float | Elapsed time from trial start to click submit (seconds) |
+| n_moves | int | The total number of drag operations (the number of times the block has been moved) |

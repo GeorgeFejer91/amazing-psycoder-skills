@@ -6,7 +6,7 @@
 
 ## When to Use
 
-User mentions: Rating to choice, two-phase preference, painting rating, adaptive choice, 评分转选择任务. A two-phase decision-making paradigm where participants first rate individual stimuli and then make pairwise choices between stimuli selected based on their own ratings, demonstrating dynamic stimulus selection driven by participant responses.
+User mentions: Rating to choice, two-phase preference, painting rating, adaptive choice, rating-to-choice task. A two-phase decision-making paradigm where participants first rate individual stimuli and then make pairwise choices between stimuli selected based on their own ratings, demonstrating dynamic stimulus selection driven by participant responses.
 
 ## Core Logic
 
@@ -68,28 +68,28 @@ No specific publication — this is a methodology demo illustrating dynamic stim
 
 ## Do Not Assume
 
-- Do not assume 所有刺激在评级阶段都获得了全部评级等级——参与者可能只使用了部分评分等级（如仅使用1和2，而从未使用3），需处理缺失等级时选择阶段如何构建试次
-- Do not assume 选择阶段的对比类型已预先固定——对比类型（如1v2, 2v3, 1v3）由条件文件定义，但实际可用的图片对取决于参与者的评级分布，需在代码中动态匹配
-- Do not assume 占位刺激可以随意使用而不影响数据质量——当某评级等级无对应刺激而使用占位图时，该试次的行为数据可能不具有可比性，需在数据分析中标记
-- Do not assume 左右位置不影响选择偏好——需对刺激的左右位置进行试次内随机化或跨试次平衡，并在数据中记录实际呈现位置
-- Do not assume 评级阶段和选择阶段使用相同的时间参数——两个阶段的刺激呈现时间、反应窗口和ITI可能需要不同的设置
+- Do not assume that all stimuli received full rating levels during the rating phase - participants may have used only some of the rating levels (e.g., only 1 and 2, never 3), and how to structure trials in the selection phase when missing levels need to be dealt with
+- Do not assume that the comparison type in the selection phase is pre-fixed - the comparison type (e.g. 1v2, 2v3, 1v3) is defined by the conditions file, but the actual available image pairs depend on the participant's rating distribution and need to be matched dynamically in the code
+- Do not assume that placeholder stimuli can be used arbitrarily without affecting data quality - when a placeholder image is used without a corresponding stimulus for a certain rating level, the behavioral data of this trial may not be comparable and need to be marked in the data analysis
+- Do not assume that left and right position does not affect choice preference - the left and right position of the stimulus needs to be randomized within trials or balanced across trials, and the actual presentation position is recorded in the data
+- Do not assume that the rating phase and the selection phase use the same timing parameters - stimulus presentation times, response windows and ITI may require different settings for the two phases
 
 ## Condition File Columns
 
-选择阶段条件文件的列（评级阶段通常无需条件文件，直接遍历图片列表）：
+Select the columns of the stage condition file (the rating stage usually does not require a condition file and directly traverses the picture list):
 
 | Column | Type | Description |
 |--------|------|-------------|
-| comparison_type | str | 对比类型标签，如 "1v2"、"2v3"、"1v3" |
-| left_rating | int | 左侧刺激应具有的目标评级等级 |
-| right_rating | int | 右侧刺激应具有的目标评级等级 |
-| num_trials | int | 该对比类型每种位置排列的重复次数 |
+| comparison_type | str | Comparison type tag, such as "1v2", "2v3", "1v3" |
+| left_rating | int | The target rating level that the left stimulus should have |
+| right_rating | int | The target rating level that the right stimulus should have |
+| num_trials | int | The number of repetitions for each position permutation of this comparison type |
 
 ## Variants
 
-- **标准双阶段评分转选择（Standard Two-Phase Rating-to-Choice）**：参与者先完成所有刺激的评分，然后根据评分结果进行配对选择。评分阶段与选择阶段在时间上完全分离。这是本文件描述的核心范式。
-- **试次级评分转选择（Trial-by-Trial Rating-to-Choice）**：在每个试次中，参与者先对一个新刺激评分，随即在当前已评分的刺激中进行选择，评分与选择交替进行。适用于研究即时偏好一致性与学习效应。可参考 adaptive-choice 范式。
-- **多轮评分转选择（Multi-Round Rating-to-Choice）**：参与者进行多轮"评分-选择"循环，每轮的选择结果反馈到下一轮的刺激集或评分参考中。适用于研究偏好动态演化和选择诱导的偏好改变（choice-induced preference change）。
+- **Standard Two-Phase Rating-to-Choice**: Participants first complete the ratings of all stimuli, and then make pairing choices based on the rating results. The scoring phase and the selection phase are completely separated in time. This is the core paradigm described in this paper.
+- **Trial-by-Trial Rating-to-Choice**: In each trial, participants first rate a new stimulus, and then choose among the currently rated stimuli. Rating and selection alternate. Suitable for studying immediate preference consistency and learning effects. Please refer to the adaptive-choice paradigm.
+- **Multi-Round Rating-to-Choice**: Participants perform multiple rounds of "rating-choice" cycles, and the selection results of each round are fed back to the stimulus set or rating reference of the next round. It is suitable for studying the dynamic evolution of preferences and choice-induced preference change.
 
 ---
 
@@ -97,7 +97,7 @@ No specific publication — this is a methodology demo illustrating dynamic stim
 
 ### User Request
 
-> "我想做一个评分转选择实验。第一阶段让被试对30张抽象画图片用1到5分进行喜好度评分。第二阶段根据评分结果，展示评分差至少为2的图片对（例如评分1 vs 评分3、评分2 vs 评分4等），让被试按键选择更喜欢的图片。每种对比类型做8个试次。如果某评分等级没有对应图片，则跳过包含该等级的所有对比类型。用PsychoPy，全屏模式。"
+> "I want to do a rating-to-choice experiment. In the first stage, subjects are asked to rate their preference for 30 abstract paintings on a scale of 1 to 5. In the second stage, based on the rating results, pairs of pictures with a rating difference of at least 2 are displayed (for example, rating 1 vs. rating 3, rating 2 vs. Rating 4, etc.), let the subject press the button to select the preferred picture. Do 8 trials for each comparison type. If there is no corresponding picture for a certain rating level, use PsychoPy, full screen mode.
 
 ### Trial Window Timeline
 
@@ -105,23 +105,23 @@ No specific publication — this is a methodology demo illustrating dynamic stim
 Phase 1 — Rating（30 trials）:
 ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐
 │ Window 1                 │ →  │ Window 2                 │ →  │ Window 3                 │
-│ 图片刺激                 │    │ 评分界面                 │    │ ITI                      │
-│ Content: 抽象画图片      │    │ Content: 1-5分量表       │    │ Content: blank           │
-│ Duration: until key      │    │   (1=非常不喜欢,        │    │ Duration: 500 ms         │
-│ Response: none           │    │    5=非常喜欢)           │    │ Response: none           │
+│ Picture stimulation │ │ Scoring interface │ │ ITI │
+│ Content: Abstract painting pictures │ │ Content: 1-5 point scale │ │ Content: blank │
+│ Duration: until key │ │ (1=dislike very much, │ │ Duration: 500 ms │
+│ Response: none │ │ 5=like it very much) │ │ Response: none │
 │ Condition: {image_file}  │    │ Duration: until key      │    │ Condition: none          │
 │ Data: image, onset       │    │ Response: 1,2,3,4,5      │    │ Data: none               │
 └──────────────────────────┘    │ Data: rating, rt          │    └──────────────────────────┘
                                 └──────────────────────────┘
 
-Phase 2 — Choice（对比类型 × 8 trials，左右位置平衡）:
+Phase 2 — Choice (contrast type × 8 trials, balanced left and right positions):
 ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐
 │ Window 1                 │ →  │ Window 2                 │ →  │ Window 3                 │
-│ 图片对                   │    │ 选择界面                 │    │ ITI                      │
-│ Content: 左右两张抽象画  │    │ Content: "按1选左       │    │ Content: blank           │
-│   左: rated X             │    │   按2选右"              │    │ Duration: 500 ms         │
-│   右: rated Y             │    │ Duration: until key      │    │ Response: none           │
-│ Duration: until key      │    │ Response: 1=左, 2=右     │    │ Condition: none          │
+│ Picture pair │ │ Selection interface │ │ ITI │
+│ Content: Two abstract paintings on the left and right │ │ Content: "Press 1 to select left │ │ Content: blank │
+│ Left: rated X │ │ Press 2 to select right" │ │ Duration: 500 ms │
+│ Right: rated Y │ │ Duration: until key │ │ Response: none │
+│ Duration: until key │ │ Response: 1=left, 2=right │ │ Condition: none │
 │ Response: none           │    │ Condition: {comparison}  │    │ Data: none               │
 │ Condition: {comparison}  │    │ Data: choice, rt          │    └──────────────────────────┘
 │ Data: left_img, right_img│    └──────────────────────────┘
@@ -132,88 +132,88 @@ Phase 2 — Choice（对比类型 × 8 trials，左右位置平衡）:
 
 | Field | Value |
 |-------|-------|
-| 实验名称 | 评分转选择任务 |
-| 平台 | PsychoPy |
-| 刺激类型 | 抽象画图片 |
-| 刺激数量 | 30张 |
-| 评分量表 | 1-5分（喜好度） |
-| 评分标签 | 1=非常不喜欢, 5=非常喜欢 |
-| 对比规则 | 评分差 ≥ 2 |
-| 每种对比类型试次数 | 8（左右位置各半） |
-| 缺失等级处理 | 跳过包含该等级的所有对比类型 |
-| 显示模式 | 全屏 |
+| Experiment name | Score to selection task |
+| Platform | PsychoPy |
+| Stimulus type | Abstract painting picture |
+| Number of stimuli | 30 pictures |
+| Rating scale | 1-5 points (likeability) |
+| Rating label | 1=dislike very much, 5=like very much |
+| Comparison rules | Rating difference ≥ 2 |
+| Number of trials for each comparison type | 8 (half for left and right positions) |
+| Missing grade handling | Skip all comparison types that contain this grade |
+| Display mode | Full screen |
 
 ### Missing Information
 
-1. 对比类型的具体列表未明确——评分差≥2可能包含"1v3, 1v4, 1v5, 2v4, 2v5, 3v5"等，需确认是否全部纳入还是仅选择部分
-2. 评级阶段图片呈现顺序未指定——随机顺序还是固定顺序？是否所有被试使用相同顺序？
-3. 选择阶段若某对比类型可用图片对数量不足8对，是重复使用还是减少试次？重复使用时同一图片对是否可多次出现？
+1. The specific list of comparison types is not clear - score difference ≥ 2 may include "1v3, 1v4, 1v5, 2v4, 2v5, 3v5", etc. You need to confirm whether all of them are included or only some are selected.
+2. The order of picture presentation during the rating phase is not specified—random order or fixed order? Did all subjects use the same order?
+3. In the selection stage, if the number of available picture pairs for a certain comparison type is less than 8, should they be reused or reduced? Can the same image pair appear multiple times when reused?
 
 ### Critical Assumptions
 
-- 假设评分差≥2的对比类型默认包含所有可能组合（1v3, 1v4, 1v5, 2v4, 2v5, 3v5），而非仅相邻等级差为2的组合
-- 假设评级阶段无反馈，选择阶段也无试次间反馈（仅记录选择数据）
-- 假设选择阶段每种对比类型固定8个试次，左右位置在试次内随机化（各占50%），而非用条件文件预先指定
+- Assume that contrast types with a rating difference ≥ 2 include all possible combinations by default (1v3, 1v4, 1v5, 2v4, 2v5, 3v5) instead of just combinations with adjacent rating differences of 2
+- Assume there is no feedback during the rating phase and no inter-trial feedback during the selection phase (only selection data is recorded)
+- Assume that each contrast type in the selection phase has a fixed number of 8 trials, and the left and right positions are randomized within trials (50% each) instead of being pre-specified with a condition file
 
 ### Code Architecture
 
 ```
 rating_to_choice.py
-├── 实验初始化（窗口全屏、时钟、颜色、字体）
-├── 参数配置（n_images=30, rating_scale=1-5, min_rating_diff=2, n_trials_per_comparison=8）
-├── 加载刺激图片列表（从指定文件夹或条件文件读取文件名）
-├── Phase 1: 评分阶段
-│   ├── 随机化图片呈现顺序
-│   ├── 逐试次循环（30 trials）
-│   │   ├── Window 1: 呈现图片（until keypress 跳过 → Window 2）
-│   │   ├── Window 2: 呈现评分量表 + 记录按键（1-5）和 RT
+├── Experiment initialization (window full screen, clock, color, font)
+├── Parameter configuration (n_images=30, rating_scale=1-5, min_rating_diff=2, n_trials_per_comparison=8)
+├── Load stimulus picture list (read file name from specified folder or condition file)
+├── Phase 1: Scoring phase
+│ ├── Randomize the order of picture presentation
+│ ├── Trial-by-trial loop (30 trials)
+│ │ ├── Window 1: Present image (until keypress skip → Window 2)
+│ │ ├── Window 2: Present rating scale + record keystrokes (1-5) and RT
 │   │   ├── Window 3: ITI（500 ms）
-│   │   └── 将 {image, rating, rt} 存入 rating_data 列表
-│   └── 构建评级分布：统计每个等级的图片列表
-├── Phase 2: 选择阶段
-│   ├── 构建对比类型列表：根据 rating_data 和 min_rating_diff 生成所有有效对比
-│   ├── 过滤：跳过任一等级无图片的对比类型
-│   ├── 动态构建试次列表（每种对比 × n_trials_per_comparison）
-│   │   ├── 每个试次随机选取对应等级的各1张图片
-│   │   ├── 随机化左右位置（50% 概率交换）
-│   │   └── 若某对比类型可用配对不足，按最大可用配对数生成试次
-│   ├── 随机化试次顺序
-│   └── 逐试次循环
-│       ├── Window 1: 呈现左右图片对（until keypress → Window 2）
-│       ├── Window 2: 呈现选择提示 + 记录按键（1/2）和 RT
+│ │ └── Save {image, rating, rt} into the rating_data list
+│ └── Construct rating distribution: count the picture list for each level
+├── Phase 2: Selection phase
+│ ├── Build comparison type list: generate all valid comparisons based on rating_data and min_rating_diff
+│ ├── Filter: Skip comparison types without pictures at any level
+│ ├── Dynamically construct trial list (each comparison × n_trials_per_comparison)
+│ │ ├── Randomly select 1 picture of the corresponding level in each trial
+│ │ ├── Randomize left and right positions (50% probability exchange)
+│ │ └── If there are insufficient available pairs for a certain comparison type, trials will be generated based on the maximum number of available pairs.
+│ ├── Randomize trial order
+│ └── Trial-by-trial loop
+│ ├── Window 1: Present left and right image pairs (until keypress → Window 2)
+│ ├── Window 2: Present selection prompt + record keystrokes (1/2) and RT
 │       ├── Window 3: ITI（500 ms）
-│       └── 将 {left_img, right_img, left_rating, right_rating, comparison_type, choice, rt} 存入 choice_data 列表
-├── 数据保存（.csv）
+│ └── Save {left_img, right_img, left_rating, right_rating, comparison_type, choice, rt} into the choice_data list
+├── Data saving (.csv)
 │   ├── rating_data.csv（phase, trial, image, rating, rt）
 │   └── choice_data.csv（phase, trial, left_img, right_img, left_rating, right_rating, comparison_type, choice, rt）
-└── Escape 退出检查（每个窗口均检查）
+└── Escape exit check (checked in each window)
 ```
 
 ### Expected Data Columns
 
-Phase 1 — 评分阶段：
+Phase 1 — Scoring phase:
 
 | Column | Type | Description |
 |--------|------|-------------|
-| participant_id | str | 被试编号 |
+| participant_id | str | participant number |
 | phase | str | "rating" |
-| trial_index | int | 评分阶段试次序号（1-30） |
-| image | str | 图片文件名 |
-| rating | int | 评分值（1-5） |
-| rt | float | 评分反应时（毫秒） |
+| trial_index | int | Trial number in the scoring stage (1-30) |
+| image | str | image file name |
+| rating | int | Rating value (1-5) |
+| rt | float | Scoring reaction time (milliseconds) |
 
-Phase 2 — 选择阶段：
+Phase 2 — Selection phase:
 
 | Column | Type | Description |
 |--------|------|-------------|
-| participant_id | str | 被试编号 |
+| participant_id | str | participant number |
 | phase | str | "choice" |
-| trial_index | int | 选择阶段试次序号 |
-| left_image | str | 左侧图片文件名 |
-| right_image | str | 右侧图片文件名 |
-| left_rating | int | 左侧图片在评分阶段的评价值 |
-| right_rating | int | 右侧图片在评分阶段的评价值 |
-| comparison_type | str | 对比类型（如 "1v3", "2v4"） |
-| rating_diff | int | 评分差绝对值 |
-| choice | int | 选择结果（1=左, 2=右） |
-| rt | float | 选择反应时（毫秒） |
+| trial_index | int | Selection phase trial number |
+| left_image | str | Left image file name |
+| right_image | str | Right image file name |
+| left_rating | int | The evaluation value of the left image in the rating stage |
+| right_rating | int | The evaluation value of the image on the right in the rating stage |
+| comparison_type | str | comparison type (such as "1v3", "2v4") |
+| rating_diff | int | Absolute value of rating difference |
+| choice | int | Choice result (1=left, 2=right) |
+| rt | float | Select reaction time (milliseconds) |

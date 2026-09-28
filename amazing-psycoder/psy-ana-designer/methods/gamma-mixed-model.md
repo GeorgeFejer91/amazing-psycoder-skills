@@ -1,47 +1,47 @@
-# Gamma 混合模型 (Gamma GLMM)
+# Gamma Mixed Model (Gamma GLMM)
 
-## 概述
+## Overview
 
-Gamma混合模型用于处理**严重右偏**的连续数据（RT数据最常见）。
+The Gamma mixture model is used to process continuous data that is severely right-skewed (RT data is the most common).
 
-## 何时使用
+## When to use
 
-| 条件 | 要求 |
+| Conditions | Requirements |
 |------|------|
-| 实验设计 | 被试内或被试间设计，需包含随机效应结构（如随机截距、随机斜率） |
-| 因变量类型 | 连续正数，严重右偏（如反应时RT、持续时间、潜伏期） |
-| 数据分布 | 所有观测值为正值；方差随均值增大（Gamma分布特征） |
-| 样本信息 | 由 cluster 数、每 cluster 观测、随机结构、偏度和效应决定；用模拟和收敛/恢复诊断，不设固定被试数 |
-| 链接函数 | 通常使用 log 链接，效应量解释为比率变化 |
-| 关键假设 | 残差服从Gamma分布；随机效应服从正态分布；观测间条件独立 |
+| Experimental design | Within-subjects or between-subjects design, must include random effects structure (such as random intercept, random slope) |
+| Dependent variable type | Continuous positive number, severely right-skewed (such as reaction time RT, duration, latency) |
+| Data distribution | All observations are positive; the variance increases with the mean (Gamma distribution characteristics) |
+| Sample information | Determined by the number of clusters, observations per cluster, random structure, skewness and effects; using simulation and convergence/recovery diagnosis, no fixed number of subjects |
+| Link function | Typically using log link, effect sizes are interpreted as ratio changes |
+| Key assumptions | Residuals obey Gamma distribution; random effects obey normal distribution; conditions between observations are independent |
 
-## 模型
+## Model
 
 ```r
 glmer(rt ~ condition + (1+condition|subject),
       data=data, family=Gamma(link="log"))
 ```
 
-效应解释: exp(estimate) = RT比率。如exp(0.2)=1.22, 条件B的RT比条件A高22%。
+Effect explanation: exp(estimate) = RT ratio. For example, exp(0.2)=1.22, the RT of condition B is 22% higher than that of condition A.
 
-## 与log(RT)+lmer的比较
+## Comparison with log(RT)+lmer
 
-| 方法 | 优点 | 缺点 |
+| Method | Advantages | Disadvantages |
 |------|------|------|
-| log(RT)+lmer | 简单, 收敛好 | 解释需反转换 |
-| Gamma GLMM | 原始尺度, 自然处理偏态 | 可能收敛慢 |
+| log(RT)+lmer | Simple, good convergence | Interpretation requires reverse transformation |
+| Gamma GLMM | Original scale, naturally handles skewness | May converge slowly |
 
-两种方法通常给出一致结论。选择哪个取决于领域惯例和你对"可解释性"的偏好。
+Both methods usually give consistent conclusions. Which one you choose depends on domain conventions and your preference for "explainability".
 
-## 报告
+## Report
 
-APA 7th 格式报告示例:
+APA 7th format report example:
 
-> 采用Gamma混合模型（log链接函数）分析反应时数据，以条件为固定效应，被试和项目为随机截距，条件在被试内的随机斜率。模型显示条件B的反应时显著长于条件A，*b* = 0.20, *SE* = 0.06, *z* = 3.33, *p* = .001, 95% CI [0.08, 0.32]。exp(0.20) = 1.22，表明条件B的反应时平均比条件A高22%。随机效应方差显示被试间在基线反应时上存在较大个体差异 (SD = 0.15)。
+> Gamma mixed model (log link function) was used to analyze the reaction time data, with condition as a fixed effect, subjects and items as random intercepts, and condition as a random slope within subjects. The model showed that reaction time for condition B was significantly longer than condition A, *b* = 0.20, *SE* = 0.06, *z* = 3.33, *p* = .001, 95% CI [0.08, 0.32]. exp(0.20) = 1.22, indicating that the reaction time of condition B is 22% higher than that of condition A on average. Random effects variance revealed large individual differences in baseline reaction times between subjects (SD = 0.15).
 
-关键报告要素:
-- 明确说明链接函数 (link = "log")
-- 报告 *b* (log尺度上的系数)、*SE*、*z*/*t* 值及 *p* 值
-- 报告 exp(*b*) 及其实际含义（RT比率或百分比变化）
-- 报告随机效应结构及方差分量
-- 若模型收敛困难，报告优化器选择 (如 `bobyqa`) 及收敛信息
+Key reporting elements:
+- Explicitly specify the link function (link = "log")
+- Reports *b* (coefficients on log scale), *SE*, *z*/*t* values, and *p* values
+- reports exp(*b*) and its actual meaning (RT ratio or percentage change)
+- Report random effects structure and variance components
+- If the model has difficulty converging, report the optimizer choice (such as `bobyqa`) and convergence information

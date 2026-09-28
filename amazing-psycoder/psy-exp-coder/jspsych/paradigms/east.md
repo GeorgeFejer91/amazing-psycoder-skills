@@ -4,7 +4,7 @@
 > **Config reference**: [east](../../../psy-exp-designer/paradigms/east.md)
 > **Source**: [psychbruce/jspsych](https://github.com/psychbruce/jspsych) (Bao, 2020) · jsPsych 6.1.0
 
-> ⚠️ **LANGUAGE WARNING**: The code example below is a Chinese-language reference implementation. When generating code for non-Chinese users, ALL participant-facing text (instructions, stimuli, feedback, button labels, debrief text) MUST be translated to the user's language. See [Language Consistency (Red Line)](../../SKILL.md#language-consistency-red-line). The stimulus words (`健康, 快乐...`), instruction paragraphs, category labels, and debrief messages in this example are Chinese-specific — replace them entirely for other languages.
+> ⚠️ **LANGUAGE WARNING**: The code example below is a Chinese-language reference implementation. When generating code for non-Chinese users, ALL participant-facing text (instructions, stimuli, feedback, button labels, debrief text) MUST be translated to the user's language. See [Language Consistency (Red) Line)](../../SKILL.md#language-consistency-red-line). The stimulus words (`health, happiness...`), instruction paragraphs, category labels, and debrief messages in this example are Chinese-specific — replace them entirely for other languages.
 
 ## Experiment Logic
 
@@ -49,7 +49,7 @@ function timer() {
         if (second.innerHTML > 1) {
             second.innerHTML = second.innerHTML - 1
         } else {
-            button.innerHTML = '继续'
+            button.innerHTML = 'Continue'
             button.disabled = false
         }
     }
@@ -77,7 +77,7 @@ var set_html_style = {
         document.body.style.backgroundColor = 'rgb(250, 250, 250)' // background color
         document.body.style.color = 'black' // font color
         document.body.style.fontSize = '20pt'
-        document.body.style.fontFamily = '微软雅黑'
+        document.body.style.fontFamily = 'Microsoft Yahei'
         document.body.style.fontWeight = 'bold' // 'normal', 'bold'
         document.body.style.lineHeight = '1.6em' // line space
         document.body.style.cursor = 'default' // 'default', 'none', 'wait', ...
@@ -97,7 +97,7 @@ var set_html_style_EAST = {
         document.body.style.backgroundColor = 'black'
         document.body.style.color = 'white'
         document.body.style.fontSize = '32pt'
-        document.body.style.fontFamily = '微软雅黑'
+        document.body.style.fontFamily = 'Microsoft Yahei'
         document.body.style.fontWeight = 'normal'
         document.body.style.lineHeight = '1.2em'
         document.body.style.cursor = 'none'
@@ -110,20 +110,20 @@ var set_html_style_EAST = {
 // Stimuli
 
 var EAST_attrib_words = [
-    { data: { stim_type: 'pos' }, s: '健康' },
-    { data: { stim_type: 'pos' }, s: '快乐' },
-    { data: { stim_type: 'pos' }, s: '美好' },
-    { data: { stim_type: 'neg' }, s: '邪恶' },
-    { data: { stim_type: 'neg' }, s: '吝啬' },
-    { data: { stim_type: 'neg' }, s: '卑鄙' },
+    { data: { stim_type: 'pos' }, s: 'Health' },
+    { data: { stim_type: 'pos' }, s: 'Happy' },
+    { data: { stim_type: 'pos' }, s: 'Beautiful' },
+    { data: { stim_type: 'neg' }, s: 'Evil' },
+    { data: { stim_type: 'neg' }, s: 'Stingy' },
+    { data: { stim_type: 'neg' }, s: 'Despicable' },
 ]
 
-var a1 = '玫瑰'
-var a2 = '牡丹'
-var b1 = '空气'
-var b2 = '土地'
-var c1 = '蟑螂'
-var c2 = '蚊子'
+var a1 = 'Rose'
+var a2 = 'Peony'
+var b1 = 'Air'
+var b2 = 'Land'
+var c1 = 'Cockroach'
+var c2 = 'Mosquito'
 var blu = 'rgb(0, 125, 150)'
 var grn = 'rgb(0, 150, 125)'
 var EAST_target_words = [
@@ -143,14 +143,14 @@ var EAST_target_words = [
 
 // Category label tags (positioned absolute left/right)
 
-var tag_LR1 = `<div class="tag-left">按“F”键:<br/>积极词</div>
-               <div class="tag-right">按“J”键:<br/>消极词</div>`
+var tag_LR1 = `<div class="tag-left">Press F:<br/>Positive words</div>
+               <div class="tag-right">Press J:<br/>Negative words</div>`
 
-var tag_LR2 = `<div class="tag-left">按“F”键:<br/><span style="color:${blu}">蓝色</span></div>
-               <div class="tag-right">按“J”键:<br/><span style="color:${grn}">绿色</span></div>`
+var tag_LR2 = `<div class="tag-left">Press F:<br/><span style="color:${blu}">Blue</span></div>
+               <div class="tag-right">Press J:<br/><span style="color:${grn}">Green</span></div>`
 
-var tag_LR3 = `<div class="tag-left">按“F”键:<br/>积极词<br/>或<br/><span style="color:${blu}">蓝色</span></div>
-               <div class="tag-right">按“J”键:<br/>消极词<br/>或<br/><span style="color:${grn}">绿色</span></div>`
+var tag_LR3 = `<div class="tag-left">Press F:<br/>Positive words<br/>or<br/><span style="color:${blu}">blue</span></div>
+               <div class="tag-right">Press J:<br/>Negative words<br/>or<br/><span style="color:${grn}">green</span></div>`
 
 // Instructions
 
@@ -158,16 +158,16 @@ var EAST_prac1_instr = {
     type: 'html-keyboard-response',
     stimulus: `
     <p style="text-align: left; font-size: 20pt">
-    练习任务1：<br/><br/>
-    下面是一个“形容词分类”任务。<br/>
-    屏幕上将依次呈现一些形容词，它们分别具有<span style="color:#FFD866">积极</span>或<span style="color:#FFD866">消极</span>的含义。<br/>
-    在每个形容词呈现之前，屏幕上会出现注视点“+”来提醒您注意。<br/>
-    在每个形容词呈现之后，请<span style="color:#FFD866">尽量正确并且快速地</span>做出按键反应。<br/>
-    - 如果出现<span style="color:#FFD866">积极</span>形容词，请按<span style="color:#FFD866">“F”键</span>。<br/>
-    - 如果出现<span style="color:#FFD866">消极</span>形容词，请按<span style="color:#FFD866">“J”键</span>。<br/>
-    每次判断均会有正确（“√”）或错误（“X”）的反馈。<br/><br/>
-    现在，请您双手食指分别放在“F”键和“J”键上，并保证实验过程中双手不离开键盘。<br/>
-    如果您已认真阅读并充分理解了上述要求，请按空格键开始。</p>`,
+    Practice task 1:<br/><br/>
+    Below is an "Adjective Classification" task. <br/>
+    Adjectives with <span style="color:#FFD866">positive</span> or <span style="color:#FFD866">negative</span> meaning will appear one at a time.<br/>
+    Before each adjective is presented, a fixation point "+" will appear on the screen to remind you to pay attention. <br/>
+    After each adjective appears, <span style="color:#FFD866">respond as accurately and quickly as possible</span>.<br/>
+    - For <span style="color:#FFD866">positive</span> adjectives, press <span style="color:#FFD866">F</span>.<br/>
+    - For <span style="color:#FFD866">negative</span> adjectives, press <span style="color:#FFD866">J</span>.<br/>
+    Each judgment will have correct ("√") or wrong ("X") feedback. <br/><br/>
+    Now, please place your index fingers on the "F" key and the "J" key respectively, and ensure that your hands do not leave the keyboard during the experiment. <br/>
+    If you have carefully read and fully understood the above requirements, please press the space bar to get started. </p>`,
     choices: [' ']
 }
 
@@ -175,16 +175,16 @@ var EAST_prac2_instr = {
     type: 'html-keyboard-response',
     stimulus: `
     <p style="text-align: left; font-size: 20pt">
-    练习任务2：<br/><br/>
-    下面是一个“名词分类”任务。<br/>
-    屏幕上将依次呈现一些名词，它们分别具有<span style="color:${blu}">蓝色■</span>或<span style="color:${grn}">绿色■</span>的字体颜色。<br/>
-    在每个名词呈现之前，屏幕上会出现注视点“+”来提醒您注意。<br/>
-    在每个名词呈现之后，请<span style="color:#FFD866">尽量正确并且快速地</span>做出按键反应。<br/>
-    - 如果出现<span style="color:${blu}">蓝色</span>名词，请按<span style="color:#FFD866">“F”键</span>。<br/>
-    - 如果出现<span style="color:${grn}">绿色</span>名词，请按<span style="color:#FFD866">“J”键</span>。<br/>
-    每次判断均会有正确(“√”)或错误(“X”)的反馈。<br/><br/>
-    现在，请您双手食指分别放在“F”键和“J”键上，并保证实验过程中双手不离开键盘。<br/>
-    如果您已认真阅读并充分理解了上述要求，请按空格键开始。</p>`,
+    Practice task 2:<br/><br/>
+    The following is a "noun classification" task. <br/>
+    Nouns shown in <span style="color:${blu}">blue</span> or <span style="color:${grn}">green</span> will appear one at a time.<br/>
+    Before each noun is presented, a fixation point "+" will appear on the screen to remind you to pay attention. <br/>
+    After each noun appears, <span style="color:#FFD866">respond as accurately and quickly as possible</span>.<br/>
+    - For a <span style="color:${blu}">blue</span> noun, press <span style="color:#FFD866">F</span>.<br/>
+    - For a <span style="color:${grn}">green</span> noun, press <span style="color:#FFD866">J</span>.<br/>
+    Each judgment will have correct (“√”) or incorrect (“X”) feedback. <br/><br/>
+    Now, please place your index fingers on the "F" key and the "J" key respectively, and ensure that your hands do not leave the keyboard during the experiment. <br/>
+    If you have carefully read and fully understood the above requirements, please press the space bar to get started. </p>`,
     choices: [' ']
 }
 
@@ -192,14 +192,14 @@ var EAST_test_instr = {
     type: 'html-keyboard-response',
     stimulus: `
     <p style="text-align: left; font-size: 20pt">
-    正式任务：<br/><br/>
-    接下来是正式任务，先前两个练习任务中的白色形容词和彩色名词会随机交替出现。<br/>
-    你仍然需要<span style="color:#FFD866">尽量正确并且快速地</span>对它们的属性做出判断：<br/>
-    - 如果出现<span style="color:#FFD866">积极</span>形容词或<span style="color:${blu}">蓝色</span>名词，请按<span style="color:#FFD866">“F”键</span>。<br/>
-    - 如果出现<span style="color:#FFD866">消极</span>形容词或<span style="color:${grn}">绿色</span>名词，请按<span style="color:#FFD866">“J”键</span>。<br/>
-    这次将不再呈现关于正确或错误的反馈。<br/><br/>
-    现在，请您双手食指分别放在“F”键和“J”键上，并保证实验过程中双手不离开键盘。<br/>
-    如果您已认真阅读并充分理解了上述要求，请按空格键开始。</p>`,
+    Formal mission:<br/><br/>
+    Next came the formal task, where the white adjectives and colored nouns from the two previous practice tasks were randomly alternated. <br/>
+    Continue to <span style="color:#FFD866">respond as accurately and quickly as possible</span>:<br/>
+    - For <span style="color:#FFD866">positive</span> adjectives or <span style="color:${blu}">blue</span> nouns, press <span style="color:#FFD866">F</span>.<br/>
+    - For <span style="color:#FFD866">negative</span> adjectives or <span style="color:${grn}">green</span> nouns, press <span style="color:#FFD866">J</span>.<br/>
+    No feedback on what is correct or incorrect will be presented this time. <br/><br/>
+    Now, please place your index fingers on the "F" key and the "J" key respectively, and ensure that your hands do not leave the keyboard during the experiment. <br/>
+    If you have carefully read and fully understood the above requirements, please press the space bar to get started. </p>`,
     choices: [' ']
 }
 
@@ -371,12 +371,12 @@ var debrief2 = {
         var east_c = east_c_grn - east_c_blu
         return `
         <p style="text-align: left">
-        结果反馈（实验部分）：<br/><br/>
-        你对玫瑰、牡丹的内隐态度：${east_a.toFixed(2)}<br/>
-        你对空气、土地的内隐态度：${east_b.toFixed(2)}<br/>
-        你对蟑螂、蚊子的内隐态度：${east_c.toFixed(2)}<br/>
-        （小于0 = 消极，0 = 中性，大于0 = 积极）<br/><br/>
-        （按任意键继续）</p>`
+        Result feedback (experimental part):<br/><br/>
+        Your implicit attitude towards roses and peonies: ${east_a.toFixed(2)}<br/>
+        Your implicit attitude towards air and land: ${east_b.toFixed(2)}<br/>
+        Your implicit attitude towards cockroaches and mosquitoes: ${east_c.toFixed(2)}<br/>
+        (less than 0 = negative, 0 = neutral, greater than 0 = positive)<br/><br/>
+        (Press any key to continue)</p>`
     }
 }
 
@@ -406,7 +406,7 @@ jsPsych.init({
     timeline: main_timeline,
     on_finish: function() {
         jsPsych.data.get().localSave('csv', `data_east_${subID}.csv`) // download from browser
-        document.getElementById('jspsych-content').innerHTML += '实验结束，感谢您的参与！'
+        document.getElementById('jspsych-content').innerHTML += 'The experiment is over, thank you for your participation!'
     }
 })
 ```

@@ -1,52 +1,52 @@
-# 时间序列分析 (ARIMA)
+# Time Series Analysis (ARIMA)
 
-## 概述
+## Overview
 
-ARIMA模型分析单变量时间序列数据,适用于密集纵向测量(如每日日记、EMA生态瞬时评估、生理信号)。
+ARIMA models analyze univariate time series data and are suitable for dense longitudinal measurements (e.g. daily diaries, EMA ecological momentary assessments, physiological signals).
 
-**典型场景**: 30天每日焦虑评分的趋势和周期性分析; 干预前后时间序列的变化(中断时间序列)。
+**Typical scenario**: Trend and periodic analysis of 30-day daily anxiety scores; changes in time series before and after intervention (interrupted time series).
 
-## 何时使用
+## When to use
 
-| 条件 | 要求 |
+| Conditions | Requirements |
 |------|------|
-| 设计类型 | 密集纵向设计（每日日记、EMA、生理信号）或单被试实验设计 |
-| 因变量类型 | 连续变量，等间隔时间点重复测量 |
-| 信息要求 | 时间点数量、干预前后覆盖、季节性、效应形态、自相关与目标精度共同决定可辨识度/功效；不使用固定 30 或 12 点门槛 |
-| 关键诊断 | 平稳性/差分、残差自相关、结构突变、季节性、缺失/间隔和预测校准需结合图形与领域知识；ADF/Ljung–Box 的单个 p 值不能证明模型充分 |
+| Design type | Intensive longitudinal design (daily diary, EMA, physiological signals) or single-subject experimental design |
+| Dependent variable type | Continuous variable, repeated measurements at equally spaced time points |
+| Information Requirements | Number of time points, pre- and post-intervention coverage, seasonality, effect shape, autocorrelation, and target accuracy determine discriminability/power; do not use fixed 30 or 12-point thresholds |
+| Key diagnostics | Stationarity/differences, residual autocorrelation, structural mutations, seasonality, missingness/intervals, and prediction calibration require a combination of graphs and domain knowledge; a single p-value for ADF/Ljung–Box does not prove model adequacy |
 
 ## ARIMA(p,d,q)
 
-| 参数 | 含义 |
+| Parameter | Meaning |
 |------|------|
-| AR(p) | 自回归阶数:当前值由前p个值预测 |
-| I(d) | 差分阶数:做d次差分使序列平稳 |
-| MA(q) | 移动平均阶数:当前值由前q个预测误差预测 |
+| AR(p) | Autoregressive order: the current value is predicted by the previous p values |
+| I(d) | Difference order: do d times of difference to make the sequence stationary |
+| MA(q) | Moving average order: the current value is predicted by the first q prediction errors |
 
-## R代码
+## R code
 
 ```r
 library(forecast)
 fit <- auto.arima(data$anxiety)
 summary(fit)
-# 残差诊断
+# Residual diagnosis
 checkresiduals(fit)
-# 预测
-forecast(fit, h=7)  # 未来7天
+# Prediction
+forecast(fit, h=7)  # Next 7 days
 plot(forecast(fit, h=7))
 ```
 
-## 中断时间序列 (ITS)
+## Interrupt Time Series (ITS)
 
-检验某个干预时点后序列是否发生变化:
+Test whether the sequence changes after a certain intervention time point:
 
 ```r
 model <- lm(outcome ~ time + intervention + time_after, data=data)
 ```
 
-## 报告
+## Report
 
-**APA 7th 格式报告示例：**
+**APA 7th format report example:**
 
 > A 30-day intensive longitudinal design was used to examine daily anxiety ratings (0–100 visual analog scale) before and after a cognitive training intervention introduced at Day 15. An ARIMA(1,0,2) model was selected via automatic model selection (Hyndman & Khandakar, 2008) and confirmed by residual diagnostics (Ljung-Box test, *p* = .41). The model revealed a significant autoregressive component, AR(1) = 0.62, 95% CI [0.38, 0.86], *p* < .001, indicating that anxiety on a given day was positively predicted by the previous day's score. The moving average parameters were MA(1) = −0.34, 95% CI [−0.58, −0.10], *p* = .006, and MA(2) = 0.21, 95% CI [0.03, 0.39], *p* = .02.
 >

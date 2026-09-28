@@ -1,44 +1,44 @@
-# Bootstrap 方法
+# Bootstrap method
 
-## 概述
+## Overview
 
-Bootstrap 通过从原始数据中**有放回重采样**来估计统计量的抽样分布。不需要假设理论分布,适用范围极广。
+Bootstrap estimates the sampling distribution of a statistic by resampling with replacement from the original data. There is no need to assume theoretical distribution, and the scope of application is extremely wide.
 
-**典型场景**: 效应量的置信区间、中介效应的间接效应检验、非标准统计量的推断。
+**Typical scenarios**: Confidence interval of effect size, indirect effect test of mediation effect, inference of non-standard statistics.
 
-## 何时使用
+## When to use
 
-| 条件 | 要求 |
+| Conditions | Requirements |
 |------|------|
-| 设计 | 被试内或被试间 |
-| DV | 连续或分类 |
-| 用途 | 效应量CI、中介间接效应、非标准统计量推断 |
-| 重采样次数 | ≥5000（报告CI时） |
-| 重采样单位 | 需匹配分析单位（被试内→重采样被试） |
+| Design | Within or between subjects |
+| DV | Continuous or Categorical |
+| Purpose | Effect size CI, mediating indirect effect, non-standard statistical inference |
+| Number of resampling | ≥5000 (when reporting CI) |
+| Resampling unit | Need to match the analysis unit (within subject → resampling subject) |
 
-## 类型
+## Type
 
-| 类型 | 方法 | 适用 |
+| Type | Method | Applicable |
 |------|------|------|
-| 非参数Bootstrap | 直接从数据重采样 | 通用 |
-| 参数Bootstrap | 从拟合的分布采样 | 样本量小但有模型 |
-| 残差Bootstrap | 重采样残差 | 回归模型 |
+| Non-parametric Bootstrap | Resampling directly from data | General |
+| Parameter Bootstrap | Sampling from the fitted distribution | Small sample size but model |
+| Residual Bootstrap | Resampled Residual | Regression Model |
 
-## Bootstrap CI 方法
+## Bootstrap CI method
 
-| 方法 | 特点 |
+| Method | Features |
 |------|------|
-| Percentile | 简单,非对称可接受 |
-| BCa (Bias-Corrected) | **推荐**,校正偏差和偏度 |
-| Studentized | 最准确但需SE估计 |
+| Percentile | Simple, asymmetrically acceptable |
+| BCa (Bias-Corrected) | **Recommended**, corrected bias and skewness |
+| Studentized | The most accurate but requires SE estimation |
 
-## R 代码
+## R code
 
 ```r
 library(boot)
 
-# ==== 1. 配对设计: Cohen's d 的 Bootstrap CI ====
-# 对差异分重采样以保留被试内配对结构
+# ==== 1. Paired design: Cohen's d's Bootstrap CI ====
+# Resample difference scores to preserve within-subject pairing structure
 set.seed(123)
 n <- 30
 rt_congruent    <- rnorm(n, mean = 450, sd = 80)
@@ -52,9 +52,9 @@ boot_d <- function(d, indices) {
 boot_res <- boot(diff_scores, statistic = boot_d, R = 5000)
 boot_res
 boot.ci(boot_res, type = "perc")   # Percentile CI
-boot.ci(boot_res, type = "bca")    # BCa CI (推荐)
+boot.ci(boot_res, type = "bca")    # BCa CI (recommended)
 
-# ==== 2. 独立组: Cohen's d 的 Bootstrap CI ====
+# ==== 2. Independent group: Cohen's d's Bootstrap CI ====
 library(effsize)
 set.seed(42)
 g1 <- rnorm(35, mean = 10, sd = 3)
@@ -74,7 +74,7 @@ cat(sprintf(
   quantile(d_boot, 0.975)
 ))
 
-# ==== 3. 中介效应 Bootstrap (间接效应 a×b) ====
+# ==== 3. Mediating effect Bootstrap (indirect effect a×b) ====
 library(lavaan)
 
 set.seed(1)
@@ -95,25 +95,25 @@ fit <- sem(model, data = med_df, se = "bootstrap", bootstrap = 5000)
 parameterEstimates(fit, boot.ci.type = "bca.simple", level = 0.95)
 ```
 
-## 报告
+## Report
 
-### APA 7th 报告格式 (均值差异)
+### APA 7th Report Format (Mean Difference)
 
-> 采用 Bootstrap 方法(5000 次重采样)估计配对均值差异的效应量。结果显示，Cohen's d = 0.62, 95% BCa CI = [0.12, 1.10]，置信区间不包含零，表明两条件间差异具有中等以上的效应量。
+> The effect size of paired mean differences was estimated using the Bootstrap method (5000 resamples). The results showed that Cohen's d = 0.62, 95% BCa CI = [0.12, 1.10], and the confidence interval did not include zero, indicating that the difference between the two conditions had a larger than moderate effect size.
 
-### APA 7th 报告格式 (中介分析)
+### APA 7th Report Format (Mediation Analysis)
 
-> 采用 Bootstrap 方法(5000 次重采样)检验间接效应。结果显示，ab = 0.28, 95% BCa CI = [0.11, 0.47]，置信区间不包含零，表明 M 在 X 与 Y 之间的中介效应显著。
+> Use the Bootstrap method (5000 resamplings) to test for indirect effects. The results show that ab = 0.28, 95% BCa CI = [0.11, 0.47], and the confidence interval does not include zero, indicating that the mediating effect of M between X and Y is significant.
 
-## 注意事项
+## Notes
 
-- 重采样次数≥5000 (报告CI时)
-- 重采样单位需匹配分析单位(被试内→重采样被试,非试次)
-- Bootstrap不能挽救坏数据——仍需要合理的样本量和实验设计
+- The number of resamples ≥ 5000 (when reporting CI)
+- The resampling unit needs to match the analysis unit (within subject → resampling subject, non-trial)
+- Bootstrap cannot save bad data - reasonable sample size and experimental design are still required
 
-## 备选方法
+## Alternative method
 
-- 置换检验 — 适用于假设检验而非区间估计
-- 稳健回归 — 处理异常值时替代传统回归
-- 贝叶斯方法 — 提供整个后验分布而非点估计区间
+- permutation test - suitable for hypothesis testing rather than interval estimation
+- Robust regression — an alternative to traditional regression when dealing with outliers
+- Bayesian method - provides the entire posterior distribution rather than a point estimate interval
 

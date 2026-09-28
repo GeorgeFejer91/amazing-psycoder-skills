@@ -1,59 +1,57 @@
-# 统计效力分析 (Power Analysis)
+# Statistical Power Analysis (Power Analysis)
 
-## 概述
+## Overview
 
-效力分析在数据收集**之前**确定所需样本量,或在收集**之后**评估已有效应可检测的最小效应量。心理学预注册和伦理审查的必需品。
+Prospective power analysis can justify a sample size before data collection. Sensitivity analysis can describe the minimum effect size detectable at a chosen power level for a fixed sample size. Neither substitutes for an estimate and uncertainty interval after the study.
 
-**典型场景**: "我需要多少被试才能检测到 d=0.5 的效应?" "n=30 时我能检测到多小的效应?"
+**Typical scenario**: "How many subjects do I need to detect an effect at d=0.5?" "How small an effect can I detect at n=30?"
 
-## 何时使用
+## When to use
 
-| 条件 | 要求 |
+| Conditions | Requirements |
 |------|------|
-| 研究设计已确定 | 自变量/因变量、实验设计类型(被试间/被试内/混合)已明确 |
-| 效应量可估计 | 可从文献、元分析或预实验中获取预期的效应量(Cohen's d, η², r 等) |
-| 统计检验已选定 | 已确定将使用的统计方法(t检验、ANOVA、回归、混合模型等) |
-| 伦理或资源约束存在 | 需要向伦理委员会提交样本量理由,或受限于预算/时间 |
-| 预注册要求 | 期刊或平台要求预注册时注明样本量规划依据 |
+| Research design has been determined | Independent variables/dependent variables, experimental design type (between-subjects/within-subjects/mixed) have been clarified |
+| The effect size can be estimated | The expected effect size can be obtained from the literature, meta-analysis or pilot experiments (Cohen's d, η², r, etc.) |
+| Statistical test has been selected | The statistical method to be used has been determined (t-test, ANOVA, regression, mixed model, etc.) |
+| Ethical or resource constraints exist | Sample size justification needs to be submitted to the ethics committee, or limited by budget/time |
+| Pre-registration requirements | The journal or platform requires the sample size planning basis to be stated when pre-registering |
 
-> 若上述条件不满足(例如无效应量估计),应使用**敏感性分析**(sensitivity analysis):固定 α、power 和 n,反推可检测的最小效应量。
+> If the above conditions are not met (for example, there is no effect size estimate), **sensitivity analysis** (sensitivity analysis) should be used: fix α, power and n, and infer the minimum detectable effect size.
 
-## 四种效力分析
+## Four types of effectiveness analysis
 
-| 类型 | 给定 | 求 |
+| Type | Given | Find |
 |------|------|-----|
-| A Priori | α, power, effect size | 所需 n |
-| Sensitivity | α, power, n | 可检测的最小效应 |
-| Post-hoc | α, n, effect size | 已有研究的power |
-| 样本量规划 | 预算/时间约束 | 最优被试数 |
+| A Priori | α, power, effect size | required n |
+| Sensitivity | α, power, n | Minimum detectable effect |
+| Post-hoc observed power | α, n, observed effect size | Avoid: it adds no information to the observed p-value and is misleading as a retrospective quality check |
+| Sample size planning | Budget/time constraints | Optimal number of subjects |
 
-## 常用工具
+## Common tools
 
-| 方法 | R包 |
+| Method | R Package |
 |------|-----|
-| t检验/ANOVA | `pwr` |
-| 混合模型 | `simr` (基于模拟) |
-| 通用 | `powerAnalyzeR` |
+| t test/ANOVA | `pwr` |
+| Mixed model | `simr` (simulation-based) |
+| General | `powerAnalyzeR` |
 
-## 典型值
+## Typical value
 
-- α = 0.05 (标准)
-- Power = 0.80 (推荐) 或 0.90 (严格)
-- d = 0.2 (小), 0.5 (中), 0.8 (大)
-- η²p = 0.01 (小), 0.06 (中), 0.14 (大)
+- Choose α, target power or precision, and a scientifically justified smallest effect of interest for the decision context. Values such as α=.05 and power=.80 are common conventions, not universal requirements.
+- Generic "small/medium/large" effect-size labels are illustrative conventions and do not replace a study-specific effect justification.
 
-## R 代码
+## R code
 
-### 安装与加载
+### Installation and loading
 
 ```r
 install.packages("pwr")
 library(pwr)
 ```
 
-### A Priori 效力分析 (求所需样本量)
+### A Priori power analysis (find the required sample size)
 
-双样本独立 t 检验,预期 Cohen's d = 0.5,α = 0.05,power = 0.80:
+Two-sample independent t-test, expected Cohen's d = 0.5, α = 0.05, power = 0.80:
 
 ```r
 result <- pwr.t.test(
@@ -64,10 +62,10 @@ result <- pwr.t.test(
   alternative = "two.sided"
 )
 result
-# n = 63.77 → 每组需 64 名被试,共 128 名
+# n = 63.77 → Each group requires 64 subjects, 128 in total
 ```
 
-单因素被试间 ANOVA (4 组),预期 f = 0.25 (中等效应),α = 0.05,power = 0.80:
+One-way between-subjects ANOVA (4 groups), expected f = 0.25 (medium effect), α = 0.05, power = 0.80:
 
 ```r
 pwr.anova.test(
@@ -76,10 +74,10 @@ pwr.anova.test(
   sig.level = 0.05,
   power     = 0.80
 )
-# n = 44.60 → 每组需 45 名被试,共 180 名
+# n = 44.60 → Each group requires 45 subjects, 180 in total
 ```
 
-相关系数检验,预期 r = 0.30:
+Correlation coefficient test, expected r = 0.30:
 
 ```r
 pwr.r.test(
@@ -88,13 +86,13 @@ pwr.r.test(
   power     = 0.80,
   alternative = "two.sided"
 )
-# n = 84.07 → 需 85 名被试
+# n = 84.07 → 85 subjects required
 ```
 
-### Sensitivity 分析 (给定 n 求可检测的最小效应量)
+### Sensitivity analysis (given n, find the smallest detectable effect size)
 
 ```r
-# 已知每组仅能招募 30 名被试,求可检测的最小 d
+# It is known that each group can only recruit 30 subjects, find the minimum detectable d
 pwr.t.test(
   n          = 30,
   sig.level  = 0.05,
@@ -102,55 +100,41 @@ pwr.t.test(
   type       = "two.sample",
   alternative = "two.sided"
 )
-# d = 0.74 → 仅能检测到大效应
+# d = 0.74 → only large effects can be detected
 ```
 
-### Post-hoc 效力分析 (已收集数据后评估 power)
+After data collection, report the estimated effect and its uncertainty interval. If the sample size is fixed, a sensitivity analysis can describe design capability for a *prespecified* effect size; do not use power computed from the observed effect as evidence about the result.
+
+### Effect size conversion
 
 ```r
-# 已有研究:每组 n=25,d=0.4,评估其 power
-pwr.t.test(
-  n          = 25,
-  d          = 0.4,
-  sig.level  = 0.05,
-  type       = "two.sample",
-  alternative = "two.sided"
-)
-# power = 0.31 → 效力严重不足
-```
+# There is no universal conversion from d to ANOVA f: it depends on
+# the number of groups, allocation, contrast, and assumed group means.
 
-### 效应量换算
-
-```r
-# Cohen's d → f (ANOVA用)
-d <- 0.5
-f <- d / 2
-f  # 0.25
-
-# η² → f (ANOVA用)
+# η² → f (for ANOVA)
 eta_sq <- 0.06
 f <- sqrt(eta_sq / (1 - eta_sq))
 f  # 0.253
 ```
 
-### 混合模型效力分析 (simr)
+### Mixed model power analysis (simr)
 
 ```r
 # install.packages("simr")
 library(simr)
 
-# 使用已有模型对象进行基于模拟的效力估计
+# Simulation-based effectiveness estimation using existing model objects
 # model <- lmer(RT ~ condition + (1 | subject), data = pilot_data)
 # powerSim(model, nsim = 200, test = fixed("condition"))
 ```
 
-## 报告
+## Report
 
-> An a priori power analysis (α=.05, power=.80) indicated that N=34 is required to detect a medium within-subjects effect (d_z=0.5) with a two-tailed paired t-test.
+> An a priori power analysis for a two-sided paired t-test used the prespecified standardized mean paired difference, target power, and alpha level. Report the exact software output, the resulting number of *pairs*, and the assumptions about missing pairs.
 
-## 备选方法
+## Alternative method
 
-- 等价性检验 (Equivalence Testing) — 当研究目标是评估效应是否落在预先定义的可忽略区间，而非把“未显著”当作无效应
-- 贝叶斯因子 (Bayes Factor) — 当需要持续收集数据直到证据充分(而非预先固定样本量)
-- 效应量估计 (Effect Size Estimation) — 当已有时数据,需要估计效应量及其置信区间
-- 样本量规划 (Sample Size Planning) — 当约束来自预算/时间而非统计效力
+- Equivalence Testing — When the research goal is to evaluate whether the effect falls within a predefined negligible interval, rather than treating "not significant" as no effect
+- Bayes Factor — when evidence for competing specified models is the estimand; sequential sampling still requires a defensible prior and stopping/reporting plan
+- Effect Size Estimation — When data are available, the effect size and its confidence interval need to be estimated
+- Sample Size Planning - when constraints are budget/time rather than statistical power

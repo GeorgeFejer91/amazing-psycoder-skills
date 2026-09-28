@@ -6,7 +6,7 @@
 
 ## When to Use
 
-User mentions: Ultimatum game, UG, fairness, social decision-making, economic game, 最后通牒游戏, 公平博弈. A two-player economic game that measures fairness preferences and the willingness to incur personal costs to punish unfair treatment.
+User mentions: Ultimatum game, UG, fairness, social decision-making, economic game, ultimatum game, fair game. A two-player economic game that measures fairness preferences and the willingness to incur personal costs to punish unfair treatment.
 
 ## Core Logic
 
@@ -57,28 +57,28 @@ Camerer, C. F. (2003). *Behavioral game theory: Experiments in strategic interac
 
 ## Do Not Assume
 
-- Do not assume 参与者始终是Responder角色 — 部分变体交替角色或让参与者担任Proposer，需明确确认角色分配方式
-- Do not assume 提议者是人类 — 计算机/算法作为提议者是常见操作，用于区分社会偏好与风险偏好。需确认提议者身份（真人照片/姓名、匿名、或计算机算法）
-- Do not assume 分配方案是预先编程的 — 部分实现涉及实时人类提议者，需联网配对或使用虚拟玩家逻辑
-- Do not assume 接受/拒绝是唯一的因变量 — 部分设计在每个试次后收集公平性评分或情绪评定，需确认是否需要试次后评分
-- Do not assume 总金额固定为10单位 — 不同研究使用不同面额（如$10、£10、100元、100积分），需明确确认赌注金额和货币单位
-- Do not assume 连接模拟环节是必需的 — 部分实验明确告知参与者分配方案是预先设定的，跳过连接动画以缩短实验时长
+- Do not assume that the participant is always the Responder role - some variants alternate roles or let the participant act as the Proposer, and the role allocation method needs to be clearly confirmed
+- Do not assume the proposer is a human — computers/algorithms acting as proposers are a common practice used to distinguish social preferences from risk preferences. The identity of the proposer needs to be confirmed (real photo/name, anonymous, or computer algorithm)
+- Do not assume assignments are pre-programmed — some implementations involve real-time human proposers, require online matchmaking, or use virtual player logic
+- Do not assume acceptance/rejection is the only dependent variable - some designs collect fairness ratings or emotion ratings after each trial, need to confirm whether post-trial ratings are required
+- Do not assume that the total amount is fixed at 10 units - different studies use different denominations (such as $10, £10, 100 yuan, 100 points), and the bet amount and currency unit need to be clearly confirmed
+- Do not assume that the connection simulation session is required — some experiments explicitly inform participants that the allocation plan is predetermined, and skip the connection animation to shorten the experiment time
 
 ## Condition File Columns
 
 | Column | Type | Description |
 |--------|------|-------------|
-| proposer_amount | int/float | 提议者获得的金额 |
-| responder_amount | int/float | 参与者（Responder）获得的金额 |
-| total_stake | int/float | 本轮总分配金额 |
-| fairness | str | 公平性分类（`"fair"`, `"unfair"`, `"very_unfair"`） |
-| proposer_id | str | 提议者身份标签（`"human"` 或 `"computer"`） |
+| proposer_amount | int/float | Amount received by the proposer |
+| responder_amount | int/float | The amount received by the participant (Responder) |
+| total_stake | int/float | Total allocation amount of this round |
+| fairness | str | fairness classification (`"fair"`, `"unfair"`, `"very_unfair"`) |
+| proposer_id | str | Proposer identity tag (`"human"` or `"computer"`) |
 
 ## Variants
 
-- **经典最后通牒博弈 (Classic Ultimatum Game)**：单次匿名博弈，参与者固定为Responder角色，对一系列预先设定的分配方案做出接受或拒绝决策。分配方案通常包含公平（5:5）、不公平（7:3、8:2）和非常不公平（9:1、10:0）等梯度水平。这是最常用的实现方式，本文档主要描述此变体。
-- **独裁者博弈 (Dictator Game)**：Proposer单方面决定分配方案，Responder无权拒绝，只能被动接受。用于测量纯粹的利他偏好和公平动机，排除策略性考虑和惩罚动机。可交叉参考 dictator-game.md（如该文件存在）。
-- **多轮重复最后通牒博弈 (Repeated Ultimatum Game)**：同一对参与者进行多轮博弈，角色固定或交替轮换。用于考察声誉建立、互惠策略和学习效应。每次试次后可能需要显示累积收益。可交叉参考 trust-game.md（如该文件存在）。
+- **Classic Ultimatum Game**: A single anonymous game in which the participants are fixed as Responders and make acceptance or rejection decisions for a series of preset allocation plans. Distribution plans typically include gradient levels such as fair (5:5), unfair (7:3, 8:2), and very unfair (9:1, 10:0). This is the most common implementation, and this document mainly describes this variant.
+- **Dictator Game**: The Proposer unilaterally decides on the allocation plan. The Responder has no right to refuse and can only passively accept it. Used to measure purely altruistic preferences and fairness motives, excluding strategic considerations and punishment motives. Cross-reference dictator-game.md if it exists.
+- **Multi-round Repeated Ultimatum Game**: The same pair of participants conduct multiple rounds of the game, with roles fixed or alternately rotated. Used to examine reputation building, reciprocity strategies, and learning effects. It may be necessary to display cumulative gains after each trial. Can be cross-referenced to trust-game.md if it exists.
 
 ---
 
@@ -86,89 +86,89 @@ Camerer, C. F. (2003). *Behavioral game theory: Experiments in strategic interac
 
 ### User Request
 
-> "我想用PsychoPy做一个最后通牒博弈实验。参与者作为回应者，每次看到分配方案：提议者获得多少，自己获得多少，总金额为100元。分配方案包括：提议者50元/自己50元（公平）、提议者70元/自己30元（不公平）、提议者90元/自己10元（非常不公平）。每种方案出现10次，共30试次，随机顺序。试次开始前先模拟连接其他玩家（3秒），然后呈现分配方案，屏幕下方有两个按钮'接受'和'拒绝'，用鼠标点击。如果接受，显示双方收益；如果拒绝，显示'双方收益均为0'。结果呈现2秒。试次间隔500-800ms随机。无练习试次。"
+> "I want to use PsychoPy to do an ultimatum game experiment. Participants, as responders, see the distribution plan every time: how much the proposer gets, how much they get, and the total amount is 100 yuan. The distribution plans include: proposer 50 yuan/self 50 yuan (fair), proposer 70 yuan/self 30 yuan (unfair), proposer 90 yuan/self 10 yuan (very unfair). Each The plan appears 10 times, with a total of 30 trials, in a random order. Before the trial starts, the allocation plan is presented. There are two buttons 'Accept' and 'Reject' at the bottom of the screen. If accepted, the benefits of both parties are displayed. The results are presented for 2 seconds. There are no practice trials. "
 
 ### Trial Window Timeline
 
 ```text
 ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐
 │ Window 1                 │ →  │ Window 2                 │ →  │ Window 3                 │ →  │ Window 4                 │
-│ 连接模拟                  │    │ 分配方案 + 决策           │    │ 结果呈现                  │    │ ITI                      │
-│ Content: "正在连接        │    │ Content: "提议者获得:     │    │ Content: 双方收益（接受） │    │ Content: 空白            │
-│ 其他玩家..."              │    │ ¥70, 您获得: ¥30"        │    │ 或 "双方收益均为0元"      │    │ Duration: 500-800 ms     │
-│ Duration: 3 s             │    │ + 接受/拒绝按钮           │    │ （拒绝）                  │    │ Response: none           │
+│ Connection Simulation │ │ Allocation Plan + Decision │ │ Result Presentation │ │ ITI │
+│ Content: "Connecting │ │ Content: "The proposer gets: │ │ Content: Benefits of both parties (accepted) │ │ Content: Blank │
+│ Other players..." │ │ ¥70, you get: ¥30" │ │ or "Both sides gain 0 yuan" │ │ Duration: 500-800 ms │
+│ Duration: 3 s │ │ + Accept/Reject button │ │ (Reject) │ │ Response: none │
 │ Response: none            │    │ Duration: until click     │    │ Duration: 2 s             │    │ Data: none               │
-│ Data: none                │    │ Response: 鼠标点击        │    │ Response: none            │    │                           │
+│ Data: none │ │ Response: Mouse click │ │ Response: none │ │ │
 │                           │    │ Data: choice, RT, offer   │    │ Data: none                │    │                           │
 └──────────────────────────┘    └──────────────────────────┘    └──────────────────────────┘    └──────────────────────────┘
 ```
 
 | Window | Content | Duration | Response | File/Folder | Condition | Data |
 |--------|---------|----------|----------|-------------|-----------|------|
-| 连接模拟 | "正在连接其他玩家..." | 3 s | none | none | none | none |
-| 分配方案+决策 | 分配金额 + 接受/拒绝按钮 | until mouse click | 鼠标点击 | none | {proposer_amount, responder_amount} | choice, rt, offer |
-| 结果呈现 | 双方收益 或 "双方收益均为0元" | 2 s | none | none | none | none |
-| ITI | 空白 | 500-800 ms random | none | none | none | none |
+| Connection simulation | "Connecting to other players..." | 3 s | none | none | none | none |
+| Allocation plan + decision | Allocation amount + accept/reject button | until mouse click | mouse click | none | {proposer_amount, responder_amount} | choice, rt, offer |
+| Result presentation | Benefits of both parties or "Both parties' profits are 0 yuan" | 2 s | none | none | none | none |
+| ITI | blank | 500-800 ms random | none | none | none | none |
 
 ### Parsed Experiment Specification
 
 | Field | Value |
 |-------|-------|
-| 实验名称 | 最后通牒博弈任务 |
-| 平台 | PsychoPy |
-| 任务类型 | 最后通牒博弈 (Ultimatum Game) |
-| 参与者角色 | Responder（回应者） |
-| 总金额 | 100元 |
-| 分配方案 | 50:50（公平）、70:30（不公平）、90:10（非常不公平） |
-| 每方案试次数 | 10次 |
-| 总试次数 | 30 |
-| 试次顺序 | 随机 |
-| 响应方式 | 鼠标点击接受/拒绝按钮 |
-| 连接模拟 | 3秒 |
-| 结果呈现 | 2秒 |
-| ITI | 500-800ms随机 |
+| Experiment name | Ultimatum game task |
+| Platform | PsychoPy |
+| Mission Type | Ultimatum Game (Ultimatum Game) |
+| Participant role | Responder |
+| Total amount | 100 yuan |
+| Allocation plan | 50:50 (fair), 70:30 (unfair), 90:10 (very unfair) |
+| Number of attempts per plan | 10 times |
+| Total number of attempts | 30 |
+| Trial order | Random |
+| Response method | Click the mouse to accept/reject button |
+| Connection simulation | 3 seconds |
+| Result presentation | 2 seconds |
+| ITI | 500-800ms random |
 
 ### Missing Information
 
-1. 提议者身份未明确 → 需确认是"匿名人类玩家"还是"计算机算法"（影响封面故事文本和连接模拟后的呈现方式）
-2. 是否需要在实验结束后显示累积总收益 → 影响结果汇总界面的设计
-3. 指导语内容未提供 → 需确认指导语文本、是否明确告知分配方案为预先设定
+1. The identity of the proposer is not clear → It needs to be confirmed whether it is an "anonymous human player" or a "computer algorithm" (affects the cover story text and the presentation method after connecting to the simulation)
+2. Whether it is necessary to display the cumulative total income after the experiment → affects the design of the results summary interface
+3. The content of the guidance language is not provided → It is necessary to confirm the text of the guidance language and whether it is clearly informed that the allocation plan is preset
 
 ### Critical Assumptions
 
-- 提议者为匿名人类玩家，连接模拟用于增强封面故事的可信度（默认设计假设）
-- 实验结束后不显示累积总收益，仅呈现致谢页面
-- 指导语使用标准最后通牒博弈指导语模板，包含角色说明和规则解释
-- 无试次后公平性评分或情绪评定
+- The proposer is an anonymous human player, and the connection simulation is used to enhance the credibility of the cover story (default design assumption)
+- After the experiment is over, the cumulative total revenue will not be displayed, only the acknowledgment page will be displayed.
+- Instructions use the standard Ultimatum Game instruction template, including role descriptions and rule explanations
+- No post-trial fairness ratings or mood ratings
 
 ### Code Architecture
 
 ```
 ultimatum_game.py
-├── 参数设置 (total_stake=100, offers, n_repeats, timing)
-├── 窗口初始化 (全屏/窗口)
-├── 刺激预加载 (TextStim for 分配文本, ButtonStim for 接受/拒绝)
-├── 条件表生成 (3种方案 × 10次 = 30试次, 随机排列)
-├── 连接模拟 (3秒, TextStim)
-├── 试次循环:
-│   ├── 分配方案呈现 + 接受/拒绝按钮
-│   ├── 鼠标点击响应 (记录 choice, rt)
-│   ├── 结果呈现 (2秒, 根据选择显示收益)
-│   └── ITI (500-800ms 随机)
-├── 致谢页面
-└── 数据保存: try/finally CSV 增量写入
+├── Parameter settings (total_stake=100, offers, n_repeats, timing)
+├── Window initialization (full screen/window)
+├── Stimulus preloading (TextStim for assign text, ButtonStim for accept/reject)
+├── Condition table generation (3 options × 10 times = 30 trials, randomly arranged)
+├── Connection simulation (3 seconds, TextStim)
+├── Trial cycle:
+│ ├── Allocation plan presentation + accept/reject button
+│ ├── Mouse click response (record choice, rt)
+│ ├── Result presentation (2 seconds, revenue will be displayed based on selection)
+│ └── ITI (500-800ms random)
+├── Acknowledgments page
+└── Data saving: try/finally CSV incremental writing
 ```
 
 ### Expected Data Columns
 
 | Column | Type | Description |
 |--------|------|-------------|
-| trial_index | int | 试次序号 (0-based) |
-| proposer_amount | float | 提议者获得金额 |
-| responder_amount | float | 参与者获得金额 |
-| total_stake | float | 本轮总金额 |
-| fairness | str | 公平性分类 (`"fair"`, `"unfair"`, `"very_unfair"`) |
-| choice | str | 参与者的选择 (`"accept"` 或 `"reject"`) |
-| rt | float | 反应时间 (秒) |
-| outcome_self | float | 参与者本轮实际收益 |
-| outcome_proposer | float | 提议者本轮实际收益 |
+| trial_index | int | trial number (0-based) |
+| proposer_amount | float | Amount obtained by the proposer |
+| responder_amount | float | Amount received by the participant |
+| total_stake | float | Total amount of this round |
+| fairness | str | fairness classification (`"fair"`, `"unfair"`, `"very_unfair"`) |
+| choice | str | participant's choice (`"accept"` or `"reject"`) |
+| rt | float | reaction time (seconds) |
+| outcome_self | float | Actual income of participants in this round |
+| outcome_proposer | float | The proposer's actual income in this round |

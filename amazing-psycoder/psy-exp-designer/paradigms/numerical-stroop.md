@@ -6,7 +6,7 @@
 
 ## When to Use
 
-User mentions: Numerical Stroop, number Stroop, physical vs. semantic comparison, Henik task, 数字斯特鲁普. A variant of the Stroop task using numerical magnitude comparison, measuring interference between the physical size and semantic value of digits.
+User mentions: Numerical Stroop, number Stroop, physical vs. semantic comparison, Henik task, numerical Stroop. A variant of the Stroop task using numerical magnitude comparison, measuring interference between the physical size and semantic value of digits.
 
 ## Core Logic
 
@@ -69,36 +69,36 @@ Columns in the xlsx/csv file that drives each trial (one file per task condition
 
 | Column | Type | Description |
 |--------|------|-------------|
-| number1 | int/str | 左侧呈现的数字（如 `3`、`5`） |
-| number2 | int/str | 右侧呈现的数字（如 `5`、`3`） |
-| size1 | float | 左侧数字的物理字号高度（如 `0.1`、`0.08`） |
-| size2 | float | 右侧数字的物理字号高度（如 `0.08`、`0.1`） |
-| congruency | str | `"congruent"`（物理大小与数值大小一致）或 `"incongruent"`（物理大小与数值大小冲突） |
+| number1 | int/str | The number presented on the left (such as `3`, `5`) |
+| number2 | int/str | The number presented on the right (such as `5`, `3`) |
+| size1 | float | The physical font size height of the left number (such as `0.1`, `0.08`) |
+| size2 | float | The physical font size height of the number on the right (such as `0.08`, `0.1`) |
+| congruency | str | `"congruent"` (the physical size is consistent with the numerical size) or `"incongruent"` (the physical size conflicts with the numerical size) |
 
 ## Variants
 
-- **经典数值 Stroop（Classic Numerical Stroop）**：基于 Henik & Tzelgov (1982) 的原始设计，参与者分别完成语义比较（判断哪个数字数值更大）和物理比较（判断哪个数字物理尺寸更大）两个组块任务。每个组块内包含一致和不一致试次。详见本文件。
-- **大小一致性任务（Size Congruity Task）**：数值 Stroop 的泛化版本，使用其他可量化维度（如面积、亮度、数量）替代物理字号，考察不同维度间的一致性效应。刺激参数（尺寸、亮度等）需在条件文件中以额外列的方式定义，代码需适配多维度刺激呈现。可参考 Eriksen Flanker 任务中刺激维度的定义方式。
-- **发展性数值 Stroop（Developmental Numerical Stroop）**：针对儿童或特殊人群（如发展性计算障碍）的简化版本，通常使用更少的数字对（如 1–5 而非 1–9），更大的物理尺寸差异，并加入中性试次（neutral trials，两个数字物理尺寸相同但数值不同）以减少任务难度。需额外确认适用年龄段和数字范围。
+- **Classic Numerical Stroop**: Based on the original design of Henik & Tzelgov (1982), participants completed two block tasks: semantic comparison (judging which number is larger in numerical value) and physical comparison (judging which number is larger in physical size). Each block contained congruent and incongruent trials. See this document for details.
+- **Size Congruity Task**: A generalized version of numerical Stroop, using other quantifiable dimensions (such as area, brightness, quantity) instead of physical font size to examine the consistency effect between different dimensions. Stimulus parameters (size, brightness, etc.) need to be defined as additional columns in the condition file, and the code needs to be adapted to multi-dimensional stimulus presentation. Consider the way stimulus dimensions are defined in Eriksen Flanker's task.
+- **Developmental Numerical Stroop**: A simplified version for children or special populations (e.g., developmental dyscalculia) that typically uses fewer number pairs (e.g., 1–5 instead of 1–9), greater physical size differences, and adds neutral trials (two numbers with the same physical size but different numerical values) to reduce task difficulty. Additional confirmation of applicable age groups and numerical ranges is required.
 
 ## Example
 
 ### User Request
 
-> "我要做一个数值Stroop实验。屏幕左右两边各呈现一个数字，两个数字物理大小不同。在语义任务中，被试判断哪个数字的数值更大，忽略物理大小；在物理任务中，判断哪个数字物理尺寸更大，忽略数值。数字使用1-9之间的数字对（排除相同数字配对），字体大小分大(0.12)和小(0.06)两种。每个任务block包含80个试次，一致/不一致各40个。先做语义block，后做物理block。每个block前有16个练习试次。按键用左右箭头键。用PsychoPy实现。"
+> "I am going to do a numerical Stroop experiment. A number is presented on the left and right sides of the screen, and the two numbers are different in physical size. In the semantic task, the subjects judge which number has a larger numerical value, ignoring the physical size; in the physical task, the subject judges which number has a larger physical size, ignoring the numerical value. The numbers use pairs of numbers between 1-9 (identical numbers are excluded Word matching), the font size is divided into large (0.12) and small (0.06). Each task block contains 40 trials for consistency and inconsistency. There are 16 practice trials before each block.
 
 ### Trial Window Timeline
 
 ```text
 ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐
 │ Window 1                 │ →  │ Window 2                 │ →  │ Window 3                 │
-│ 注视点                   │    │ 数字刺激对               │    │ 反馈（仅练习阶段）       │
-│ Content: +               │    │ Content: 两个数字         │    │ Content: "正确！" 或     │
-│ Duration: 100 ms         │    │ 分别以不同字号呈现        │    │ "哦哦，答错了！"          │
-│ Response: 无             │    │ 位置: 左侧(-0.075,0)     │    │ Duration: 1000 ms        │
-│ Condition: 无            │    │       右侧(0.075,0)      │    │ Response: 无             │
-│ Data: 无                 │    │ Duration: 直到按键       │    │ Condition: 无            │
-│                          │    │ Response: left/right 键  │    │ Data: 无                 │
+│ Fixation point │ │ Digital stimulus pair │ │ Feedback (practice phase only) │
+│ Content: + │ │ Content: two numbers │ │ Content: "Correct!" or │
+│ Duration: 100 ms │ │ Presented in different font sizes │ │ "Oh, wrong answer!" │
+│ Response: None │ │ Position: Left (-0.075,0) │ │ Duration: 1000 ms │
+│ Condition: None │ │ Right(0.075,0) │ │ Response: None │
+│ Data: None │ │ Duration: Until key │ │ Condition: None │
+│ │ │ Response: left/right key │ │ Data: None │
 │                          │    │ Condition: {number1,     │    │                          │
 │                          │    │  number2, size1, size2,  │    │                          │
 │                          │    │  congruency}             │    │                          │
@@ -106,84 +106,84 @@ Columns in the xlsx/csv file that drives each trial (one file per task condition
 └──────────────────────────┘    └──────────────────────────┘    └──────────────────────────┘
 ```
 
-| Window | 内容 | 持续时间 | 反应 | 条件 | 数据 |
+| Window | Content | Duration | Response | Condition | Data |
 |--------|------|----------|------|------|------|
-| 注视点 | + | 100 ms | 无 | 无 | 无 |
-| 数字刺激 | 两个数字（不同字号），左右并排呈现 | 直到按键（无截止时间） | 左箭头键 / 右箭头键 | {number1, number2, size1, size2, congruency, task_type} | rt, key, acc |
-| 反馈 | "正确！" / "哦哦，答错了！"（仅练习） | 1000 ms | 无 | 无 | 无 |
+| fixation point | + | 100 ms | none | none | none |
+| Number stimulus | Two numbers (different font sizes), presented side by side | Until key (no deadline) | Left arrow key / Right arrow key | {number1, number2, size1, size2, congruency, task_type} | rt, key, acc |
+| Feedback | "Correct!" / "Oh, wrong answer!" (Practice only) | 1000 ms | None | None | None |
 
 ### Parsed Experiment Specification
 
 | Field | Value |
 |-------|-------|
-| 实验名称 | 数值 Stroop 任务 |
-| 平台 | PsychoPy |
-| 任务类型 | 数值 Stroop（Numerical Stroop / Size Congruity Task） |
-| 任务条件 | 语义比较（数值更大） + 物理比较（尺寸更大），组块呈现 |
-| 数字范围 | 1–9（排除相同数字配对） |
-| 物理尺寸 | 大字号（0.12）、小字号（0.06） |
-| 反应按键 | 左箭头键（←）、右箭头键（→） |
-| 每 block 试次数 | 80（40 congruent + 40 incongruent） |
-| 任务顺序 | 固定：先语义后物理 |
-| 练习试次 | 每 block 前 16 个 |
-| 阶段 | 指导语 → 练习(语义, 16) → 语义 Block(80) → 休息 → 练习(物理, 16) → 物理 Block(80) → 结束 |
+| Experiment Name | Numerical Stroop Task |
+| Platform | PsychoPy |
+| Task type | Numerical Stroop (Numerical Stroop / Size Congruity Task) |
+| Task conditions | Semantic comparison (larger value) + physical comparison (larger size), chunked presentation |
+| Number range | 1–9 (excluding same number pairs) |
+| Physical size | Large font size (0.12), small font size (0.06) |
+| Response keys | Left arrow key (←), right arrow key (→) |
+| Number of trials per block | 80 (40 congruent + 40 incongruent) |
+| Task order | Fixed: semantics first, physics later |
+| Practice trials | First 16 per block |
+| Stage | Instructions → Practice (Semantics, 16) → Semantics Block(80) → Rest → Practice (Physics, 16) → Physics Block(80) → End |
 
 ### Missing Information
 
-1. 指导语内容未说明 → 需确认语义任务和物理任务各自的指导语具体措辞（如"请判断哪个数字的数值更大，按左或右键"）
-2. ITI（试次间隔）未提及 → 需确认试次间是否有间隔时间及具体时长（200–500 ms 随机？还是直接进入下一个试次？）
-3. Block 间休息未说明 → 需确认语义 block 结束后是否有休息提示，以及休息时长是否由被试自主控制
+1. The content of the instructions is not specified → It is necessary to confirm the specific wording of the instructions for the semantic tasks and the physical tasks (such as "Please judge which number is larger, press the left or right key")
+2. ITI (inter-trial interval) is not mentioned → It is necessary to confirm whether there is an interval between trials and the specific duration (200–500 ms random? Or go directly to the next trial?)
+3. The rest between blocks is not specified → It is necessary to confirm whether there is a rest prompt after the end of the semantic block, and whether the rest duration is controlled by the subject voluntarily
 
 ### Critical Assumptions
 
-- ITI 默认为 300 ms（注视点出现前），与 Pavlovia 参考实现保持一致
-- Block 间有自主控制休息提示（按空格键继续）
-- 数字刺激从注视点偏移 200 ms 后呈现（同 Pavlovia 参考实现：注视点 100 ms → 空白 200 ms 后刺激出现）
-- 左右位置与按键映射一致（左侧刺激对应左箭头键，右侧刺激对应右箭头键），刺激位置固定不随机交换
-- 无反应截止时间（response-terminated），参与者按键后立即进入下一窗口
+- ITI defaults to 300 ms (before fixation), consistent with Pavlovia reference implementation
+- There is a self-control rest prompt between blocks (press the space bar to continue)
+-The digital stimulus is presented 200 ms after the offset from the fixation point (same as Pavlovia reference implementation: 100 ms after the fixation point → 200 ms after the blank)
+- The left and right positions are consistent with the key mapping (the left stimulus corresponds to the left arrow key, the right stimulus corresponds to the right arrow key), and the stimulus positions are fixed and not randomly exchanged
+- No response deadline (response-terminated), the participant will immediately enter the next window after pressing the button
 
 ### Code Architecture
 
 ```
 numerical_stroop.py
-├── 参数定义（任务顺序、字号映射、按键、试次数、时间参数）
-├── 窗口设置（全屏/窗口、背景色、单位=height）
-├── 刺激预加载（TextStim × 2：左数字和右数字；多边形注视点 +）
-├── 条件文件加载/生成（semantic_practice.xlsx, semantic_main.xlsx, physical_practice.xlsx, physical_main.xlsx）
-├── 实验阶段：
-│   ├── 指导语（通用 + 语义任务特定）
-│   ├── 语义练习 block（16 试次，有反馈）
-│   │   ├── 注视点（100 ms）
-│   │   ├── 数字刺激对（200 ms 后呈现，直到按键）
-│   │   ├── 反馈（1000 ms）
+├── Parameter definition (task sequence, font size mapping, keys, number of trials, time parameters)
+├── Window settings (full screen/window, background color, unit=height)
+├── Stimulus preloading (TextStim × 2: left digits and right digits; polygon fixation +)
+├── Conditional file loading/generation (semantic_practice.xlsx, semantic_main.xlsx, physical_practice.xlsx, physical_main.xlsx)
+├── Experimental phase:
+│ ├── Instructions (general + semantic task specific)
+│ ├── Semantic practice block (16 trials, with feedback)
+│ │ ├── Fixation point (100 ms)
+│ │ ├── Number stimulus pair (presented after 200 ms until key press)
+│ │ ├── Feedback (1000 ms)
 │   │   └── ITI（300 ms）
-│   ├── 语义正式 block（80 试次，无反馈）
-│   │   ├── Block 指导语
-│   │   └── 试次循环（注视点 → 数字刺激 → ITI）
-│   ├── 休息提示（按空格继续）
-│   ├── 物理练习 block（16 试次，有反馈）
-│   │   └── 同上结构
-│   └── 物理正式 block（80 试次，无反馈）
-│       └── 同上结构
-├── 数据保存：try/finally + 逐行写入 CSV
-└── 结束画面
+│ ├── Semantic formal block (80 trials, no feedback)
+│ │ ├── Block instructions
+│ │ └── Trial cycle (fixation point → digital stimulus → ITI)
+│ ├── Rest prompt (press space to continue)
+│ ├── Physics practice block (16 trials, with feedback)
+│ │ └── Same structure as above
+│ └── Physics formal block (80 trials, no feedback)
+│ └── Same structure as above
+├── Data saving: try/finally + write to CSV line by line
+└── End screen
 ```
 
 ### Expected Data Columns
 
 | Column | Type | Description |
 |--------|------|-------------|
-| participant | str | 被试编号 |
-| task_type | str | 任务类型（`"semantic"` 或 `"physical"`） |
-| block_type | str | 阶段类型（`"practice"` 或 `"formal"`） |
-| trial_num | int | Block 内试次编号 |
-| number1 | int | 左侧数字的数值 |
-| number2 | int | 右侧数字的数值 |
-| size1 | float | 左侧数字的字号高度 |
-| size2 | float | 右侧数字的字号高度 |
-| congruency | str | 一致性（`"congruent"` 或 `"incongruent"`） |
-| correct_side | str | 正确答案所在侧（`"left"` 或 `"right"`） |
-| correct_key | str | 正确按键（`"left"` 或 `"right"`） |
-| key_pressed | str | 参与者实际按键 |
-| rt | float | 反应时（ms） |
-| acc | int | 正确率（1 = 正确，0 = 错误） |
+| participant | str | participant number |
+| task_type | str | Task type (`"semantic"` or `"physical"`) |
+| block_type | str | stage type (`"practice"` or `"formal"`) |
+| trial_num | int | Block trial number |
+| number1 | int | The value of the number on the left |
+| number2 | int | The value of the number on the right |
+| size1 | float | The font size height of the left number |
+| size2 | float | The font size height of the numbers on the right |
+| congruency | str | consistency (`"congruent"` or `"incongruent"`) |
+| correct_side | str | The side of the correct answer (`"left"` or `"right"`) |
+| correct_key | str | Correct key (`"left"` or `"right"`) |
+| key_pressed | str | Actual key pressed by the participant |
+| rt | float | reaction time (ms) |
+| acc | int | Accuracy rate (1 = correct, 0 = incorrect) |

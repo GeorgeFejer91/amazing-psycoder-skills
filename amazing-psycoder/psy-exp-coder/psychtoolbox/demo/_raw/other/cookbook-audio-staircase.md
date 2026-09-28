@@ -1,18 +1,18 @@
-# 听觉楼梯实验 — KbQueue + PsychPortAudio 同步
+# Auditory staircase experiment — KbQueue + PsychPortAudio synchronization
 
-> 来源: [PTB Cookbook: Simple Experiment 4](https://github.com/Psychtoolbox-3/Psychtoolbox-3/wiki/Cookbook:-simple-experiment-4)  
-> 作者: Aaron Seitz (2012)  
-> 参考层级: L4 demo（仅参考音频同步 + 楼梯算法 + KbQueue RT 模式）
+> Source: [PTB Cookbook: Simple Experiment 4](https://github.com/Psychtoolbox-3/Psychtoolbox-3/wiki/Cookbook:-simple-experiment-4)
+> Author: Aaron Seitz (2012)
+> Reference level: L4 demo (only reference audio synchronization + staircase algorithm + KbQueue RT mode)
 
-## 实验逻辑
+## Experimental logic
 
-40 试次听觉检测楼梯实验：
-- 刺激: 牛叫声（强度由楼梯控制）
-- 任务: 听到声音就按键
-- 楼梯规则: 3-down 法则，连续 3 次正确 → 声音强度降低
-- 数据: 每试次保存当前楼梯阈值
+40-trial auditory detection staircase experiment:
+- Stimulus: Cow noise (intensity controlled by stairs)
+-Task: Press the button when you hear the sound
+- Staircase rule: 3-down rule, correct 3 times in a row → sound intensity decreases
+- Data: Save the current stair threshold for each trial
 
-## 原始代码
+## Original code
 
 ```matlab
 % SampleExperiment.m
@@ -89,38 +89,38 @@ ListenChar(0);
 PsychPortAudio('Close');
 ```
 
-## 反模式标注
+## Anti-pattern annotation
 
-| 问题 | 位置 | 规范替代 |
+| Issues | Locations | Canonical Overrides |
 |------|------|---------|
-| `Waitsecs(.5)` 等待反应 | 反应窗口 | 帧循环 + `GetSecs` 超时检测 |
-| `KbQueueCheck` 未读取 `firstPress` 时间戳 | 反应收集 | `[pressed, firstPress]=KbQueueCheck` → 提取 RT |
-| `save(baseName)` 每试次全量保存 | 数据保存 | 追加式写入（`fprintf` + `fclose`） |
-| `Screen('CloseAll')` | 清理 | `sca` |
-| 无 `try-catch` | 全局 | 必须包裹 |
-| `wavread` 已废弃 | 音频加载 | `audioread` (R2015b+) |
+| `Waitsecs(.5)` Wait for response | Response window | Frame loop + `GetSecs` Timeout detection |
+| `KbQueueCheck` not reading `firstPress` timestamp | reaction collection | `[pressed, firstPress]=KbQueueCheck` → extract RT |
+| `save(baseName)` Save the entire amount for each trial | Data saving | Append writing (`fprintf` + `fclose`) |
+| `Screen('CloseAll')` | Cleanup | `sca` |
+| None `try-catch` | Global | Must wrap |
+| `wavread` Deprecated | Audio loading | `audioread` (R2015b+) |
 
-## 关键 API 模式（符合 spec 规范的部分）
+## Key API mode (part that conforms to the spec specification)
 
 ```matlab
-% PsychPortAudio 精确调度：先 FillBuffer + Start(inf) → 再 RescheduleStart 对齐 Flip
+% PsychPortAudio precise scheduling: FillBuffer + Start(inf) → then RescheduleStart to align Flip
 PsychPortAudio('FillBuffer', pahandle, audioData);
-PsychPortAudio('Start', pahandle, 1, inf);          % 无限循环等待调度
-PsychPortAudio('RescheduleStart', pahandle, targetTime, 0);  % 对齐到 Flip 时刻
+PsychPortAudio('Start', pahandle, 1, inf);          % Infinite loop waiting for scheduling
+PsychPortAudio('RescheduleStart', pahandle, targetTime, 0);  % Align to Flip moment
 
-% 刺激 onset 半帧提前 Flip
+% stimulus onset half frame advance Flip
 vbl = Screen('Flip', window, starttime - FlipInt/2);
-KbQueueFlush;  % 清空 Flip 前的按键缓冲
+KbQueueFlush;  % Clear the key buffer before Flip
 ```
 
-## 楼梯算法逻辑（可用于范式设计）
+## Staircase algorithm logic (can be used for paradigm design)
 
 ```
-3-down 法则:
-  if 连续正确 >= 3:
-      阈值降低（难度增加）
+3-down rule:
+  if consecutive correct >= 3:
+      Threshold lowered (difficulty increased)
   else:
-      阈值升高（难度降低）
+      Threshold increased (difficulty decreased)
 
-约束: 阈值 ∈ [0, 1]
+Constraint: threshold ∈ [0, 1]
 ```

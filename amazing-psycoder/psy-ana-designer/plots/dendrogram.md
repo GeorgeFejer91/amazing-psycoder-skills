@@ -1,35 +1,35 @@
-# 树状图 (Dendrogram)
+# Dendrogram
 
-## 概述
+## Overview
 
-树状图展示层次聚类的结果,用树枝结构表示数据点的分组关系。是聚类分析的必要可视化。
+A dendrogram displays the results of hierarchical clustering, using a branch structure to represent the grouping relationship of data points. It is a necessary visualization for cluster analysis.
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| 场景 | 层次聚类结果 |
-| 用途 | 确定最佳聚类数(剪枝高度) |
+| Scenario | Hierarchical clustering results |
+| Purpose | Determine the optimal number of clusters (pruning height) |
 
-## R 代码
+## R code
 
 ```r
 hc <- hclust(dist(data[,vars]), method="ward.D2")
 plot(hc, hang=-1, labels=FALSE, main="Hierarchical Clustering")
-rect.hclust(hc, k=3, border="red")  # 标注3类
+rect.hclust(hc, k=3, border="red")  # Mark category 3
 ```
 
-## 解读
+## Interpretation
 
-- 纵轴=合并距离(越高=越不相似)
-- 横轴=观测/聚类
-- 低处合并=相似度高
-- 高处横切线→确定聚类数
+- Vertical axis = merge distance (higher = less similar)
+- Horizontal axis = observations/clusters
+- Low merge = high similarity
+- High transverse line → Determine the number of clusters
 
-## 关键参数
+## Key parameters
 
-| 参数 | 作用 |
+| Parameters | Function |
 |------|------|
-| `method` | 聚类方法(ward.D2/complete/average) |
-| `hang` | 标签悬挂位置(-1=对齐) |
-| `k` | 剪枝类别数 |
+| `method` | Clustering method (ward.D2/complete/average) |
+| `hang` | Label hanging position (-1=alignment) |
+| `k` | Number of pruning categories |

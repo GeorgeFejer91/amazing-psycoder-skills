@@ -1,10 +1,10 @@
 # jsPsych Paradigms
 
-> **L3 legacy source set**: 22 个 PsychoJS + 1 个 lab.js + 2 个 jsPsych 6.1.0。代码块是隔离的历史来源，不得复制、执行或标为当前 jsPsych 可运行代码。
+> **L3 legacy source set**: 22 PsychoJS + 1 lab.js + 2 jsPsych 6.1.0. Code blocks are isolated historical sources and may not be copied, executed, or marked as current jsPsych runnable code.
 
-## 范式索引
+## Paradigm index
 
-| 范式 | 文件 | 类型 |
+| Paradigm | File | Type |
 |------|------|------|
 | Antisaccade | [antisaccade.md](antisaccade.md) | PsychoJS |
 | Attention Network Task | [attention-network-task.md](attention-network-task.md) | PsychoJS |
@@ -19,8 +19,8 @@
 | Corsi Blocks | [corsi-blocks.md](corsi-blocks.md) | PsychoJS |
 | Cyberball | [cyberball.md](cyberball.md) | PsychoJS |
 | Drag and Drop | [drag-and-drop.md](drag-and-drop.md) | PsychoJS |
-| EAST | [east.md](east.md) | jsPsych 6.1.0 原生 |
-| IAT | [iat.md](iat.md) | jsPsych 6.1.0 原生 |
+| EAST | [east.md](east.md) | jsPsych 6.1.0 native |
+| IAT | [iat.md](iat.md) | jsPsych 6.1.0 native |
 | Stroop (lab.js) | [labjs-stroop.md](labjs-stroop.md) | lab.js |
 | Mental Rotation | [mental-rotation.md](mental-rotation.md) | PsychoJS |
 | Multisensory Nature | [multisensory-nature.md](multisensory-nature.md) | PsychoJS |
@@ -32,12 +32,12 @@
 | Sternberg | [sternberg.md](sternberg.md) | PsychoJS |
 | Wisconsin Card Sorting | [wisconsin-card-sorting.md](wisconsin-card-sorting.md) | PsychoJS |
 
-## 类型说明
+## Type description
 
-- **PsychoJS**: PsychoPy Builder 的独立 JavaScript runtime，常部署于 Pavlovia；不是 jsPsych 实现或插件集
-- **lab.js**: 独立的 JavaScript 实验框架（非 jsPsych/PsychoJS），使用 HTML 模板 + messageHandlers
-- **jsPsych 6.1.0 原生**: 标准 jsPsych 6.1.0 库的原生实现（来源：psychbruce/jspsych）
+- **PsychoJS**: Standalone JavaScript runtime for PsychoPy Builder, often deployed in Pavlovia; not a jsPsych implementation or plugin set
+- **lab.js**: Standalone JavaScript experiment framework (not jsPsych/PsychoJS), using HTML templates + messageHandlers
+- **jsPsych 6.1.0 native**: Native implementation of the standard jsPsych 6.1.0 library (source: psychbruce/jspsych)
 
-> **重要：范式 ≠ API 参考。** 只读取设计意图、窗口序列、条件字段和评分语义，再用 [spec](../spec/README.md) 与 [mapping](../mapping/README.md) 重新实现。任何 legacy 代码片段都必须被当前 validator 拒绝或重写。
+> **Important: Paradigm ≠ API Reference. ** Only read the design intent, window sequence, conditional fields and scoring semantics, and then reimplement using [spec](../spec/README.md) and [mapping](../mapping/README.md). Any legacy code snippets must be rejected or rewritten by the current validator.
 
-每个文件可能混有实验逻辑和历史导出代码；后者不构成可运行性或正确性证据。
+Each file may contain a mixture of experimental logic and historical export code; the latter does not constitute evidence of runnability or correctness.

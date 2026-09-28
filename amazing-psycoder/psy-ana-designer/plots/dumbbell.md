@@ -1,17 +1,17 @@
-# 哑铃图 (Dumbbell Chart)
+# Dumbbell Chart
 
-## 概述
+## Overview
 
-哑铃图用线段连接两点的值,两端用圆点标记。非常适合展示前后变化或两组比较,尤其当需要同时展示多个项目的比较时。
+The dumbbell chart uses a line segment to connect the values ​​of two points, and the two ends are marked with dots. Ideal for showing before and after changes or comparing two groups, especially when you need to show comparisons of multiple items at the same time.
 
-## 何时使用
+## When to use
 
-| 条件 | 说明 |
+| Condition | Description |
 |------|------|
-| 场景 | 前后测比较,两组均值比较(多项) |
-| 目标 | 展示变化幅度和方向 |
+| Scenario | Pre- and post-test comparison, mean comparison of two groups (multiple items) |
+| Goal | Show magnitude and direction of change |
 
-## R 代码
+## R code
 
 ```r
 library(ggalt)
@@ -23,17 +23,17 @@ ggplot(data, aes(x=pre, xend=post, y=subject)) +
   theme_minimal()
 ```
 
-## 解读
+## Interpretation
 
-- 线长=变化幅度
-- 左端点=前测,右端点=后测
-- 颜色翻转(左>右)=分数下降
-- 多条线平行=变化一致;分散=个体差异大
+- Line length = change range
+- Left endpoint = pretest, right endpoint = posttest
+- color flip (left > right) = score decrease
+- Multiple parallel lines = consistent changes; scattered = large individual differences
 
-## 关键参数
+## Key parameters
 
-| 参数 | 作用 |
+| Parameters | Function |
 |------|------|
-| `size` | 线宽 |
-| `colour_x`/`colour_xend` | 起终点颜色 |
-| `dot_guide` | TRUE=加纵向虚线引导 |
+| `size` | line width |
+| `colour_x`/`colour_xend` | Starting and ending colors |
+| `dot_guide` | TRUE=Add vertical dotted line guide |

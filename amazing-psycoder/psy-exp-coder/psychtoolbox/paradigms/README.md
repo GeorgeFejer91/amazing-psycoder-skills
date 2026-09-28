@@ -1,27 +1,27 @@
 # Psychtoolbox Paradigms
 
-> **Layer 3 legacy source set**: 5 个教学范式/组件，保留设计意图与旧 MATLAB 示例；不是当前生成模板或运行证据。
+> **Layer 3 legacy source set**: 5 teaching paradigms/components that retain design intent with legacy MATLAB examples; not current build templates or run-proofs.
 
-## 范式索引
+## Paradigm index
 
-| 范式 | 文件 | 说明 |
+| Paradigm | File | Description |
 |------|------|------|
-| Stroop | [stroop.md](stroop.md) | 颜色-词 Stroop 任务。词（Red/Green/Blue）× 墨水颜色独立操控，方向键反应，RT+正确率记录 |
-| Posner Cuing | [posner-cuing-experiment.md](posner-cuing-experiment.md) | 空间线索任务。Gabor 目标，线索有效性操控（contingent/non-contingent），数据保存到 tab 分隔文件 |
-| Orientation Threshold | [orientation-threshold.md](orientation-threshold.md) | 2AFC 朝向辨别阈限测量。恒定刺激法，程序化 Gabor，心理测量函数拟合 |
-| Likert Scale | [likert-scale.md](likert-scale.md) | 7 点 Likert 量表。鼠标悬停放大+点击选中，颜色梯度反馈（蓝→红），响应收集组件 |
-| Slider | [coolness-slider.md](coolness-slider.md) | 连续滑动条评分。Click-and-drag 交互，0-100% 实时百分比显示，动态颜色变化 |
+| Stroop | [stroop.md](stroop.md) | Color-Word Stroop task. Word (Red/Green/Blue) × Ink color independent control, direction key response, RT + accuracy record |
+| Posner Cuing | [posner-cuing-experiment.md](posner-cuing-experiment.md) | Spatial cueing task. Gabor target, cue validity manipulation (contingent/non-contingent), data saved to tab-delimited file |
+| Orientation Threshold | [orientation-threshold.md](orientation-threshold.md) | 2AFC Orientation discrimination threshold measurement. Constant stimulus method, programmed Gabor, psychometric function fitting |
+| Likert Scale | [likert-scale.md](likert-scale.md) | 7-point Likert scale. Mouseover to enlarge + click to select, color gradient feedback (blue → red), response collection component |
+| Slider | [coolness-slider.md](coolness-slider.md) | Continuous slider rating. Click-and-drag interaction, 0-100% real-time percentage display, dynamic color change |
 
-## 类型说明
+## Type description
 
-- **历史完整示例**（Stroop、Posner Cuing、Orientation Threshold）：可提取 trial/条件/计分意图，但代码必须依据当前 config 与 spec 重写
-- **响应收集组件**（Likert Scale、Slider）：交互式 UI 组件，可作为子组件嵌入更大的实验中
+- **Historical complete example** (Stroop, Posner Cuing, Orientation Threshold): trial/condition/scoring intent can be extracted, but the code must be rewritten according to the current config and spec
+- **Response Collection Component** (Likert Scale, Slider): Interactive UI component that can be embedded as a sub-component into a larger experiment
 
-## 文件结构
+## File structure
 
-> **重要：范式 ≠ API 参考。** 以下文件中嵌入的 MATLAB 代码示例来自 Peter Scarfe 的 PTB 教程，使用教学级 API（如 `KbCheck`）。**生成实验代码时，API 模式以 [spec/README.md](../spec/README.md) 的 Canonical Code Skeleton 为准**（`KbQueueCheck` 替代 `KbCheck`、`VBLTimestamp` 替代 `GetSecs`、`try/catch/sca` 替代裸 `sca`）。范式文件仅提供实验逻辑：窗口序列、条件结构、正确性规则。
+> **Important: Paradigm ≠ API Reference. ** The MATLAB code examples embedded in the following files are from Peter Scarfe's PTB tutorials, using tutorial-level APIs such as `KbCheck`. **When generating experimental code, the API mode is based on the Canonical Code Skeleton of [spec/README.md](../spec/README.md)** (`KbQueueCheck` replaces `KbCheck`, `VBLTimestamp` replaces `GetSecs`, `try/catch/sca` replaces bare `sca`). The paradigm file only provides experimental logic: window sequences, conditional structures, correctness rules.
 
-每个范式文件 `.md` 可能包含：
-- 实验描述与设计逻辑
-- 窗口/屏幕序列
-- 历史教学 MATLAB 代码（不得直接复制、执行或据此声称当前可运行）
+Each paradigm file `.md` may contain:
+- Experiment description and design logic
+- window/screen sequence
+- History Teaching MATLAB code (may not be directly copied, executed, or claimed to be currently runnable)

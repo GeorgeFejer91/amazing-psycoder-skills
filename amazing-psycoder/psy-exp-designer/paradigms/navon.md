@@ -5,7 +5,7 @@
 
 ## When to Use
 
-User mentions: Navon, 整体局部, global/local, hierarchical letters, Navon task.
+User mentions: Navon, global/local, hierarchical letters, Navon task.
 
 ## Core Logic
 
@@ -25,10 +25,10 @@ Before generating Navon code, confirm ALL of these:
 6. **Stimulus source**: loaded from image files or generated in code? If files: naming convention? If generated: font/grid rule?
 7. **Visual angle**: confirm global (~5°) and local (~0.5°) letter sizes; is monitor calibration available?
 8. Congruency conditions: which exact combinations?
-9. **ITI duration**: 试次间隔时间和变化范围？
-10. **OS & font**: 在什么操作系统运行？如使用中文，确认字体
-11. **Display**: 全屏还是窗口？屏幕分辨率？
-12. **Instruction text**: 指导语内容？如何向被试说明整体/局部注意？
+9. **ITI duration**: Trial interval and variation range?
+10. **OS & font**: What operating system is it running on? If using Chinese, confirm the font
+11. **Display**: Full screen or window? Screen resolution?
+12. **Instruction text**: What is the instruction content? How to explain global/local attention to subjects?
 
 ## Do Not Assume
 
@@ -103,7 +103,7 @@ Navon, D. (2003). What does a compound letter tell the psychologist's mind? *Act
 
 ### User Request
 
-> "我需要做一个Navon实验。被试看到由小字母组成的大字母，任务是判断大字母是H还是S。H按F键，S按J键。小字母也可能是H或S，但不需要判断。一致条件（大小字母相同）和冲突条件（大小字母不同）各半。先20个练习，再4个正式block各40个trial。整体字母大约5度视角，局部字母约0.5度。用PsychoPy完成。"
+> "I need to do a Navon experiment. Subjects see a large letter composed of small letters, and the task is to judge whether the large letter is H or S. H presses the F key, and S presses the J key. The small letter may also be H or S, but no judgment is required. There are half and half consistent conditions (the same large and small letters) and conflict conditions (different large and small letters). First 20 exercises, and then 4 formal blocks with 40 trials each. The overall letter is about 5 degrees of viewing angle, and the local letters are about 0.5 degrees. Completed with PsychoPy."
 
 ### Trial Window Timeline
 
@@ -111,7 +111,7 @@ Navon, D. (2003). What does a compound letter tell the psychologist's mind? *Act
 ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐
 │ Window 1                 │ →  │ Window 2                 │ →  │ Window 3                 │ →  │ Window 4                 │
 │ Fixation                 │    │ Navon Target             │    │ Feedback                 │    │ ITI                      │
-│ Content: +               │    │ Content: Navon大字       │    │ Content: 正确/错误        │    │ Content: empty           │
+│ Content: + │ │ Content: Navon large characters │ │ Content: correct/wrong │ │ Content: empty │
 │ Duration: 500 ms         │    │ Duration: until key      │    │ Duration: 500 ms         │    │ Duration: [MISSING]      │
 │ Response: none           │    │ Response: f/j            │    │ Response: none           │    │ Response: none           │
 │ File: none               │    │ File: [MISSING]          │    │ File: none               │    │ File: none               │
@@ -123,8 +123,8 @@ Navon, D. (2003). What does a compound letter tell the psychologist's mind? *Act
 | Window | Content | Duration | Response | File/Folder | Condition | Data |
 |--------|---------|----------|----------|-------------|-----------|------|
 | Fixation | + | 500 ms | none | none | none | none |
-| Navon Target | 大字母+小字母 | until key (deadline [MISSING]) | f=H, j=S | [MISSING] | {letter} | rt, key, acc |
-| Feedback | 正确/错误 | 500 ms | none | none | {correct_response} | none |
+| Navon Target | Large letters + small letters | until key (deadline [MISSING]) | f=H, j=S | [MISSING] | {letter} | rt, key, acc |
+| Feedback | Correct/Error | 500 ms | none | none | {correct_response} | none |
 | ITI | empty | [MISSING] | none | none | none | none |
 
 ### Parsed Experiment Specification
@@ -134,7 +134,7 @@ Navon, D. (2003). What does a compound letter tell the psychologist's mind? *Act
 | Experiment name | Navon Global/Local Task |
 | Platform | PsychoPy |
 | Task type | Navon (global-level, blocked) |
-| Attended level | Global only (大字母) |
+| Attended level | Global only (big letters) |
 | Target letters | H → F, S → J |
 | Congruency conditions | Congruent (H/H, S/S), Incongruent (H/S, S/H) |
 | Ratio | 50:50 congruent:incongruent |
@@ -150,7 +150,7 @@ Navon, D. (2003). What does a compound letter tell the psychologist's mind? *Act
 
 ### Assumptions
 
-- Blocked design (global level only — user said "判断大字母", no switching)
+- Blocked design (global level only — user said "Judge large letters", no switching)
 - Equal trial count per condition within each block (20 congruent + 20 incongruent)
 - No neutral condition (only congruent and incongruent)
 

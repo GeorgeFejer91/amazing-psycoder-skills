@@ -169,15 +169,15 @@ paradigm_config:
   scale_type: likert             # likert | vas
   n_points: 9                    # number of scale points (Likert only)
   anchors:                       # scale endpoint labels
-    low: "非常负性"
-    high: "非常正性"
+    low: "Very negative"
+    high: "Very positive"
   dimensions:                    # rating dimension(s)
     - name: valence
-      anchor_low: "非常负性"
-      anchor_high: "非常正性"
+      anchor_low: "Very negative"
+      anchor_high: "Very positive"
     - name: arousal
-      anchor_low: "非常平静"
-      anchor_high: "非常激动"
+      anchor_low: "very calm"
+      anchor_high: "Very excited"
 
   # IAT
   block_structure: standard       # standard (7-block) | custom
@@ -186,12 +186,12 @@ paradigm_config:
 
   # EAST
   attribute_words:
-    positive: [健康, 快乐, 美好]
-    negative: [邪恶, 吝啬, 卑鄙]
+    positive: [Health, happiness, beauty]
+    negative: [evil, stingy, despicable]
   target_categories:
-    a: [玫瑰, 牡丹]
-    b: [空气, 土地]
-    c: [蟑螂, 蚊子]
+    a: [Rose, Peony]
+    b: [Air, Land]
+    c: [cockroach, mosquito]
   color_positive: blue
   color_negative: green
   repetitions: 2
@@ -214,10 +214,10 @@ paradigm_config:
   # Task Switching
   tasks:                          # task definitions
     - name: parity
-      cue: "红色边框"
+      cue: "Red border"
       rule: "odd_even"
     - name: magnitude
-      cue: "蓝色边框"
+      cue: "Blue border"
       rule: "greater_less_5"
   csi: 300                        # cue-stimulus interval (ms)
   rci: 1000                       # response-cue interval (ms)
@@ -258,7 +258,7 @@ output:
 | Literal text | `"+"` | `"+"` | Fixed text displayed as-is |
 | Column reference | `"{column_name}"` | `"{stimulus}"` | Substituted from condition file column |
 | Image file | `"{stimulus}"` + `stimulus_folder` | `"stimuli/{stimulus}"` | Global `stimulus_folder` prepended to column value |
-| Built-in feedback | `"correct_incorrect"` | `"correct_incorrect"` | Automatic 正确/错误 text |
+| Built-in feedback | `"correct_incorrect"` | `"correct_incorrect"` | Automatic correct/wrong text |
 | Empty | `""` | `""` | Blank screen |
 
 ## Duration Value Types

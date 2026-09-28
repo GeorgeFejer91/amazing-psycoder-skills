@@ -53,7 +53,7 @@ def create_navon_stimulus(win, global_letter, local_letter, grid_size=(5, 5)):
     ...
 ```
 
-**What to ask the user**: "Navon 刺激是用图片文件还是代码实时生成？如果用图片，文件命名规则是什么？"
+**What to ask the user**: "Are Navon stimuli generated in real time using image files or code? If using images, what are the file naming rules?"
 
 ### Step 2: Condition Table
 

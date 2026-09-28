@@ -6,7 +6,7 @@
 
 ## When to Use
 
-User mentions: WCST, Wisconsin Card Sorting, set-shifting, cognitive flexibility, perseveration, 威斯康星卡片分类, 认知灵活性. The gold-standard neuropsychological test of executive function measuring the ability to form, maintain, and shift cognitive sets in response to changing reinforcement contingencies.
+User mentions: WCST, Wisconsin Card Sorting, set-shifting, cognitive flexibility, perseveration, Wisconsin Card Sorting, cognitive flexibility. The gold-standard neuropsychological test of executive function measuring the ability to form, maintain, and shift cognitive sets in response to changing reinforcement contingencies.
 
 ## Core Logic
 
@@ -57,31 +57,31 @@ Heaton, R. K., Chelune, G. J., Talley, J. L., Kay, G. G., & Curtiss, G. (1993). 
 
 ## Do Not Assume
 
-- Do not assume 10 连续正确即为完成分类。部分版本使用 6 或 8 个连续正确作为分类完成标准，确认标准数目。
-- Do not assume 规则序列是固定的。颜色→形状→数量是常见顺序，但规则顺序可能随机化或由实验设计决定。
-- Do not assume 所有三个维度都使用。简化版本可能只使用 2 个维度（如仅颜色和形状），确认维度数量。
-- Do not assume 128 张卡片总是全部使用。部分版本在完成 6 个分类后提前终止，或仅使用 64 张卡片（WCST-64）。
-- Do not assume 反馈仅为文字。确认反馈形式：文字（"正确"/"错误"）、声音、还是两者兼有。
-- Do not assume 被试已知三个维度。部分实验在指导语中明确告知维度，部分则完全不告知，需确认指导语内容。
+- Do not assume 10 consecutive correct ones to complete the classification. Some versions use 6 or 8 consecutive corrects as the classification completion criterion to confirm the number of criteria.
+- Do not assume that the sequence of rules is fixed. Color → Shape → Quantity is a common order, but the order of rules may be randomized or determined by experimental design.
+- Do not assume all three dimensions are used. A simplified version might use only 2 dimensions (e.g. only color and shape), confirm the number of dimensions.
+- Do not assume that all 128 cards are always used. Some versions terminated early after completing 6 categories, or used only 64 cards (WCST-64).
+- Do not assume feedback is text only. Confirm feedback form: text ("correct"/"wrong"), voice, or both.
+- Do not assume that the subject knows the three dimensions. Some experiments clearly inform the dimensions in the instructions, while some do not inform them at all. The content of the instructions needs to be confirmed.
 
 ## Condition File Columns
 
-驱动每次试次的 xlsx/csv 文件列：
+drives xlsx/csv file columns for each trial:
 
 | Column | Type | Description |
 |--------|------|-------------|
-| rule | str | 当前分类规则：`"color"`、`"shape"` 或 `"number"` |
-| card_id | int | 卡片编号（1-128） |
-| correct_target | str | 正确目标卡片标识（如 `"red_triangle"`） |
-| block | int | 所属 block 编号（1-6，对应 6 个分类） |
+| rule | str | Current classification rule: `"color"`, `"shape"` or `"number"` |
+| card_id | int | card number (1-128) |
+| correct_target | str | Correct target card identification (such as `"red_triangle"`) |
+| block | int | Block number (1-6, corresponding to 6 categories) |
 
 ## Variants
 
-1. **标准 WCST（128 张卡片）**：原始版本，使用 128 张纸质卡片，3 个维度各 4 个值，最多完成 6 个分类。规则顺序固定（颜色→形状→数量→颜色→形状→数量）。参见 [config-schema](../references/config-schema.md)。
+1. **Standard WCST (128 cards)**: Original version, using 128 paper cards, 4 values in each of 3 dimensions, and up to 6 classifications completed. The order of the rules is fixed (color → shape → quantity → color → shape → quantity). See [config-schema](../references/config-schema.md).
 
-2. **简化版 MCST（Modified Card Sorting Test）**：仅使用 48 张卡片，排除那些与目标卡片共享多个属性的模糊卡片（如与正确目标同时匹配颜色和数量的卡片）。减少混淆，更适合临床人群，尤其是老年或认知障碍患者。参见 [go-nogo.md](go-nogo.md) 的反馈处理逻辑。
+2. **Simplified version of MCST (Modified Card Sorting Test)**: Use only 48 cards, excluding those ambiguous cards that share multiple attributes with the target card (such as cards that match both color and quantity with the correct target). Reduces confusion and is more suitable for clinical populations, especially elderly or cognitively impaired patients. See [go-nogo.md](go-nogo.md) for feedback processing logic.
 
-3. **计算机化 WCST-64**：仅使用 64 张卡片（每个规则一个 deck），缩短测试时间同时保持心理测量特性。适用于时间有限的筛查场景。
+3. **Computerized WCST-64**: Uses only 64 cards (one deck per rule), reducing test time while maintaining psychometric properties. Suitable for screening scenarios with limited time.
 
 ---
 
@@ -89,17 +89,17 @@ Heaton, R. K., Chelune, G. J., Talley, J. L., Kay, G. G., & Curtiss, G. (1993). 
 
 ### User Request
 
-> "我想做一个威斯康星卡片分类测验。屏幕上方显示4张目标卡片（分别是1个红色三角形、2个绿色星星、3个黄色十字、4个蓝色圆形），下方显示1张测试卡片。被试点击目标卡片来分类。每次点击后显示'正确'或'错误'反馈1秒。完成10个连续正确后自动切换规则。一共6个分类要完成，每次切换规则不提醒被试。测试前先做10个练习试次。使用PsychoPy。被试是中文母语者。"
+> "I want to do a Wisconsin card sorting test. 4 target cards (1 red triangle, 2 green stars, 3 yellow crosses, 4 blue circles) are displayed at the top of the screen, and 1 test card is displayed at the bottom. The subject clicks on the target card to sort. Each click "Correct" or "wrong" feedback is displayed for 1 second. The rules are automatically switched after 10 consecutive correct ones. A total of 6 categories are to be completed, and the subjects are not reminded to do 10 practice trials before the test. The subjects are native Chinese speakers.
 
 ### Trial Window Timeline
 
 ```text
 ┌──────────────────────┐  ┌──────────────────────┐  ┌──────────────────────┐  ┌──────────────────────┐
 │ Window 1             │→ │ Window 2             │→ │ Window 3             │→ │ Window 4             │
-│ 注视点               │  │ 卡片分类              │  │ 反馈                  │  │ 分类完成提示          │
-│ Content: + at center │  │ Content: 4 目标卡片   │  │ Content: "正确！"     │  │ Content: "分类完成！  │
-│ Duration: 1.0 s      │  │ (上排) + 1 测试卡片   │  │ 或 "错误"            │  │ 即将开始新规则..."    │
-│ Response: none       │  │ (下排)               │  │ Duration: 1.0 s      │  │ Duration: 2.0 s      │
+│ Fixation point │ │ Card sorting │ │ Feedback │ │ Sorting completion prompts │
+│ Content: + at center │ │ Content: 4 target cards │ │ Content: "Correct!" │ │ Content: "Classification completed! │
+│ Duration: 1.0 s │ │ (top row) + 1 test card │ │ or "Error" │ │ New rules are about to start..." │
+│ Response: none │ │ (lower row) │ │ Duration: 1.0 s │ │ Duration: 2.0 s │
 │ Data: none           │  │ Duration: until click │  │ Response: none       │  │ Response: none       │
 │                      │  │ Response: click on    │  │ Data: none           │  │ Data: none           │
 │                      │  │ a target card        │  │                       │  │                      │
@@ -112,72 +112,72 @@ Heaton, R. K., Chelune, G. J., Talley, J. L., Kay, G. G., & Curtiss, G. (1993). 
 
 | Field | Value |
 |-------|-------|
-| 实验名称 | 威斯康星卡片分类测验（WCST） |
-| 平台 | PsychoPy |
-| 任务类型 | 认知灵活性 / 定势转换（set-shifting） |
-| 目标卡片 | 1红三角 / 2绿星 / 3黄十字 / 4蓝圆（上排） |
-| 测试卡片 | 每次1张，下方居中呈现 |
-| 维度 | 3个（颜色、形状、数量），各4个值 |
-| 反应方式 | 鼠标点击目标卡片 |
-| 反馈 | 文字"正确"/"错误"，持续 1 s |
-| 分类完成标准 | 10 个连续正确 |
-| 总分类数 | 6 个 |
-| 规则切换 | 自动、无提醒 |
-| 阶段 | 指导语 → 练习(10试次) → 正式测验(最多128试次) |
+| Experiment Name | Wisconsin Card Sorting Test (WCST) |
+| Platform | PsychoPy |
+| Task type | Cognitive flexibility/set-shifting |
+| Target card | 1 red triangle / 2 green star / 3 yellow cross / 4 blue circle (top row) |
+| Test card | 1 card at a time, presented in the center below |
+| Dimensions | 3 (color, shape, quantity), 4 values each |
+| Reaction mode | Mouse click on the target card |
+| Feedback | Text "correct"/"wrong", lasts 1 s |
+| Classification completion standard | 10 consecutive correct |
+| Total number of categories | 6 |
+| Rule switching | Automatic, no reminder |
+| Stage | Instructions → Practice (10 trials) → Formal test (up to 128 trials) |
 
 ### Missing Information
 
-1. 注视点持续时间未说明 → 默认 1.0 s（需与用户确认）
-2. 试次间隔（ITI）未提及 → 需确认是否有 ITI 及其持续时间
-3. 练习阶段的反馈方式未说明 → 需确认练习阶段是否与正式阶段反馈一致
+1. The duration of the fixation point is not specified → Default is 1.0 s (needs to confirm with the user)
+2. The inter-trial interval (ITI) is not mentioned → Need to confirm whether there is an ITI and its duration
+3. The feedback method in the practice stage is not specified → It is necessary to confirm whether the feedback in the practice stage is consistent with the feedback in the formal stage
 
 ### Critical Assumptions
 
-- 规则顺序为颜色→形状→数量→颜色→形状→数量（标准 WCST 顺序）
-- 练习阶段同样显示反馈，持续 1 s
-- 注视点为黑色"+"，居中呈现
-- 被试响应无时间限制（until click），但需记录 RT
-- 练习阶段卡片从标准 128 张中选取前 10 张，不切换规则
+- The order of the rules is Color→Shape→Quantity→Color→Shape→Quantity (standard WCST order)
+- Feedback is also displayed during the practice phase and lasts 1 s
+- The fixation point is black "+" and is centered
+- There is no time limit for the subject's response (until click), but RT needs to be recorded
+- During the practice stage, the first 10 cards are selected from the standard 128 cards without switching rules.
 
 ### Code Architecture
 
 ```
 wcst.py
-├── 参数（dimensions, n_correct_to_shift=10, n_categories=6, n_practice=10）
-├── 窗口设置（全屏/窗口，分辨率）
-├── 刺激预加载
-│   ├── 4 个目标卡片（TextStim/ShapeStim + 颜色填充）
-│   ├── 128 张测试卡片（按维度生成所有组合）
-│   └── 反馈文字（"正确！"/"错误"）
-├── 条件表生成（card_id, shape, color, number, rule, correct_target）
-├── 主循环
-│   ├── 规则管理（当前规则、连续正确计数、已完成分类数）
-│   ├── 试次循环
-│   │   ├── 注视点（1.0 s）
-│   │   ├── 显示目标卡片 + 测试卡片（等待点击）
-│   │   ├── 判断正确/错误（匹配当前规则的目标卡片）
-│   │   ├── 反馈（1.0 s）
-│   │   └── 检查是否达到 10 个连续正确 → 切换规则
-│   └── 终止条件：6 个分类完成 或 128 张卡片用完
-├── 数据保存：try/finally CSV，逐行写入
-└── 退出：Escape 键监听
+├── Parameters (dimensions, n_correct_to_shift=10, n_categories=6, n_practice=10)
+├── Window settings (full screen/window, resolution)
+├── Stimulus preloading
+│ ├── 4 target cards (TextStim/ShapeStim + color fill)
+│ ├── 128 test cards (generate all combinations by dimension)
+│ └── Feedback text ("Correct!"/"Error")
+├── Condition table generation (card_id, shape, color, number, rule, correct_target)
+├── Main loop
+│ ├── Rule management (current rules, continuous correct count, number of completed classifications)
+│ ├── Trial cycle
+│ │ ├── Fixation point (1.0 s)
+│ │ ├── Display target card + test card (waiting for click)
+│ │ ├── Judge correct/wrong (match the target card of the current rule)
+│ │ ├── Feedback (1.0 s)
+│ │ └── Check whether it reaches 10 consecutive correct → Switch rules
+│ └── Termination conditions: 6 categories completed or 128 cards used up
+├── Data saving: try/finally CSV, write line by line
+└── Exit: Escape key monitoring
 ```
 
 ### Expected Data Columns
 
 | Column | Type | Description |
 |--------|------|-------------|
-| card_id | int | 卡片编号（1-128） |
-| trial_index | int | 试次序号（全局） |
-| block | int | 当前分类编号（1-6） |
-| rule | str | 当前分类规则（color/shape/number） |
-| shape | str | 测试卡片形状 |
-| color | str | 测试卡片颜色 |
-| number | int | 测试卡片符号数量 |
-| correct_target | str | 正确目标卡片标识 |
-| clicked_target | str | 被试点击的目标卡片标识 |
-| acc | int | 正确=1，错误=0 |
-| rt | float | 反应时间（ms） |
-| consecutive_correct | int | 当前连续正确计数 |
-| perseverative_error | int | 固着错误=1（按旧规则对当前规则错），否则=0 |
-| category_completed | int | 该试次所属分类是否已完成（1=是） |
+| card_id | int | card number (1-128) |
+| trial_index | int | Trial number (global) |
+| block | int | Current classification number (1-6) |
+| rule | str | Current classification rule (color/shape/number) |
+| shape | str | Test card shape |
+| color | str | Test card color |
+| number | int | Number of test card symbols |
+| correct_target | str | Correct target card ID |
+| clicked_target | str | The target card ID clicked by the subject |
+| acc | int | correct=1, error=0 |
+| rt | float | reaction time (ms) |
+| consecutive_correct | int | Current consecutive correct count |
+| perseverative_error | int | Perseverative error = 1 (wrong with the current rule according to the old rule), otherwise = 0 |
+| category_completed | int | Whether the category to which this trial belongs has been completed (1=yes) |

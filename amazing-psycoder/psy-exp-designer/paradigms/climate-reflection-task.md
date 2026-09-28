@@ -6,7 +6,7 @@
 
 ## When to Use
 
-User mentions: Climate reflection, environmental attitudes, climate change engagement, climate beliefs, 气候反思任务, 环境态度. A two-phase questionnaire paradigm designed to explore how exposure to climate information influences participants' engagement with and attitudes toward climate change issues.
+User mentions: Climate reflection, environmental attitudes, climate change engagement, climate beliefs, climate reflection task, environmental attitudes. A two-phase questionnaire paradigm designed to explore how exposure to climate information influences participants' engagement with and attitudes toward climate change issues.
 
 ## Core Logic
 
@@ -81,11 +81,11 @@ Developed as part of climate change engagement research using the PsychoJS platf
 
 ## Do Not Assume
 
-- Do not assume the informational passage is the same for all participants — between-subjects manipulation with different passage types (e.g., 科学共识, 个人叙事, 解决方案导向) is the core experimental design; a single-passage within-subjects design weakens causal inference.
+- Do not assume the informational passage is the same for all participants — between-subjects manipulation with different passage types (e.g., scientific consensus, personal narrative, solution-oriented) is the core experimental design; a single-passage within-subjects design weakens causal inference.
 - Do not assume participants will fully read the informational passage — reading time must be recorded (`reading_time`) as a manipulation check; participants who skim or skip the passage dilute the experimental manipulation.
 - Do not assume the reflection rating uses a 0–100 continuous slider — some implementations use Likert scales (e.g., 1–7) or bipolar scales (−3 to +3); the scale type affects whether parametric or non-parametric analyses are appropriate.
 - Do not assume all Phase 1 questions must reappear in Phase 3 — some designs include filler questions that are asked but not reflected upon, or randomly sample a subset for reflection to reduce demand characteristics.
-- Do not assume the topic is climate change — the paradigm structure (自由回答 → 信息暴露 → 反思重评) is domain-general and equally applicable to vaccine attitudes, political beliefs, AI risk perception, or any attitude object.
+- Do not assume the topic is climate change — the paradigm structure (free answer → information exposure → reflection and re-evaluation) is domain-general and equally applicable to vaccine attitudes, political beliefs, AI risk perception, or any attitude object.
 - Do not assume Phase 2 always precedes Phase 3 — some control-group designs place the informational passage after reflection (Phase 2 and Phase 3 swapped) to establish a no-exposure baseline.
 
 ## Condition File Columns
@@ -94,38 +94,38 @@ Columns in the xlsx/csv file that drives each trial:
 
 | Column | Type | Description |
 |--------|------|-------------|
-| question_id | str | 问题唯一标识符，用于跨阶段数据链接（如 `"Q01"`, `"Q02"`） |
-| question_text | str | Phase 1 和 Phase 3 呈现的问题文本 |
-| question_category | str | 问题类别（如 `"belief"`, `"concern"`, `"policy"`, `"behavior"`），用于分维度分析 |
+| question_id | str | Question unique identifier, used for cross-stage data linking (such as `"Q01"`, `"Q02"`) |
+| question_text | str | Question text presented in Phase 1 and Phase 3 |
+| question_category | str | Question category (such as `"belief"`, `"concern"`, `"policy"`, `"behavior"`), used for dimensional analysis |
 
 ## Variants
 
-### 多信息条件变体
+### Multi-information condition variant
 
-将被试随机分配到不同的信息短文条件（如科学共识组 vs. 个人叙事组 vs. 中性对照组），Phase 2 根据分组呈现不同内容。核心问题是不同信息框架对态度改变的差异化影响。条件分配需在实验前通过随机化或拉丁方确定。
+Randomly assign subjects to different information text conditions (such as scientific consensus group vs. personal narrative group vs. neutral control group), and Phase 2 presents different content according to the group. The core issue is the differential impact of different message frames on attitude change. Condition assignment needs to be determined before the experiment by randomization or Latin square.
 
-### 通用态度反思任务
+### General Attitude Reflection Task
 
-将气候议题替换为其他态度对象（疫苗态度、政治态度、AI风险感知等），保持相同的 "自由回答 → 信息暴露 → 反思重评" 三阶段结构。问题集和信息短文内容随主题变化，但代码架构完全复用。可参考 [rating.md](rating.md) 了解单次态度评分的范式差异。
+Replace climate issues with other attitude objects (vaccine attitude, political attitude, AI risk perception, etc.), maintaining the same three-stage structure of "free answer → information exposure → reflection and re-evaluation". The content of question sets and information essays changes with the topic, but the code structure is completely reused. Refer to [rating.md](rating.md) for paradigm differences in single attitude ratings.
 
-### 简化双阶段变体
+### Simplified two-stage variant
 
-省略 Phase 1 的自由回答环节，直接让被试阅读信息短文后进行 Likert 态度评分（即仅保留 Phase 2 + Phase 3 的评分部分）。适用于只需测量态度变化方向而非反思深度的场景。代码更简单，但失去了文本分析的数据维度。
+The free-response session in Phase 1 is omitted, and subjects are directly asked to rate Likert attitudes after reading the information text (that is, only the scoring part of Phase 2 + Phase 3 is retained). Suitable for scenarios where only the direction of attitude change is measured rather than the depth of reflection. The code is simpler, but the data dimension of text analysis is lost.
 
 ## Example
 
 ### User Request
 
-> "我想做一个气候反思实验。被试先回答5个关于气候变化的问题（比如你相信气候变化正在发生吗？你愿意改变生活习惯吗？等等），每个问题单独显示，用文本框输入答案，按回车提交。然后所有被试阅读一段科学共识短文（介绍97%气候科学家认同人类活动导致全球变暖）。之后重新呈现每个问题，同时显示被试之前自己的答案，让被试用一个0-100的滑块评价自己有多同意之前的回答（0=完全不同意, 100=完全同意）。5个问题随机顺序呈现。用PsychoPy。被试为大学生，在macOS上运行。"
+> "I want to do a climate reflection experiment. The subjects first answer 5 questions about climate change (for example, do you believe climate change is happening? Are you willing to change your living habits? etc.). Each question is displayed separately. Use the text box to enter the answer and press Enter to submit. Then all subjects read a A short scientific consensus article (introducing that 97% of climate scientists agree that human activities cause global warming). Each question is then re-presented, and the subject's previous answer is displayed, allowing the subject to rate how much they agree with the previous answer using a 0-100 slider (0=completely disagree, 100=completely agree). 5 questions presented in random order. Participants were college students, running on macOS.
 
 ### Trial Window Timeline
 
 ```text
-Phase 1 — Free Response (循环5题):
+Phase 1 — Free Response (loop 5 questions):
 ┌──────────────────────────┐    ┌──────────────────────────┐
 │ Window 1                 │ →  │ Window 2                 │
-│ 问题呈现                  │    │ 文本输入                  │
-│ Content: {question_text} │    │ Content: 文本框           │
+│ Problem presentation │ │ Text input │
+│ Content: {question_text} │ │ Content: text box │
 │ Duration: self-paced     │    │ Duration: until Enter     │
 │ Response: none           │    │ Response: free text       │
 │ File: none               │    │ File: none               │
@@ -133,22 +133,22 @@ Phase 1 — Free Response (循环5题):
 │ Data: question_id        │    │ Data: answer.text        │
 └──────────────────────────┘    └──────────────────────────┘
 
-Phase 2 — Information (全被试统一):
+Phase 2 — Information (unified for all subjects):
 ┌──────────────────────────┐
-│ 信息短文                  │
-│ Content: 科学共识短文      │
+│ Message text │
+│ Content: Short scientific consensus article │
 │ Duration: self-paced     │
-│   (按任意键继续)           │
+│ (Press any key to continue) │
 │ Response: any key        │
 │ Data: reading_time       │
 └──────────────────────────┘
 
-Phase 3 — Reflection (循环5题):
+Phase 3 — Reflection (Loop 5 questions):
 ┌──────────────────────────┐    ┌──────────────────────────┐
 │ Window 1                 │ →  │ Window 2                 │
-│ 问题 + 先前回答           │    │ 一致性评分                │
-│ Content: {question_text} │    │ Content: 滑块 0-100      │
-│   "你之前的回答：{text}"   │    │ Duration: until response │
+│ Question + Previous Answer │ │ Consistency Rating │
+│ Content: {question_text} │ │ Content: Slider 0-100 │
+│ "Your previous answer: {text}" │ │ Duration: until response │
 │ Duration: self-paced     │    │ Response: slider drag    │
 │ Response: key to continue│    │   + click to confirm     │
 │ Condition: {question_id} │    │ Condition: {question_id} │
@@ -159,82 +159,82 @@ Phase 3 — Reflection (循环5题):
 
 | Window | Content | Duration | Response | File/Folder | Condition | Data |
 |--------|---------|----------|----------|-------------|-----------|------|
-| P1-问题 | {question_text} | self-paced (任意键) | none | none | {question_id} | question_id |
-| P1-输入 | 文本框 | until Enter | 自由文本 | none | {question_id} | answer.text |
-| P2-短文 | 科学共识短文 | self-paced (任意键) | any key | none | none | reading_time |
-| P3-回顾 | {question_text} + "你之前的回答：{text}" | self-paced (任意键) | none | none | {question_id} | question_id, previous_answer |
-| P3-评分 | 滑块 0-100 | until confirm | slider drag + click | none | {question_id} | agreement_rating |
+| P1-Question | {question_text} | self-paced (any key) | none | none | {question_id} | question_id |
+| P1-Input | Text Box | until Enter | Free Text | none | {question_id} | answer.text |
+| P2-Short article | Scientific consensus short article | self-paced (any key) | any key | none | none | reading_time |
+| P3-Review | {question_text} + "Your previous answer: {text}" | self-paced (any key) | none | none | {question_id} | question_id, previous_answer |
+| P3-Rating | Slider 0-100 | until confirm | slider drag + click | none | {question_id} | agreement_rating |
 
 ### Parsed Experiment Specification
 
 | Field | Value |
 |-------|-------|
-| 实验名称 | 气候反思任务（科学共识条件） |
-| 平台 | PsychoPy |
-| 任务类型 | Climate Reflection Task（态度反思重评） |
-| 问题数量 | 5 题（随机顺序） |
-| 问题内容 | 气候变化信念、个人关注、生活习惯、政策支持、行为意愿 |
-| 信息条件 | 单一条件（科学共识短文），全被试统一 |
-| Phase 1 输入方式 | 文本框，Enter 提交 |
-| Phase 3 评分方式 | 连续滑块 0–100，拖动后点击确认 |
-| 被试群体 | 大学生 |
-| 操作系统 | macOS（字体：PingFang） |
-| 实验阶段 | 指导语 → Phase 1(5题) → Phase 2(短文) → Phase 3(5题) → 结束 |
+| Experiment Name | Climate Reflection Task (Scientific Consensus Condition) |
+| Platform | PsychoPy |
+| Task Type | Climate Reflection Task (Attitude Reflection Re-evaluation) |
+| Number of questions | 5 questions (random order) |
+| Question content | Climate change beliefs, personal concerns, living habits, policy support, behavioral intentions |
+| Information condition | Single condition (scientific consensus essay), unified for all subjects |
+| Phase 1 input method | Text box, Enter submission |
+| Phase 3 scoring method | Continuous slider 0–100, drag and click to confirm |
+| Subject group | College students |
+| Operating system | macOS (Font: PingFang) |
+| Experimental phase | Instructions → Phase 1 (5 questions) → Phase 2 (essay) → Phase 3 (5 questions) → End |
 
 ### Missing Information
 
-1. 信息短文的具体内容未提供 — 需要完整文本（约200–500字）或确认是否由实验者自行准备
-2. 滑块确认方式未明确 — 是拖动即记录还是需要点击"确认"按钮？当前假定为拖动后点击确认
-3. Phase 3 中是否允许被试修改之前的回答？当前假定仅评分、不可修改原答案
+1. The specific content of the informational essay is not provided - the full text (approximately 200–500 words) or confirmation of whether it was prepared by the experimenter is required
+2. The confirmation method of the slider is not clear - is it recorded after dragging it or does it require clicking the "Confirm" button? It is currently assumed to be click to confirm after dragging
+3. Are subjects allowed to modify their previous answers in Phase 3? It is currently assumed that only grading and original answers cannot be modified.
 
 ### Critical Assumptions
 
-- 5个问题在 Phase 1 和 Phase 3 中各呈现一次，Phase 1 顺序随机化，Phase 3 使用相同随机顺序以保证被试能一一对应
-- 信息短文为单一条件，无被试间随机分组；若需多条件比较，需扩展为被试间设计
-- 文本框输入不做字数限制，但建议在指导语中提示"不少于20字"以保证回答质量
-- 滑块初始位置设为 50（中性），避免初始值对被试评分产生锚定效应
+- 5 questions are presented once each in Phase 1 and Phase 3. The order of Phase 1 is randomized, and the same random order is used in Phase 3 to ensure that the subjects can correspond one to one.
+- The information text is a single condition, and there is no random grouping between subjects; if multiple conditions are needed to compare, it needs to be extended to a between-subjects design
+- There is no word limit for input in the text box, but it is recommended to indicate "no less than 20 words" in the instruction to ensure the quality of the answer.
+- The initial position of the slider is set to 50 (neutral) to avoid the anchoring effect of the initial value on the subject's score.
 
 ### Code Architecture
 
 ```
 climate_reflection.py
-├── 导入模块（psychopy.gui, visual, event, data, core）
-├── 参数配置（窗口大小、字体、颜色、问题文件路径、短文文本）
-├── 窗口初始化（全屏/窗口，背景色）
-├── 读取问题文件（conditions.xlsx → question_id, question_text）
-├── 问题顺序随机化
-├── Phase 1 — 自由回答循环：
-│   ├── 显示问题文本
-│   ├── 文本输入框（visual.TextBox2 / 自定义 text input）
-│   ├── 监听 Enter 键提交
-│   └── 记录 answer.text + question_id + rt_phase1
-├── Phase 2 — 信息短文：
-│   ├── 显示短文文本（visual.TextStim，多行）
-│   ├── 监听任意键继续
-│   └── 记录 reading_time
-├── Phase 3 — 反思评分循环：
-│   ├── 显示问题文本 + "你之前的回答：{answer.text}"
-│   ├── 显示滑块（visual.Slider, 0–100, 初始=50）
-│   ├── 监听滑块拖动 + 确认点击
-│   └── 记录 agreement_rating + rt_phase3
-├── 结束界面
-├── 数据保存：try/finally CSV，增量写入
-│   ├── 基础列：participant, date, expName
-│   ├── Phase 1 列：question_id, answer_text, rt_phase1
-│   ├── Phase 2 列：reading_time
-│   └── Phase 3 列：agreement_rating, rt_phase3
+├── Import module (psychopy.gui, visual, event, data, core)
+├── Parameter configuration (window size, font, color, question file path, short text)
+├── Window initialization (full screen/window, background color)
+├── Read question file (conditions.xlsx → question_id, question_text)
+├── Question order randomization
+├── Phase 1 — Free answer cycle:
+│ ├── Show question text
+│ ├── Text input box (visual.TextBox2 / custom text input)
+│ ├── Listen for Enter key submission
+│ └── record answer.text + question_id + rt_phase1
+├── Phase 2 — Information text:
+│ ├── Display short text (visual.TextStim, multiple lines)
+│ ├── Monitor any key to continue
+│ └── record reading_time
+├── Phase 3 — Reflective Grading Cycle:
+│ ├── Show question text + "Your previous answer: {answer.text}"
+│ ├── Display slider (visual.Slider, 0–100, initial=50)
+│ ├── Monitor slider drag + confirm click
+│ └── record agreement_rating + rt_phase3
+├── End interface
+├── Data saving: try/finally CSV, incremental writing
+│ ├── Basic columns: participant, date, expName
+│ ├── Phase 1 columns: question_id, answer_text, rt_phase1
+│ ├── Phase 2 column: reading_time
+│ └── Phase 3 columns: agreement_rating, rt_phase3
 ```
 
 ### Expected Data Columns
 
 | Column | Type | Description |
 |--------|------|-------------|
-| participant | str | 被试编号 |
-| question_id | str | 问题编号（跨阶段匹配键） |
-| question_text | str | 问题文本 |
-| question_category | str | 问题类别 |
-| answer_text | str | Phase 1 自由回答文本 |
-| rt_phase1 | float | Phase 1 回答反应时（ms） |
-| reading_time | float | Phase 2 短文阅读时间（ms） |
-| agreement_rating | float | Phase 3 一致性评分（0–100） |
-| rt_phase3 | float | Phase 3 评分反应时（ms） |
+| participant | str | participant number |
+| question_id | str | question number (cross-stage matching key) |
+| question_text | str | question text |
+| question_category | str | question category |
+| answer_text | str | Phase 1 Free Answer Text |
+| rt_phase1 | float | Phase 1 response time (ms) |
+| reading_time | float | Phase 2 short article reading time (ms) |
+| agreement_rating | float | Phase 3 agreement score (0–100) |
+| rt_phase3 | float | Phase 3 scoring reaction time (ms) |

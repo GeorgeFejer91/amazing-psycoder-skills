@@ -5,7 +5,7 @@
 
 ## When to Use
 
-User mentions: Task switching, 任务转换, switch cost, cognitive flexibility, set shifting, alternating tasks, cued task switching.
+User mentions: Task switching, task switching, switch cost, cognitive flexibility, set shifting, alternating tasks, cued task switching.
 
 ## Core Logic
 
@@ -31,11 +31,11 @@ Before generating task-switching code, confirm ALL of these:
 7. **Response mapping**: Keys for each task? Overlapping or non-overlapping response sets?
 8. **Single-task blocks**: Are there pure blocks (one task only) for baseline comparison?
 9. **Trial count**: How many per block? Per condition (switch/repeat × task)?
-10. **Block order**: 单任务block在前还是混合block在前？是否需要平衡？
-11. **ITI duration**: 试次间隔时间和变化范围？
-12. **OS & font**: 在什么操作系统运行？如使用中文，确认字体
-13. **Display**: 全屏还是窗口？刺激大小和屏幕位置？
-14. **Instruction text**: 指导语内容？如何向被试说明任务切换规则？
+10. **Block order**: Single task block first or mixed block first? Is there a need for balance?
+11. **ITI duration**: Trial interval time and variation range?
+12. **OS & font**: What operating system is it running on? If using Chinese, confirm the font
+13. **Display**: Full screen or window? Stimulus size and screen location?
+14. **Instruction text**: Instruction content? How to explain task switching rules to subjects?
 
 ## Do Not Assume
 
@@ -105,7 +105,7 @@ Kiesel, A., Steinhauser, M., Wendt, M., Falkenstein, M., Jost, K., Philipp, A. M
 
 ### User Request
 
-> "我想做一个任务转换实验。被试对数字做两个任务：奇偶判断（奇数/偶数）和大小判断（大于5/小于5）。用颜色边框提示任务：红色边框=奇偶判断，蓝色边框=大小判断。线索呈现300 ms后出现数字。50%重复，50%转换。数字为1-9（排除5）。先40个练习，然后4个正式block各48个trial。CSI=300 ms，RCI=1000 ms。用PsychoPy。"
+> "I want to do a task switching experiment. Subjects perform two tasks on numbers: parity judgment (odd/even) and size judgment (greater than 5/less than 5). Use color borders to prompt the task: red border = parity judgment, blue border = size judgment. The clues are presented 300 Numbers appear after ms. 50% repetitions. Numbers 1-9 (excluding 5). First 40 trials, CSI=300 ms, RCI=1000 ms.
 
 ### Trial Window Timeline
 
@@ -113,7 +113,7 @@ Kiesel, A., Steinhauser, M., Wendt, M., Falkenstein, M., Jost, K., Philipp, A. M
 ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐    ┌──────────────────────────┐
 │ Window 1                 │ →  │ Window 2                 │ →  │ Window 3                 │ →  │ Window 4                 │ →  │ Window 5                 │
 │ Cue                      │    │ Target                   │    │ Response                 │    │ Feedback                 │    │ ITI (RCI)                │
-│ Content: 红/蓝色边框      │    │ Content: {digit}         │    │ Content: {digit}         │    │ Content: 正确/错误        │    │ Content: empty           │
+│ Content: red/blue border │ │ Content: {digit} │ │ Content: {digit} │ │ Content: correct/wrong │ │ Content: empty │
 │ Duration: 300 ms         │    │ Duration: until key      │    │ Duration: until key      │    │ Duration: 500 ms         │    │ Duration: 1000 ms        │
 │ Response: none           │    │ Response: none           │    │ Response: f/j            │    │ Response: none           │    │ Response: none           │
 │ File: none               │    │ File: none (text)        │    │ File: none               │    │ File: none               │    │ File: none               │
@@ -124,10 +124,10 @@ Kiesel, A., Steinhauser, M., Wendt, M., Falkenstein, M., Jost, K., Philipp, A. M
 
 | Window | Content | Duration | Response | File/Folder | Condition | Data |
 |--------|---------|----------|----------|-------------|-----------|------|
-| Cue | 红/蓝色边框 | 300 ms | none | none (generated) | {task_cue} | none |
+| Cue | Red/Blue Border | 300 ms | none | none (generated) | {task_cue} | none |
 | Target | {digit} | until key (deadline 3000 ms) | none (target onset) | none (text) | {digit} | none |
 | Response | {digit} (after cue+target) | merged with target | f/j (task-dependent) | none | {correct_response} | rt, key, acc |
-| Feedback | 正确/错误 | 500 ms | none | none | {correct_response} | none |
+| Feedback | Correct/Error | 500 ms | none | none | {correct_response} | none |
 | ITI (RCI) | empty | 1000 ms | none | none | none | none |
 
 ### Parsed Experiment Specification
